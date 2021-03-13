@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;700&display=swap');
+
+:root {
+    --brand-regular: #0CC998, 100%;
+    --brand-dark: #103C21;
+
+    --white: #FFFFFF;
+    --offwhite: #F9F9F9;
+    --gray: #EEEEEE;
+
+    --black: #000;
+    
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    font-weight: 400;
+}
+
+html {
+    font-family: 'Baloo 2', cursive;
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    background-color: var(--gray);
+}
