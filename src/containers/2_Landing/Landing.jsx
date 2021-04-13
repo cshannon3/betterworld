@@ -17,21 +17,34 @@ import LeftPanel from "containers/Panels/LeftPanel"
 
 
 export default function Landing() {
- 
+
 
 
   return (
     <Row>
-    <LeftPanel />
-    <ContentContainer>
-     <h1>Landing</h1>
-    </ContentContainer>
-  </Row>
+      <LeftPanel />
+      <ContentContainer>
+        <ProjectTitleBox><h2>Project Title Box</h2></ProjectTitleBox>
+        <AtAGlanceBox>
+          <GreenTitleBar>At A Glance Box</GreenTitleBar>
+          <div></div>
+        </AtAGlanceBox>
+        <TaskOverviewBox>
+          <GreyTitleBar> Task Overview</GreyTitleBar>
+          <div></div>
+          </TaskOverviewBox>
+        <UpcomingEventsBox>
+        <GreyTitleBar> Upcoming Events</GreyTitleBar>
+         <div></div>
+          </UpcomingEventsBox>
+        <HelpWantedBox>
+          <GreenTitleBar> Help Wanted</GreenTitleBar>
+          <div></div>
+        </HelpWantedBox>
+      </ContentContainer>
+    </Row>
   )
 }
-
-
-
 
 
 const Row = styled.div`
@@ -40,104 +53,75 @@ const Row = styled.div`
 `
 
 const ContentContainer = styled.div`
+  display: grid;
   width: 100%;
-  padding: 5vh 5% 0 5%;
+  padding: 3vh 40px 3vh 40px ;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 20px 10px;
+  
 `
-const TeamsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 15px;
+const ProjectTitleBox = styled.div`
+  display: grid;
+  grid-area: 1 / 1 / span 2 / span 2;
+`
+const AtAGlanceBox = styled.div`
+  display: grid;
+  grid-area: 1 / 3 / span 1 / span 2;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+`
+const TaskOverviewBox = styled.div`
+  display: grid;
+  grid-area: 2 / 3 / span 2 / span 2;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+`
+const UpcomingEventsBox = styled.div`
+  display: grid;
+  grid-area: 3 / 1 / span 1 / span 1;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
 `
 
-const Team = styled.div`
-  width: 30%;
-  margin-right: 3%;
-  height: 250px;
-  background-color: #ECF6FF;
-  border-radius: 15px;
-  margin-bottom: 40px;
+const HelpWantedBox = styled.div`
+  display: grid;
+  grid-area: 3 / 2 / span 1 / span 1;
+  background: #E6FAF5;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
 `
-
-const TeamName = styled.p`
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 22px;
-  text-align: center;
-  color: black;
+const GreyTitleBar = styled.div`
+  height:38px;
+  background: #E3E7EA;
+  border-radius: 3px 3px 0px 0px;
   display: flex;
   align-items: center;
-  justify-content: center;
-`
-
-const EditIcon = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-left: 15px;
-  cursor: pointer;
-`
-
-const TrashIcon = styled.img`
-  position: absolute;
-  top: 0px;
-  right: 10px;
-  height: 25px;
-  width: 25px;
-  cursor: pointer;
-`
-
-const PinIcon = styled.img`
-  position: absolute;
-  top: 0px;
-  left: 15px;
-  height: 25px;
-  width: 25px;
-  cursor: pointer;
-`
-
-const SectionName = styled.div`
-  font-family: Open Sans;
-  font-weight: bold;
-  font-size: 18px;
-  color: #9B9B9B;
-  margin-top: 40px;
-`
-
-const AddCard = styled.div`
-  width: 30%;
-  height: 250px;
-  border: 2px solid #0466C8;
-  border-radius: 15px;
-  margin-right: 3%;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  cursor: pointer;
-  margin-bottom: 40px;
-`
-
-const AddText = styled.p`
-  width: 100%;
-  font-weight: bold;
-  font-size: 24px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 21px;
   line-height: 33px;
-  color: #0466C8;
-  text-align: center;
+  letter-spacing: -0.02em;
+  padding-left:5px;
+  color: #757575;
 `
-
-const Circle = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
-  margin: 0 auto;
-  background: #0466C8;
-  margin-top: 20px;
+const GreenTitleBar = styled.div`
+  height:38px;
+  background: #0CC998;
+  border-radius: 3px 3px 0px 0px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 21px;
+  line-height: 33px;
+  letter-spacing: -0.02em;
+  padding-left:5px;
+  color: #FFFFFF;
 `
 
-const Icon = styled.img`
-  width: 50px;
-  height: 50px;
-`
