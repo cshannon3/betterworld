@@ -16,6 +16,7 @@ import ControlContext from "shared/control-context";
 //Screens
 import Splash from 'containers/1_Splash/Splash'
 import Landing from 'containers/2_Landing/Landing'
+import ProjectPage from 'containers/3_Project_Page/ProjectPage'
 
 
 // import './App.scss';
@@ -61,7 +62,7 @@ const App = () => {
           <div className="App__container">
             <Switch>
               <Route exact path="/">
-                {user ? <Landing /> : <Splash />}
+                {user ? <ProjectPage /> : <Splash />}
               </Route>
             </Switch>
           </div>

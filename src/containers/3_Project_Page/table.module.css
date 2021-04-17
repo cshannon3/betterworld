@@ -1,0 +1,50 @@
+/* .container {
+    padding: 4rem 5rem;
+} */
+
+.heading {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--brand-dark);
+}
+
+.table {
+    width: 100%;
+}
+
+.thead {
+    background-color: var(--brand-regular);
+    border-radius: 0.4rem;
+}
+
+.tbody {
+    background-color: var(--white);
+}
+
+/* .tr {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 0.2rem solid var(--brand-dark);
+} */
+
+.th {
+    grid-column: span 2;
+    padding: 1rem;
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+/* .td {
+    grid-column: span 2;
+    padding: 1rem;
+    font-size: 1.5rem;
+} */
+
+/* .largeColumn {
+    grid-column: span 6;
+} */
+
+.arrow {
+    margin-left: 1rem;
+}
