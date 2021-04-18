@@ -23,7 +23,7 @@ function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
             Search:{' '}
             <Input
                 value={value || ''}
-                placeholder={`${count} annotations...`}
+                placeholder={`${count} sections...`}
                 onChange={handleChange}
             />
         </SearchDiv>
@@ -51,13 +51,13 @@ const Container = styled.tr`
 const Input = styled.input`
     margin-left: 1rem;
     font-size: 2rem;
-    background-color: grey;
+    background-color: white;
     color: black;
     border: none;
     outline: none;
     &::placeholder {
         color: black;
-        opacity: 0.8;   
+        opacity: 0.2;   
     }
 `;
 const SearchDiv = styled.th`

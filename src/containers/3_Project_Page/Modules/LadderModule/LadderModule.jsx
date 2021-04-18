@@ -1,11 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import cn from 'classnames';
 import { matchSorter } from 'match-sorter';
 import LadderModal from './LadderModal';
 import Search from './Search';
 import styled from "styled-components"
+import * as styles from '../sharedStyles';
 
+import ProjectContext from '../../ProjectContext';
 
 
 function fuzzyTextFilterFn(rows, id, filterValue) {
@@ -17,7 +19,9 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-function LadderComponent({ data }) {
+function LadderModule({ data }) {
+    const ctx = useContext(ProjectContext);
+
     const [modalIsOpen,setIsOpen] =useState(false);
     const [modalData,setModalData] =useState(null);
     
@@ -29,6 +33,12 @@ function LadderComponent({ data }) {
 
 
   function closeModal(){
+    //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
+    var uri = window.location.toString();
+    if (uri.indexOf("#") > 0) {
+        var clean_uri = uri.substring(0, uri.indexOf("#"));
+        window.history.replaceState({}, document.title, clean_uri);
+    }
     setIsOpen(false);
   }
     const columns = useMemo(() => [
@@ -82,13 +92,13 @@ function LadderComponent({ data }) {
     return (
         <TaskOverviewBox>
         <LadderModal
-            data={"test string"}
+          data={modalData}
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
         >
         </LadderModal>
         <TableSection >
-            <GreyTitleBar> Project Ladder </GreyTitleBar>
+            <styles.GreyTitleBar> Project Ladder </styles.GreyTitleBar>
             <Search
                         state={state}
                         preGlobalFilteredRows={preGlobalFilteredRows}
@@ -138,21 +148,7 @@ function LadderComponent({ data }) {
         </TaskOverviewBox>
     );
 }
-const GreyTitleBar = styled.div`
-  height:38px;
-  background: #E3E7EA;
-  border-radius: 3px 3px 0px 0px;
-  display: flex;
-  align-items: center;
-  font-family: Baloo 2;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 21px;
-  line-height: 33px;
-  letter-spacing: -0.02em;
-  padding-left:5px;
-  color: #757575;
-`
+
 const TaskOverviewBox = styled.div`
   display: grid;
   grid-area: 2 / 3 / span 2 / span 2;
@@ -184,4 +180,4 @@ const TableSection = styled.section`
     }
 `;
 
-export default LadderComponent;
+export default LadderModule;

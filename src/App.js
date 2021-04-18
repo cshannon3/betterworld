@@ -17,7 +17,7 @@ import ControlContext from "shared/control-context";
 import Splash from 'containers/1_Splash/Splash'
 import Landing from 'containers/2_Landing/Landing'
 import ProjectPage from 'containers/3_Project_Page/ProjectPage'
-
+import { ModalProvider } from 'styled-react-modal'
 
 // import './App.scss';
 
@@ -29,7 +29,7 @@ const App = () => {
   window.onload = function () {
     console.log("ON LOAD");
     let _user = JSON.parse(window.localStorage.getItem("user"));
-    if (_user) {setUser(_user); }
+    if (_user) { setUser(_user); }
   }
 
   return (
@@ -54,18 +54,20 @@ const App = () => {
               firebase.auth().signOut().then(function () {
                 if (userListener) userListener();
                 window.localStorage.setItem("user", null);
-  
+
                 window.location.replace("/");
               }).catch(function (error) { console.log(error) });
             },
           }}>
-          <div className="App__container">
-            <Switch>
-              <Route exact path="/">
-                {user ? <ProjectPage /> : <Splash />}
-              </Route>
-            </Switch>
-          </div>
+          <ModalProvider>
+            <div className="App__container">
+              <Switch>
+                <Route exact path="/">
+                  {user ? <ProjectPage /> : <Splash />}
+                </Route>
+              </Switch>
+            </div>
+          </ModalProvider>
         </ControlContext.Provider>
       </React.Fragment>
     </Router>
