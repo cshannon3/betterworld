@@ -2,7 +2,10 @@ import React, { useContext } from "react"
 import styled from "styled-components"
 import ControlContext from '../../shared/control-context'
 import { NavLink } from 'react-router-dom'
-import Folder from '../../assets/Panel/folder1.png'
+import FolderIcon from '../../assets/Panel/folder1.png'
+import NetworkIcon from '../../assets/Panel/network1.png'
+import EarthIcon from '../../assets/Panel/planet-earth1.png'
+import UserIcon from '../../assets/Panel/user1.png'
 
 
 export default function LeftPanel() {
@@ -10,7 +13,6 @@ export default function LeftPanel() {
         user,
         logoutUser,
     } = useContext(ControlContext);
-
 
 
     return (
@@ -21,19 +23,19 @@ export default function LeftPanel() {
             </section>
             <Line />
             <div>
-                <PhotoIcon src={Folder} alt='Projects' />
+                <PhotoIcon src={FolderIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>
             </div>
             <div>
-                <PhotoIcon src={Folder} alt='Projects' />
+                <PhotoIcon src={NetworkIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>
             </div>
             <div>
-                <PhotoIcon src={Folder} alt='Projects' />
+                <PhotoIcon src={EarthIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>
             </div>
             <div>
-                <PhotoIcon src={Folder} alt='Projects' />
+                <PhotoIcon src={UserIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>
             </div>
             <LogoutBtn className='logoutBtn' onClick={() => logoutUser()}>Log Out</LogoutBtn>
