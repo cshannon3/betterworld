@@ -8,6 +8,7 @@ const ControlContext = createContext({
   logoutUser:  () => {},
   user:        null,
   setUser:     ()=>{},
+  data:        null
  
 });
   
