@@ -4,6 +4,12 @@ import moneyIcon from "assets/Landing/Committees/money-bag 1.png"
 import bookIcon from "assets/Landing/Committees/open-book 1.png"
 import actionIcon from "assets/Landing/Committees/runner 1.png"
 
+import JitsiIcon from "assets/Landing/jitsi.png";
+import DriveIcon from "assets/Landing/google-drive.png";
+import DocIcon from "assets/Landing/google-docs.png";
+import InstaIcon from "assets/Landing/insta.png";
+import FBIcon from "assets/Landing/fb.png";
+import TwitterIcon from "./assets/Landing/twitter.png";
 
 const data = {
     "projects":[
@@ -231,6 +237,46 @@ const data = {
         "order":1,
         "icon":actionIcon
     },
+],
+"quick_links":[
+    {
+        "tip":"Meeting Link",
+        "url":"https://meet.jit.si/CMU_Against_ICE_Meetings",
+        "icon":JitsiIcon,
+        "title":"Jitsi"
+    },
+    {
+        "tip":"Group Drive",
+        "url":"https://drive.google.com/drive/folders/10lF9_JXDtbrik86Jx03NFv0610ybc_Bh?usp=sharing",
+        "icon":DriveIcon,
+        "title":"drive"
+    },
+    {
+        "tip":"All Notes",
+        "url":"https://docs.google.com/document/d/1WYUrZpa72Xm0Hst9uSq1jqlMnVdCZ5ALn9tHW2-sOo0/edit?usp=sharing",
+        "icon":DocIcon,
+        "title":"All Notes"
+    },
+    {
+        "tip":"IG Page",
+        "url":"https://www.instagram.com/cmuwontbuildit/",
+        "icon":InstaIcon,
+        "title":"Insta"
+    },
+    {
+        "tip":"FB Page",
+        "url":"https://www.instagram.com/cmuwontbuildit/",
+        "icon":FBIcon,
+        "title":"FB Page"
+    },
+    {
+        "tip":"Twitter Page",
+        "url":"https://www.instagram.com/cmuwontbuildit/",
+        "icon":TwitterIcon,
+        "title":"Twitter Page"
+    },
+
 ]
+
 }
 export default data;

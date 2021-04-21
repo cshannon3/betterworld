@@ -2,14 +2,15 @@ import React, { useContext, useState, useEffect } from "react"
 import styled from "styled-components"
 import LeftPanel from "containers/Panels/LeftPanel"
 import ControlContext from '../../shared/control-context';
+import Tooltip from '@material-ui/core/Tooltip';
 
-
+import { NavLink } from 'react-router-dom'
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
   const projectData = ctrctx.data["projects"];
   const committeeData = ctrctx.data["committees"];
-
+  const quickData = ctrctx.data["quick_links"];
   return (
     <Row>
       <LeftPanel />
@@ -17,50 +18,56 @@ export default function Landing() {
         <OverviewSection>
           <h3>BETTERWORLD</h3>
           <h1>CMU Against ICE</h1>
-            <p>We align ourselves with student movements mobilizing with Mijente under the #NoTechForICE campaign and organize to challenge the dominant narratives at CMU and in broader society.</p>
+          <p>We align ourselves with student movements mobilizing with Mijente under the #NoTechForICE campaign and organize to challenge the dominant narratives at CMU and in broader society.</p>
         </OverviewSection>
         <QuickLinksSection>
           <h3>Quick Links</h3>
-            <Row>
-            <LinkBox>
-                test
-            </LinkBox>
-            <LinkBox>
-                test
-            </LinkBox>
-            <LinkBox>
-                test
-            </LinkBox>
-            <LinkBox>
-                test
-            </LinkBox>
-            </Row>
+          <Row>
+          {quickData.map((data) =>
+              <Tooltip title={data.tip}>
+              <a href={data.url} target="_blank">
+                <LinkBox>
+                  <img src={data.icon} alt={data.title} />
+                </LinkBox>
+              </a>
+            </Tooltip>
+            )}
+          </Row>
         </QuickLinksSection>
         <CommitteeSection>
           <h2> Committees</h2>
           <Row>
-            {committeeData.map((data)=>
-            <CommitteeBox >
-            <div className="contentBox">
-                <div className="order">{`0${data["order"]}`}</div>
-                <div className="name">{data["name"]}</div>
-                <div className="line"/>
-            </div>
-            <img src={data["icon"]} alt={data["name"]}/>
-           </CommitteeBox>
+            {committeeData.map((data) =>
+              <CommitteeBox >
+                <div className="contentBox">
+                  <div className="order">{`0${data["order"]}`}</div>
+                  <div className="name">{data["name"]}</div>
+                  <div className="line" />
+                </div>
+                <img src={data["icon"]} alt={data["name"]} />
+              </CommitteeBox>
             )}
-            
-            
+
+
           </Row>
         </CommitteeSection>
 
         <ProjectsSection>
           <h2> Projects/Actions</h2>
           <Row>
-          <ProjectBox>test</ProjectBox>
-          <ProjectBox>test</ProjectBox>
-          <ProjectBox>test</ProjectBox>
-          <ProjectBox>test</ProjectBox>
+            <ProjectBox href="/project">
+                  <div className="name">Dis-O 2021</div>
+                  <div className="line"/>
+                  <br/>
+                  <p ><span >Start date:</span>  1/2/21</p>
+                  <p><span >Est. Completion:</span> 12/2/21</p>
+                  <br/>
+                  <p><span>Task Count:</span> 13/30</p>
+                  <p><span>Volunteers:</span> 4</p>
+            </ProjectBox>
+            <ProjectBox>test</ProjectBox>
+            <ProjectBox>test</ProjectBox>
+            <ProjectBox>test</ProjectBox>
           </Row>
         </ProjectsSection>
       </ContentContainer>
@@ -90,9 +97,7 @@ const ContentContainer = styled.div`
     display: flex;
     align-items: center;
     letter-spacing: -0.02em;
-
     color: #0CC998;
-
   }
   h2 {
     font-family: Baloo 2;
@@ -124,11 +129,11 @@ const OverviewSection = styled.div`
   min-height:
 `
 const QuickLinksSection = styled.div`
-  background: #FFFFFF;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  
+  width:100%;
 `
+// background: #FFFFFF;
+// box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+// border-radius: 3px;
 const CommitteeSection = styled.div`
   width:100%
 `
@@ -176,19 +181,55 @@ const CommitteeBox = styled.div`
 const LinkBox = styled.div`
     height:60px;
     min-width:60px;
-    background: #0CC998;
+    background: white;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 3px;
+    img{
+      height:54px;
+      width:60px;
+      margin:3px;
+    }
 `
 
 
 const ProjectsSection = styled.div`
   width:100%
 `
-const ProjectBox = styled.div`
+const ProjectBox = styled.a`
   height:194px;
   min-width:244px;
-  background: #0CC998;
+  cursor: pointer;
+  text-decoration: none;
+  background: #FAFAFA;
+  border: 1px solid #0CC998;
+  box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
+  padding: 20px 15px;
+  .name {
+    color: #0CC998;
+    font-family: Baloo 2;
+    font-weight:normal;
+    font-size: 32px;
+    line-height: 28px;
+    font-weight:800;
+  }
+
+  .line {
+    background-color: #0CC998;
+    width: 50px;
+    height: 3px;
+    margin-top:5px;
+    border-radius: 11px;
+  }
+  p{
+    font-family: Helvetica Neue;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  span{
+    font-weight:bold;
+  }
 `

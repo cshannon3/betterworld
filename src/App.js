@@ -17,10 +17,11 @@ import ControlContext from "shared/control-context";
 import Splash from 'containers/1_Splash/Splash'
 import Landing from 'containers/2_Landing/Landing'
 import ProjectPage from 'containers/3_Project_Page/ProjectPage'
+import CommitteePage from 'containers/CommitteePage/CommitteePage'
 import { ModalProvider } from 'styled-react-modal'
 import data from "dummydata";
 
-// import './App.scss';
+
 
 let userListener, teamsListener;
 
@@ -64,10 +65,15 @@ const App = () => {
           <ModalProvider>
             <div className="App__container">
               <Switch>
+
+                <Route path="/project" component={ProjectPage} />
+                <Route path="/committee" component={CommitteePage} />
+      
                 <Route exact path="/">
-                  {user ? <Landing/>: <Splash />/* <ProjectPage /> */}
+                  {/*Conditional rendering based on whether user logged in*/}
+                  {user ? <Landing /> : <Splash />}
                 </Route>
-              </Switch>
+            </Switch>
             </div>
           </ModalProvider>
         </ControlContext.Provider>
