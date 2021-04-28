@@ -3,6 +3,7 @@ import styled from "styled-components"
 import LeftPanel from "containers/Panels/LeftPanel"
 import ControlContext from '../../shared/control-context';
 import Tooltip from '@material-ui/core/Tooltip';
+import { useHistory } from "react-router-dom";
 
 import { NavLink } from 'react-router-dom'
 
@@ -11,6 +12,8 @@ export default function Landing() {
   const projectData = ctrctx.data["projects"];
   const committeeData = ctrctx.data["committees"];
   const quickData = ctrctx.data["quick_links"];
+  let history = useHistory();
+
   return (
     <Row>
       <LeftPanel />
@@ -47,15 +50,15 @@ export default function Landing() {
                 <img src={data["icon"]} alt={data["name"]} />
               </CommitteeBox>
             )}
-
-
           </Row>
         </CommitteeSection>
-
         <ProjectsSection>
           <h2> Projects/Actions</h2>
           <Row>
-            <ProjectBox href="/project">
+            <ProjectBox onClick={()=>{
+              ctrctx.setCurrentProjectID("immigrationjustice");
+              history.push("/project");
+            }}>
                   <div className="name">Dis-O 2021</div>
                   <div className="line"/>
                   <br/>

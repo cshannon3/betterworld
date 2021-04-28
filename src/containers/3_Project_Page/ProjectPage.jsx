@@ -13,13 +13,17 @@ import {
 
 } from './Modules/modules'
 import ProjectContext from "./ProjectContext";
-import dummyData from './DummyData';
-
+//import dummyData from './DummyData';
+import ControlContext from "../../shared/control-context";
 
 
 
 export default function ProjectPage() {
-    const data =dummyData["Immigration Justice Zine"]
+    const appCtx = useContext(ControlContext);
+
+    const data = appCtx.getProjectData();
+    console.log(data);
+    //dummyData["Immigration Justice Zine"]
     return (
         <ProjectContext.Provider
         value={{
@@ -32,8 +36,8 @@ export default function ProjectPage() {
                 <ProjectInfoModule/>
                 <AtAGlanceModule/>
                 <LadderModule data={data["sections"]} />
-                <UpcomingEventsModule/>
-                <HelpWantedModule/>
+                {/* <UpcomingEventsModule/>
+                <HelpWantedModule/> */}
             </ContentContainer>
         </Row>
         </ProjectContext.Provider> 
@@ -47,14 +51,16 @@ const Row = styled.div`
   display: flex;
   width: 100%;
 `
-
 const ContentContainer = styled.div`
   display: grid;
   width: 100%;
+  height:100vh;
   padding: 5vh 50px 3vh 40px ;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-gap: 20px 10px;
   
 `
+
+
 

@@ -27,6 +27,7 @@ let userListener, teamsListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [currentProjectID, setCurrentProjectID] = useState(null);
 
   window.onload = function () {
     console.log("ON LOAD");
@@ -40,6 +41,7 @@ const App = () => {
         <ControlContext.Provider
           value={{
             user, // ID of current user
+
             loginUser: async () => {
               // Authenticate and get User Info
               let result = await firebase.auth().signInWithPopup(provider);
@@ -60,15 +62,17 @@ const App = () => {
                 window.location.replace("/");
               }).catch(function (error) { console.log(error) });
             },
-            data: data
+            data: data,
+            currentProjectID: currentProjectID,
+            setCurrentProjectID: (newProject)=>{setCurrentProjectID(newProject);},
+            getProjectData: ()=>{if(currentProjectID!==null&& data!=null) return data["projects"][currentProjectID] }
+    
           }}>
           <ModalProvider>
             <div className="App__container">
               <Switch>
-
                 <Route path="/project" component={ProjectPage} />
                 <Route path="/committee" component={CommitteePage} />
-      
                 <Route exact path="/">
                   {/*Conditional rendering based on whether user logged in*/}
                   {user ? <Landing /> : <Splash />}

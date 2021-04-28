@@ -4,15 +4,13 @@ import ControlContext from '../../shared/control-context'
 import GoogleLogo from '../../assets/google-logo.png'
 
 export default function Splash () {
-  const {
-    loginUser,
-  } = useContext(ControlContext);
+  const appCtx = useContext(ControlContext);
   
   return (
     <LoginContainer>
       <Title>Better<Blue>World</Blue></Title>
       <Subtitle>Virtual Collaboration Made Easy</Subtitle>
-      <Button id="LoginPage-login-button" onClick={() => loginUser()}>
+      <Button id="LoginPage-login-button" onClick={() => appCtx.loginUser()}>
         <Img src={GoogleLogo} />
         Sign In with Google
       </Button>
