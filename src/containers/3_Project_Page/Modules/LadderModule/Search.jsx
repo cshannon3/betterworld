@@ -19,14 +19,14 @@ function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) 
     };
 
     return (
-        <SearchDiv>
+        <th>
             Search:{' '}
             <Input
                 value={value || ''}
                 placeholder={`${count} sections...`}
                 onChange={handleChange}
             />
-        </SearchDiv>
+        </th>
     );
 }
 
@@ -60,12 +60,12 @@ const Input = styled.input`
         opacity: 0.2;   
     }
 `;
-const SearchDiv = styled.th`
-    display: flex;
-    align-items: center;
-    font-size: 2rem;
-    padding: .5rem 1rem;
-`
+// const SearchDiv = styled.th`
+//     display: flex;
+//     align-items: center;
+//     font-size: 2rem;
+//     padding: .5rem 1rem;
+// `
 
 
 // .search {

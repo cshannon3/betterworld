@@ -68,6 +68,7 @@ const projects = {
                 "id":"immigration-history",
                 "name":"Immigration history and connection to xenophobia",
                 "contributors":["bonnie","cat"],
+                "status":"Research",
                 "resources":[
                     {
                         "name": "Predict and Surveil",
@@ -77,7 +78,16 @@ const projects = {
                         "description": "Book that’s a deep dive into how LAPD uses palantir and other surveillance tech"
                     },
                     
-                ]
+                ],
+                "help_requests":[
+                    {
+                        "content": "Feedback on page 10 graphic"
+                    },
+                    {
+                        "content": "Research into CMU Policing History"
+                    },
+            
+            ],
             },
         ],
         "tasks":[
@@ -150,6 +160,7 @@ const projects = {
                 },
                 "resources":[
                 ],
+               
             },
         ],
         "updates": [
@@ -162,16 +173,7 @@ const projects = {
                 "documentID":"path to document"
             }
         ],
-        "help_requests":[
         
-                {
-                    "content": "Feedback on page 10 graphic"
-                },
-                {
-                    "content": "Research into CMU Policing History"
-                },
-        
-        ],
 
             
     },
