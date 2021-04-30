@@ -17,14 +17,17 @@ import ControlContext from "shared/control-context";
 import Splash from 'containers/1_Splash/Splash'
 import Landing from 'containers/2_Landing/Landing'
 import ProjectPage from 'containers/3_Project_Page/ProjectPage'
+import CommitteePage from 'containers/CommitteePage/CommitteePage'
 import { ModalProvider } from 'styled-react-modal'
+import data from "dummydata";
 
-// import './App.scss';
+
 
 let userListener, teamsListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [currentProjectID, setCurrentProjectID] = useState(null);
 
   window.onload = function () {
     console.log("ON LOAD");
@@ -38,6 +41,7 @@ const App = () => {
         <ControlContext.Provider
           value={{
             user, // ID of current user
+
             loginUser: async () => {
               // Authenticate and get User Info
               let result = await firebase.auth().signInWithPopup(provider);
@@ -58,14 +62,22 @@ const App = () => {
                 window.location.replace("/");
               }).catch(function (error) { console.log(error) });
             },
+            data: data,
+            currentProjectID: currentProjectID,
+            setCurrentProjectID: (newProject)=>{setCurrentProjectID(newProject);},
+            getProjectData: ()=>{if(currentProjectID!==null&& data!=null) return data["projects"][currentProjectID] }
+    
           }}>
           <ModalProvider>
             <div className="App__container">
               <Switch>
+                <Route path="/project" component={ProjectPage} />
+                <Route path="/committee" component={CommitteePage} />
                 <Route exact path="/">
-                  {user ? <ProjectPage /> : <Splash />}
+                  {/*Conditional rendering based on whether user logged in*/}
+                  {user ? <Landing /> : <Splash />}
                 </Route>
-              </Switch>
+            </Switch>
             </div>
           </ModalProvider>
         </ControlContext.Provider>

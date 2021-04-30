@@ -2,7 +2,7 @@ import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import cn from 'classnames';
 import { matchSorter } from 'match-sorter';
-import LadderModal from './LadderModal';
+import LadderModal from './LadderModal/LadderModal';
 import Search from './Search';
 import styled from "styled-components"
 import * as styles from '../sharedStyles';
@@ -24,13 +24,15 @@ function LadderModule({ data }) {
 
     const [modalIsOpen,setIsOpen] =useState(false);
     const [modalData,setModalData] =useState(null);
+    const [modalType,setModalType] =useState(null);
     
-    function openModal(cell) {
+    function openModal(cell, type) {
+        setModalType(type);
+        console.log(cell)
         setModalData(cell.row.original);
-        console.log(cell.row.original)
+        
         setIsOpen(true);
     }
-
 
   function closeModal(){
     //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
@@ -45,24 +47,37 @@ function LadderModule({ data }) {
         {
             width: 300,
             Header: 'Section',
-            accessor: 'section',
+            accessor: 'name',
             Cell: ({ cell }) => (
-                <span value={cell.value} onClick={()=>openModal(cell)}>
+                <span value={cell.value} onClick={()=>openModal(cell, "overview")}>
                   {cell.value}
                 </span>
               )
         },
         {
-            Header: 'Researcher',
-            accessor: 'researcher',
+            Header: 'Contributors',
+            accessor: 'contributors',
+            Cell: ({ cell }) => (
+                <span  onClick={()=>openModal(cell,"contributors")}>
+                  {cell.value}
+                </span>
+              )
         },
         {
-            Header: 'Author',
-            accessor: 'author',
+            Header: 'Status',
+            accessor: 'status',
         },
         {
-            Header: 'Artist',
-            accessor: 'artist',
+            Header: 'Ways To Help',
+            accessor: 'help_requests',
+            Cell: ({ cell }) => {
+                const helpRequests = cell.value;
+                console.log(helpRequests);
+               return ( <span  onClick={()=>openModal(cell, "helpRequests")}>
+                  {helpRequests.length}
+                </span>
+                )
+            }
         },
     ], []);
 
@@ -94,16 +109,26 @@ function LadderModule({ data }) {
         <LadderModal
           data={modalData}
           isOpen={modalIsOpen}
+          modalType={modalType}
           onRequestClose={closeModal}
         >
         </LadderModal>
         <TableSection >
-            <styles.GreyTitleBar> Project Ladder </styles.GreyTitleBar>
-            <Search
+            <TitleBar> 
+                <div>
+                    <span>Project Ladder</span>
+                </div> 
+                <Search
                         state={state}
                         preGlobalFilteredRows={preGlobalFilteredRows}
                         setGlobalFilter={setGlobalFilter}
                     /> 
+                <div>
+                    <button>Edit</button>
+                    <button>Add Section</button>
+                </div>
+            </TitleBar>
+         
             <table  {...getTableProps()}>
                 <thead>
                     {headerGroups.map((headerGroup) => (
@@ -149,9 +174,16 @@ function LadderModule({ data }) {
     );
 }
 
+
+const TitleBar = styled(styles.GreyTitleBar)`
+    display:flex;
+    justify-content: space-between;
+    padding-right:20px;
+`
+
 const TaskOverviewBox = styled.div`
   display: grid;
-  grid-area: 2 / 3 / span 2 / span 2;
+  grid-area: 3 / 1 / span 2 / span 4;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;

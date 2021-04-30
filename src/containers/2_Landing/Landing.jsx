@@ -1,46 +1,78 @@
 import React, { useContext, useState, useEffect } from "react"
 import styled from "styled-components"
-// import ControlContext from '../../shared/control-context'
-
-// import ReactModal from 'react-modal'
-// import Trashcan from 'assets/Landing/delete.svg'
-// import GroupIcon from 'assets/Landing/group.png'
-// import Pin from 'assets/Landing/pin.svg'
-// import FilledPin from 'assets/Landing/filled-pin.svg'
-// import Pencil from 'assets/Landing/pencil.svg'
-// import { Title, Breadcrumbs, Input, FilterButton, ContentContainer, HeaderRow } from 'assets/StyledComponents/Shared'
-// import { Link } from 'react-router-dom'
 import LeftPanel from "containers/Panels/LeftPanel"
-// import ModalContent from 'containers/Modal/AddModalContent'
-// import DeleteModalContent from 'containers/Modal/DeleteModalContent'
-// import { OverlayContainer } from 'assets/StyledComponents/Overlay'
+import ControlContext from '../../shared/control-context';
+import Tooltip from '@material-ui/core/Tooltip';
+import { useHistory } from "react-router-dom";
 
+import { NavLink } from 'react-router-dom'
 
 export default function Landing() {
-
-
+  const ctrctx = useContext(ControlContext);
+  const projectData = ctrctx.data["projects"];
+  const committeeData = ctrctx.data["committees"];
+  const quickData = ctrctx.data["quick_links"];
+  let history = useHistory();
 
   return (
     <Row>
       <LeftPanel />
       <ContentContainer>
-        <ProjectTitleBox><h2>Project Title Box</h2></ProjectTitleBox>
-        <AtAGlanceBox>
-          <GreenTitleBar>At A Glance Box</GreenTitleBar>
-          <div></div>
-        </AtAGlanceBox>
-        <TaskOverviewBox>
-          <GreyTitleBar> Task Overview</GreyTitleBar>
-          <div></div>
-          </TaskOverviewBox>
-        <UpcomingEventsBox>
-        <GreyTitleBar> Upcoming Events</GreyTitleBar>
-         <div></div>
-          </UpcomingEventsBox>
-        <HelpWantedBox>
-          <GreenTitleBar> Help Wanted</GreenTitleBar>
-          <div></div>
-        </HelpWantedBox>
+        <OverviewSection>
+          <h3>BETTERWORLD</h3>
+          <h1>CMU Against ICE</h1>
+          <p>We align ourselves with student movements mobilizing with Mijente under the #NoTechForICE campaign and organize to challenge the dominant narratives at CMU and in broader society.</p>
+        </OverviewSection>
+        <QuickLinksSection>
+          <h3>Quick Links</h3>
+          <Row>
+          {quickData.map((data) =>
+              <Tooltip title={data.tip}>
+              <a href={data.url} target="_blank">
+                <LinkBox>
+                  <img src={data.icon} alt={data.title} />
+                </LinkBox>
+              </a>
+            </Tooltip>
+            )}
+          </Row>
+        </QuickLinksSection>
+        <CommitteeSection>
+          <h2> Committees</h2>
+          <Row>
+            {committeeData.map((data) =>
+              <CommitteeBox >
+                <div className="contentBox">
+                  <div className="order">{`0${data["order"]}`}</div>
+                  <div className="name">{data["name"]}</div>
+                  <div className="line" />
+                </div>
+                <img src={data["icon"]} alt={data["name"]} />
+              </CommitteeBox>
+            )}
+          </Row>
+        </CommitteeSection>
+        <ProjectsSection>
+          <h2> Projects/Actions</h2>
+          <Row>
+            <ProjectBox onClick={()=>{
+              ctrctx.setCurrentProjectID("immigrationjustice");
+              history.push("/project");
+            }}>
+                  <div className="name">Dis-O 2021</div>
+                  <div className="line"/>
+                  <br/>
+                  <p ><span >Start date:</span>  1/2/21</p>
+                  <p><span >Est. Completion:</span> 12/2/21</p>
+                  <br/>
+                  <p><span>Task Count:</span> 13/30</p>
+                  <p><span>Volunteers:</span> 4</p>
+            </ProjectBox>
+            <ProjectBox>test</ProjectBox>
+            <ProjectBox>test</ProjectBox>
+            <ProjectBox>test</ProjectBox>
+          </Row>
+        </ProjectsSection>
       </ContentContainer>
     </Row>
   )
@@ -50,78 +82,157 @@ export default function Landing() {
 const Row = styled.div`
   display: flex;
   width: 100%;
+  gap: 20px;
 `
 
 const ContentContainer = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
   width: 100%;
-  padding: 3vh 40px 3vh 40px ;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 20px 10px;
-  
+  padding: 3vh 40px 10vh 40px;
+  h1 {
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 60px;
+    line-height: 94px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.02em;
+    color: #0CC998;
+  }
+  h2 {
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 26px;
+    color: black;
+  }
+  h3 {
+    font-weight: 800;
+    font-size: 21px;
+    line-height: 33px;
+    color: black;
+  }
+  p {
+    font-family: Helvetica Neue;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 22px;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+  }
 `
-const ProjectTitleBox = styled.div`
-  display: grid;
-  grid-area: 1 / 1 / span 2 / span 2;
+const OverviewSection = styled.div`
+  width:100%;
+  min-height:
 `
-const AtAGlanceBox = styled.div`
-  display: grid;
-  grid-area: 1 / 3 / span 1 / span 2;
-  background: #FFFFFF;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
+const QuickLinksSection = styled.div`
+  width:100%;
 `
-const TaskOverviewBox = styled.div`
-  display: grid;
-  grid-area: 2 / 3 / span 2 / span 2;
-  background: #FFFFFF;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
+// background: #FFFFFF;
+// box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+// border-radius: 3px;
+const CommitteeSection = styled.div`
+  width:100%
 `
-const UpcomingEventsBox = styled.div`
-  display: grid;
-  grid-area: 3 / 1 / span 1 / span 1;
-  background: #FFFFFF;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
+const CommitteeBox = styled.div`
+    position: relative;
+    height:111px;
+    min-width:244px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    background: #0CC998;
+    img {
+      position: absolute; 
+      top:0px;
+      right:0px;
+      height:111px;
+      min-width:244px;
+    }
+    .contentBox{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding-left: 30px;
+      height:100px;
+
+      .name, .order {
+        color:white;
+        font-family: Baloo 2;
+        font-weight:normal;
+        font-size: 32px;
+        line-height: 28px;
+      }
+      .name {
+        font-weight:800;
+      }
+      .line {
+        background-color:white;
+        width: 50px;
+        height: 3px;
+        margin-top:5px;
+        border-radius: 11px;
+      }
+    }
 `
 
-const HelpWantedBox = styled.div`
-  display: grid;
-  grid-area: 3 / 2 / span 1 / span 1;
-  background: #E6FAF5;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-`
-const GreyTitleBar = styled.div`
-  height:38px;
-  background: #E3E7EA;
-  border-radius: 3px 3px 0px 0px;
-  display: flex;
-  align-items: center;
-  font-family: Baloo 2;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 21px;
-  line-height: 33px;
-  letter-spacing: -0.02em;
-  padding-left:5px;
-  color: #757575;
-`
-const GreenTitleBar = styled.div`
-  height:38px;
-  background: #0CC998;
-  border-radius: 3px 3px 0px 0px;
-  display: flex;
-  align-items: center;
-  font-family: Baloo 2;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 21px;
-  line-height: 33px;
-  letter-spacing: -0.02em;
-  padding-left:5px;
-  color: #FFFFFF;
+const LinkBox = styled.div`
+    height:60px;
+    min-width:60px;
+    background: white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    img{
+      height:54px;
+      width:60px;
+      margin:3px;
+    }
 `
 
+
+const ProjectsSection = styled.div`
+  width:100%
+`
+const ProjectBox = styled.a`
+  height:194px;
+  min-width:244px;
+  cursor: pointer;
+  text-decoration: none;
+  background: #FAFAFA;
+  border: 1px solid #0CC998;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 20px 15px;
+  .name {
+    color: #0CC998;
+    font-family: Baloo 2;
+    font-weight:normal;
+    font-size: 32px;
+    line-height: 28px;
+    font-weight:800;
+  }
+
+  .line {
+    background-color: #0CC998;
+    width: 50px;
+    height: 3px;
+    margin-top:5px;
+    border-radius: 11px;
+  }
+  p{
+    font-family: Helvetica Neue;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  span{
+    font-weight:bold;
+  }
+`
