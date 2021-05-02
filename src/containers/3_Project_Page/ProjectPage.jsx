@@ -20,14 +20,16 @@ import ControlContext from "../../shared/control-context";
 
 export default function ProjectPage() {
     const appCtx = useContext(ControlContext);
-
-    const data = appCtx.getProjectData();
+    const urlParts = window.location.href.split("/")
+    const projectId = urlParts[urlParts.length-1]
+    const data = appCtx.getProjectData(projectId);
     console.log(data);
     //dummyData["Immigration Justice Zine"]
     return (
         <ProjectContext.Provider
         value={{
-            data:data
+            data:data,
+
         }}
         >
         <Row>

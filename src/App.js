@@ -63,15 +63,13 @@ const App = () => {
               }).catch(function (error) { console.log(error) });
             },
             data: data,
-            currentProjectID: currentProjectID,
-            setCurrentProjectID: (newProject)=>{setCurrentProjectID(newProject);},
-            getProjectData: ()=>{if(currentProjectID!==null&& data!=null) return data["projects"][currentProjectID] }
+            getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
     
           }}>
           <ModalProvider>
             <div className="App__container">
               <Switch>
-                <Route path="/project" component={ProjectPage} />
+                <Route path="/project/:projectId" component={ProjectPage} />
                 <Route path="/committee" component={CommitteePage} />
                 <Route exact path="/">
                   {/*Conditional rendering based on whether user logged in*/}
