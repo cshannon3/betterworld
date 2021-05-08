@@ -9,7 +9,7 @@ import * as styles from '../../sharedStyles';
 //Modal.setAppElement('#root')
 const StyledModal = Modal.styled`
   width: 90vw;
-  height: 90vh;
+  height: 85vh;
   background-color:white;
 `
 //  <TeamNotesWidget id={data["id"]}/>
@@ -21,7 +21,25 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
             return  (<div>{currentModalType}</div>);
         if (isOpen) return (
             <WidgetContainer>
-                <MainContainer>Hi</MainContainer>
+                <MainContainer>
+                    <div>
+                    <div className="header">
+                        <div className="description">
+                            Hello
+                        </div>
+                        <div className="dates">
+                            3/4/5 
+                        </div>
+                    </div>
+                    <div className="tasks">
+                        Hi
+                    </div>
+                    <div className="buttons">
+                        <ButtonOne >OFFER HELP</ButtonOne>
+                        <ButtonOne >REQUEST HELP</ButtonOne>
+                    </div>
+                    </div>
+                </MainContainer>
                 <UpdatesContainer>
                     <UpdatesMenu>
                        <div><h3>Updates</h3></div>
@@ -30,7 +48,6 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                           <button>Add</button>
                         </div>
                         </UpdatesMenu>
-                    
                     <UpdateBox>
                     <div className={"topbar"}>
                         <div className={"author"}>Darya
@@ -72,6 +89,15 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
 };
 
 
+
+const WidgetContainer = styled.div`
+height: 100%;
+width:100%;
+display:flex;
+background-color: white;
+`
+ 
+
 const CloseBox = styled.div`
     cursor:pointer;
 `;
@@ -83,6 +109,46 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
         display:flex;
     }
 `
+const MainContainer = styled.div`
+background-color: white;
+flex-grow:1;
+
+>div{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    justify-content: center;
+    margin:auto;
+}
+.header{
+    height:100px;
+    display:flex;
+    justify-content:space-between;
+    .description{
+        color:blue;
+    }
+    .date{
+        color:green;
+    }
+}
+.tasks{
+    height:400px;
+    flex-grow:1;
+}
+.buttons{
+    height:100px;
+    width:100%;
+    
+    display:flex;
+    justify-content: space-evenly;
+    align-items:center;
+}
+`
+
+
+
+
+
 const UpdatesMenu = styled.div`
     display:flex;
     justify-content: space-between;
@@ -100,24 +166,17 @@ const UpdatesMenu = styled.div`
         align-items: center;
     }
 `
-const WidgetContainer = styled.div`
-height: auto;
- min-height: 100% !important;
-width:100%;
-display:grid;
-grid-template-columns: 1fr 350px;
-`
+
+
+
 
 const UpdatesContainer = styled.div`
 background-color:#F8F8F8;
 margin: 15px;
+width:350px;
 `
-const MainContainer = styled.div`
 
-background-color:red;
-`
 const UpdatesList = styled.div`
-
 `
 const UpdateBox = styled.div`
 background-color: #FFFFFF;
@@ -166,6 +225,14 @@ margin:auto;
 }
 
 `
+
+
+const ButtonOne =styled.button`
+    background: #0CC998;
+    border-radius: 72.2872px;
+    height:35px;
+    width:144px;
+`;
 
 export default LadderModal;
 

@@ -56,8 +56,7 @@ export default function Landing() {
           <h2> Projects/Actions</h2>
           <Row>
             <ProjectBox onClick={()=>{
-              ctrctx.setCurrentProjectID("immigrationjustice");
-              history.push("/project");
+              history.push("/project/immigrationjustice");
             }}>
                   <div className="name">Dis-O 2021</div>
                   <div className="line"/>
@@ -123,7 +122,6 @@ const ContentContainer = styled.div`
     line-height: 27px;
     display: flex;
     align-items: center;
-
     color: #000000;
   }
 `
@@ -184,9 +182,9 @@ const CommitteeBox = styled.div`
 const LinkBox = styled.div`
     height:60px;
     min-width:60px;
-    background: white;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 3px;
+    // background: white;
+    // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    // border-radius: 3px;
     img{
       height:54px;
       width:60px;
