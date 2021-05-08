@@ -41,7 +41,9 @@ export default function Landing() {
           <h2> Committees</h2>
           <Row>
             {committeeData.map((data) =>
-              <CommitteeBox >
+              <CommitteeBox onClick={()=>{
+                history.push("/committee");
+              }}>
                 <div className="contentBox">
                   <div className="order">{`0${data["order"]}`}</div>
                   <div className="name">{data["name"]}</div>
@@ -146,7 +148,7 @@ const CommitteeBox = styled.div`
     border-radius: 3px;
     background: #0CC998;
     img {
-      position: absolute; 
+      position: absolute;
       top:0px;
       right:0px;
       height:111px;

@@ -11,30 +11,17 @@ import {
 
 } from '../3_Project_Page/Modules/modules'
 import ProjectContext from "../3_Project_Page/ProjectContext";
-import dummyData from '../3_Project_Page/DummyData';
-
+//import dummyData from 'dummydata';
 
 
 
 export default function CommitteePage() {
-    const data =dummyData["Immigration Justice Zine"]
+    console.log("Committee page")
     return (
-        <ProjectContext.Provider
-        value={{
-            data:data
-        }}
-        >
-        <Row>
-            <LeftPanel />
-            <ContentContainer>
-                <ProjectInfoModule/>
-                <AtAGlanceModule/>
-                <LadderModule data={data["sections"]} />
-                <UpcomingEventsModule/>
-                <HelpWantedModule/>
-            </ContentContainer>
-        </Row>
-        </ProjectContext.Provider> 
+      <Row>
+          <LeftPanel />
+          <h1> Committee Page</h1>
+      </Row>
     )
 }
 
@@ -53,6 +40,5 @@ const ContentContainer = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   grid-gap: 20px 10px;
-  
-`
 
+`
