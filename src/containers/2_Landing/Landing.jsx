@@ -37,7 +37,9 @@ export default function Landing() {
             )}
           </Row>
         </QuickLinksSection>
-        <CommitteeSection>
+        <CommitteeSection onClick={()=>{
+          history.push("/committee");
+        }}>
           <h2> Committees</h2>
           <Row>
             {committeeData.map((data) =>
@@ -146,7 +148,7 @@ const CommitteeBox = styled.div`
     border-radius: 3px;
     background: #0CC998;
     img {
-      position: absolute; 
+      position: absolute;
       top:0px;
       right:0px;
       height:111px;
