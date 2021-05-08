@@ -122,7 +122,6 @@ const ContentContainer = styled.div`
     line-height: 27px;
     display: flex;
     align-items: center;
-
     color: #000000;
   }
 `
@@ -183,9 +182,9 @@ const CommitteeBox = styled.div`
 const LinkBox = styled.div`
     height:60px;
     min-width:60px;
-    background: white;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 3px;
+    // background: white;
+    // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    // border-radius: 3px;
     img{
       height:54px;
       width:60px;

@@ -44,6 +44,7 @@ const App = () => {
 
             loginUser: async () => {
               // Authenticate and get User Info
+              console.log("Hi")
               let result = await firebase.auth().signInWithPopup(provider);
               console.log(result);
               let userId = result.user.uid;

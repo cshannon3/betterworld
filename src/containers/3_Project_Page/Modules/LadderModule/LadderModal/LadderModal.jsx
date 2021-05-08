@@ -125,22 +125,20 @@ flex-grow:1;
     display:flex;
     justify-content:space-between;
     .description{
-        background-color:blue;
+        color:blue;
     }
     .date{
-        background-color:green;
+        color:green;
     }
 }
 .tasks{
     height:400px;
     flex-grow:1;
-
-    background-color:blue;
 }
 .buttons{
     height:100px;
     width:100%;
-    background-color:pink;
+    
     display:flex;
     justify-content: space-evenly;
     align-items:center;
