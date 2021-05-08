@@ -6,6 +6,7 @@ import FolderIcon from '../../assets/Panel/folder1.png'
 import NetworkIcon from '../../assets/Panel/network1.png'
 import EarthIcon from '../../assets/Panel/planet-earth1.png'
 import UserIcon from '../../assets/Panel/user1.png'
+import { useHistory } from "react-router-dom";
 
 
 export default function LeftPanel() {
@@ -13,6 +14,7 @@ export default function LeftPanel() {
         user,
         logoutUser,
     } = useContext(ControlContext);
+    let history = useHistory();
 
 
     return (
@@ -22,21 +24,27 @@ export default function LeftPanel() {
                 {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
             </section>
             <Line />
-            <div>
+            <div onClick={()=>{
+              history.push("/");
+            }}>
+                <PhotoIcon src={EarthIcon} alt='Projects' />
+                <MenuText>OVERVIEW</MenuText>
+            </div>
+            <div onClick={()=>{
+              history.push("/project/immigrationjustice");
+            }}>
                 <PhotoIcon src={FolderIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>
             </div>
-            <div>
+            <div onClick={()=>{
+              history.push("/committee");
+            }}>
                 <PhotoIcon src={NetworkIcon} alt='Projects' />
-                <MenuText>PROJECTS</MenuText>
-            </div>
-            <div>
-                <PhotoIcon src={EarthIcon} alt='Projects' />
-                <MenuText>PROJECTS</MenuText>
+                <MenuText>COMMITTEES</MenuText>
             </div>
             <div>
                 <PhotoIcon src={UserIcon} alt='Projects' />
-                <MenuText>PROJECTS</MenuText>
+                <MenuText>MY INFO</MenuText>
             </div>
             <LogoutBtn className='logoutBtn' onClick={() => logoutUser()}>Log Out</LogoutBtn>
         </Panel>
