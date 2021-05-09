@@ -29,7 +29,7 @@ export default function ProjectPage() {
         <ProjectContext.Provider
         value={{
             data:data,
-
+            
         }}
         >
         <Row>

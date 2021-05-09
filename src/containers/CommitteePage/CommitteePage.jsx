@@ -17,24 +17,24 @@ import dummyData from '../3_Project_Page/DummyData';
 
 
 export default function CommitteePage() {
-    const data =dummyData["Immigration Justice Zine"]
+   // const data =dummyData["Immigration Justice Zine"]
     return (
-        <ProjectContext.Provider
-        value={{
-            data:data
-        }}
-        >
+        // <ProjectContext.Provider
+        // value={{
+        //     data:data
+        // }}
+        // >
         <Row>
             <LeftPanel />
             <ContentContainer>
                 <ProjectInfoModule/>
                 <AtAGlanceModule/>
-                <LadderModule data={data["sections"]} />
+                {/* <LadderModule data={data["sections"]} /> */}
                 <UpcomingEventsModule/>
                 <HelpWantedModule/>
             </ContentContainer>
         </Row>
-        </ProjectContext.Provider> 
+        // </ProjectContext.Provider> 
     )
 }
 

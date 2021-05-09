@@ -78,6 +78,7 @@ const App = () => {
                 </Route>
             </Switch>
             </div>
+            
           </ModalProvider>
         </ControlContext.Provider>
       </React.Fragment>

@@ -11,6 +11,7 @@
     "brace": "^0.11.1",
     "classnames": "^2.3.1",
     "codemirror": "^5.60.0",
+    "draft-js": "^0.11.7",
     "firebase": "^8.3.0",
     "firepad": "^1.5.11",
     "match-sorter": "^6.3.0",
@@ -33,7 +34,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-   
   },
   "eslintConfig": {
     "extends": [
@@ -52,9 +52,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-   
   }
-
 }

@@ -87,81 +87,84 @@ const projects = {
                         "content": "Research into CMU Policing History"
                     },
             
-            ],
+                ],
+                "stages":[
+                    {
+                        "id":"immigrationhistoryresearch",
+                        "sectionId":"immigration-history",
+                        "name": "Research",
+                        "type":"Research",
+                        "status":"in progress",
+                        "contributors":["bonnie", "cat"],
+                        "active_doc":{
+                            "name": "Background Research",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Document for our research"
+                        },
+                        "resources":[
+                            {
+                                "name": "Immigration Dis O 2021",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Notes from Dis O immigration Section"
+                            },
+                        ],
+                    },
+                    {
+                        "id":"immigrationhistorywriting",
+                        "sectionId":"immigration-history",
+                        "name": "Writing",
+                        "type":"Writing",
+                        "status":"not started",
+                        "contributors":["bonnie", "cat"],
+                        "active_doc":{
+                            "name": "Immigration History Section",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Document for our research"
+                        },
+                        "resources":[
+                        ],
+                    },
+                    {
+                        "id":"immigrationhistorydesign",
+                        "sectionId":"immigration-history",
+                        "name": "Design",
+                        "type":"Design",
+                        "status":"not started",
+                        "contributors":["cat"],
+                        "active_doc":{
+                            "name": "Canva",
+                                "type": "canva",
+                                "createdDate": "2/2/2",
+                                "description": "Immigration History Zine"
+                        },
+                        "resources":[
+                        ],
+                    },
+                    {
+                        "id":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "name": "Design",
+                        "type":"Design",
+                        "status":"not started",
+                        "contributors":["cat"],
+                        "active_doc":{
+                                "name": "Immigration History Section",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Document for our research"
+                        },
+                        "resources":[
+                        ],
+                       
+                    },
+                ]
             },
         ],
         "tasks":[
-            {
-                "id":"immigrationhistoryresearch",
-                "sectionId":"immigration-history",
-                "name": "Research",
-                "type":"Research",
-                "status":"in progress",
-                "contributors":["bonnie", "cat"],
-                "active_doc":{
-                    "name": "Background Research",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Document for our research"
-                },
-                "resources":[
-                    {
-                        "name": "Immigration Dis O 2021",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Notes from Dis O immigration Section"
-                    },
-                ],
-            },
-            {
-                "id":"immigrationhistorywriting",
-                "sectionId":"immigration-history",
-                "name": "Writing",
-                "type":"Writing",
-                "status":"not started",
-                "contributors":["bonnie", "cat"],
-                "active_doc":{
-                    "name": "Immigration History Section",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Document for our research"
-                },
-                "resources":[
-                ],
-            },
-            {
-                "id":"immigrationhistorydesign",
-                "sectionId":"immigration-history",
-                "name": "Design",
-                "type":"Design",
-                "status":"not started",
-                "contributors":["cat"],
-                "active_doc":{
-                    "name": "Canva",
-                        "type": "canva",
-                        "createdDate": "2/2/2",
-                        "description": "Immigration History Zine"
-                },
-                "resources":[
-                ],
-            },
-            {
-                "id":"immigrationhistoryediting",
-                "sectionId":"immigration-history",
-                "name": "Design",
-                "type":"Design",
-                "status":"not started",
-                "contributors":["cat"],
-                "active_doc":{
-                        "name": "Immigration History Section",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Document for our research"
-                },
-                "resources":[
-                ],
-               
-            },
+            
         ],
         "updates": [
             {
@@ -170,12 +173,11 @@ const projects = {
                 "sectionId":"immigration-history",
                 "author":"bonnie",
                 "date":"3/27/21",
-                "documentID":"path to document"
+                "documentID":"path to document",
+           
             }
         ],
-        
 
-            
     },
     // "disO-2020":{},
     // "disO-2021":{},

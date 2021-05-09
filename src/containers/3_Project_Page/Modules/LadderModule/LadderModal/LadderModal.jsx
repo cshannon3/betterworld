@@ -1,63 +1,70 @@
-import { useMemo, useState } from 'react';
-//import Modal from 'react-modal';
+import { useState, useContext } from 'react';
 import styled from "styled-components"
-import TeamNotesWidget from "./Notepad/NotepadWidget";
 import Modal from 'styled-react-modal'
 import * as styles from '../../sharedStyles';
+import StagesComponent from "./StagesComponent";
+import AddUpdateComponent from "./AddUpdateComponent";
+import ProjectContext from '../../../ProjectContext';
 
 
-//Modal.setAppElement('#root')
 const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
   background-color:white;
 `
-//  <TeamNotesWidget id={data["id"]}/>
 function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
-    console.log(data, "DATA", isOpen)
-    const [currentModalType, setModalType] = useState(modalType)
+    const ctx = useContext(ProjectContext);
     function InnerComponent() {
-        if (currentModalType==="helpRequests") 
-            return  (<div>{currentModalType}</div>);
         if (isOpen) return (
             <WidgetContainer>
                 <MainContainer>
-                    <div>
-                    <div className="header">
-                        <div className="description">
-                            Hello
+                    <div>  
+                        <div className="header">
+                            <div className="description">
+                                Hello
+                            </div>
+                            <div className="dates">
+                                3/4/5
+                            </div>
+                            
                         </div>
-                        <div className="dates">
-                            3/4/5 
+                        <div className="tasks">
+                            <StagesComponent data={data["stages"]}/>
                         </div>
-                    </div>
-                    <div className="tasks">
-                        Hi
-                    </div>
-                    <div className="buttons">
-                        <ButtonOne >OFFER HELP</ButtonOne>
-                        <ButtonOne >REQUEST HELP</ButtonOne>
-                    </div>
+                        <div className="buttons">
+                            <AddUpdateComponent
+                            title={"Offer Help"}
+                            saveText={"Offer"}
+                            description={"Describe how or where you would like to help"}
+                            onSave={()=>{}}
+                            />
+                            <AddUpdateComponent
+                            title={"Request Help"}
+                            saveText={"Request"}
+                            description={" Describe the work you need help with for this task..."}
+                            onSave={()=>{}}
+                            />
+                        </div>
                     </div>
                 </MainContainer>
                 <UpdatesContainer>
                     <UpdatesMenu>
-                       <div><h3>Updates</h3></div>
-                       <div>
-                          <button>Filter</button>
-                          <button>Add</button>
+                        <div><h3>Updates</h3></div>
+                        <div>
+                            <button>Filter</button>
+                        <AddUpdateComponent />
                         </div>
-                        </UpdatesMenu>
+                    </UpdatesMenu>
                     <UpdateBox>
-                    <div className={"topbar"}>
-                        <div className={"author"}>Darya
-                            <span className={"stage"}> &#8226; Research</span>
+                        <div className={"topbar"}>
+                            <div className={"author"}>Darya
+                                <span className={"stage"}> &#8226; Research</span>
+                            </div>
+                            <div className={"date"}>
+                                4/18/21
+                            </div>
                         </div>
-                        <div className={"date"}>
-                        4/18/21
-                        </div>
-                    </div>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqui.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqui.
                     </UpdateBox>
                     <UpdateBox>HEY</UpdateBox>
                     <UpdateBox>HEY</UpdateBox>
@@ -66,27 +73,30 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
         );
         return null;
     }
-    if(!data) return (null)
+    if (!data) return (null)
     return (
         <StyledModal
             isOpen={isOpen}
             onBackgroundClick={onRequestClose}
             onEscapeKeydown={onRequestClose}>
+          
+           
             <GreenTitleBar>
                 <div>{data && data["name"]}</div>
                 <div>
-                <button>Edit</button>
+                    <button>Edit</button>
                     <CloseBox onClick={onRequestClose}>X</CloseBox>
-                  
+
                 </div>
-                
+
             </GreenTitleBar>
-               <InnerComponent/> 
+            <InnerComponent />
         </StyledModal>
     );
-    
+
 
 };
+
 
 
 
@@ -96,7 +106,7 @@ width:100%;
 display:flex;
 background-color: white;
 `
- 
+
 
 const CloseBox = styled.div`
     cursor:pointer;
@@ -121,7 +131,7 @@ flex-grow:1;
     margin:auto;
 }
 .header{
-    height:100px;
+    height:33%;
     display:flex;
     justify-content:space-between;
     .description{
@@ -140,13 +150,17 @@ flex-grow:1;
     width:100%;
     
     display:flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     align-items:center;
 }
 `
 
 
-
+const TitleBar = styled(styles.GreyTitleBar)`
+    display:flex;
+    justify-content: space-between;
+    padding-right:20px;
+`
 
 
 const UpdatesMenu = styled.div`
@@ -168,7 +182,15 @@ const UpdatesMenu = styled.div`
 `
 
 
-
+const LinkBox = styled.div`
+    height:50px;
+    min-width:50px;
+    img{
+      height:54px;
+      width:60px;
+      margin:3px;
+    }
+`
 
 const UpdatesContainer = styled.div`
 background-color:#F8F8F8;
@@ -227,19 +249,43 @@ margin:auto;
 `
 
 
-const ButtonOne =styled.button`
+const ButtonOne = styled.button`
     background: #0CC998;
     border-radius: 72.2872px;
     height:35px;
     width:144px;
+    margin:10px;
 `;
 
+const TableSection = styled.section`
+    table {
+        width:100%;
+    }
+    thead {
+        background-color: var(--brand-regular);
+        border-radius: 0.4rem;
+    }
+    th,td {
+        grid-column: span 2;
+        padding: 1rem;
+        text-align: left;
+    }
+    th {
+        font-size: 1.5rem;
+    }
+    td {
+        font-size: 1rem;
+    }
+    span {
+        margin-left: 1rem;
+    }
+`;
 export default LadderModal;
 
 
 // if(currentModalType==="helpRequests")
-    
-    
+
+
 // return (
 //     <StyledModal
 //         isOpen={isOpen}

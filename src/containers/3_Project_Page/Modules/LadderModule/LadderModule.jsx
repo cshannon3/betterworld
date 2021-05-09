@@ -1,18 +1,18 @@
 import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import cn from 'classnames';
-import { matchSorter } from 'match-sorter';
+
 import LadderModal from './LadderModal/LadderModal';
 import Search from './Search';
 import styled from "styled-components"
 import * as styles from '../sharedStyles';
-
+import {fuzzyTextFilterFn} from "shared/utils";
 import ProjectContext from '../../ProjectContext';
 
 
-function fuzzyTextFilterFn(rows, id, filterValue) {
-    return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
-}
+// function fuzzyTextFilterFn(rows, id, filterValue) {
+//     return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
+// }
 //Modal.setAppElement('#root')
 
 

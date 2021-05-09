@@ -11,23 +11,21 @@ const ProjectContext = createContext({
     getSectionData: ()=>{},
     addMemberToSection: () =>{},
     removeMemberFromSection: () =>{},
+    getStageData: ()=>{},
     
-    getTaskData: ()=>{},
-    
-    addMemberToTask: ()=>{},
-    removeMemberFromTask: ()=>{ },
+    addMemberToStage: ()=>{},
+    removeMemberFromStage: ()=>{ },
 
-    addHelpRequestToTask:()=>{},
+    addHelpRequestToStage:()=>{},
     handleHelpRequest:()=>{},
 
-    addResourceToTask: ()=>{},
-    removeResourceFromTask: ()=>{},
+    addResourceToStage: ()=>{},
+    removeResourceFromStage: ()=>{},
 
-    updateTaskStatus: () =>{},
-
-    addUpdateToTask: ()=>{},
-
+    updateStageStatus: () =>{},
     
+    addUpdateToStage: ()=>{},
+
 });
 
 export default ProjectContext;
