@@ -25,7 +25,9 @@ const db = firebase.firestore();
 export const provider = new firebase.auth.GoogleAuthProvider();
 
 export function getUserRef(userId) { return db.collection("users").doc(userId); }
-export const getUserTeams = uid => { return db.collection('teams').where('users', 'array-contains', uid);};
+export const getProjects = () => { return db.collection('projects');};
+
+export const getProjectRef = id => { return db.collection('projects').doc(id);};
 
 
 export async function createNewUser(result) {
@@ -51,3 +53,15 @@ export async function getUserData(userId) {
 async function setUserData(userId, data) {await getUserRef(userId).set(data);}
 export async function updateUserData(userId, data) {await getUserRef(userId).update(data);}
 
+
+export async function createProject(projectData) {
+    // Add team
+    let res = await db.collection("projects").add(projectData);
+   // let userData = await getUserData(user.id);
+    return {...res, "id":res.id};
+}
+
+export async function updateProject(projectId, projectData) {
+    // Add team
+    await getProjectRef(projectId).update(projectData);
+}

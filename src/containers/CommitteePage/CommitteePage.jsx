@@ -11,7 +11,7 @@ import {
 
 } from '../3_Project_Page/Modules/modules'
 import ProjectContext from "../3_Project_Page/ProjectContext";
-import dummyData from '../3_Project_Page/DummyData';
+//import dummyData from '../3_Project_Page/DummyData';
 
 
 

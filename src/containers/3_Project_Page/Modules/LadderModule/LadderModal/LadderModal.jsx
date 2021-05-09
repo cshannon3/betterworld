@@ -5,6 +5,9 @@ import * as styles from '../../sharedStyles';
 import StagesComponent from "./StagesComponent";
 import AddUpdateComponent from "./AddUpdateComponent";
 import ProjectContext from '../../../ProjectContext';
+import ControlContext from 'shared/control-context';
+import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
+import { cleanUpdateModel } from 'data_models/projectmodel';
 
 
 const StyledModal = Modal.styled`
@@ -13,9 +16,14 @@ const StyledModal = Modal.styled`
   background-color:white;
 `
 function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
+    const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
+    
     function InnerComponent() {
-        if (isOpen) return (
+        if (!isOpen || !ctrctx.user) return null;
+        const userName = ctrctx.user["displayName"];
+        console.log(userName);
+        return (
             <WidgetContainer>
                 <MainContainer>
                     <div>  
@@ -36,13 +44,39 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                             title={"Offer Help"}
                             saveText={"Offer"}
                             description={"Describe how or where you would like to help"}
-                            onSave={()=>{}}
+                            onSave={({stage, content})=>{
+                                const newUpdate = cleanUpdateModel({
+                                    "sectionId":"",
+                                    "stage":stage,
+                                    "type":"offer to help",
+                                    "status":"not started",
+                                    "author":ctrctx.user.displayName,
+                                    "authorId":ctrctx.user.id,
+                                    "date":Date.now(),
+                                    "content":content,
+                                    "reactions":[ ]
+                                });
+                                ctx.addUpdate(newUpdate, data.id);
+                            }}
                             />
                             <AddUpdateComponent
                             title={"Request Help"}
                             saveText={"Request"}
                             description={" Describe the work you need help with for this task..."}
-                            onSave={()=>{}}
+                            onSave={({stage, content})=>{
+                                const newUpdate = cleanUpdateModel({
+                                    "sectionId":"",
+                                    "stage":stage,
+                                    "type":"request help",
+                                    "status":"not started",
+                                    "author":ctrctx.user.displayName,
+                                    "authorId":ctrctx.user.id,
+                                    "date":Date.now(),
+                                    "content":content,
+                                    "reactions":[ ]
+                                });
+                                ctx.addUpdate(newUpdate, data.id);
+                            }}
                             />
                         </div>
                     </div>
@@ -55,19 +89,26 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         <AddUpdateComponent />
                         </div>
                     </UpdatesMenu>
-                    <UpdateBox>
+                    {data && data["updates"].map((updateData)=>{
+                      return   <UpdateBox key={updateData["id"]}>
                         <div className={"topbar"}>
-                            <div className={"author"}>Darya
-                                <span className={"stage"}> &#8226; Research</span>
+                            <div className={"author"}>{updateData["author"]}
+                                <span className={"stage"}> &#8226; {updateData["stage"]}</span>
                             </div>
                             <div className={"date"}>
-                                4/18/21
+                                {updateData["date"]}
                             </div>
                         </div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqui.
+                        <p>
+                        {updateData["content"]}
+                        </p>
+                        <SlackCounter 
+                        user={userName}
+                        counters={updateData["reactions"]}
+                        />
+                        {/* <SlackSelector />  */}
                     </UpdateBox>
-                    <UpdateBox>HEY</UpdateBox>
-                    <UpdateBox>HEY</UpdateBox>
+                    })}
                 </UpdatesContainer>
             </WidgetContainer>
         );
@@ -79,8 +120,6 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
             isOpen={isOpen}
             onBackgroundClick={onRequestClose}
             onEscapeKeydown={onRequestClose}>
-          
-           
             <GreenTitleBar>
                 <div>{data && data["name"]}</div>
                 <div>

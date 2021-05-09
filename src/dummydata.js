@@ -62,7 +62,7 @@ const projects = {
         "start_date":"3/7/2021",
         "expected_end_date":"6/15/2021",
         "description": "Student guide serving as an \"alternative\" orientation to CMU; nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.",
-        "target date": "June 15th",
+        "target_date": "June 15th",
         "sections":[
             {
                 "id":"immigration-history",
@@ -77,17 +77,8 @@ const projects = {
                         "createdDate": "2/2/2",
                         "description": "Book that’s a deep dive into how LAPD uses palantir and other surveillance tech"
                     },
-                    
                 ],
-                "help_requests":[
-                    {
-                        "content": "Feedback on page 10 graphic"
-                    },
-                    {
-                        "content": "Research into CMU Policing History"
-                    },
-            
-                ],
+              
                 "stages":[
                     {
                         "id":"immigrationhistoryresearch",
@@ -160,24 +151,99 @@ const projects = {
                         ],
                        
                     },
-                ]
+                ],
+
+                "updates": [
+                    {
+                        "id":"u1",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Research",
+                        "type":"help request",
+                        "status":"done",
+                        "author":"Bonnie",
+                        "authorId":"bonnie",
+                        "date":"3/27/21",
+                        "documentID":"path to document",
+                        "content":"Can someone look through this docment and let us know how it looks. I feel like we are missing a few things.",
+                        "reactions":[
+                           {
+                            'emoji': '👍', // String emoji reaction
+                            'by': 'case', // String of persons name
+                           },
+                           {
+                            'emoji': '🗿', // String emoji reaction
+                            'by': 'Connor Shannon', // String of persons name
+                           }
+                        ]
+                            
+                    },
+                    {
+                        "id":"u2",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Research",
+                        "type":"update",
+                        "status":"done",
+                        "author":"Cat",
+                        "authorId":"cat",
+                        "date":"4/15/21",
+                        "documentID":"path to document",
+                        "content":"Just finished the final draft of the doc. Meeting tomorrow to do another run through.",
+                        "reactions":[
+                           {
+                            'emoji': '🎉', // String emoji reaction
+                            'by': 'Darya', // String of persons name
+                           },
+                          
+                        ]     
+                    },
+                    {
+                        "id":"u3",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Writing",
+                        "type":"offer to help",
+                        "status":"done",
+                        "author":"Sarah",
+                        "authorId":"sarah",
+                        "date":"4/15/21",
+                        "documentID":"path to document",
+                        "content":"I can help with the writing when you guys are done with the research, just lmk!",
+                        "reactions":[
+                           {
+                            'emoji': '❤️', // String emoji reaction
+                            'by': 'Bonnie', // String of persons name
+                           },
+                           {
+                            'emoji': '❤️', // String emoji reaction
+                            'by': 'Connor Shannon', // String of persons name
+                           }
+                        ]
+                    },
+                    {
+                        "id":"u4",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Research",
+                        "type":"help request",
+                        "status":"open",
+                        "author":"Bonnie",
+                        "authorId":"bonnie",
+                        "date":"3/27/21",
+                        "content":"Does anyone know someone who could help with the history of ICE in pittsburgh section",
+                        "reactions":[
+                           {
+                            'emoji': '👍', // String emoji reaction
+                            'by': 'case', // String of persons name
+                           },
+                        ]
+                            
+                    },
+                ],
             },
         ],
-        "tasks":[
-            
-        ],
-        "updates": [
-            {
-                "id":"u1",
-                "taskid":"immigrationhistoryediting",
-                "sectionId":"immigration-history",
-                "author":"bonnie",
-                "date":"3/27/21",
-                "documentID":"path to document",
-           
-            }
-        ],
-
+    
     },
     // "disO-2020":{},
     // "disO-2021":{},

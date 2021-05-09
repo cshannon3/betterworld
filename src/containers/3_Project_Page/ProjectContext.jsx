@@ -24,7 +24,7 @@ const ProjectContext = createContext({
 
     updateStageStatus: () =>{},
     
-    addUpdateToStage: ()=>{},
+    addUpdate: ()=>{},
 
 });
 

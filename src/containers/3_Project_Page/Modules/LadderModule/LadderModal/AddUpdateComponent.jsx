@@ -40,7 +40,9 @@ const AddUpdateButton  = ({
               <textarea rows="4" cols="50">
               {description}
         </textarea>
-          <button onClick={onSave}>{saveText}</button>
+          <button onClick={
+            ()=>onSave({stage:"Research",content:description})
+            }>{saveText}</button>
         </StyledModal>
       </div>
     )

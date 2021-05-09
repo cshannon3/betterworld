@@ -9,6 +9,7 @@ const ControlContext = createContext({
   user:        null,
   setUser:     ()=>{},
   data:        null,
+  projectsData: null,
   currentProjectID: null,
   setCurrentProjectID: ()=>{},
   getProjectData: ()=>{}

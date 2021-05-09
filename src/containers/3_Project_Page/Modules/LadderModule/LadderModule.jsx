@@ -1,6 +1,6 @@
 import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
-import cn from 'classnames';
+//import cn from 'classnames';
 
 import LadderModal from './LadderModal/LadderModal';
 import Search from './Search';
@@ -10,18 +10,12 @@ import {fuzzyTextFilterFn} from "shared/utils";
 import ProjectContext from '../../ProjectContext';
 
 
-// function fuzzyTextFilterFn(rows, id, filterValue) {
-//     return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
-// }
-//Modal.setAppElement('#root')
-
-
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-function LadderModule({ data }) {
+function LadderModule() {
     const ctx = useContext(ProjectContext);
-
+    const data = ctx.data["sections"];
     const [modalIsOpen,setIsOpen] =useState(false);
     const [modalData,setModalData] =useState(null);
     const [modalType,setModalType] =useState(null);
@@ -67,18 +61,18 @@ function LadderModule({ data }) {
             Header: 'Status',
             accessor: 'status',
         },
-        {
-            Header: 'Ways To Help',
-            accessor: 'help_requests',
-            Cell: ({ cell }) => {
-                const helpRequests = cell.value;
-                console.log(helpRequests);
-               return ( <span  onClick={()=>openModal(cell, "helpRequests")}>
-                  {helpRequests.length}
-                </span>
-                )
-            }
-        },
+        // {
+        //     Header: 'Ways To Help',
+        //     accessor: 'help_requests',
+        //     Cell: ({ cell }) => {
+        //         const helpRequests = cell.value;
+        //         console.log(helpRequests);
+        //        return ( <span  onClick={()=>openModal(cell, "helpRequests")}>
+        //           {helpRequests.length}
+        //         </span>
+        //         )
+        //     }
+        // },
     ], []);
 
     const filterTypes = useMemo(() => ({
