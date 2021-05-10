@@ -7,6 +7,7 @@ import NetworkIcon from '../../assets/Panel/network1.png'
 import EarthIcon from '../../assets/Panel/planet-earth1.png'
 import UserIcon from '../../assets/Panel/user1.png'
 import { useHistory } from "react-router-dom";
+import './panel.css';
 
 
 export default function LeftPanel() {
@@ -24,25 +25,25 @@ export default function LeftPanel() {
                 {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
             </section>
             <Line />
-            <div onClick={()=>{
+            <div className="active" id="overviewSideLink" onClick={()=>{
               history.push("/");
             }}>
-                <PhotoIcon src={EarthIcon} alt='Projects' />
+                <PhotoIcon src={EarthIcon} alt='Overview' />
                 <MenuText>OVERVIEW</MenuText>
             </div>
-            <div onClick={()=>{
+            <div id="projectSideLink" onClick={()=>{
               history.push("/project/immigrationjustice");
             }}>
                 <PhotoIcon src={FolderIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>
             </div>
-            <div onClick={()=>{
+            <div id="committeeSideLink" onClick={()=>{
               history.push("/committee");
             }}>
-                <PhotoIcon src={NetworkIcon} alt='Projects' />
+                <PhotoIcon src={NetworkIcon} alt='Committees' />
                 <MenuText>COMMITTEES</MenuText>
             </div>
-            <div>
+            <div id="myInfoSideLink">
                 <PhotoIcon src={UserIcon} alt='Projects' />
                 <MenuText>MY INFO</MenuText>
             </div>
