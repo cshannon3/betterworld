@@ -58,7 +58,7 @@ export default function Landing() {
           <h2> Projects/Actions</h2>
           <Row>
             <ProjectBox onClick={()=>{
-              history.push("/project/immigrationjustice");
+              history.push("/project/V4qZkmLeS8zucg3x6vYg");
             }}>
                   <div className="name">Dis-O 2021</div>
                   <div className="line"/>

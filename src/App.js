@@ -7,7 +7,8 @@ import {
   provider,
   getUserData,
   createNewUser,
-  updateUserData
+  updateUserData,
+  getProjects
 } from 'shared/firebase';
 //import dummydata from 'shared/dummydata';
 import firebase from "firebase/app";
@@ -23,17 +24,33 @@ import data from "dummydata";
 
 
 
-let userListener, teamsListener;
+let userListener, projectsListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [currentProjectID, setCurrentProjectID] = useState(null);
+  const [projectsData, setProjectsData] = useState([]);
+  //const [currentProjectID, setCurrentProjectID] = useState(null);
 
   window.onload = function () {
     console.log("ON LOAD");
     let _user = JSON.parse(window.localStorage.getItem("user"));
-    if (_user) { setUser(_user); }
-  }
+    let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
+    //let _project = window.localStorage.getItem("currentProjectId");
+    if (_user ) { 
+      setUser(_user); 
+      projectsListener = getProjects().onSnapshot(function (querySnapshot) {
+        
+        let _projectsData = {};
+        querySnapshot.forEach(function (doc) {
+          _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+        });
+        console.log(_projectsData);
+      setProjectsData(_projectsData);
+      });
+      
+    }
+
+    }
 
   return (
     <Router>
@@ -41,7 +58,7 @@ const App = () => {
         <ControlContext.Provider
           value={{
             user, // ID of current user
-
+            projectsData,
             loginUser: async () => {
               // Authenticate and get User Info
               console.log("Hi")
@@ -52,6 +69,16 @@ const App = () => {
               //let data;
               if (!userData) userData = await createNewUser(result);
               else userData = { id: userId, ...userData, }
+
+              projectsListener = getProjects().onSnapshot(function (querySnapshot) {
+                let _projectsData = {};
+                querySnapshot.forEach(function (doc) {
+                  _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+                });
+                console.log(_projectsData);
+                setProjectsData(_projectsData);
+                window.localStorage.setItem("projects", JSON.stringify(_projectsData));
+              });
               setUser(userData); window.localStorage.setItem("user", JSON.stringify(userData));
             },
 
@@ -64,7 +91,13 @@ const App = () => {
               }).catch(function (error) { console.log(error) });
             },
             data: data,
-            getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
+       // getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
+            getProjectData: (currentID)=>{
+              if(currentID!==null&& projectsData!=null) return projectsData[currentID]
+            if(projectsData==null){
+              console.log("null data")
+            }
+            }
     
           }}>
           <ModalProvider>
@@ -78,6 +111,7 @@ const App = () => {
                 </Route>
             </Switch>
             </div>
+
           </ModalProvider>
         </ControlContext.Provider>
       </React.Fragment>

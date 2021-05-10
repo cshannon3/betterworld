@@ -62,7 +62,7 @@ const projects = {
         "start_date":"3/7/2021",
         "expected_end_date":"6/15/2021",
         "description": "Student guide serving as an \"alternative\" orientation to CMU; nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.",
-        "target date": "June 15th",
+        "target_date": "June 15th",
         "sections":[
             {
                 "id":"immigration-history",
@@ -77,105 +77,173 @@ const projects = {
                         "createdDate": "2/2/2",
                         "description": "Book that’s a deep dive into how LAPD uses palantir and other surveillance tech"
                     },
-                    
                 ],
-                "help_requests":[
+              
+                "stages":[
                     {
-                        "content": "Feedback on page 10 graphic"
+                        "id":"immigrationhistoryresearch",
+                        "sectionId":"immigration-history",
+                        "name": "Research",
+                        "type":"Research",
+                        "status":"in progress",
+                        "contributors":["bonnie", "cat"],
+                        "active_doc":{
+                            "name": "Background Research",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Document for our research"
+                        },
+                        "resources":[
+                            {
+                                "name": "Immigration Dis O 2021",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Notes from Dis O immigration Section"
+                            },
+                        ],
                     },
                     {
-                        "content": "Research into CMU Policing History"
+                        "id":"immigrationhistorywriting",
+                        "sectionId":"immigration-history",
+                        "name": "Writing",
+                        "type":"Writing",
+                        "status":"not started",
+                        "contributors":["bonnie", "cat"],
+                        "active_doc":{
+                            "name": "Immigration History Section",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Document for our research"
+                        },
+                        "resources":[
+                        ],
                     },
-            
-            ],
-            },
-        ],
-        "tasks":[
-            {
-                "id":"immigrationhistoryresearch",
-                "sectionId":"immigration-history",
-                "name": "Research",
-                "type":"Research",
-                "status":"in progress",
-                "contributors":["bonnie", "cat"],
-                "active_doc":{
-                    "name": "Background Research",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Document for our research"
-                },
-                "resources":[
                     {
-                        "name": "Immigration Dis O 2021",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Notes from Dis O immigration Section"
+                        "id":"immigrationhistorydesign",
+                        "sectionId":"immigration-history",
+                        "name": "Design",
+                        "type":"Design",
+                        "status":"not started",
+                        "contributors":["cat"],
+                        "active_doc":{
+                            "name": "Canva",
+                                "type": "canva",
+                                "createdDate": "2/2/2",
+                                "description": "Immigration History Zine"
+                        },
+                        "resources":[
+                        ],
+                    },
+                    {
+                        "id":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "name": "Design",
+                        "type":"Design",
+                        "status":"not started",
+                        "contributors":["cat"],
+                        "active_doc":{
+                                "name": "Immigration History Section",
+                                "type": "googleDoc",
+                                "createdDate": "2/2/2",
+                                "description": "Document for our research"
+                        },
+                        "resources":[
+                        ],
+                       
                     },
                 ],
-            },
-            {
-                "id":"immigrationhistorywriting",
-                "sectionId":"immigration-history",
-                "name": "Writing",
-                "type":"Writing",
-                "status":"not started",
-                "contributors":["bonnie", "cat"],
-                "active_doc":{
-                    "name": "Immigration History Section",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Document for our research"
-                },
-                "resources":[
-                ],
-            },
-            {
-                "id":"immigrationhistorydesign",
-                "sectionId":"immigration-history",
-                "name": "Design",
-                "type":"Design",
-                "status":"not started",
-                "contributors":["cat"],
-                "active_doc":{
-                    "name": "Canva",
-                        "type": "canva",
-                        "createdDate": "2/2/2",
-                        "description": "Immigration History Zine"
-                },
-                "resources":[
-                ],
-            },
-            {
-                "id":"immigrationhistoryediting",
-                "sectionId":"immigration-history",
-                "name": "Design",
-                "type":"Design",
-                "status":"not started",
-                "contributors":["cat"],
-                "active_doc":{
-                        "name": "Immigration History Section",
-                        "type": "googleDoc",
-                        "createdDate": "2/2/2",
-                        "description": "Document for our research"
-                },
-                "resources":[
-                ],
-               
-            },
-        ],
-        "updates": [
-            {
-                "id":"u1",
-                "taskid":"immigrationhistoryediting",
-                "sectionId":"immigration-history",
-                "author":"bonnie",
-                "date":"3/27/21",
-                "documentID":"path to document"
-            }
-        ],
-        
 
-            
+                "updates": [
+                    {
+                        "id":"u1",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Research",
+                        "type":"help request",
+                        "status":"done",
+                        "author":"Bonnie",
+                        "authorId":"bonnie",
+                        "date":"3/27/21",
+                        "documentID":"path to document",
+                        "content":"Can someone look through this docment and let us know how it looks. I feel like we are missing a few things.",
+                        "reactions":[
+                           {
+                            'emoji': '👍', // String emoji reaction
+                            'by': 'case', // String of persons name
+                           },
+                           {
+                            'emoji': '🗿', // String emoji reaction
+                            'by': 'Connor Shannon', // String of persons name
+                           }
+                        ]
+                            
+                    },
+                    {
+                        "id":"u2",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Research",
+                        "type":"update",
+                        "status":"done",
+                        "author":"Cat",
+                        "authorId":"cat",
+                        "date":"4/15/21",
+                        "documentID":"path to document",
+                        "content":"Just finished the final draft of the doc. Meeting tomorrow to do another run through.",
+                        "reactions":[
+                           {
+                            'emoji': '🎉', // String emoji reaction
+                            'by': 'Darya', // String of persons name
+                           },
+                          
+                        ]     
+                    },
+                    {
+                        "id":"u3",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Writing",
+                        "type":"offer to help",
+                        "status":"done",
+                        "author":"Sarah",
+                        "authorId":"sarah",
+                        "date":"4/15/21",
+                        "documentID":"path to document",
+                        "content":"I can help with the writing when you guys are done with the research, just lmk!",
+                        "reactions":[
+                           {
+                            'emoji': '❤️', // String emoji reaction
+                            'by': 'Bonnie', // String of persons name
+                           },
+                           {
+                            'emoji': '❤️', // String emoji reaction
+                            'by': 'Connor Shannon', // String of persons name
+                           }
+                        ]
+                    },
+                    {
+                        "id":"u4",
+                        "taskid":"immigrationhistoryediting",
+                        "sectionId":"immigration-history",
+                        "stage":"Research",
+                        "type":"help request",
+                        "status":"open",
+                        "author":"Bonnie",
+                        "authorId":"bonnie",
+                        "date":"3/27/21",
+                        "content":"Does anyone know someone who could help with the history of ICE in pittsburgh section",
+                        "reactions":[
+                           {
+                            'emoji': '👍', // String emoji reaction
+                            'by': 'case', // String of persons name
+                           },
+                        ]
+                            
+                    },
+                ],
+            },
+        ],
+    
     },
     // "disO-2020":{},
     // "disO-2021":{},

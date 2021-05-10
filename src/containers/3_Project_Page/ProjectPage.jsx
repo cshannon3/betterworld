@@ -15,21 +15,49 @@ import {
 import ProjectContext from "./ProjectContext";
 //import dummyData from './DummyData';
 import ControlContext from "../../shared/control-context";
-
+import {updateProject} from "shared/firebase";
 
 
 export default function ProjectPage() {
     const appCtx = useContext(ControlContext);
     const urlParts = window.location.href.split("/")
     const projectId = urlParts[urlParts.length-1]
-    const data = appCtx.getProjectData(projectId);
-    console.log(data);
+    const [projectData, setProjectData] = useState(appCtx.getProjectData(projectId));
     //dummyData["Immigration Justice Zine"]
     return (
         <ProjectContext.Provider
         value={{
-            data:data,
+            data:projectData,
+            addSectionToProject: () =>{},
+            editSection:()=>{},
+            removeSectionFromProject:()=>{},
+            addMemberToSection: () =>{},
+            removeMemberFromSection: () =>{},
+            getStageData: ()=>{},
+            
+            addMemberToStage: ()=>{},
+            removeMemberFromStage: ()=>{ },
 
+            addHelpRequestToStage:()=>{},
+            handleHelpRequest:()=>{},
+
+            addResourceToStage: ()=>{},
+            updateStageStatus: () =>{},
+            
+            addUpdate: (updateData, sectionId)=>  {
+                console.log(sectionId);
+                let sections = [...projectData["sections"]];
+                let s = sections.findIndex((sec)=>sec.id==sectionId);
+                console.log(s);
+                console.log(sections[s]);
+                sections[s] = {...sections[s],  "updates":[...sections[s]["updates"], updateData]}
+                console.log(s);
+                const newData = {...projectData, "sections":sections};
+                updateProject(newData.id, newData);
+                setProjectData(newData);
+               
+                
+            },
         }}
         >
         <Row>
@@ -37,7 +65,7 @@ export default function ProjectPage() {
             <ContentContainer>
                 <ProjectInfoModule/>
                 <AtAGlanceModule/>
-                <LadderModule data={data["sections"]} />
+                <LadderModule/>
                 {/* <UpcomingEventsModule/>
                 <HelpWantedModule/> */}
             </ContentContainer>
