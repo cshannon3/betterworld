@@ -22,7 +22,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
     const [selectorOpen, setSelectorOpen] = useState(null);
     const [sectionData, setSectionData] = useState(data);
     useEffect(() => {
-        if(data!= sectionData){
+        if(sectionData ==null){
             setSectionData(data);
         }
       });
@@ -72,7 +72,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                         "reactions": []
                                     });
                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-                                   console.log("add", newSectionData);
+                                 
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData)
                                 }}
@@ -96,7 +96,6 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                         "reactions": [
                                         ]
                                     });
-                                    console.log("add", newSectionData);
                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData)
@@ -130,7 +129,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                     "reactions": [
                                     ]
                                 });
-                                console.log("add", newSectionData);
+                               
                                 const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
                                 ctx.updateSection(newSectionData);
                                 setSectionData(newSectionData)
@@ -151,7 +150,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                     let u = newUpdates.findIndex((up)=>up.id==newUpdateData.id);
                                     newUpdates[u]=newUpdateData;
                                     let newSectionData = {...sectionData,  "updates":newUpdates}
-                                    console.log("update", newSectionData);
+                                
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData);
                                     //ctx.updateUpdate(newUpdateData, sectionData.id)
@@ -164,13 +163,14 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                 } }
                                 deleteUpdate={(updateData)=>{
                                     if (window.confirm("Are you sure? This action cannot be reversed")) {
-  
-                                        if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
+                                        console.log(updateData);
+                                        //if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
+                                           // console.log("good")
                                             let newSectionData = {...sectionData,  "updates":sectionData["updates"].filter(u=>u.id!=updateData.id)}
-                                            console.log("update", newSectionData);
+                                            console.log(newSectionData);
                                             ctx.updateSection(newSectionData);
                                             setSectionData(newSectionData);
-                                        }
+                                       // }
                                         
                                        // ctx.deleteUpdate(updateData, sectionData.id);
                                     }else{

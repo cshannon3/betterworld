@@ -5,21 +5,50 @@ import { GrBlockQuote } from "react-icons/gr";
 import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
 
 
+
+
+
+export function MyEditor({content, onSave, onCancel}) {
+
+    
+    const [editorState, setEditorState] = React.useState(
+      () => content !== undefined ? EditorState.createWithContent(ContentState.createFromText(content)) : EditorState.createEmpty(),
+    );
+
+    return (
+    <div>
+    <div className="RichEditor-root">
+    
+         <Editor editorState={editorState} onChange={setEditorState} />
+        
+    </div>
+     <button onClick={()=>{
+        const blocks = convertToRaw(editorState.getCurrentContent()).blocks;
+        const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
+        onSave(value);
+     }}>save</button>
+     <button onClick={onCancel}>cancel</button>
+     </div>
+    );
+  }
+
+
+  
 export default class RichEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             editorState: 
             this.props.content !== undefined ? EditorState.createWithContent(ContentState.createFromText(this.props.content)) : EditorState.createEmpty(),
+            
         };
-
-        this.focus = () => this.refs.editor.focus();
+        this.textInput = React.createRef();
+        this.focus = () => this.textInput.editor.focus();
         this.onChange = (editorState) => {
             const blocks = convertToRaw(editorState.getCurrentContent()).blocks;
             const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
             this.props.changeHandler(value);
             this.setState({ editorState: editorState });
-
         }  //this.setState({ editorState, annotationContent: editorState });
         this.handleKeyCommand = (command) => this._handleKeyCommand(command);
         this.onTab = (e) => this._onTab(e);
@@ -27,6 +56,7 @@ export default class RichEditor extends React.Component {
         this.toggleInlineStyle = (style) => {
             this._toggleInlineStyle(style);
         }
+
 
     }
 
@@ -104,7 +134,7 @@ export default class RichEditor extends React.Component {
                         onChange={this.onChange}
                         onTab={this.onTab}
                         placeholder=""
-                        ref="editor"
+                        ref={this.textInput}
                         spellCheck={true}
                     />
                 </div>

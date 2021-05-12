@@ -2,7 +2,7 @@ import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
 import * as styles from '../../sharedStyles';
-import RichEditor from "../RichTextEditor/RichTextEditor";
+import {MyEditor} from "../RichTextEditor/RichTextEditor";
 
 const StyledModal = Modal.styled`
 width: 362px;
@@ -57,16 +57,26 @@ const AddUpdateButton = ({
           </div>
         </MenuLine>
 
-        <RichEditor
+        <MyEditor
           content={content}
+          onSave={
+            (val)=>{
+              onSave({ stage: selectedStage, content: val})
+              //setContent(value)
+            }
+          }
+          onCancel={
+            ()=>{}
+          }
+          
           changeHandler={(value) => setContent(value)}
         />
         {/* <textarea rows="4" cols="50">
               {description}
         </textarea> */}
-        <button onClick={
+        {/* <button onClick={
           () => onSave({ stage: selectedStage, content: content })
-        }>{saveText}</button>
+        }>{saveText}</button> */}
       </StyledModal>
     </div>
   )

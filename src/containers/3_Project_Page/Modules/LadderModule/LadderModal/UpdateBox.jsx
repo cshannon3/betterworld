@@ -2,107 +2,175 @@ import styled from "styled-components";
 import { useMemo, useState, useEffect } from 'react';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import _ from 'lodash';
-import {formatTimestamp} from "shared/utils";
-import { AiOutlineEdit, AiOutlineDelete} from "react-icons/ai";
+import { formatTimestamp } from "shared/utils";
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import RichEditor, {MyEditor} from "../RichTextEditor/RichTextEditor";
+
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
 const UpdateBox = ({
-    updateData, 
-    userName, 
-    isSelector, 
-    setSelectorOpen=()=>{}, 
-    updateUpdate=()=>{}, 
-    deleteUpdate=()=>{}
+    updateData,
+    userName,
+    isSelector,
+    setSelectorOpen = () => { },
+    updateUpdate = () => { },
+    deleteUpdate = () => { }
 }) => {
-    const isCurrentUser = updateData.author==userName;
-
+    const isCurrentUser = updateData.author == userName;
+    const [isEditing, setIsEditing] = useState(false);
+    const [isShowingReplies, setIsShowingReplies] = useState(false);
+    const [content, setContent] = useState(updateData["content"]);
     useEffect(() => {
         // Update the document title using the browser API
-      });
-      
-    
-    function handleSelect(emoji){
+    });
+
+
+    function handleSelect(emoji) {
         console.log(emoji, "HI");
         const index = _.findIndex(updateData["reactions"], { emoji, by: userName })
         console.log(index);
         if (index > -1) {
             const newReactions = [...updateData["reactions"].slice(0, index), ...updateData["reactions"].slice(index + 1)]
-            const newUpdateData = {...updateData, "reactions": newReactions}
+            const newUpdateData = { ...updateData, "reactions": newReactions }
             console.log(newReactions);
             updateUpdate(newUpdateData);
             setSelectorOpen(newUpdateData);
-          
+
         } else {
             const newReactions = [...updateData.reactions, { emoji, by: userName }]
-            const newUpdateData = {...updateData, "reactions": newReactions}
+            const newUpdateData = { ...updateData, "reactions": newReactions }
             updateUpdate(newUpdateData);
             console.log(newUpdateData);
             setSelectorOpen(newUpdateData);
         }
-      }
-
-    
-    function inner() {
-        return (
-            <div>
-                <div className={"topbar"}>
-                    <div className={"author"}>{updateData["author"]}
-                        <span className={"stage"}> &#8226; {updateData["stage"]}</span>
-                    </div>
-                    <div className={"date"}>
-                        {formatTimestamp(updateData["date"])}
-                        
-                    </div>
-                   {isCurrentUser&&
-                    <div>
-                    <AiOutlineEdit
-                        onClick={()=>{}}
-                    />
-                    <AiOutlineDelete
-                        onClick={()=>{
-
-                                deleteUpdate(updateData);
-                    
-                        }}
-                    />
-                    </div>
-                    }
-
-                </div>
-                <p className={"content"}>
-                    {updateData["content"]}
-                </p>
-                <SlackCounter
-                    user={userName}
-                    counters={updateData["reactions"]}
-                    onAdd={ ()=>setSelectorOpen(updateData) }
-                    onSelect={ emoji=>handleSelect(emoji) }
-                />
-                {isSelector?<SlackSelector 
-                onSelect={ handleSelect }
-                />  :null}
-                
-            </div>
-        );
     }
 
- 
+    const TypeRow = () => {
+        return (
+            <TypeRowDiv >Update Type</TypeRowDiv>
+        )
+    }
+    const HeaderRow = () => {
+        return (<div className={"topbar"}>
+            <div className={"author"}>{updateData["author"]}
+                <span className={"stage"}> &#8226; {updateData["stage"]}</span>
+            </div>
+            <div className={"date"}>
+                {formatTimestamp(updateData["date"])}
+
+            </div>
+            {isCurrentUser &&
+                <div>
+                    <AiOutlineEdit
+                        onClick={() => {setIsEditing(!isEditing) }}
+                    />
+                    <AiOutlineDelete
+                        onClick={() => { deleteUpdate(updateData); }}
+                    />
+                </div>
+            }
+
+        </div>);
+    }
+    const ContentRow = () => {
+        return (
+        <p className={"content"}>
+        {updateData["content"]}
+        </p>)
+    }
+    function ContentRowEdit() {
+        console.log()
+        return (
+            <div className={"content"}>
+             <MyEditor
+                content={content}
+                onSave={(val)=>{
+                    const newUpdateData = { ...updateData, "content": val }
+                    updateUpdate(newUpdateData);
+                    setIsEditing(false);
+                }}
+                onCancel={()=>{
+                    setIsEditing(false);
+                }}
+                //changeHandler={(value) => setContent(value)}
+        />
+         </div>
+        )
+    }
+
+    const FlagRow = () => {
+        return (<div></div>)
+
+    }
+    const ReactionRow = () => {
+        return (
+        <SlackCounter
+            user={userName}
+            counters={updateData["reactions"]}
+            onAdd={() => setSelectorOpen(updateData)}
+            onSelect={emoji => handleSelect(emoji)}
+        />);
+    }
+  
+    const RepliesInfoRow = () => {
+        return (<div></div>)
+    }
+    const RepliesListRow = () => {
+        return (<div></div>)
+    }
+
+    // const inner = () => {
+    //     return (
+    //         <div>
+
+               
+    //             <SlackCounter
+    //                 user={userName}
+    //                 counters={updateData["reactions"]}
+    //                 onAdd={() => setSelectorOpen(updateData)}
+    //                 onSelect={emoji => handleSelect(emoji)}
+    //             />
+    //             {isSelector ? <SlackSelector onSelect={handleSelect} /> : null}
+
+    //         </div>
+    //     );
+    // }
+
+
 
     return updateData["type"] == "offer to help" ?
         (
             <OfferHelpBox key={updateData["id"]}>
-                {inner()}
+                <HeaderRow/>
+                {isEditing? <ContentRowEdit/> : <ContentRow/>}
+                <FlagRow/>
+                <ReactionRow/>
+                {updateData["replies"]&& <RepliesInfoRow/>}
+                {isShowingReplies&& <RepliesListRow/>}
+                {isSelector &&<SlackSelector onSelect={handleSelect} /> }
             </OfferHelpBox>
-            ) : updateData["type"] == "request help" ?
+        ) : updateData["type"] == "request help" ?
             (<RequestBox key={updateData["id"]}>
-                {inner()}
+              
+                <HeaderRow/>
+                {isEditing? <ContentRowEdit/> : <ContentRow/>}
+                <FlagRow/>
+                <ReactionRow/>
+                {updateData["replies"]&& <RepliesInfoRow/>}
+                {isShowingReplies&& <RepliesListRow/>}
+                {isSelector &&<SlackSelector onSelect={handleSelect} /> }
             </RequestBox>
             ) : (
-            <UpdateBoxCSS key={updateData["id"]}>
-                {inner()}
-            </UpdateBoxCSS>
+                <UpdateBoxCSS key={updateData["id"]}>
+                    <HeaderRow/>
+                    {isEditing? <ContentRowEdit/> : <ContentRow/>}
+                    <FlagRow/>
+                    <ReactionRow/>
+                    {updateData["replies"]&& <RepliesInfoRow/>}
+                    {isShowingReplies&& <RepliesListRow/>}
+                    {isSelector &&<SlackSelector onSelect={handleSelect} /> }
+                </UpdateBoxCSS>
             );
 }
-
 
 
 
@@ -110,7 +178,6 @@ const UpdateBoxCSS = styled.div`
 background-color: #FFFFFF;
 border: 1px solid #EEEEEE;
 box-sizing: border-box;
-height:120px;
 margin:5%;
 
 .topbar{
@@ -142,6 +209,7 @@ margin:5%;
 }
 .content {
     padding-left:5px;
+    padding-right:5px;
 }
 .date{
     font-family: Baloo 2;
@@ -155,6 +223,11 @@ margin:5%;
     color: #0CC998;
 }
 
+`
+const TypeRowDiv = styled.div`
+    height:40px;
+    background-color:grey;
+    width:100%
 `
 
 const OfferHelpBox = styled(UpdateBoxCSS)`
