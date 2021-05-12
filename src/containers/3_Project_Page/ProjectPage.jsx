@@ -48,14 +48,24 @@ export default function ProjectPage() {
                 console.log(sectionId);
                 let sections = [...projectData["sections"]];
                 let s = sections.findIndex((sec)=>sec.id==sectionId);
-                console.log(s);
-                console.log(sections[s]);
                 sections[s] = {...sections[s],  "updates":[...sections[s]["updates"], updateData]}
                 console.log(s);
                 const newData = {...projectData, "sections":sections};
                 updateProject(newData.id, newData);
                 setProjectData(newData);
             },
+            updateUpdate: (updateData, sectionId)=>  {
+                let sections = [...projectData["sections"]];
+                let s = sections.findIndex((sec)=>sec.id==sectionId);
+                let newUpdates = sections[s]["updates"];
+                let u = newUpdates.findIndex((up)=>up.id==updateData.id);
+                newUpdates[u]=updateData;
+                sections[s] = {...sections[s],  "updates":newUpdates}
+                const newData = {...projectData, "sections":sections};
+                updateProject(newData.id, newData);
+                setProjectData(newData);
+            },
+
             deleteUpdate: (updateData, sectionId)=>  {
                 let sections = [...projectData["sections"]];
                 let s = sections.findIndex((sec)=>sec.id==sectionId);
