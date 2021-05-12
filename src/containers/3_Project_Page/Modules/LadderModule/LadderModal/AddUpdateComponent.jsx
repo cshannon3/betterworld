@@ -43,9 +43,9 @@ const AddUpdateButton = ({
         <MenuLine>
           <span>{userName}</span>
           <div class="dropdown">
-            <select name="cars" id="cars" onChange={()=>
+            <select name="stages" id="stages" onChange={()=>
               {
-                var x = document.getElementById("cars").value;
+                var x = document.getElementById("stages").value;
                 console.log(x);
                 setSelectedStage(x);
               }

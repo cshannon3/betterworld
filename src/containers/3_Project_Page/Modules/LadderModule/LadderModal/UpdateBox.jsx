@@ -3,11 +3,22 @@ import { useMemo, useState, useEffect } from 'react';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import _ from 'lodash';
 import {formatTimestamp} from "shared/utils";
+import { AiOutlineEdit, AiOutlineDelete} from "react-icons/ai";
+//https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
+const UpdateBox = ({
+    updateData, 
+    userName, 
+    isSelector, 
+    setSelectorOpen=()=>{}, 
+    updateUpdate=()=>{}, 
+    deleteUpdate=()=>{}
+}) => {
+    const isCurrentUser = updateData.author==userName;
 
-const UpdateBox = ({updateData, userName, isSelector, setSelectorOpen=()=>{}, updateUpdate=()=>{}}) => {
     useEffect(() => {
         // Update the document title using the browser API
       });
+      
     
     function handleSelect(emoji){
         console.log(emoji, "HI");
@@ -39,7 +50,23 @@ const UpdateBox = ({updateData, userName, isSelector, setSelectorOpen=()=>{}, up
                     </div>
                     <div className={"date"}>
                         {formatTimestamp(updateData["date"])}
+                        
                     </div>
+                   {isCurrentUser&&
+                    <div>
+                    <AiOutlineEdit
+                        onClick={()=>{}}
+                    />
+                    <AiOutlineDelete
+                        onClick={()=>{
+
+                                deleteUpdate(updateData);
+                    
+                        }}
+                    />
+                    </div>
+                    }
+
                 </div>
                 <p className={"content"}>
                     {updateData["content"]}

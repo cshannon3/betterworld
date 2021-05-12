@@ -20,17 +20,20 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
     const ctx = useContext(ProjectContext);
 
     const [selectorOpen, setSelectorOpen] = useState(null);
+    const [sectionData, setSectionData] = useState(data);
     useEffect(() => {
-        // Update the document title using the browser API
-        console.log(selectorOpen);
+        if(data!= sectionData){
+            setSectionData(data);
+        }
       });
 
     function InnerComponent() {
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
+        console.log(data);
         const stages = data["stages"].map((st)=>st.name);
-       console.log(stages);
+       
         console.log(userName);
         return (
             <WidgetContainer>
@@ -47,7 +50,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
 
                         </div>
                         <div className="tasks">
-                            <StagesComponent data={data["stages"]} />
+                            <StagesComponent data={data && data["stages"]} />
                         </div>
                         <div className="buttons">
                             <AddUpdateComponent
@@ -68,7 +71,10 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                         "content": content,
                                         "reactions": []
                                     });
-                                    ctx.addUpdate(newUpdate, data.id);
+                                    const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                   console.log("add", newSectionData);
+                                    ctx.updateSection(newSectionData);
+                                    setSectionData(newSectionData)
                                 }}
                             />
                             <AddUpdateComponent
@@ -90,7 +96,11 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                         "reactions": [
                                         ]
                                     });
-                                    ctx.addUpdate(newUpdate, data.id);
+                                    console.log("add", newSectionData);
+                                    const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    ctx.updateSection(newSectionData);
+                                    setSectionData(newSectionData)
+                                    //ctx.addUpdate(newUpdate, sectionData.id);
                                 }}
                             />
                         </div>
@@ -120,25 +130,53 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                     "reactions": [
                                     ]
                                 });
-                                ctx.addUpdate(newUpdate, data.id);
+                                console.log("add", newSectionData);
+                                const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                ctx.updateSection(newSectionData);
+                                setSectionData(newSectionData)
+                                //ctx.addUpdate(newUpdate, sectionData.id);
                             }}
                             />
                         </div>
                     </UpdatesMenu>
                     <UpdatesList>
-                        {data && data["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
+                        {sectionData && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
                             return <UpdateBox
                                 id={updateData.id}
                                 updateData={updateData}
                                 userName={userName}
                                 isSelector={selectorOpen==updateData.id}
-                                updateUpdate={(newUpdateData)=>{ctx.updateUpdate(newUpdateData, data.id)}}
+                                updateUpdate={(newUpdateData)=>{
+                                    let newUpdates = sectionData["updates"];
+                                    let u = newUpdates.findIndex((up)=>up.id==newUpdateData.id);
+                                    newUpdates[u]=newUpdateData;
+                                    let newSectionData = {...sectionData,  "updates":newUpdates}
+                                    console.log("update", newSectionData);
+                                    ctx.updateSection(newSectionData);
+                                    setSectionData(newSectionData);
+                                    //ctx.updateUpdate(newUpdateData, sectionData.id)
+
+                                }}
                                 setSelectorOpen={(updateData)=>{
                                      console.log(updateData);
                                     if(updateData.id==selectorOpen)setSelectorOpen(null);
                                     else setSelectorOpen(updateData.id);
-                                }
-                            }
+                                } }
+                                deleteUpdate={(updateData)=>{
+                                    if (window.confirm("Are you sure? This action cannot be reversed")) {
+  
+                                        if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
+                                            let newSectionData = {...sectionData,  "updates":sectionData["updates"].filter(u=>u.id!=updateData.id)}
+                                            console.log("update", newSectionData);
+                                            ctx.updateSection(newSectionData);
+                                            setSectionData(newSectionData);
+                                        }
+                                        
+                                       // ctx.deleteUpdate(updateData, sectionData.id);
+                                    }else{
+                                        return;
+                                    }
+                                }}
                             />
 
                         })}
@@ -260,15 +298,6 @@ const UpdatesMenu = styled.div`
 `
 
 
-const LinkBox = styled.div`
-    height:50px;
-    min-width:50px;
-    img{
-      height:54px;
-      width:60px;
-      margin:3px;
-    }
-`
 
 const UpdatesContainer = styled.div`
 background-color:#F8F8F8;
@@ -283,37 +312,29 @@ height:87%;
 
 
 
-const ButtonOne = styled.button`
-    background: #0CC998;
-    border-radius: 72.2872px;
-    height:35px;
-    width:144px;
-    margin:10px;
-`;
-
-const TableSection = styled.section`
-    table {
-        width:100%;
-    }
-    thead {
-        background-color: var(--brand-regular);
-        border-radius: 0.4rem;
-    }
-    th,td {
-        grid-column: span 2;
-        padding: 1rem;
-        text-align: left;
-    }
-    th {
-        font-size: 1.5rem;
-    }
-    td {
-        font-size: 1rem;
-    }
-    span {
-        margin-left: 1rem;
-    }
-`;
+// const TableSection = styled.section`
+//     table {
+//         width:100%;
+//     }
+//     thead {
+//         background-color: var(--brand-regular);
+//         border-radius: 0.4rem;
+//     }
+//     th,td {
+//         grid-column: span 2;
+//         padding: 1rem;
+//         text-align: left;
+//     }
+//     th {
+//         font-size: 1.5rem;
+//     }
+//     td {
+//         font-size: 1rem;
+//     }
+//     span {
+//         margin-left: 1rem;
+//     }
+// `;
 export default LadderModal;
 
 

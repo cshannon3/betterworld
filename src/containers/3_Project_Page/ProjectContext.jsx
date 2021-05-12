@@ -22,6 +22,7 @@ const ProjectContext = createContext({
     addResourceToStage: ()=>{},
     removeResourceFromStage: ()=>{},
 
+    updateSection: ()=>{},
     updateStageStatus: () =>{},
     
     addUpdate: ()=>{},
