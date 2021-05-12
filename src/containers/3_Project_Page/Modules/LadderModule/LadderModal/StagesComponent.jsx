@@ -13,7 +13,24 @@ const StagesComponent = ({data={}}) => {
         { width: 300, Header: 'Stage', accessor: 'name',
             Cell: ({ cell }) => (  <StageTitle> {cell.value} </StageTitle> ) },
         { Header: 'Status',accessor: 'status',
-            Cell: ({ cell }) => ( <StageStatus> {cell.value} </StageStatus>) },
+            Cell: ({ cell }) => (
+                <StageStatus> 
+                      {cell.value}
+                      </StageStatus>
+            // <select name="stages" id="stages" onChange={()=>
+            //   {
+            //     var x = document.getElementById("stages").value;
+            //     console.log(x);
+            //     setSelectedStage(x);
+            //   }
+            //   }>
+            //   {["In Progress"].map((m)=>(
+            //   <option value={m} 
+            //   >{m}</option>))}
+            // </select>
+            //    </StageStatus>
+                 ) 
+            },
         {Header: 'Link',accessor: 'active_doc',
              Cell: ({ cell }) => (  <LinkBox  > <img src={docIcon}/> </LinkBox> ) },
         { Header: 'People', accessor: 'contributors', },
@@ -89,11 +106,11 @@ const TitleBar = styled(styles.GreyTitleBar)`
 
 
 const LinkBox = styled.div`
-    height:50px;
-    min-width:50px;
+    height:40px;
+    min-width:40px;
     img{
-      height:54px;
-      width:60px;
+      height:34px;
+      width:40px;
       margin:3px;
     }
 `

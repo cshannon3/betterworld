@@ -9,7 +9,7 @@ import {
     ProjectInfoModule,
     AtAGlanceModule,
     UpcomingEventsModule,
-    HelpWantedModule,
+    //HelpWantedModule,
 
 } from './Modules/modules'
 import ProjectContext from "./ProjectContext";
@@ -43,21 +43,18 @@ export default function ProjectPage() {
 
             addResourceToStage: ()=>{},
             updateStageStatus: () =>{},
-            
-            addUpdate: (updateData, sectionId)=>  {
-                console.log(sectionId);
+            updateSection: (sectionData) =>{
                 let sections = [...projectData["sections"]];
-                let s = sections.findIndex((sec)=>sec.id==sectionId);
-                console.log(s);
-                console.log(sections[s]);
-                sections[s] = {...sections[s],  "updates":[...sections[s]["updates"], updateData]}
-                console.log(s);
+                let s = sections.findIndex((sec)=>sec.id==sectionData.Id);
+                sections[s] = sectionData;
                 const newData = {...projectData, "sections":sections};
                 updateProject(newData.id, newData);
                 setProjectData(newData);
-               
-                
             },
+
+
+
+          
         }}
         >
         <Row>
@@ -94,3 +91,36 @@ const ContentContainer = styled.div`
 
 
 
+  // addUpdate: (updateData, sectionId)=>  {
+                
+            //     let sections = [...projectData["sections"]];
+            //     let s = sections.findIndex((sec)=>sec.id==sectionId);
+            //     sections[s] = {...sections[s],  "updates":[...sections[s]["updates"], updateData]}
+            //     console.log(s);
+            //     const newData = {...projectData, "sections":sections};
+            //     updateProject(newData.id, newData);
+            //     setProjectData(newData);
+            // },
+            // updateUpdate: (updateData, sectionId)=>  {
+            //     let sections = [...projectData["sections"]];
+            //     let s = sections.findIndex((sec)=>sec.id==sectionId);
+            //     let newUpdates = sections[s]["updates"];
+            //     let u = newUpdates.findIndex((up)=>up.id==updateData.id);
+            //     newUpdates[u]=updateData;
+            //     sections[s] = {...sections[s],  "updates":newUpdates}
+            //     const newData = {...projectData, "sections":sections};
+            //     updateProject(newData.id, newData);
+            //     setProjectData(newData);
+            // },
+
+            // deleteUpdate: (updateData, sectionId)=>  {
+            //     let sections = [...projectData["sections"]];
+            //     let s = sections.findIndex((sec)=>sec.id==sectionId);
+            //     console.log(sections[s]);
+            //     if(sections[s]["updates"].find(v=>v.id==updateData.id).authorId==appCtx.user.id){
+            //         sections[s] = {...sections[s],  "updates":sections[s]["updates"].filter(u=>u.id!=updateData.id)}
+            //         const newData = {...projectData, "sections":sections};
+            //         updateProject(newData.id, newData);
+            //         setProjectData(newData);
+            //     }
+            // },
