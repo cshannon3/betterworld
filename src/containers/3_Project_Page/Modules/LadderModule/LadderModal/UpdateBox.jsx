@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useMemo, useState, useEffect } from 'react';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import _ from 'lodash';
+import {formatTimestamp} from "shared/utils";
 
 const UpdateBox = ({updateData, userName, isSelector, setSelectorOpen=()=>{}, updateUpdate=()=>{}}) => {
     useEffect(() => {
@@ -37,7 +38,7 @@ const UpdateBox = ({updateData, userName, isSelector, setSelectorOpen=()=>{}, up
                         <span className={"stage"}> &#8226; {updateData["stage"]}</span>
                     </div>
                     <div className={"date"}>
-                        {updateData["date"]}
+                        {formatTimestamp(updateData["date"])}
                     </div>
                 </div>
                 <p className={"content"}>
