@@ -73,7 +73,9 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                     "authorId":ctrctx.user.id,
                                     "date":Date.now(),
                                     "content":content,
-                                    "reactions":[ ]
+                                    "reactions":[ 
+                                        
+                                    ]
                                 });
                                 ctx.addUpdate(newUpdate, data.id);
                             }}

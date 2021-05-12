@@ -9,7 +9,7 @@ import {
     ProjectInfoModule,
     AtAGlanceModule,
     UpcomingEventsModule,
-    HelpWantedModule,
+    //HelpWantedModule,
 
 } from './Modules/modules'
 import ProjectContext from "./ProjectContext";
@@ -55,8 +55,17 @@ export default function ProjectPage() {
                 const newData = {...projectData, "sections":sections};
                 updateProject(newData.id, newData);
                 setProjectData(newData);
-               
-                
+            },
+            deleteUpdate: (updateData, sectionId)=>  {
+                let sections = [...projectData["sections"]];
+                let s = sections.findIndex((sec)=>sec.id==sectionId);
+                console.log(sections[s]);
+                if(sections[s]["updates"].findWhere(v=>v.id==updateData.id).authorId==appCtx.user.id){
+                    sections[s] = {...sections[s],  "updates":sections[s]["updates"].filter(u=>u.id!=updateData.id)}
+                    const newData = {...projectData, "sections":sections};
+                    updateProject(newData.id, newData);
+                    setProjectData(newData);
+                }
             },
         }}
         >

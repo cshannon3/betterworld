@@ -1,9 +1,8 @@
-
 import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
 import * as styles from '../../sharedStyles';
-
+import RichEditor from "../RichTextEditor/RichTextEditor";
 
 const StyledModal = Modal.styled`
 width: 362px;
@@ -23,6 +22,7 @@ const AddUpdateButton  = ({
 }) =>{
   
    const [isOpen, setIsOpen] = useState(isModalOpen);
+   const [content, setContent] = useState(description);
   function toggleModal(e) {
     setIsOpen(!isOpen)
   }
@@ -37,11 +37,15 @@ const AddUpdateButton  = ({
               <div>
                   <TitleBar>{title}</TitleBar>
               </div>
-              <textarea rows="4" cols="50">
+              <RichEditor
+                content={content}
+                changeHandler={(value)=>setContent(value)}
+              />
+              {/* <textarea rows="4" cols="50">
               {description}
-        </textarea>
+        </textarea> */}
           <button onClick={
-            ()=>onSave({stage:"Research",content:description})
+            ()=>onSave({stage:"Research",content:content})
             }>{saveText}</button>
         </StyledModal>
       </div>

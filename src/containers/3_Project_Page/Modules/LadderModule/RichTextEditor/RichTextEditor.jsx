@@ -9,14 +9,15 @@ export default class RichEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState: this.props.annotationContent !== undefined ? EditorState.createWithContent(ContentState.createFromText(this.props.annotationContent)) : EditorState.createEmpty(),
+            editorState: 
+            this.props.content !== undefined ? EditorState.createWithContent(ContentState.createFromText(this.props.content)) : EditorState.createEmpty(),
         };
 
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => {
             const blocks = convertToRaw(editorState.getCurrentContent()).blocks;
             const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
-            this.props.annotationChangeHandler(value);
+            this.props.changeHandler(value);
             this.setState({ editorState: editorState });
 
         }  //this.setState({ editorState, annotationContent: editorState });

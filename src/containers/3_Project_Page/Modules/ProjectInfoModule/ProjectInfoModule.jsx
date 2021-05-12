@@ -13,7 +13,8 @@ export default function ProjectInfoModule() {
             </div>
             <div>
                 <ProjectsSubtitle>Target Date</ProjectsSubtitle>
-                <DateTitle>{ctx.data["target date"]}</DateTitle>
+                <DateTitle>TODO Date</DateTitle> 
+                {/* {ctx.data["target date"]} */}
             </div>
         </div>
         <ProjectName>{ctx.data["name"]}</ProjectName>
