@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useContext} from 'react';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import _ from 'lodash';
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import RichEditor, {MyEditor} from "../RichTextEditor/RichTextEditor";
-
+import {FiChevronDown, FiChevronUp } from "react-icons/fi";
+import {BsReply} from "react-icons/bs";
+import {cleanReplyModel } from "data_models/projectmodel";
+import ControlContext from 'shared/control-context';
+import UpdateReply from './UpdateReply';
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
 const UpdateBox = ({
     updateData,
@@ -15,17 +19,25 @@ const UpdateBox = ({
     updateUpdate = () => { },
     deleteUpdate = () => { }
 }) => {
+    
+    const ctrctx = useContext(ControlContext);
+    const userId = ctrctx.user["id"];
     const isCurrentUser = updateData.author == userName;
     const [isEditing, setIsEditing] = useState(false);
+    const [isEditingReply, setIsReplyEditing] = useState(false);
     const [isShowingReplies, setIsShowingReplies] = useState(false);
+    const [activeReply, setActiveReply]= useState(null);
+    
     const [content, setContent] = useState(updateData["content"]);
+    
+
+    
+    
     useEffect(() => {
         // Update the document title using the browser API
     });
 
-
     function handleSelect(emoji) {
-        console.log(emoji, "HI");
         const index = _.findIndex(updateData["reactions"], { emoji, by: userName })
         console.log(index);
         if (index > -1) {
@@ -43,7 +55,6 @@ const UpdateBox = ({
             setSelectorOpen(newUpdateData);
         }
     }
-
     const TypeRow = () => {
         return (
             <TypeRowDiv >Update Type</TypeRowDiv>
@@ -68,7 +79,16 @@ const UpdateBox = ({
                     />
                 </div>
             }
-
+            <BsReply
+                onClick={() => { 
+                    setActiveReply(cleanReplyModel({
+                        "author": userName,
+                        "authorId": userId,
+                        "date": Date.now(),
+                    }));
+                    setIsReplyEditing(true); 
+                }}
+            />
         </div>);
     }
     const ContentRow = () => {
@@ -78,7 +98,6 @@ const UpdateBox = ({
         </p>)
     }
     function ContentRowEdit() {
-        console.log()
         return (
             <div className={"content"}>
              <MyEditor
@@ -99,8 +118,8 @@ const UpdateBox = ({
 
     const FlagRow = () => {
         return (<div></div>)
-
     }
+
     const ReactionRow = () => {
         return (
         <SlackCounter
@@ -112,28 +131,74 @@ const UpdateBox = ({
     }
   
     const RepliesInfoRow = () => {
-        return (<div></div>)
+        if(!updateData["replies"]) return null;
+        return (
+        <div>
+        {isShowingReplies? 
+            <FiChevronUp onClick={()=>setIsShowingReplies(false)}/> : 
+             <FiChevronDown onClick={()=>setIsShowingReplies(true)}/>
+        }
+        {`${updateData["replies"].length} Replies`}
+        </div>)
     }
     const RepliesListRow = () => {
-        return (<div></div>)
+        
+        return (<div>
+            {updateData["replies"].map((reply)=>(
+                <UpdateReply
+                    id={reply.id}
+                    reply={reply}
+                    userName={userName}
+                    isEditing={activeReply&&(reply.id==activeReply.id)}
+                    setIsEditing={(r)=>{setActiveReply(r); setIsReplyEditing(true);}}
+                    deleteReply={(r)=>{
+                        if(updateData.replies&& updateData.replies.find((v)=>v.id==r.id)){
+                            const newUpdateData = { ...updateData, "replies": updateData["replies"].filter(u=>u.id!=r.id)}
+                            updateUpdate(newUpdateData);
+                            setActiveReply(null);
+                            setIsReplyEditing(false);
+                        //updateUpdate(newUpdateData);
+                        }
+                    }}
+                />
+            ))}
+        </div>)
     }
 
-    // const inner = () => {
-    //     return (
-    //         <div>
-
-               
-    //             <SlackCounter
-    //                 user={userName}
-    //                 counters={updateData["reactions"]}
-    //                 onAdd={() => setSelectorOpen(updateData)}
-    //                 onSelect={emoji => handleSelect(emoji)}
-    //             />
-    //             {isSelector ? <SlackSelector onSelect={handleSelect} /> : null}
-
-    //         </div>
-    //     );
-    // }
+    const ReplyEditRow = () => {
+        return (
+            <div className={"content"}>
+             <MyEditor
+                content={activeReply.content}
+                onSave={(val)=>{
+                   console.log(val);
+                    //setActiveReply({...activeReply, "content":val});
+                    let newUpdateData;
+                    if(updateData.replies&& updateData.replies.find((v)=>v.id==activeReply.id)){
+                        let newReplies = updateData["replies"];
+                        let u = newReplies.findIndex((v)=>v.id==activeReply.id);
+                        newReplies[u]={...activeReply, "content":val};
+                        newUpdateData = { ...updateData, "replies": newReplies }
+                    //updateUpdate(newUpdateData);
+                    }else if (updateData.replies){
+                        newUpdateData = { ...updateData, "replies": [...updateData["replies"],{...activeReply, "content":val} ] }
+                    }else{
+                        newUpdateData = { ...updateData, "replies": [{...activeReply, "content":val} ] }
+                    }
+                    updateUpdate(newUpdateData);
+                    console.log(newUpdateData);
+                    setActiveReply(null);
+                    setIsReplyEditing(false);
+                }}
+                onCancel={()=>{
+                    setActiveReply(null);
+                    setIsReplyEditing(false);
+                }} 
+                //changeHandler={(value) => setContent(value)}
+        />
+         </div>
+        )
+    }
 
 
 
@@ -144,20 +209,21 @@ const UpdateBox = ({
                 {isEditing? <ContentRowEdit/> : <ContentRow/>}
                 <FlagRow/>
                 <ReactionRow/>
-                {updateData["replies"]&& <RepliesInfoRow/>}
+                <RepliesInfoRow/>
                 {isShowingReplies&& <RepliesListRow/>}
                 {isSelector &&<SlackSelector onSelect={handleSelect} /> }
+                {isEditingReply&&<ReplyEditRow/>}
             </OfferHelpBox>
         ) : updateData["type"] == "request help" ?
             (<RequestBox key={updateData["id"]}>
-              
                 <HeaderRow/>
                 {isEditing? <ContentRowEdit/> : <ContentRow/>}
                 <FlagRow/>
                 <ReactionRow/>
-                {updateData["replies"]&& <RepliesInfoRow/>}
+                 <RepliesInfoRow/>
                 {isShowingReplies&& <RepliesListRow/>}
                 {isSelector &&<SlackSelector onSelect={handleSelect} /> }
+                {isEditingReply&&<ReplyEditRow/>}
             </RequestBox>
             ) : (
                 <UpdateBoxCSS key={updateData["id"]}>
@@ -165,9 +231,10 @@ const UpdateBox = ({
                     {isEditing? <ContentRowEdit/> : <ContentRow/>}
                     <FlagRow/>
                     <ReactionRow/>
-                    {updateData["replies"]&& <RepliesInfoRow/>}
+                    <RepliesInfoRow/>
                     {isShowingReplies&& <RepliesListRow/>}
                     {isSelector &&<SlackSelector onSelect={handleSelect} /> }
+                    {isEditingReply&&<ReplyEditRow/>}
                 </UpdateBoxCSS>
             );
 }
