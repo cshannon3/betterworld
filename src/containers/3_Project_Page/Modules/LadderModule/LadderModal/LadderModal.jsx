@@ -139,7 +139,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         </div>
                     </UpdatesMenu>
                     <UpdatesList>
-                        {sectionData && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
+                        {sectionData && ("updates" in sectionData) && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
                             return <UpdateBox
                                 id={updateData.id}
                                 updateData={updateData}

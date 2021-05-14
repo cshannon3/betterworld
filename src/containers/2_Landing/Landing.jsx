@@ -9,11 +9,11 @@ import { NavLink } from 'react-router-dom'
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
-  const projectData = ctrctx.data["projects"];
+  let projectsData= Object.values(ctrctx.getProjectsData());
   const committeeData = ctrctx.data["committees"];
   const quickData = ctrctx.data["quick_links"];
   let history = useHistory();
-
+console.log(projectsData, "ho");
   return (
     <Row>
       <LeftPanel />
@@ -57,21 +57,22 @@ export default function Landing() {
         <ProjectsSection>
           <h2> Projects/Actions</h2>
           <Row>
-            <ProjectBox onClick={()=>{
-              history.push("/project/V4qZkmLeS8zucg3x6vYg");
-            }}>
-                  <div className="name">Dis-O 2021</div>
-                  <div className="line"/>
-                  <br/>
-                  <p ><span >Start date:</span>  1/2/21</p>
-                  <p><span >Est. Completion:</span> 12/2/21</p>
-                  <br/>
-                  <p><span>Task Count:</span> 13/30</p>
-                  <p><span>Volunteers:</span> 4</p>
-            </ProjectBox>
-            <ProjectBox>test</ProjectBox>
-            <ProjectBox>test</ProjectBox>
-            <ProjectBox>test</ProjectBox>
+            {
+              projectsData.map((project)=>{
+               return( <ProjectBox onClick={()=>{
+                  history.push(`/project/${project.id}`);
+                }}>
+                      <div className="name">{project.name}</div>
+                      <div className="line"/>
+                      <br/>
+                      <p ><span >Start date:</span> 1/3/21</p>
+                      <p><span >Est. Completion:</span> 12/2/21</p>
+                      <br/>
+                      <p><span>Task Count:</span> 13/30</p>
+                      <p><span>Volunteers:</span> 4</p>
+                </ProjectBox>)
+              })
+            }
           </Row>
         </ProjectsSection>
       </ContentContainer>

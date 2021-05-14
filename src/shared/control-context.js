@@ -12,8 +12,8 @@ const ControlContext = createContext({
   projectsData: null,
   currentProjectID: null,
   setCurrentProjectID: ()=>{},
-  getProjectData: ()=>{}
-
+  getProjectData: ()=>{},
+  getProjectsData:()=>{}
 });
   
 export default ControlContext;
