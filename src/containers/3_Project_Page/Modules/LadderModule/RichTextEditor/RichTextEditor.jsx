@@ -1,16 +1,15 @@
 import React from 'react';
 import "./RichTextEditor.css"
-import { Editor, EditorState, RichUtils, convertToRaw, ContentState } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
 import { GrBlockQuote } from "react-icons/gr";
 import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
-
-
+//https://blog.logrocket.com/building-rich-text-editors-in-react-using-draft-js-and-react-draft-wysiwyg/
+//https://draftjs.org/docs/api-reference-data-conversion
 
 
 
 export function MyEditor({content, onSave, onCancel}) {
 
-    
     const [editorState, setEditorState] = React.useState(
       () => content !== undefined ? EditorState.createWithContent(ContentState.createFromText(content)) : EditorState.createEmpty(),
     );
@@ -20,11 +19,13 @@ export function MyEditor({content, onSave, onCancel}) {
     <div className="RichEditor-root">
     
          <Editor editorState={editorState} onChange={setEditorState} />
-        
     </div>
      <button onClick={()=>{
-        const blocks = convertToRaw(editorState.getCurrentContent()).blocks;
+        const raw = convertToRaw(editorState.getCurrentContent());
+        const blocks =raw.blocks; 
         const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
+       // const notRaw = convertFromRaw(blocks);
+       // console.log(raw, notRaw);
         onSave(value);
      }}>save</button>
      <button onClick={onCancel}>cancel</button>

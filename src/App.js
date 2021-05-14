@@ -28,7 +28,7 @@ let userListener, projectsListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [projectsData, setProjectsData] = useState([]);
+  const [projectsData, setProjectsData] = useState({});
   //const [currentProjectID, setCurrentProjectID] = useState(null);
 
   window.onload = function () {
@@ -38,16 +38,20 @@ const App = () => {
     //let _project = window.localStorage.getItem("currentProjectId");
     if (_user ) { 
       setUser(_user); 
+      if(_projectsData){
+        setProjectsData(_projectsData);
+      }
+      else{
       projectsListener = getProjects().onSnapshot(function (querySnapshot) {
         
-        let _projectsData = {};
+        _projectsData = {};
         querySnapshot.forEach(function (doc) {
           _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
         });
         console.log(_projectsData);
       setProjectsData(_projectsData);
       });
-      
+    }
     }
 
     }
@@ -61,7 +65,6 @@ const App = () => {
             projectsData,
             loginUser: async () => {
               // Authenticate and get User Info
-              console.log("Hi")
               let result = await firebase.auth().signInWithPopup(provider);
               console.log(result);
               let userId = result.user.uid;
@@ -92,12 +95,23 @@ const App = () => {
             },
             data: data,
        // getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
-            getProjectData: (currentID)=>{
-              if(currentID!==null&& projectsData!=null) return projectsData[currentID]
-            if(projectsData==null){
-              console.log("null data")
-            }
-            }
+            getProjectData:  (currentID)=> {
+          if(currentID!==null&& currentID in projectsData) {
+            
+            console.log("otoeps")
+            return projectsData[currentID];
+          }
+       
+          else{
+            let _user = JSON.parse(window.localStorage.getItem("user"));
+              let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
+              console.log(_projectsData);
+              setUser(_user); 
+              setProjectsData(_projectsData);
+              return  _projectsData[currentID];
+                
+          }
+        }
     
           }}>
           <ModalProvider>

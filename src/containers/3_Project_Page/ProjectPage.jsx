@@ -22,7 +22,18 @@ export default function ProjectPage() {
     const appCtx = useContext(ControlContext);
     const urlParts = window.location.href.split("/")
     const projectId = urlParts[urlParts.length-1]
+    console.log(projectId);
     const [projectData, setProjectData] = useState(appCtx.getProjectData(projectId));
+    // useEffect(() => {
+    //     if(projectData ==null){
+    //         let da = appCtx.getProjectData(projectId);
+    //        if(da!=null){
+    //            console.log("Set")
+    //            setProjectData(da);
+    //        }
+    //     }
+    // });
+    console.log(projectData);
     //dummyData["Immigration Justice Zine"]
     return (
         <ProjectContext.Provider
