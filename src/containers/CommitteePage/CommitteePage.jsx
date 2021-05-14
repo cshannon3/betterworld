@@ -4,29 +4,31 @@ import styled from "styled-components"
 import LeftPanel from "containers/Panels/LeftPanel"
 import {
     LadderModule,
-    ProjectInfoModule,
+    CommitteeInfoModule,
     AtAGlanceModule,
+    BudgetModule,
+    CalendarModule,
     UpcomingEventsModule,
     HelpWantedModule,
 
-} from '../3_Project_Page/Modules/modules'
+} from './Modules/modules'
 import ProjectContext from "../3_Project_Page/ProjectContext";
 //import dummyData from 'dummydata';
 //starting dev
 
 
 export default function CommitteePage() {
-    console.log("Committee page")
     return (
       <Row>
           <LeftPanel />
-          <h1> Committee Page</h1>
+          <CommitteeInfoModule />
+          <BudgetModule />
           <AtAGlanceModule />
+          <CalendarModule />
+          <div>Import Updates module</div>
       </Row>
     )
 }
-
-
 
 
 const Row = styled.div`
