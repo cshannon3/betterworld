@@ -28,7 +28,7 @@ let userListener, projectsListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [projectsData, setProjectsData] = useState({});
+  const [projectsData, setProjectsData] = useState(null);
   //const [currentProjectID, setCurrentProjectID] = useState(null);
 
   window.onload = function () {
@@ -36,33 +36,34 @@ const App = () => {
     let _user = JSON.parse(window.localStorage.getItem("user"));
     let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
     //let _project = window.localStorage.getItem("currentProjectId");
-    if (_user ) { 
-      setUser(_user); 
-      if(_projectsData){
+    if (_user) {
+      setUser(_user);
+      if (_projectsData) {
         setProjectsData(_projectsData);
       }
-      else{
-      projectsListener = getProjects().onSnapshot(function (querySnapshot) {
-        
-        _projectsData = {};
-        querySnapshot.forEach(function (doc) {
-          _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+      else {
+        projectsListener = getProjects().onSnapshot(function (querySnapshot) {
+
+          _projectsData = {};
+          querySnapshot.forEach(function (doc) {
+            _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+          });
+          console.log(_projectsData);
+          setProjectsData(_projectsData);
         });
-        console.log(_projectsData);
-      setProjectsData(_projectsData);
-      });
-    }
+      }
     }
 
-    }
+  }
 
   return (
     <Router>
       <React.Fragment>
         <ControlContext.Provider
           value={{
+            data: data,
             user, // ID of current user
-            projectsData,
+            projectsData:projectsData,
             loginUser: async () => {
               // Authenticate and get User Info
               let result = await firebase.auth().signInWithPopup(provider);
@@ -78,7 +79,6 @@ const App = () => {
                 querySnapshot.forEach(function (doc) {
                   _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
                 });
-                console.log(_projectsData);
                 setProjectsData(_projectsData);
                 window.localStorage.setItem("projects", JSON.stringify(_projectsData));
               });
@@ -93,26 +93,30 @@ const App = () => {
                 window.location.replace("/");
               }).catch(function (error) { console.log(error) });
             },
-            data: data,
-       // getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
-            getProjectData:  (currentID)=> {
-          if(currentID!==null&& currentID in projectsData) {
-            
-            console.log("otoeps")
-            return projectsData[currentID];
-          }
-       
-          else{
-            let _user = JSON.parse(window.localStorage.getItem("user"));
+
+            // getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
+            getProjectData: (currentID) => {
+              if (projectsData && currentID !== null && currentID in projectsData) {
+                return projectsData[currentID];
+              }
+              else {
+                let _user = JSON.parse(window.localStorage.getItem("user"));
+                let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
+                console.log(_projectsData);
+                setUser(_user);
+                setProjectsData(_projectsData);
+                return _projectsData[currentID];
+              }
+            },
+            getProjectsData: ()=>{
+              if(projectsData) return projectsData;
               let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
-              console.log(_projectsData);
-              setUser(_user); 
-              setProjectsData(_projectsData);
-              return  _projectsData[currentID];
-                
-          }
-        }
-    
+               if(_projectsData){
+                 setProjectsData(_projectsData);
+                 return _projectsData;
+               }
+              
+            }
           }}>
           <ModalProvider>
             <div className="App__container">
@@ -123,7 +127,7 @@ const App = () => {
                   {/*Conditional rendering based on whether user logged in*/}
                   {user ? <Landing /> : <Splash />}
                 </Route>
-            </Switch>
+              </Switch>
             </div>
 
           </ModalProvider>
