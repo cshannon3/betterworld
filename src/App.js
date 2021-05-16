@@ -49,6 +49,7 @@ const App = () => {
             _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
           });
           console.log(_projectsData);
+         
           setProjectsData(_projectsData);
         });
       }
@@ -83,8 +84,8 @@ const App = () => {
                 window.localStorage.setItem("projects", JSON.stringify(_projectsData));
               });
               setUser(userData); window.localStorage.setItem("user", JSON.stringify(userData));
+              
             },
-
             logoutUser: () => {
               firebase.auth().signOut().then(function () {
                 if (userListener) userListener();

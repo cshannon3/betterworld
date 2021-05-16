@@ -25,9 +25,9 @@ const db = firebase.firestore();
 export const provider = new firebase.auth.GoogleAuthProvider();
 
 export function getUserRef(userId) { return db.collection("users").doc(userId); }
-export const getProjects = () => { return db.collection('projects');};
+// export const getProjects = () => { return db.collection('projects');};
 
-export const getProjectRef = id => { return db.collection('projects').doc(id);};
+// export const getProjectRef = id => { return db.collection('projects').doc(id);};
 
 
 export async function createNewUser(result) {
@@ -54,14 +54,32 @@ async function setUserData(userId, data) {await getUserRef(userId).set(data);}
 export async function updateUserData(userId, data) {await getUserRef(userId).update(data);}
 
 
-export async function createProject(projectData) {
+// export async function createProject(projectData) {
+//     // Add team
+//     let res = await db.collection("projects").add(projectData);
+//    // let userData = await getUserData(user.id);
+//     return {...res, "id":res.id};
+// }
+
+// export async function updateProject(projectId, projectData) {
+//     // Add team
+//     await getProjectRef(projectId).update(projectData);
+// }
+
+
+export const getProjects = ({groupID = "cmu-against-ice"}) => { return db.collection("groups").doc(groupID).collection('projects');};
+
+export const getProjectRef = ( {id, groupID="cmu-against-ice"}) => { return db.collection("groups").doc(groupID).collection('projects').doc(id);};
+
+export async function createProject(projectData, {groupID="cmu-against-ice"}) {
     // Add team
-    let res = await db.collection("projects").add(projectData);
+    let res = await db.collection("groups").doc(groupID).collection("projects").add(projectData);
    // let userData = await getUserData(user.id);
     return {...res, "id":res.id};
 }
 
 export async function updateProject(projectId, projectData) {
     // Add team
-    await getProjectRef(projectId).update(projectData);
+    await getProjectRef({id:projectId, groupID:"cmu-against-ice"}).update(projectData);
 }
+
