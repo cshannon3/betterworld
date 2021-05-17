@@ -8,7 +8,8 @@ import {
   getUserData,
   createNewUser,
   updateUserData,
-  getProjects
+  getProjects,
+  getCommittees
 } from 'shared/firebase';
 //import dummydata from 'shared/dummydata';
 import firebase from "firebase/app";
@@ -19,43 +20,59 @@ import Splash from 'containers/1_Splash/Splash'
 import Landing from 'containers/2_Landing/Landing'
 import ProjectPage from 'containers/3_Project_Page/ProjectPage'
 import CommitteePage from 'containers/CommitteePage/CommitteePage'
-import { ModalProvider } from 'styled-react-modal'
+import { ModalProvider } from 'styled-react-modal';
 import data from "dummydata";
 
-
-
-let userListener, projectsListener;
+let userListener, projectsListener, committeesListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [projectsData, setProjectsData] = useState(null);
+  const [committeesData, setCommitteesData] = useState(null)
   //const [currentProjectID, setCurrentProjectID] = useState(null);
+
+function setupProjectListener(){
+  projectsListener = getProjects({groupID:"cmu-against-ice"}).onSnapshot(function (querySnapshot) {
+   let  _projectsData = {};
+    querySnapshot.forEach(function (doc) {
+      _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+    });
+    console.log(_projectsData);
+    setProjectsData(_projectsData);
+    window.localStorage.setItem("projects", JSON.stringify(_projectsData));
+  });
+}
+function setupCommitteeListener(){
+  committeesListener = getCommittees({groupID:"cmu-against-ice"}).onSnapshot(function (querySnapshot) {
+   let  _committeesData = {};
+    querySnapshot.forEach(function (doc) {
+      _committeesData[doc.id] = { ...doc.data(), "id": doc.id };
+    });
+    setCommitteesData(_committeesData);
+    window.localStorage.setItem("committees", JSON.stringify(_committeesData));
+  });
+}
 
   window.onload = function () {
     console.log("ON LOAD");
     let _user = JSON.parse(window.localStorage.getItem("user"));
     let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
-    //let _project = window.localStorage.getItem("currentProjectId");
+    let _committeesData = JSON.parse(window.localStorage.getItem("committees"));
     if (_user) {
       setUser(_user);
-      if (_projectsData) {
-        setProjectsData(_projectsData);
-      }
-      else {
-        projectsListener = getProjects().onSnapshot(function (querySnapshot) {
-
-          _projectsData = {};
-          querySnapshot.forEach(function (doc) {
-            _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
-          });
-          console.log(_projectsData);
-         
-          setProjectsData(_projectsData);
-        });
-      }
+      if(!projectsListener) setupProjectListener();
+      else if (_projectsData)  setProjectsData(_projectsData);
+    
+      if(!committeesListener) setupCommitteeListener();
+      else if (_committeesData)  setCommitteesData(_committeesData);
+    
     }
-
   }
+  useEffect(()=>{
+    if(!projectsListener) setupProjectListener();
+    if(!committeesListener) setupCommitteeListener();
+    
+   });
 
   return (
     <Router>
@@ -65,6 +82,7 @@ const App = () => {
             data: data,
             user, // ID of current user
             projectsData:projectsData,
+            committeesData:committeesData,
             loginUser: async () => {
               // Authenticate and get User Info
               let result = await firebase.auth().signInWithPopup(provider);
@@ -74,15 +92,7 @@ const App = () => {
               //let data;
               if (!userData) userData = await createNewUser(result);
               else userData = { id: userId, ...userData, }
-
-              projectsListener = getProjects().onSnapshot(function (querySnapshot) {
-                let _projectsData = {};
-                querySnapshot.forEach(function (doc) {
-                  _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
-                });
-                setProjectsData(_projectsData);
-                window.localStorage.setItem("projects", JSON.stringify(_projectsData));
-              });
+              setupProjectListener();
               setUser(userData); window.localStorage.setItem("user", JSON.stringify(userData));
               
             },

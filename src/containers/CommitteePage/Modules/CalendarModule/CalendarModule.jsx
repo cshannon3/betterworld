@@ -1,4 +1,5 @@
-import ProjectContext from '../../ProjectContext';
+import ProjectContext from '../../CommitteeContext';
+
 import {useContext} from 'react';
 import styled from "styled-components";
 import * as styles from '../sharedStyles';

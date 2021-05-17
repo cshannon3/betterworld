@@ -32,7 +32,7 @@ export default function LeftPanel() {
                 <MenuText>OVERVIEW</MenuText>
             </div>
             <div id="projectSideLink" onClick={()=>{
-              history.push("/project/V4qZkmLeS8zucg3x6vYg");
+              history.push("/project/immigrationjustice");
             }}>
                 <PhotoIcon src={FolderIcon} alt='Projects' />
                 <MenuText>PROJECTS</MenuText>

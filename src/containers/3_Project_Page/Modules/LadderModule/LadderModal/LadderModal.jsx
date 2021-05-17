@@ -7,7 +7,7 @@ import AddUpdateComponent from "./AddUpdateComponent";
 import ProjectContext from '../../../ProjectContext';
 import ControlContext from 'shared/control-context';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
-import { cleanUpdateModel } from 'data_models/projectmodel';
+import { cleanUpdateModel } from 'data_models/updatemodel';
 import UpdateBox from './UpdateBox';
 
 const StyledModal = Modal.styled`

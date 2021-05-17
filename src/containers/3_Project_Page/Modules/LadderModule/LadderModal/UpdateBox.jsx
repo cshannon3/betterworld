@@ -7,7 +7,7 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import RichEditor, {MyEditor} from "../RichTextEditor/RichTextEditor";
 import {FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {BsReply} from "react-icons/bs";
-import {cleanReplyModel } from "data_models/projectmodel";
+import {cleanReplyModel } from "data_models/updatemodel";
 import ControlContext from 'shared/control-context';
 import UpdateReply from './UpdateReply';
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
