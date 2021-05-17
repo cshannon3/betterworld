@@ -4,16 +4,22 @@ import LeftPanel from "containers/Panels/LeftPanel"
 import ControlContext from '../../shared/control-context';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useHistory } from "react-router-dom";
-
+import {committeeIcons} from "dummydata"
 import { NavLink } from 'react-router-dom'
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
   let projectsData= Object.values(ctrctx.getProjectsData());
-  const committeeData = ctrctx.data["committees"];
+  
+  
+  //const committeeData = ctrctx.data["committees"];
+  const committeeData = Object.values(ctrctx.committeesData);
   const quickData = ctrctx.data["quick_links"];
+  console.log(committeeData);
+  
   let history = useHistory();
-console.log(projectsData, "ho");
+
+
   return (
     <Row>
       <LeftPanel />
@@ -49,7 +55,7 @@ console.log(projectsData, "ho");
                   <div className="name">{data["name"]}</div>
                   <div className="line" />
                 </div>
-                <img src={data["icon"]} alt={data["name"]} />
+                <img src={committeeIcons[data["id"]]} alt={data["name"]} />
               </CommitteeBox>
             )}
           </Row>

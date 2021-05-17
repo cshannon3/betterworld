@@ -11,6 +11,18 @@ import InstaIcon from "assets/Landing/insta.png";
 import FBIcon from "assets/Landing/fb.png";
 import TwitterIcon from "./assets/Landing/twitter.png";
 
+
+export const committeeIcons = {
+    "money":moneyIcon,
+    "actions":actionIcon,
+    "recruiting":chatIcon,
+    "art-edu":bookIcon
+}
+
+
+
+
+
 const users = {
     "darya":{
         "name":"darya",
