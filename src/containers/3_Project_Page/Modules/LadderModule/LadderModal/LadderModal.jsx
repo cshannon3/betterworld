@@ -3,12 +3,12 @@ import styled from "styled-components"
 import Modal from 'styled-react-modal'
 import * as styles from '../../sharedStyles';
 import StagesComponent from "./StagesComponent";
-import AddUpdateComponent from "./AddUpdateComponent";
+import AddUpdateComponent from "../../../../../components/UpdatesSection/AddUpdateComponent";
 import ProjectContext from '../../../ProjectContext';
 import ControlContext from 'shared/control-context';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import { cleanUpdateModel } from 'data_models/updatemodel';
-import UpdateBox from './UpdateBox';
+import UpdatesSection from 'components/UpdatesSection/UpdatesSection';
 
 const StyledModal = Modal.styled`
   width: 90vw;
@@ -54,52 +54,23 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         </div>
                         <div className="buttons">
                             <AddUpdateComponent
-                                title={"Offer Help"}
-                                saveText={"Offer"}
+                                type={"offer to help"}
                                 stages={stages}
-                                userName={userName}
-                                description={"Describe how or where you would like to help"}
-                                onSave={({ stage, content }) => {
-                                    const newUpdate = cleanUpdateModel({
-                                        "sectionId": "",
-                                        "stage": stage,
-                                        "type": "offer to help",
-                                        "status": "not started",
-                                        "author": ctrctx.user.displayName,
-                                        "authorId": ctrctx.user.id,
-                                        "date": Date.now(),
-                                        "content": content,
-                                        "reactions": []
-                                    });
+                                user={ctrctx.user}
+                                onSave={(newUpdate) => {
                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-                                 
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData)
                                 }}
                             />
                             <AddUpdateComponent
-                                title={"Request Help"}
-                                saveText={"Request"}
-                                userName={userName}
+                                type={"request help"}
                                 stages={stages}
-                                description={" Describe the work you need help with for this task..."}
-                                onSave={({ stage, content }) => {
-                                    const newUpdate = cleanUpdateModel({
-                                        "sectionId": "",
-                                        "stage": stage,
-                                        "type": "request help",
-                                        "status": "not started",
-                                        "author": ctrctx.user.displayName,
-                                        "authorId": ctrctx.user.id,
-                                        "date": Date.now(),
-                                        "content": content,
-                                        "reactions": [
-                                        ]
-                                    });
+                                user={ctrctx.user}
+                                onSave={(newUpdate) => {
                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData)
-                                    //ctx.addUpdate(newUpdate, sectionData.id);
                                 }}
                             />
                         </div>
@@ -110,35 +81,40 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         <div><h3>Updates</h3></div>
                         <div>
                             {/* <button>Filter</button> */}
-                            <AddUpdateComponent 
-                            title={"Add Update"}
-                            saveText={"Save"}
-                            userName={userName}
-                            stages={stages}
-                            description={"Add Update...."}
-                            onSave={({ stage, content }) => {
-                                const newUpdate = cleanUpdateModel({
-                                    "sectionId": "",
-                                    "stage": stage,
-                                    "type": "default",
-                                    "status": "not started",
-                                    "author": ctrctx.user.displayName,
-                                    "authorId": ctrctx.user.id,
-                                    "date": Date.now(),
-                                    "content": content,
-                                    "reactions": [
-                                    ]
-                                });
-                               
-                                const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-                                ctx.updateSection(newSectionData);
-                                setSectionData(newSectionData)
-                                //ctx.addUpdate(newUpdate, sectionData.id);
-                            }}
+                            <AddUpdateComponent
+                                type={"default"}
+                                stages={stages}
+                                user={ctrctx.user}
+                                onSave={(newUpdate) => {
+                                    const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    ctx.updateSection(newSectionData);
+                                    setSectionData(newSectionData)
+                                }}
                             />
+                            
+
                         </div>
                     </UpdatesMenu>
-                    <UpdatesList>
+
+                    {sectionData && ("updates" in sectionData) && 
+                        <UpdatesSection
+                            updates={sectionData["updates"]}
+                            selectorOpen={selectorOpen}
+                            updateUpdates={(newUpdates)=>{
+                                let newSectionData = {...sectionData,  "updates":newUpdates}
+                                ctx.updateSection(newSectionData);
+                                setSectionData(newSectionData);
+                            }}
+                            setSelectorOpen={(id)=>{
+                                if(selectorOpen!=id)setSelectorOpen(id);
+                                else setSelectorOpen(null);
+                                console.log("setting selector");
+                            }}
+                        >
+                            
+                        </UpdatesSection>
+                    }
+                    {/* <UpdatesList>
                         {sectionData && ("updates" in sectionData) && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
                             return <UpdateBox
                                 id={updateData.id}
@@ -180,7 +156,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                             />
 
                         })}
-                    </UpdatesList>
+                    </UpdatesList> */}
                 </UpdatesContainer>
             </WidgetContainer>
         );
