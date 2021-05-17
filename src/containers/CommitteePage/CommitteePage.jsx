@@ -22,11 +22,14 @@ export default function CommitteePage() {
     return (
       <Row>
           <LeftPanel />
-          <CommitteeInfoModule />
-          <BudgetModule />
-          <AtAGlanceModule />
-          <CalendarModule />
-          <div>Import Updates module</div>
+          <ContentContainer>
+            <CommitteeInfoModule />
+            <BudgetModule />
+          
+            <AtAGlanceModule />
+            <CalendarModule />
+            <div>Import Updates module</div>
+          </ContentContainer>
       </Row>
     )
 }

@@ -1,4 +1,4 @@
-import ProjectContext from '../../CommitteeContext';
+import CommitteeContext from '../../CommitteeContext';
 
 import {useContext} from 'react';
 import styled from "styled-components";
@@ -8,6 +8,9 @@ import * as styles from '../sharedStyles';
 export default function CalendarModule() {
    return ( <CalendarBox>
         <styles.GreyTitleBar>Calendar</styles.GreyTitleBar>
+        <DatesRow>
+
+        
         <div>
           <p>Mon</p>
           <p>1</p>
@@ -36,13 +39,17 @@ export default function CalendarModule() {
           <p>Sun</p>
           <p>7</p>
         </div>
+        </DatesRow>
         <h3>Next event: Committee Meeting 5/2 @ 6pm</h3>
     </CalendarBox>);
 }
 
+const DatesRow = styled.div`
+  display:flex;
+`;
 const CalendarBox = styled.div`
-  {/*display: grid;
-  grid-area: 1 / 3 / span 1 / span 2;*/}
+  display: grid;
+  grid-area: 2 / 3 / span 1 / span 2;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
