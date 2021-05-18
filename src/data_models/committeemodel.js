@@ -5,11 +5,9 @@ import {cleanUpdateModel} from "./updatemodel";
 
 export const cleanCommitteeModel = (committeeData) => {
     let d = committeeData !== null && committeeData !== undefined ? committeeData : {};
+    if(!("id"  in committeeData)) return null;
     const blank = {
-        id: uuidv4(),
         name: "",
-        authorId: "",
-        start_date:"3/7/2021",
         description: "",
         updates:[],
         contributors:[],
@@ -17,6 +15,7 @@ export const cleanCommitteeModel = (committeeData) => {
         pointPerson:{},
         responsibilities:[]
     };
+
     let cleanModel = {...blank, ...d};
     if("updates" in cleanModel){
         let updates = cleanModel["updates"].map((sec)=>{
