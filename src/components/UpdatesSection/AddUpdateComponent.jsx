@@ -1,7 +1,7 @@
 import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
-import * as styles from '../../containers/3_Project_Page/Modules/sharedStyles';
+import * as styles from '../../styles/sharedStyles';
 import { MyEditor } from "../../containers/3_Project_Page/Modules/LadderModule/RichTextEditor/RichTextEditor";
 import {cleanUpdateModel} from "data_models/updatemodel";
 
@@ -34,7 +34,7 @@ const updateTypeInfo = {
 
 
 
-const AddUpdateButton = ({
+const AddUpdateComponent = ({
   isModalOpen = false,
   type="default",
   //title = "Add Update",
@@ -49,7 +49,7 @@ const AddUpdateButton = ({
   const buttonData = (type in updateTypeInfo) ? updateTypeInfo[type]: updateTypeInfo["default"];
   const [isOpen, setIsOpen] = useState(isModalOpen);
   const [content, setContent] = useState(buttonData.description);
-  const [selectedStage, setSelectedStage] = useState(stages[0]);
+  const [selectedStage, setSelectedStage] = useState(stages?stages[0]:null);
   
   
   
@@ -68,7 +68,7 @@ const AddUpdateButton = ({
           <TitleBar>{buttonData.title}</TitleBar>
         </div>
         <MenuLine>
-          <span>{user.displayName}</span>
+          <span>{user&&user.displayName}</span>
           {stages &&
             <div class="dropdown">
               <select name="stages" id="stages" onChange={() => {
@@ -91,8 +91,8 @@ const AddUpdateButton = ({
               let data = {
                 "content":val,
                 "type": type,
-                "author": user.displayName,
-                "authorId": user.id,
+                "author": user&&user.displayName,
+                "authorId": user&&user.id,
                 "content": val,
                }
                if(stages ){
@@ -129,7 +129,7 @@ display:flex;
     
 `;
 
-export default AddUpdateButton;
+export default AddUpdateComponent;
 
 /* <textarea rows="4" cols="50">
             {description}

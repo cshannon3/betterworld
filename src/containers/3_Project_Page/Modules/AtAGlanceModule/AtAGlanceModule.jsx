@@ -1,7 +1,7 @@
 import ProjectContext from '../../ProjectContext';
 import {useContext} from 'react';
 import styled from "styled-components";
-import * as styles from '../sharedStyles';
+import * as styles from '../../../../styles/sharedStyles';
 
 export default function AtAGlanceModule() {
    return ( <AtAGlanceBox>

@@ -2,7 +2,7 @@ import CommitteeContext from '../../CommitteeContext';
 
 import {useContext} from 'react';
 import styled from "styled-components";
-import * as styles from '../sharedStyles';
+import * as styles from 'styles/sharedStyles';
 //goal of at a glance: people photos, resource # and repsonisbilities
 
 export default function AtAGlanceModule() {

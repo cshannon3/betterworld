@@ -10,11 +10,18 @@ const ControlContext = createContext({
   setUser:     ()=>{},
   data:        null,
   projectsData: null,
-  committeesData:null,
+ 
   currentProjectID: null,
   setCurrentProjectID: ()=>{},
   getProjectData: ()=>{},
-  getProjectsData:()=>{}
+  getProjectsData:()=>{},
+
+  committeesData:null,
+  getCommitteeData: ()=>{},
+  getCommitteesData:()=>{}
+
+
+
 });
   
 export default ControlContext;

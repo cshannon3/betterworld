@@ -5,7 +5,7 @@ import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import LadderModal from './LadderModal/LadderModal';
 import Search from './Search';
 import styled from "styled-components"
-import * as styles from '../sharedStyles';
+import * as styles from '../../../../styles/sharedStyles';
 import {fuzzyTextFilterFn} from "shared/utils";
 import ProjectContext from '../../ProjectContext';
 

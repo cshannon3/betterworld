@@ -20,8 +20,8 @@ const UpdateBox = ({
 }) => {
     
     const ctrctx = useContext(ControlContext);
-    const userId = ctrctx.user.id;
-    const userName = ctrctx.user.displayName;
+    const userId = ctrctx.user&&ctrctx.user.id;
+    const userName = ctrctx.user&&ctrctx.user.displayName;
     const isCurrentUser = updateData.author == userName;
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingReply, setIsReplyEditing] = useState(false);
