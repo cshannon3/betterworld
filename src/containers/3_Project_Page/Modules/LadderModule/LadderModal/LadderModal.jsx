@@ -1,14 +1,16 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from "styled-components"
 import Modal from 'styled-react-modal'
-import * as styles from 'styles/sharedStyles';
+import * as styles from '../../../../../styles/sharedStyles';
 import StagesComponent from "./StagesComponent";
-import AddUpdateComponent from "./AddUpdateComponent";
 import ProjectContext from '../../../ProjectContext';
 import ControlContext from 'shared/control-context';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import { cleanUpdateModel } from 'data_models/updatemodel';
-import UpdateBox from './UpdateBox';
+import UpdatesSection from 'components/UpdatesSection/UpdatesSection';
+import AddUpdateComponent from 'components/UpdatesSection/AddUpdateComponent';
+
+
 
 const StyledModal = Modal.styled`
   width: 90vw;
@@ -54,134 +56,51 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         </div>
                         <div className="buttons">
                             <AddUpdateComponent
-                                title={"Offer Help"}
-                                saveText={"Offer"}
+                                type={"offer to help"}
                                 stages={stages}
-                                userName={userName}
-                                description={"Describe how or where you would like to help"}
-                                onSave={({ stage, content }) => {
-                                    const newUpdate = cleanUpdateModel({
-                                        "sectionId": "",
-                                        "stage": stage,
-                                        "type": "offer to help",
-                                        "status": "not started",
-                                        "author": ctrctx.user.displayName,
-                                        "authorId": ctrctx.user.id,
-                                        "date": Date.now(),
-                                        "content": content,
-                                        "reactions": []
-                                    });
+                                user={ctrctx.user}
+                                onSave={(newUpdate) => {
                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData)
                                 }}
                             />
                             <AddUpdateComponent
-                                title={"Request Help"}
-                                saveText={"Request"}
-                                userName={userName}
+                                type={"request help"}
                                 stages={stages}
-                                description={" Describe the work you need help with for this task..."}
-                                onSave={({ stage, content }) => {
-                                    const newUpdate = cleanUpdateModel({
-                                        "sectionId": "",
-                                        "stage": stage,
-                                        "type": "request help",
-                                        "status": "not started",
-                                        "author": ctrctx.user.displayName,
-                                        "authorId": ctrctx.user.id,
-                                        "date": Date.now(),
-                                        "content": content,
-                                        "reactions": [
-                                        ]
-                                    });
+                                user={ctrctx.user}
+                                onSave={(newUpdate) => {
                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
                                     setSectionData(newSectionData)
-                                    //ctx.addUpdate(newUpdate, sectionData.id);
                                 }}
                             />
                         </div>
                     </div>
                 </MainContainer>
-                <UpdatesContainer>
-                    <UpdatesMenu>
-                        <div><h3>Updates</h3></div>
-                        <div>
-                            {/* <button>Filter</button> */}
-                            <AddUpdateComponent
-                            title={"Add Update"}
-                            saveText={"Save"}
-                            userName={userName}
+                {/* <UpdatesContainer> */}
+                    {sectionData && ("updates" in sectionData) &&
+                        <UpdatesSection
+                            updates={sectionData["updates"]}
                             stages={stages}
-                            description={"Add Update...."}
-                            onSave={({ stage, content }) => {
-                                const newUpdate = cleanUpdateModel({
-                                    "sectionId": "",
-                                    "stage": stage,
-                                    "type": "default",
-                                    "status": "not started",
-                                    "author": ctrctx.user.displayName,
-                                    "authorId": ctrctx.user.id,
-                                    "date": Date.now(),
-                                    "content": content,
-                                    "reactions": [
-                                    ]
-                                });
-
-                                const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                            user={ctrctx.user}
+                            selectorOpen={selectorOpen}
+                            updateUpdates={(newUpdates)=>{
+                                let newSectionData = {...sectionData,  "updates":newUpdates}
                                 ctx.updateSection(newSectionData);
-                                setSectionData(newSectionData)
-                                //ctx.addUpdate(newUpdate, sectionData.id);
+                                setSectionData(newSectionData);
                             }}
-                            />
-                        </div>
-                    </UpdatesMenu>
-                    <UpdatesList>
-                        {sectionData && ("updates" in sectionData) && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
-                            return <UpdateBox
-                                id={updateData.id}
-                                updateData={updateData}
-                                userName={userName}
-                                isSelector={selectorOpen==updateData.id}
-                                updateUpdate={(newUpdateData)=>{
-                                    let newUpdates = sectionData["updates"];
-                                    let u = newUpdates.findIndex((up)=>up.id==newUpdateData.id);
-                                    newUpdates[u]=newUpdateData;
-                                    let newSectionData = {...sectionData,  "updates":newUpdates}
+                            setSelectorOpen={(id)=>{
+                                if(selectorOpen!=id)setSelectorOpen(id);
+                                else setSelectorOpen(null);
+                                console.log("setting selector");
+                            }}
+                        >
 
-                                    ctx.updateSection(newSectionData);
-                                    setSectionData(newSectionData);
-                                    //ctx.updateUpdate(newUpdateData, sectionData.id)
+                        </UpdatesSection>
+                    }
 
-                                }}
-                                setSelectorOpen={(updateData)=>{
-                                     console.log(updateData);
-                                    if(updateData.id==selectorOpen)setSelectorOpen(null);
-                                    else setSelectorOpen(updateData.id);
-                                } }
-                                deleteUpdate={(updateData)=>{
-                                    if (window.confirm("Are you sure? This action cannot be reversed")) {
-                                        console.log(updateData);
-                                        //if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
-                                           // console.log("good")
-                                            let newSectionData = {...sectionData,  "updates":sectionData["updates"].filter(u=>u.id!=updateData.id)}
-                                            console.log(newSectionData);
-                                            ctx.updateSection(newSectionData);
-                                            setSectionData(newSectionData);
-                                       // }
-
-                                       // ctx.deleteUpdate(updateData, sectionData.id);
-                                    }else{
-                                        return;
-                                    }
-                                }}
-                            />
-
-                        })}
-                    </UpdatesList>
-                </UpdatesContainer>
+                {/* </UpdatesContainer> */}
             </WidgetContainer>
         );
         return null;
@@ -223,7 +142,6 @@ font-weight: 400;
 line-height: 33px;
 letter-spacing: 0em;
 text-align: center;
-
 `
 const CloseBox = styled.div`
     cursor:pointer;
@@ -239,7 +157,6 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
 const MainContainer = styled.div`
 background-color: white;
 flex-grow:1;
-
 >div{
     display:flex;
     flex-direction:column;
@@ -252,7 +169,6 @@ flex-grow:1;
     display:flex;
     padding:50px;
     justify-content:space-between;
-
     .date{
         color:green;
     }
@@ -264,9 +180,7 @@ flex-grow:1;
 .buttons{
     height:100px;
     width:100%;
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
+
     display:flex;
     justify-content: flex-end;
     align-items:center;
@@ -334,7 +248,7 @@ height:87%;
         margin-left: 1rem;
     }
 `;
-
+*/
 
 
 // const TableSection = styled.section`

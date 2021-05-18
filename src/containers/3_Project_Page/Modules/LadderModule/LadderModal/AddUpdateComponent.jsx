@@ -1,7 +1,7 @@
 import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
-import * as styles from '../../sharedStyles';
+import * as styles from 'styles/sharedStyles';
 import {MyEditor} from "../RichTextEditor/RichTextEditor";
 
 const StyledModal = Modal.styled`

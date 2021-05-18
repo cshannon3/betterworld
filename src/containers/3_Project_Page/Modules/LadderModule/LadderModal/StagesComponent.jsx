@@ -14,7 +14,7 @@ const StagesComponent = ({data={}}) => {
             Cell: ({ cell }) => (  <StageTitle> {cell.value} </StageTitle> ) },
         { Header: 'Status',accessor: 'status',
             Cell: ({ cell }) => (
-                <StageStatus> 
+                <StageStatus>
                       {cell.value}
                       </StageStatus>
             // <select name="stages" id="stages" onChange={()=>
@@ -25,11 +25,11 @@ const StagesComponent = ({data={}}) => {
             //   }
             //   }>
             //   {["In Progress"].map((m)=>(
-            //   <option value={m} 
+            //   <option value={m}
             //   >{m}</option>))}
             // </select>
             //    </StageStatus>
-                 ) 
+                 )
             },
         {Header: 'Link',accessor: 'active_doc',
              Cell: ({ cell }) => (  <LinkBox  > <img src={docIcon}/> </LinkBox> ) },
@@ -153,6 +153,41 @@ const StageTitle = styled.div`
     border-left:5px solid;
     padding:30px 5px;
 `;
+
+const NotStartedStageTitle = styled.div`
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    border-left:5px solid #ffcc81;
+    padding:30px 5px;
+`;
+const InProgStageTitle = styled.div`
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    border-left:5px solid #EFF265;
+    padding:30px 5px;
+`;
+const DoneStageTitle = styled.div`
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    border-left:5px solid #0CC998;
+    padding:30px 5px;
+`;
+
 
 const StageStatus =styled.div`
 font-family: Helvetica;

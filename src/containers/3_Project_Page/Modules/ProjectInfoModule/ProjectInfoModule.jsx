@@ -23,7 +23,6 @@ export default function ProjectInfoModule() {
             <ProjectsSubtitle>
                 People
             </ProjectsSubtitle>
-            <CirclePhoto />
             <ProjectsSubtitle>
                 40 tasks completed
             </ProjectsSubtitle>

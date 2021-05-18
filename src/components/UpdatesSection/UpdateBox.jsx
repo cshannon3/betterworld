@@ -18,7 +18,7 @@ const UpdateBox = ({
     updateUpdates = () => { },
     deleteUpdate = () => { }
 }) => {
-    
+
     const ctrctx = useContext(ControlContext);
     const userId = ctrctx.user&&ctrctx.user.id;
     const userName = ctrctx.user&&ctrctx.user.displayName;
@@ -27,12 +27,12 @@ const UpdateBox = ({
     const [isEditingReply, setIsReplyEditing] = useState(false);
     const [isShowingReplies, setIsShowingReplies] = useState(false);
     const [activeReply, setActiveReply]= useState(null);
-    
-    const [content, setContent] = useState(updateData["content"]);
-    
 
-    
-    
+    const [content, setContent] = useState(updateData["content"]);
+
+
+
+
     useEffect(() => {
         // Update the document title using the browser API
     });
@@ -80,13 +80,13 @@ const UpdateBox = ({
                 </div>
             }
             <BsReply
-                onClick={() => { 
+                onClick={() => {
                     setActiveReply(cleanReplyModel({
                         "author": userName,
                         "authorId": userId,
                         "date": Date.now(),
                     }));
-                    setIsReplyEditing(true); 
+                    setIsReplyEditing(true);
                 }}
             />
         </div>);
@@ -120,6 +120,19 @@ const UpdateBox = ({
         return (<div></div>)
     }
 
+    const HelpReqFlagRow = () => {
+        return (<div>
+          <div> ! </div>
+          <div>Help Requested</div>
+        </div>)
+    }
+
+    const HelpOfferFlagRow = () => {
+        return (<div>
+          <div>Offer to Help Pending</div>
+        </div>)
+    }
+
     const ReactionRow = () => {
         return (
         <SlackCounter
@@ -129,20 +142,20 @@ const UpdateBox = ({
             onSelect={emoji => handleSelect(emoji)}
         />);
     }
-  
+
     const RepliesInfoRow = () => {
         if(!updateData["replies"]) return null;
         return (
         <div>
-        {isShowingReplies? 
-            <FiChevronUp onClick={()=>setIsShowingReplies(false)}/> : 
+        {isShowingReplies?
+            <FiChevronUp onClick={()=>setIsShowingReplies(false)}/> :
              <FiChevronDown onClick={()=>setIsShowingReplies(true)}/>
         }
         {`${updateData["replies"].length} Replies`}
         </div>)
     }
     const RepliesListRow = () => {
-        
+
         return (<div>
             {updateData["replies"].map((reply)=>(
                 <UpdateReply
@@ -193,7 +206,7 @@ const UpdateBox = ({
                 onCancel={()=>{
                     setActiveReply(null);
                     setIsReplyEditing(false);
-                }} 
+                }}
                 //changeHandler={(value) => setContent(value)}
         />
          </div>
@@ -205,9 +218,9 @@ const UpdateBox = ({
     return updateData["type"] == "offer to help" ?
         (
             <OfferHelpBox key={updateData["id"]}>
+              <HelpReqFlagRow/>
                 <HeaderRow/>
                 {isEditing? <ContentRowEdit/> : <ContentRow/>}
-                <FlagRow/>
                 <ReactionRow/>
                 <RepliesInfoRow/>
                 {isShowingReplies&& <RepliesListRow/>}
@@ -216,9 +229,9 @@ const UpdateBox = ({
             </OfferHelpBox>
         ) : updateData["type"] == "request help" ?
             (<RequestBox key={updateData["id"]}>
+                <HelpOfferFlagRow/>
                 <HeaderRow/>
                 {isEditing? <ContentRowEdit/> : <ContentRow/>}
-                <FlagRow/>
                 <ReactionRow/>
                  <RepliesInfoRow/>
                 {isShowingReplies&& <RepliesListRow/>}
@@ -308,5 +321,15 @@ const RequestBox = styled(UpdateBoxCSS)`
     background-color: #FFF7EC;
     border-radius: 5px;
 `
+const HelpReqFlagRow = styled.div`
+    background-color: #CB0101;
+    width: 127px;
+    height: 18px;
+`
 
+const HelpOfferFlagRow = styled.div`
+    background-color: #EAA828;
+    width: 149px;
+    height: 18px;
+`
 export default UpdateBox;
