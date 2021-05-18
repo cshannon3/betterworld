@@ -1,10 +1,10 @@
-import ProjectContext from '../../CommitteeContext';
+import CommitteeContext from '../../CommitteeContext';
 
 import {useContext} from 'react';
 import styled from "styled-components"
 
 export default function CommitteeInfoModule() {
-    const ctx = useContext(ProjectContext);
+    const ctx = useContext(CommitteeContext);
 
     return (<CommitteeTitleBox>
         <div>
@@ -82,6 +82,7 @@ const CommitteesTitle = styled.h2`
     align-items: center;
     letter-spacing: -0.02em;
     color: #0CC998;
+    
 `;
 
 const CommitteeTitleBox = styled.div`

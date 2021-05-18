@@ -6,14 +6,12 @@ export const cleanUpdateModel = (updateData) => {
     
     const blank =  {
         "id":uuidv4(),
-        "taskid":"",
-        "sectionId":"",
         "stage":"",
-        "type":"",
-        "status":"",
+        "type": "default",
+        "status": "not started",
         "author":"",
         "authorId":"",
-        "date":"",
+        "date":Date.now(),
         "content":"",
         "reactions":[ ],
         "replies":[]

@@ -4,7 +4,7 @@ import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import _ from 'lodash';
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import RichEditor, {MyEditor} from "../RichTextEditor/RichTextEditor";
+import RichEditor, {MyEditor} from "../../containers/3_Project_Page/Modules/LadderModule/RichTextEditor/RichTextEditor";
 import {FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {BsReply} from "react-icons/bs";
 import {cleanReplyModel } from "data_models/updatemodel";
@@ -13,15 +13,15 @@ import UpdateReply from './UpdateReply';
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
 const UpdateBox = ({
     updateData,
-    userName,
     isSelector,
     setSelectorOpen = () => { },
-    updateUpdate = () => { },
+    updateUpdates = () => { },
     deleteUpdate = () => { }
 }) => {
     
     const ctrctx = useContext(ControlContext);
-    const userId = ctrctx.user["id"];
+    const userId = ctrctx.user.id;
+    const userName = ctrctx.user.displayName;
     const isCurrentUser = updateData.author == userName;
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingReply, setIsReplyEditing] = useState(false);
@@ -44,13 +44,13 @@ const UpdateBox = ({
             const newReactions = [...updateData["reactions"].slice(0, index), ...updateData["reactions"].slice(index + 1)]
             const newUpdateData = { ...updateData, "reactions": newReactions }
             console.log(newReactions);
-            updateUpdate(newUpdateData);
+            updateUpdates(newUpdateData);
             setSelectorOpen(newUpdateData);
 
         } else {
             const newReactions = [...updateData.reactions, { emoji, by: userName }]
             const newUpdateData = { ...updateData, "reactions": newReactions }
-            updateUpdate(newUpdateData);
+            updateUpdates(newUpdateData);
             console.log(newUpdateData);
             setSelectorOpen(newUpdateData);
         }
@@ -104,7 +104,7 @@ const UpdateBox = ({
                 content={content}
                 onSave={(val)=>{
                     const newUpdateData = { ...updateData, "content": val }
-                    updateUpdate(newUpdateData);
+                    updateUpdates(newUpdateData);
                     setIsEditing(false);
                 }}
                 onCancel={()=>{
@@ -154,10 +154,10 @@ const UpdateBox = ({
                     deleteReply={(r)=>{
                         if(updateData.replies&& updateData.replies.find((v)=>v.id==r.id)){
                             const newUpdateData = { ...updateData, "replies": updateData["replies"].filter(u=>u.id!=r.id)}
-                            updateUpdate(newUpdateData);
+                            updateUpdates(newUpdateData);
                             setActiveReply(null);
                             setIsReplyEditing(false);
-                        //updateUpdate(newUpdateData);
+                        //updateUpdates(newUpdateData);
                         }
                     }}
                 />
@@ -179,13 +179,13 @@ const UpdateBox = ({
                         let u = newReplies.findIndex((v)=>v.id==activeReply.id);
                         newReplies[u]={...activeReply, "content":val};
                         newUpdateData = { ...updateData, "replies": newReplies }
-                    //updateUpdate(newUpdateData);
+                    //updateUpdates(newUpdateData);
                     }else if (updateData.replies){
                         newUpdateData = { ...updateData, "replies": [...updateData["replies"],{...activeReply, "content":val} ] }
                     }else{
                         newUpdateData = { ...updateData, "replies": [{...activeReply, "content":val} ] }
                     }
-                    updateUpdate(newUpdateData);
+                    updateUpdates(newUpdateData);
                     console.log(newUpdateData);
                     setActiveReply(null);
                     setIsReplyEditing(false);
