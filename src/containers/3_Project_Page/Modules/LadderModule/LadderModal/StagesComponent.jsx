@@ -7,6 +7,10 @@ import { fuzzyTextFilterFn } from "shared/utils";
 import docIcon from 'assets/Landing/google-docs.png';
 import styled from "styled-components"
 
+//TODO: Collect stage status before rendering the StageTitle and switch on
+//in progress, not started, blocked, or Done
+//Has to be done before actual status getting because div has left borer for indicator
+
 const StagesComponent = ({data={}}) => {
 
     const columns = useMemo(() => [
@@ -141,7 +145,7 @@ const TableSection = styled.section`
     }
 `;
 
-
+//could keep as "blocked" and black?
 const StageTitle = styled.div`
     font-family: Baloo 2;
     font-style: normal;
