@@ -31,3 +31,27 @@ letter-spacing: -0.02em;
 padding-left:5px;
 color: #FFFFFF;
 `
+const CirclePhoto = styled.div `
+width: 52px;
+height: 52px;
+filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
+border-radius: 50%;
+background-color: pink;
+`
+const SmallCirclePhoto = styled.div `
+width: 25px;
+height: 25px;
+filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
+border-radius: 50%;
+background-color: pink;
+`
+const GreenButton = styled.div `
+  height:100px;
+  width:100%;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  display:flex;
+  justify-content: flex-end;
+  align-items:center;
+`
