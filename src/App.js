@@ -48,6 +48,7 @@ function setupCommitteeListener(){
     querySnapshot.forEach(function (doc) {
       _committeesData[doc.id] = { ...doc.data(), "id": doc.id };
     });
+    console.log( _committeesData);
     setCommitteesData(_committeesData);
     window.localStorage.setItem("committees", JSON.stringify(_committeesData));
   });
@@ -62,13 +63,16 @@ function setupCommitteeListener(){
       setUser(_user);
       if(!projectsListener) setupProjectListener();
       else if (_projectsData)  setProjectsData(_projectsData);
-    
       if(!committeesListener) setupCommitteeListener();
       else if (_committeesData)  setCommitteesData(_committeesData);
     
     }
   }
   useEffect(()=>{
+    if(!user){
+      let _user = JSON.parse(window.localStorage.getItem("user"));
+      if(_user)setUser(_user);
+    }
     if(!projectsListener) setupProjectListener();
     if(!committeesListener) setupCommitteeListener();
     
@@ -125,15 +129,38 @@ function setupCommitteeListener(){
                if(_projectsData){
                  setProjectsData(_projectsData);
                  return _projectsData;
-               }
-              
+               } 
+               return false;
+            },
+            getCommitteeData: (currentID) => {
+              if (committeesData && currentID !== null && currentID in committeesData) {
+                return committeesData[currentID];
+              }
+              else {
+                let _user = JSON.parse(window.localStorage.getItem("user"));
+                let _committeesData = JSON.parse(window.localStorage.getItem("committees"));
+                console.log(_committeesData);
+                setUser(_user);
+                setCommitteesData(_committeesData);
+                return _committeesData[currentID];
+              }
+              return false;
+            },
+            getCommitteesData: ()=>{
+              if(committeesData) return committeesData;
+              let _committeesData = JSON.parse(window.localStorage.getItem("committees"));
+               if(_committeesData){
+                 setCommitteesData(_committeesData);
+                 return _committeesData;
+               } 
+               return false;
             }
           }}>
           <ModalProvider>
             <div className="App__container">
               <Switch>
                 <Route path="/project/:projectId" component={ProjectPage} />
-                <Route path="/committee" component={CommitteePage} />
+                <Route path="/committee/:committeeId" component={CommitteePage} />
                 <Route exact path="/">
                   {/*Conditional rendering based on whether user logged in*/}
                   {user ? <Landing /> : <Splash />}

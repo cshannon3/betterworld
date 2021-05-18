@@ -12,13 +12,21 @@ import {
     HelpWantedModule,
 
 } from './Modules/modules'
-import ProjectContext from "../3_Project_Page/ProjectContext";
-
+import ControlContext from 'shared/control-context';
+import {updateCommittee} from "shared/firebase";
+import UpdatesSection from 'components/UpdatesSection/UpdatesSection'
 //import dummyData from 'dummydata';
 //starting dev
 
 
 export default function CommitteePage() {
+    const ctrctx = useContext(ControlContext);
+    const urlParts = window.location.href.split("/")
+    const committeeId = urlParts[urlParts.length-1]
+    
+    const [committeeData, setCommitteeData] = useState(ctrctx.getCommitteeData(committeeId));
+    const [selectorOpen, setSelectorOpen] = useState(null);
+    console.log(committeeData);
     return (
       <Row>
           <LeftPanel />
@@ -28,7 +36,25 @@ export default function CommitteePage() {
           
             <AtAGlanceModule />
             <CalendarModule />
-            <div>Import Updates module</div>
+            <div> 
+              <UpdatesSection
+                            updates={"updates" in committeeData? committeeData.updates : []}
+                            user={ctrctx.user}
+                            selectorOpen={selectorOpen}
+                            updateUpdates={(newUpdates)=>{
+                                let newCommitteeData = {...committeeData,  "updates":newUpdates}
+                                updateCommittee(committeeId, newCommitteeData)
+                                setCommitteeData(newCommitteeData);
+                            }}
+                            setSelectorOpen={(id)=>{
+                                if(selectorOpen!=id)setSelectorOpen(id);
+                                else setSelectorOpen(null);
+                                console.log("setting selector");
+                            }}
+                        >
+                            
+                        </UpdatesSection>
+                </div>
           </ContentContainer>
       </Row>
     )

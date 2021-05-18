@@ -1,14 +1,16 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from "styled-components"
 import Modal from 'styled-react-modal'
-import * as styles from '../../sharedStyles';
+import * as styles from '../../../../../styles/sharedStyles';
 import StagesComponent from "./StagesComponent";
-import AddUpdateComponent from "../../../../../components/UpdatesSection/AddUpdateComponent";
 import ProjectContext from '../../../ProjectContext';
 import ControlContext from 'shared/control-context';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import { cleanUpdateModel } from 'data_models/updatemodel';
 import UpdatesSection from 'components/UpdatesSection/UpdatesSection';
+import AddUpdateComponent from 'components/UpdatesSection/AddUpdateComponent';
+
+
 
 const StyledModal = Modal.styled`
   width: 90vw;
@@ -76,29 +78,12 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         </div>
                     </div>
                 </MainContainer>
-                <UpdatesContainer>
-                    <UpdatesMenu>
-                        <div><h3>Updates</h3></div>
-                        <div>
-                            {/* <button>Filter</button> */}
-                            <AddUpdateComponent
-                                type={"default"}
-                                stages={stages}
-                                user={ctrctx.user}
-                                onSave={(newUpdate) => {
-                                    const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-                                    ctx.updateSection(newSectionData);
-                                    setSectionData(newSectionData)
-                                }}
-                            />
-                            
-
-                        </div>
-                    </UpdatesMenu>
-
+                {/* <UpdatesContainer> */}
                     {sectionData && ("updates" in sectionData) && 
                         <UpdatesSection
                             updates={sectionData["updates"]}
+                            stages={stages}
+                            user={ctrctx.user}
                             selectorOpen={selectorOpen}
                             updateUpdates={(newUpdates)=>{
                                 let newSectionData = {...sectionData,  "updates":newUpdates}
@@ -114,50 +99,8 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                             
                         </UpdatesSection>
                     }
-                    {/* <UpdatesList>
-                        {sectionData && ("updates" in sectionData) && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
-                            return <UpdateBox
-                                id={updateData.id}
-                                updateData={updateData}
-                                userName={userName}
-                                isSelector={selectorOpen==updateData.id}
-                                updateUpdate={(newUpdateData)=>{
-                                    let newUpdates = sectionData["updates"];
-                                    let u = newUpdates.findIndex((up)=>up.id==newUpdateData.id);
-                                    newUpdates[u]=newUpdateData;
-                                    let newSectionData = {...sectionData,  "updates":newUpdates}
-                                
-                                    ctx.updateSection(newSectionData);
-                                    setSectionData(newSectionData);
-                                    //ctx.updateUpdate(newUpdateData, sectionData.id)
-
-                                }}
-                                setSelectorOpen={(updateData)=>{
-                                     console.log(updateData);
-                                    if(updateData.id==selectorOpen)setSelectorOpen(null);
-                                    else setSelectorOpen(updateData.id);
-                                } }
-                                deleteUpdate={(updateData)=>{
-                                    if (window.confirm("Are you sure? This action cannot be reversed")) {
-                                        console.log(updateData);
-                                        //if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
-                                           // console.log("good")
-                                            let newSectionData = {...sectionData,  "updates":sectionData["updates"].filter(u=>u.id!=updateData.id)}
-                                            console.log(newSectionData);
-                                            ctx.updateSection(newSectionData);
-                                            setSectionData(newSectionData);
-                                       // }
-                                        
-                                       // ctx.deleteUpdate(updateData, sectionData.id);
-                                    }else{
-                                        return;
-                                    }
-                                }}
-                            />
-
-                        })}
-                    </UpdatesList> */}
-                </UpdatesContainer>
+                    
+                {/* </UpdatesContainer> */}
             </WidgetContainer>
         );
         return null;
@@ -312,8 +255,67 @@ height:87%;
 //     }
 // `;
 export default LadderModal;
+//  <UpdatesMenu>
+//                         <div><h3>Updates</h3></div>
+//                         <div>
+//                             <AddUpdateComponent
+//                                 type={"default"}
+//                                 stages={stages}
+//                                 user={ctrctx.user}
+//                                 onSave={(newUpdate) => {
+//                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+//                                     ctx.updateSection(newSectionData);
+//                                     setSectionData(newSectionData)
+//                                 }}
+//                             />
+                            
 
+//                         </div>
+//                     </UpdatesMenu> 
 
+/* <UpdatesList>
+                        {sectionData && ("updates" in sectionData) && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
+                            return <UpdateBox
+                                id={updateData.id}
+                                updateData={updateData}
+                                userName={userName}
+                                isSelector={selectorOpen==updateData.id}
+                                updateUpdate={(newUpdateData)=>{
+                                    let newUpdates = sectionData["updates"];
+                                    let u = newUpdates.findIndex((up)=>up.id==newUpdateData.id);
+                                    newUpdates[u]=newUpdateData;
+                                    let newSectionData = {...sectionData,  "updates":newUpdates}
+                                
+                                    ctx.updateSection(newSectionData);
+                                    setSectionData(newSectionData);
+                                    //ctx.updateUpdate(newUpdateData, sectionData.id)
+
+                                }}
+                                setSelectorOpen={(updateData)=>{
+                                     console.log(updateData);
+                                    if(updateData.id==selectorOpen)setSelectorOpen(null);
+                                    else setSelectorOpen(updateData.id);
+                                } }
+                                deleteUpdate={(updateData)=>{
+                                    if (window.confirm("Are you sure? This action cannot be reversed")) {
+                                        console.log(updateData);
+                                        //if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
+                                           // console.log("good")
+                                            let newSectionData = {...sectionData,  "updates":sectionData["updates"].filter(u=>u.id!=updateData.id)}
+                                            console.log(newSectionData);
+                                            ctx.updateSection(newSectionData);
+                                            setSectionData(newSectionData);
+                                       // }
+                                        
+                                       // ctx.deleteUpdate(updateData, sectionData.id);
+                                    }else{
+                                        return;
+                                    }
+                                }}
+                            />
+
+                        })}
+                    </UpdatesList> */
 // if(currentModalType==="helpRequests")
 
 

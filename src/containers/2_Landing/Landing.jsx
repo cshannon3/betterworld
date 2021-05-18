@@ -9,11 +9,12 @@ import { NavLink } from 'react-router-dom'
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
-  let projectsData= Object.values(ctrctx.getProjectsData());
+  let projectsData= ctrctx.getProjectsData();
+  projectsData = projectsData?Object.values(projectsData):[];
   
   
   //const committeeData = ctrctx.data["committees"];
-  const committeeData = Object.values(ctrctx.committeesData);
+  const committeeData = Object.values(ctrctx.getCommitteesData());
   const quickData = ctrctx.data["quick_links"];
   console.log(committeeData);
   
@@ -48,7 +49,7 @@ export default function Landing() {
           <Row>
             {committeeData.map((data) =>
               <CommitteeBox onClick={()=>{
-                history.push("/committee");
+                history.push(`/committee/${data.id}`);
               }}>
                 <div className="contentBox">
                   <div className="order">{`0${data["order"]}`}</div>

@@ -87,6 +87,13 @@ export async function updateProject(projectId, projectData) {
 }
 
 
+export const getCommitteeRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
+
 export const getCommittees = ({ groupID = "cmu-against-ice" }) => { 
     return db.collection("groups").doc(groupID).collection('committees'); 
 };
+
+export async function updateCommittee(committeeId, committeeData) {
+    // Add team
+    await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
+}

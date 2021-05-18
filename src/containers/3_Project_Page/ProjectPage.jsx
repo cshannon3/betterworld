@@ -39,21 +39,21 @@ export default function ProjectPage() {
         <ProjectContext.Provider
         value={{
             data:projectData,
-            addSectionToProject: () =>{},
-            editSection:()=>{},
-            removeSectionFromProject:()=>{},
-            addMemberToSection: () =>{},
-            removeMemberFromSection: () =>{},
-            getStageData: ()=>{},
+            // addSectionToProject: () =>{},
+            // editSection:()=>{},
+            // removeSectionFromProject:()=>{},
+            // addMemberToSection: () =>{},
+            // removeMemberFromSection: () =>{},
+            // getStageData: ()=>{},
             
-            addMemberToStage: ()=>{},
-            removeMemberFromStage: ()=>{ },
+            // addMemberToStage: ()=>{},
+            // removeMemberFromStage: ()=>{ },
 
-            addHelpRequestToStage:()=>{},
-            handleHelpRequest:()=>{},
+            // addHelpRequestToStage:()=>{},
+            // handleHelpRequest:()=>{},
 
-            addResourceToStage: ()=>{},
-            updateStageStatus: () =>{},
+            // addResourceToStage: ()=>{},
+            // updateStageStatus: () =>{},
             updateSection: (sectionData) =>{
                 let sections = [...projectData["sections"]];
                 let s = sections.findIndex((sec)=>sec.id==sectionData.Id);
@@ -62,10 +62,6 @@ export default function ProjectPage() {
                 updateProject(newData.id, newData);
                 setProjectData(newData);
             },
-
-
-
-          
         }}
         >
         <Row>
