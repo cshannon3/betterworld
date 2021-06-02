@@ -1,6 +1,7 @@
 import ProjectContext from '../../ProjectContext';
 import {useContext} from 'react';
 import styled from "styled-components"
+//need to put in SmallCirclePhoto or CirclePhoto 
 
 export default function ProjectInfoModule() {
     const ctx = useContext(ProjectContext);
