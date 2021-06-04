@@ -9,19 +9,19 @@ import {FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {BsReply} from "react-icons/bs";
 import {cleanReplyModel } from "data_models/updatemodel";
 import ControlContext from 'shared/control-context';
-import UpdateReply from './UpdateReply';
+//import UpdateReply from './UpdateReply';
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
 const UpdateBox = ({
     updateData,
+    userName,
     isSelector,
     setSelectorOpen = () => { },
-    updateUpdates = () => { },
+    updateUpdate = () => { },
     deleteUpdate = () => { }
 }) => {
 
     const ctrctx = useContext(ControlContext);
-    const userId = ctrctx.user&&ctrctx.user.id;
-    const userName = ctrctx.user&&ctrctx.user.displayName;
+    const userId = ctrctx.user["id"];
     const isCurrentUser = updateData.author == userName;
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingReply, setIsReplyEditing] = useState(false);
@@ -44,13 +44,13 @@ const UpdateBox = ({
             const newReactions = [...updateData["reactions"].slice(0, index), ...updateData["reactions"].slice(index + 1)]
             const newUpdateData = { ...updateData, "reactions": newReactions }
             console.log(newReactions);
-            updateUpdates(newUpdateData);
+            updateUpdate(newUpdateData);
             setSelectorOpen(newUpdateData);
 
         } else {
             const newReactions = [...updateData.reactions, { emoji, by: userName }]
             const newUpdateData = { ...updateData, "reactions": newReactions }
-            updateUpdates(newUpdateData);
+            updateUpdate(newUpdateData);
             console.log(newUpdateData);
             setSelectorOpen(newUpdateData);
         }
@@ -104,7 +104,7 @@ const UpdateBox = ({
                 content={content}
                 onSave={(val)=>{
                     const newUpdateData = { ...updateData, "content": val }
-                    updateUpdates(newUpdateData);
+                    updateUpdate(newUpdateData);
                     setIsEditing(false);
                 }}
                 onCancel={()=>{
@@ -117,7 +117,9 @@ const UpdateBox = ({
     }
 
     const FlagRow = () => {
-        return (<div></div>)
+        return (<div>
+            Base Flag
+          </div>)
     }
 
     const HelpReqFlagRow = () => {
@@ -167,10 +169,10 @@ const UpdateBox = ({
                     deleteReply={(r)=>{
                         if(updateData.replies&& updateData.replies.find((v)=>v.id==r.id)){
                             const newUpdateData = { ...updateData, "replies": updateData["replies"].filter(u=>u.id!=r.id)}
-                            updateUpdates(newUpdateData);
+                            updateUpdate(newUpdateData);
                             setActiveReply(null);
                             setIsReplyEditing(false);
-                        //updateUpdates(newUpdateData);
+                        //updateUpdate(newUpdateData);
                         }
                     }}
                 />
@@ -192,13 +194,13 @@ const UpdateBox = ({
                         let u = newReplies.findIndex((v)=>v.id==activeReply.id);
                         newReplies[u]={...activeReply, "content":val};
                         newUpdateData = { ...updateData, "replies": newReplies }
-                    //updateUpdates(newUpdateData);
+                    //updateUpdate(newUpdateData);
                     }else if (updateData.replies){
                         newUpdateData = { ...updateData, "replies": [...updateData["replies"],{...activeReply, "content":val} ] }
                     }else{
                         newUpdateData = { ...updateData, "replies": [{...activeReply, "content":val} ] }
                     }
-                    updateUpdates(newUpdateData);
+                    updateUpdate(newUpdateData);
                     console.log(newUpdateData);
                     setActiveReply(null);
                     setIsReplyEditing(false);
@@ -218,9 +220,9 @@ const UpdateBox = ({
     return updateData["type"] == "offer to help" ?
         (
             <OfferHelpBox key={updateData["id"]}>
-              <HelpReqFlagRow/>
                 <HeaderRow/>
                 {isEditing? <ContentRowEdit/> : <ContentRow/>}
+                <HelpOfferFlagRow/>
                 <ReactionRow/>
                 <RepliesInfoRow/>
                 {isShowingReplies&& <RepliesListRow/>}
@@ -229,9 +231,9 @@ const UpdateBox = ({
             </OfferHelpBox>
         ) : updateData["type"] == "request help" ?
             (<RequestBox key={updateData["id"]}>
-                <HelpOfferFlagRow/>
                 <HeaderRow/>
                 {isEditing? <ContentRowEdit/> : <ContentRow/>}
+                <HelpReqFlagRow/>
                 <ReactionRow/>
                  <RepliesInfoRow/>
                 {isShowingReplies&& <RepliesListRow/>}
@@ -332,4 +334,6 @@ const HelpOfferFlagRow = styled.div`
     width: 149px;
     height: 18px;
 `
+//Maybe float right? Need to align to the right of teh update box
+
 export default UpdateBox;

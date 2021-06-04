@@ -23,12 +23,12 @@ const updateTypeInfo = {
   "request help": {
     "title":"Request Help",
     "saveText":"Request",
-    "description":"Describe the work you need help with for this task..."                  
+    "description":"Describe the work you need help with for this task..."
   },
   "offer to help": {
     "title":"Offer Help",
     "saveText":"Offer",
-    "description":"Describe how or where you would like to help"                  
+    "description":"Describe how or where you would like to help"
   }
 }
 
@@ -50,9 +50,9 @@ const AddUpdateComponent = ({
   const [isOpen, setIsOpen] = useState(isModalOpen);
   const [content, setContent] = useState(buttonData.description);
   const [selectedStage, setSelectedStage] = useState(stages?stages[0]:null);
-  
-  
-  
+
+
+
   function toggleModal(e) {
     setIsOpen(!isOpen)
   }
@@ -116,6 +116,10 @@ const AddUpdateComponent = ({
 const ButtonOne = styled.button`
     background: #0CC998;
     border-radius: 72.2872px;
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
     height:35px;
     width:144px;
     margin:10px;
@@ -126,7 +130,7 @@ const TitleBar = styled(styles.GreenTitleBar)`
 
 const MenuLine = styled.div`
 display:flex;
-    
+
 `;
 
 export default AddUpdateComponent;
