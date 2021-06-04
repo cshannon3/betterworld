@@ -35,7 +35,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
         const userName = ctrctx.user["displayName"];
         console.log(data);
         const stages = data["stages"].map((st)=>st.name);
-       
+
         console.log(userName);
         return (
             <WidgetContainer>
@@ -79,7 +79,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                     </div>
                 </MainContainer>
                 {/* <UpdatesContainer> */}
-                    {sectionData && ("updates" in sectionData) && 
+                    {sectionData && ("updates" in sectionData) &&
                         <UpdatesSection
                             updates={sectionData["updates"]}
                             stages={stages}
@@ -96,10 +96,10 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                                 console.log("setting selector");
                             }}
                         >
-                            
+
                         </UpdatesSection>
                     }
-                    
+
                 {/* </UpdatesContainer> */}
             </WidgetContainer>
         );
@@ -142,7 +142,6 @@ font-weight: 400;
 line-height: 33px;
 letter-spacing: 0em;
 text-align: center;
-
 `
 const CloseBox = styled.div`
     cursor:pointer;
@@ -158,7 +157,6 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
 const MainContainer = styled.div`
 background-color: white;
 flex-grow:1;
-
 >div{
     display:flex;
     flex-direction:column;
@@ -171,7 +169,6 @@ flex-grow:1;
     display:flex;
     padding:50px;
     justify-content:space-between;
-
     .date{
         color:green;
     }
@@ -183,7 +180,7 @@ flex-grow:1;
 .buttons{
     height:100px;
     width:100%;
-    
+
     display:flex;
     justify-content: flex-end;
     align-items:center;
@@ -228,7 +225,30 @@ const UpdatesList = styled.div`
 overflow:scroll;
 height:87%;
 `
-
+/*const TableSection = styled.section`
+    table {
+        width:100%;
+    }
+    thead {
+        background-color: var(--brand-regular);
+        border-radius: 0.4rem;
+    }
+    th,td {
+        grid-column: span 2;
+    //    padding: 1rem;
+        text-align: left;
+    }
+    th {
+        font-size: 1.5rem;
+    }
+    td {
+        font-size: 1rem;
+    }
+    span {
+        margin-left: 1rem;
+    }
+`;
+*/
 
 
 // const TableSection = styled.section`
@@ -255,67 +275,8 @@ height:87%;
 //     }
 // `;
 export default LadderModal;
-//  <UpdatesMenu>
-//                         <div><h3>Updates</h3></div>
-//                         <div>
-//                             <AddUpdateComponent
-//                                 type={"default"}
-//                                 stages={stages}
-//                                 user={ctrctx.user}
-//                                 onSave={(newUpdate) => {
-//                                     const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-//                                     ctx.updateSection(newSectionData);
-//                                     setSectionData(newSectionData)
-//                                 }}
-//                             />
-                            
 
-//                         </div>
-//                     </UpdatesMenu> 
 
-/* <UpdatesList>
-                        {sectionData && ("updates" in sectionData) && sectionData["updates"].sort((a,b)=>b.date-a.date).map((updateData) => {
-                            return <UpdateBox
-                                id={updateData.id}
-                                updateData={updateData}
-                                userName={userName}
-                                isSelector={selectorOpen==updateData.id}
-                                updateUpdate={(newUpdateData)=>{
-                                    let newUpdates = sectionData["updates"];
-                                    let u = newUpdates.findIndex((up)=>up.id==newUpdateData.id);
-                                    newUpdates[u]=newUpdateData;
-                                    let newSectionData = {...sectionData,  "updates":newUpdates}
-                                
-                                    ctx.updateSection(newSectionData);
-                                    setSectionData(newSectionData);
-                                    //ctx.updateUpdate(newUpdateData, sectionData.id)
-
-                                }}
-                                setSelectorOpen={(updateData)=>{
-                                     console.log(updateData);
-                                    if(updateData.id==selectorOpen)setSelectorOpen(null);
-                                    else setSelectorOpen(updateData.id);
-                                } }
-                                deleteUpdate={(updateData)=>{
-                                    if (window.confirm("Are you sure? This action cannot be reversed")) {
-                                        console.log(updateData);
-                                        //if(sectionData["updates"].find(v=>v.id==updateData.id).authorId==ctrctx.user.id){
-                                           // console.log("good")
-                                            let newSectionData = {...sectionData,  "updates":sectionData["updates"].filter(u=>u.id!=updateData.id)}
-                                            console.log(newSectionData);
-                                            ctx.updateSection(newSectionData);
-                                            setSectionData(newSectionData);
-                                       // }
-                                        
-                                       // ctx.deleteUpdate(updateData, sectionData.id);
-                                    }else{
-                                        return;
-                                    }
-                                }}
-                            />
-
-                        })}
-                    </UpdatesList> */
 // if(currentModalType==="helpRequests")
 
 
@@ -360,9 +321,9 @@ export default LadderModal;
                     //     <p>
                     //     {updateData["content"]}
                     //     </p>
-                    //     <SlackCounter 
+                    //     <SlackCounter
                     //     user={userName}
                     //     counters={updateData["reactions"]}
                     //     />
-                    //     {/* <SlackSelector />  */}
+                    //     {/* <SlackSelector />  */
                     // </UpdateBox>

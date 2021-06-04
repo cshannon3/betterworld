@@ -5,7 +5,7 @@ import { GrBlockQuote } from "react-icons/gr";
 import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
 //https://blog.logrocket.com/building-rich-text-editors-in-react-using-draft-js-and-react-draft-wysiwyg/
 //https://draftjs.org/docs/api-reference-data-conversion
-
+//STILL ISN'T TAKING CSS?
 
 
 export function MyEditor({content, onSave, onCancel}) {
@@ -17,12 +17,12 @@ export function MyEditor({content, onSave, onCancel}) {
     return (
     <div>
     <div className="RichEditor-root">
-    
+
          <Editor editorState={editorState} onChange={setEditorState} />
     </div>
      <button onClick={()=>{
         const raw = convertToRaw(editorState.getCurrentContent());
-        const blocks =raw.blocks; 
+        const blocks =raw.blocks;
         const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
        // const notRaw = convertFromRaw(blocks);
        // console.log(raw, notRaw);
@@ -34,14 +34,14 @@ export function MyEditor({content, onSave, onCancel}) {
   }
 
 
-  
+
 export default class RichEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState: 
+            editorState:
             this.props.content !== undefined ? EditorState.createWithContent(ContentState.createFromText(this.props.content)) : EditorState.createEmpty(),
-            
+
         };
         this.textInput = React.createRef();
         this.focus = () => this.textInput.editor.focus();
@@ -244,4 +244,3 @@ const InlineStyleControls = (props) => {
         </React.Fragment>
     );
 };
-

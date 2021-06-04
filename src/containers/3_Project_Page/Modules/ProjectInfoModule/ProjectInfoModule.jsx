@@ -1,6 +1,7 @@
 import ProjectContext from '../../ProjectContext';
 import {useContext} from 'react';
 import styled from "styled-components"
+//need to put in SmallCirclePhoto or CirclePhoto 
 
 export default function ProjectInfoModule() {
     const ctx = useContext(ProjectContext);
@@ -13,7 +14,7 @@ export default function ProjectInfoModule() {
             </div>
             <div>
                 <ProjectsSubtitle>Target Date</ProjectsSubtitle>
-                <DateTitle>TODO Date</DateTitle> 
+                <DateTitle>TODO Date</DateTitle>
                 {/* {ctx.data["target date"]} */}
             </div>
         </div>
@@ -39,7 +40,7 @@ const ProjectsSubtitle = styled.h2`
     display: flex;
     align-items: center;
     letter-spacing: -0.02em;
-    
+
     color: #000000;
 `;
 const DescriptionText = styled.p`
@@ -91,5 +92,5 @@ const ProjectTitleBox = styled.div`
       display:flex;
       justify-content: space-between;
   }
- 
+
  `
