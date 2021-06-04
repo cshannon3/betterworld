@@ -2,7 +2,7 @@ import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
 import * as styles from '../../styles/sharedStyles';
-import { MyEditor } from "../../containers/3_Project_Page/Modules/LadderModule/RichTextEditor/RichTextEditor";
+import { MyEditor } from "../RichTextEditor/RichTextEditor";
 import {cleanUpdateModel} from "data_models/updatemodel";
 
 

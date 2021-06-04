@@ -1,28 +1,31 @@
 import CommitteeContext from '../../CommitteeContext';
 
-import {useContext} from 'react';
+import { useContext } from 'react';
 import styled from "styled-components";
 import * as styles from 'styles/sharedStyles';
 //goal of at a glance: people photos, resource # and repsonisbilities
 
 export default function AtAGlanceModule() {
-   return ( <AtAGlanceBox>
-        <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
-        <div>
-          <div> People box</div>
-          <div> 5 Google Docs</div>
-          <div> 11 Google Sheets</div>
-        </div>
-        <div>
-          <h2>Committee Responsibilities</h2>
-          <ul>
-            <li>Budgeting</li>
-            <li>Fundraising Efforts</li>
-            <li>Authorizing Spending</li>
-            <li>other...</li>
-          </ul>
-        </div>
-    </AtAGlanceBox>);
+  return (<AtAGlanceBox>
+    <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
+    <div className="col">
+      <div>
+        <div> People box</div>
+        <div> 5 Google Docs</div>
+        <div> 11 Google Sheets</div>
+      </div>
+      <div>
+
+        <h2>Committee Responsibilities</h2>
+        <ul>
+          <li>Budgeting</li>
+          <li>Fundraising Efforts</li>
+          <li>Authorizing Spending</li>
+          <li>other...</li>
+        </ul>
+      </div>
+    </div>
+  </AtAGlanceBox>);
 }
 
 const AtAGlanceBox = styled.div`
@@ -31,4 +34,13 @@ const AtAGlanceBox = styled.div`
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
+
+  .col{
+    display:flex;
+    justify-content: space-evenly
+  }
+  li{
+    margin-left:20px;
+  }
+
 `

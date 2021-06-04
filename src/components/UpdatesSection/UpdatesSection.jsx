@@ -12,8 +12,8 @@ const UpdatesSection = ({
     setSelectorOpen=(updateId)=>{},
 }) =>{
 return (
-    <UpdatesContainer>
-    <UpdatesMenu>
+    <UpdatesContainer isLadderModal={stages!=null}>
+    <UpdatesMenu isLadderModal={stages!=null}>
         <div><h3>Updates</h3></div>
         <div>
             {/* <button>Filter</button> */}
@@ -67,7 +67,6 @@ height:87%;
 const UpdatesMenu = styled.div`
     display:flex;
     justify-content: space-between;
-    padding:20px 0px;
     >div{
         display:flex;
     }
@@ -80,11 +79,20 @@ const UpdatesMenu = styled.div`
         display: flex;
         align-items: center;
     }
+    padding: 0px 0px 10px 20px;
+    ${({ isLadderModal }) => isLadderModal && `
+        padding:20px 0px;
+  `}
 `    
 const UpdatesContainer = styled.div`
-background-color:#F8F8F8;
-margin: 15px;
-width:350px;
+width:100%;
+height:66vh;
+${({ isLadderModal }) => isLadderModal && `
+    width:350px;
+    background-color:#F8F8F8;
+    margin: 15px;
+    height:100%;
+  `}
 `                      
 // console.log(newSectionData);
 // ctx.updateSection(newSectionData);

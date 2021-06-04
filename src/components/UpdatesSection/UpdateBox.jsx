@@ -4,7 +4,7 @@ import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import _ from 'lodash';
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import RichEditor, {MyEditor} from "../../containers/3_Project_Page/Modules/LadderModule/RichTextEditor/RichTextEditor";
+import RichEditor, {MyEditor} from "../RichTextEditor/RichTextEditor";
 import {FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {BsReply} from "react-icons/bs";
 import {cleanReplyModel } from "data_models/updatemodel";

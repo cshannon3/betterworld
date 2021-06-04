@@ -1,10 +1,10 @@
-import CommitteeContext from '../../CommitteeContext';
+// import CommitteeContext from '../../CommitteeContext';
 
-import {useContext} from 'react';
+// import {useContext} from 'react';
 import styled from "styled-components"
+import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 
-export default function CommitteeInfoModule() {
-    const ctx = useContext(CommitteeContext);
+export default function CommitteeInfoModule({committeeData, user, onSave}) {
 
     return (<CommitteeTitleBox>
         <div>
@@ -12,21 +12,32 @@ export default function CommitteeInfoModule() {
                 <CommitteesSubtitle>CMU AGAINST ICE</CommitteesSubtitle>
                 <CommitteesTitle>Committees</CommitteesTitle>
             </div>
-            <div>
-                <CommitteesSubtitle>Target Date</CommitteesSubtitle>
-                <DateTitle>May 15th</DateTitle>
-            </div>
+         
         </div>
-        <CommitteeName>Money</CommitteeName>
-        <DescriptionText>Moneyyyyyyyyyyyys</DescriptionText>
+        <CommitteeName>{committeeData.name}</CommitteeName>
+        <DescriptionText>{committeeData.description}</DescriptionText>
+        <div className="bottomBar">
         <div>
             <CommitteesSubtitle>
-                Point Person: Jess Jones
+                Point Person: {committeeData.pointPerson.displayName}
             </CommitteesSubtitle>
+            </div>
+            <div>
             <CommitteesSubtitle>
                 Interested in this Committee?
-            </CommitteesSubtitle>
-            <div>offer Help button</div>
+                </CommitteesSubtitle>
+                <AddUpdateComponent
+                                type={"offer to help"}
+                                user={user}
+                                onSave={(newUpdate) => {
+                                    onSave(newUpdate);
+                                    // const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    // ctx.updateSection(newSectionData);
+                                    // setSectionData(newSectionData)
+                                }}
+                            />
+            
+            </div>
         </div>
     </CommitteeTitleBox>)
 }
@@ -89,9 +100,16 @@ const CommitteeTitleBox = styled.div`
   display: grid;
   grid-area: 1 / 1 / span 2 / span 2;
   padding: 0px 50px 0px 0px;
-  &:nth-child(1) > div{
-      display:flex;
-      justify-content: space-between;
+  .bottomBar{
+    display:flex;
+    justify-content: space-between;
+    height:90px;
   }
 
+
  `
+
+ //   &:nth-child(1) > div{
+//       display:flex;
+//       justify-content: space-between;
+//   }

@@ -15,6 +15,8 @@ import {
 import ControlContext from 'shared/control-context';
 import {updateCommittee} from "shared/firebase";
 import UpdatesSection from 'components/UpdatesSection/UpdatesSection'
+import { useWindowWidth,} from '@react-hook/window-size';
+
 //import dummyData from 'dummydata';
 //starting dev
 
@@ -26,17 +28,30 @@ export default function CommitteePage() {
     
     const [committeeData, setCommitteeData] = useState(ctrctx.getCommitteeData(committeeId));
     const [selectorOpen, setSelectorOpen] = useState(null);
-    console.log(committeeData);
+    const windowWidth = useWindowWidth()
+    if(windowWidth<1200) return (<div>
+      Window too small...we didn't make responsive yet
+      </div>)
     return (
       <Row>
           <LeftPanel />
           <ContentContainer>
-            <CommitteeInfoModule />
-            <BudgetModule />
-          
+            <CommitteeInfoModule 
+              committeeData={committeeData}
+              user={ctrctx.user}
+              onSave={(newUpdate)=>{
+
+                let newCommitteeData = {...committeeData,  "updates":[...committeeData.updates, newUpdate]}
+                updateCommittee(committeeId, newCommitteeData)
+                setCommitteeData(newCommitteeData);
+              }}
+             />
+            <BudgetModule 
+              committeeData={committeeData}
+            />
             <AtAGlanceModule />
-            <CalendarModule />
-            <div> 
+            {/* <CalendarModule /> */}
+            <UpdateDiv> 
               <UpdatesSection
                             updates={"updates" in committeeData? committeeData.updates : []}
                             user={ctrctx.user}
@@ -54,9 +69,10 @@ export default function CommitteePage() {
                         >
                             
                         </UpdatesSection>
-                </div>
+                </UpdateDiv>
           </ContentContainer>
       </Row>
+                          
     )
 }
 
@@ -64,6 +80,7 @@ export default function CommitteePage() {
 const Row = styled.div`
   display: flex;
   width: 100%;
+  height:100vh;
 `
 
 const ContentContainer = styled.div`
@@ -75,3 +92,9 @@ const ContentContainer = styled.div`
   grid-gap: 20px 10px;
 
 `
+
+const UpdateDiv = styled.div`
+  display: grid;
+  grid-area: 2 / 3 / span 2 / span 2;
+  height:66vh;
+`;
