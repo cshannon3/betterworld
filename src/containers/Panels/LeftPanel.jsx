@@ -31,7 +31,7 @@ export default function LeftPanel() {
                 <PhotoIcon src={EarthIcon} alt='Overview' />
                 <MenuText>OVERVIEW</MenuText>
             </div>
-            <div id="projectSideLink" onClick={()=>{
+            {/* <div id="projectSideLink" onClick={()=>{
               history.push("/project/immigrationjustice");
             }}>
                 <PhotoIcon src={FolderIcon} alt='Projects' />
@@ -42,7 +42,7 @@ export default function LeftPanel() {
             }}>
                 <PhotoIcon src={NetworkIcon} alt='Committees' />
                 <MenuText>COMMITTEES</MenuText>
-            </div>
+            </div> */}
             <div id="myInfoSideLink">
                 <PhotoIcon src={UserIcon} alt='Projects' />
                 <MenuText>MY INFO</MenuText>
