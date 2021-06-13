@@ -195,7 +195,6 @@ margin-bottom:20px;
 
 
 const OverviewTextStyle = styled.div`
- 
   width: 100%;
   padding:20px;
 `;

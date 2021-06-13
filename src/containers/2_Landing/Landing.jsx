@@ -17,7 +17,7 @@ export default function Landing() {
   const committeeData = Object.values(ctrctx.getCommitteesData());
   const quickData = ctrctx.data["quick_links"];
   console.log(committeeData);
-  
+
   let history = useHistory();
 
 
@@ -65,8 +65,23 @@ export default function Landing() {
           <h2> Projects/Actions</h2>
           <Row>
             {
-              projectsData.map((project)=>{
-               return( <ProjectBox onClick={()=>{
+              projectsData.sort((a,b)=>a["end_date"]<b["end_date"]?-1:1).map((project)=>{
+               return( 
+               project["isArchived"]?
+               <ArchivedProjectBox onClick={()=>{
+                history.push(`/project/${project.id}`);
+              }}>
+                    <div className="name">{project.name}</div>
+                    <div className="line"/>
+                    <br/>
+                    <p ><span >Start date:</span></p>
+                    <p><span >End Date:</span>{project["end_date"]}</p>
+                    <br/>
+                    <p><span>Task Count:</span> 13/30</p>
+                    <p><span>Volunteers:</span> 4</p>
+              </ArchivedProjectBox>:
+
+               <ProjectBox onClick={()=>{
                   history.push(`/project/${project.id}`);
                 }}>
                       <div className="name">{project.name}</div>
@@ -77,7 +92,9 @@ export default function Landing() {
                       <br/>
                       <p><span>Task Count:</span> 13/30</p>
                       <p><span>Volunteers:</span> 4</p>
-                </ProjectBox>)
+                </ProjectBox>
+                
+                )
               })
             }
           </Row>
@@ -98,7 +115,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  width: 100%;
+  width: calc(100vw - 160px);
   padding: 3vh 40px 10vh 40px;
   h1 {
     font-family: Baloo 2;
@@ -212,6 +229,45 @@ const ProjectBox = styled.a`
   cursor: pointer;
   text-decoration: none;
   background: #FAFAFA;
+  border: 1px solid #0CC998;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 20px 15px;
+  .name {
+    color: #0CC998;
+    font-family: Baloo 2;
+    font-weight:normal;
+    font-size: 32px;
+    line-height: 28px;
+    font-weight:800;
+  }
+
+  .line {
+    background-color: #0CC998;
+    width: 50px;
+    height: 3px;
+    margin-top:5px;
+    border-radius: 11px;
+  }
+  p{
+    font-family: Helvetica Neue;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  span{
+    font-weight:bold;
+  }
+`
+
+const ArchivedProjectBox = styled.a`
+  height:194px;
+  min-width:244px;
+  cursor: pointer;
+  text-decoration: none;
+  background: grey;
   border: 1px solid #0CC998;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
