@@ -90,8 +90,8 @@ export default function Landing() {
 
 const Row = styled.div`
   display: flex;
-  width: 100%;
   gap: 20px;
+  overflow:scroll;
 `
 
 const ContentContainer = styled.div`
@@ -204,7 +204,7 @@ const LinkBox = styled.div`
 
 
 const ProjectsSection = styled.div`
-  width:100%
+  width:100%;
 `
 const ProjectBox = styled.a`
   height:194px;
