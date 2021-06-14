@@ -10,6 +10,7 @@ import {
     CalendarModule,
     UpcomingEventsModule,
     HelpWantedModule,
+    RecruitingModule
 
 } from './Modules/modules'
 import ControlContext from 'shared/control-context';
@@ -29,9 +30,33 @@ export default function CommitteePage() {
     const [committeeData, setCommitteeData] = useState(ctrctx.getCommitteeData(committeeId));
     const [selectorOpen, setSelectorOpen] = useState(null);
     const windowWidth = useWindowWidth()
-    if(windowWidth<1200) return (<div>
-      Window too small...we didn't make responsive yet
-      </div>)
+    // if(windowWidth<1200) return (<div>
+    //   Window too small...we didn't make responsive yet
+    //   </div>)
+    const CustomModule = () => {
+      if (committeeId=="art-edu"){
+        return( <RecruitingModule 
+          committeeData={committeeData}
+        />);
+      }
+      if(committeeId=="actions"){
+        return( <RecruitingModule 
+          committeeData={committeeData}
+        />);
+      }
+      if(committeeId=="money"){
+       return( <BudgetModule 
+        committeeData={committeeData}
+      />);
+      }
+      if(committeeId=="recruiting"){
+        return( <RecruitingModule 
+          committeeData={committeeData}
+        />);
+      }
+    }
+    
+    
     return (
       <Row>
           <LeftPanel />
@@ -46,9 +71,9 @@ export default function CommitteePage() {
                 setCommitteeData(newCommitteeData);
               }}
              />
-            <BudgetModule 
-              committeeData={committeeData}
-            />
+           
+           
+            <CustomModule />
             <AtAGlanceModule />
             {/* <CalendarModule /> */}
             <UpdateDiv> 
