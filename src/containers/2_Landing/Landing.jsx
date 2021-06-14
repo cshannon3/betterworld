@@ -20,6 +20,9 @@ export default function Landing() {
 
   let history = useHistory();
 
+  const formatDate = (d) =>{
+    return d.substring(0, d.length-13)
+  }
 
   return (
     <Row>
@@ -65,7 +68,7 @@ export default function Landing() {
           <h2> Projects/Actions</h2>
           <Row>
             {
-              projectsData.sort((a,b)=>a["end_date"]<b["end_date"]?-1:1).map((project)=>{
+              projectsData.sort((a,b)=>a["end_date"]>b["end_date"]?-1:1).map((project)=>{
                return( 
                project["isArchived"]?
                <ArchivedProjectBox onClick={()=>{
@@ -74,11 +77,11 @@ export default function Landing() {
                     <div className="name">{project.name}</div>
                     <div className="line"/>
                     <br/>
-                    <p ><span >Start date:</span></p>
-                    <p><span >End Date:</span>{project["end_date"]}</p>
+                    <p ><span >Start date:</span>{formatDate(project["start_date"])}</p>
+                    <p><span >End Date: </span> {formatDate(project["end_date"])}</p>
                     <br/>
-                    <p><span>Task Count:</span> 13/30</p>
-                    <p><span>Volunteers:</span> 4</p>
+                    <p><span>Updates:</span> 22</p>
+                    <p><span>Contributors:</span>{project["contributors"]?.length}</p>
               </ArchivedProjectBox>:
 
                <ProjectBox onClick={()=>{
@@ -87,11 +90,11 @@ export default function Landing() {
                       <div className="name">{project.name}</div>
                       <div className="line"/>
                       <br/>
-                      <p ><span >Start date:</span> 1/3/21</p>
-                      <p><span >Est. Completion:</span> 12/2/21</p>
+                      <p ><span >Start date:</span> {formatDate(project["start_date"])}</p>
+                      <p><span >Est. Completion:</span>{formatDate(project["end_date"])}</p>
                       <br/>
                       <p><span>Task Count:</span> 13/30</p>
-                      <p><span>Volunteers:</span> 4</p>
+                      <p><span>Contributors:</span> 4</p>
                 </ProjectBox>
                 
                 )
@@ -267,14 +270,14 @@ const ArchivedProjectBox = styled.a`
   min-width:244px;
   cursor: pointer;
   text-decoration: none;
-  background: grey;
+  background: #B6B6B6;
   border: 1px solid #0CC998;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
   padding: 20px 15px;
   .name {
-    color: #0CC998;
+    color: white;
     font-family: Baloo 2;
     font-weight:normal;
     font-size: 32px;
@@ -291,6 +294,7 @@ const ArchivedProjectBox = styled.a`
   }
   p{
     font-family: Helvetica Neue;
+    color: white;
     font-style: normal;
     font-weight: 300;
     font-size: 14px;
