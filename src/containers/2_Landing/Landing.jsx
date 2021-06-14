@@ -17,9 +17,12 @@ export default function Landing() {
   const committeeData = Object.values(ctrctx.getCommitteesData());
   const quickData = ctrctx.data["quick_links"];
   console.log(committeeData);
-  
+
   let history = useHistory();
 
+  const formatDate = (d) =>{
+    return d.substring(0, d.length-13)
+  }
 
   return (
     <Row>
@@ -65,19 +68,36 @@ export default function Landing() {
           <h2> Projects/Actions</h2>
           <Row>
             {
-              projectsData.map((project)=>{
-               return( <ProjectBox onClick={()=>{
+              projectsData.sort((a,b)=>a["end_date"]>b["end_date"]?-1:1).map((project)=>{
+               return( 
+               project["isArchived"]?
+               <ArchivedProjectBox onClick={()=>{
+                history.push(`/project/${project.id}`);
+              }}>
+                    <div className="name">{project.name}</div>
+                    <div className="line"/>
+                    <br/>
+                    <p ><span >Start date:</span>{formatDate(project["start_date"])}</p>
+                    <p><span >End Date: </span> {formatDate(project["end_date"])}</p>
+                    <br/>
+                    <p><span>Updates:</span> 22</p>
+                    <p><span>Contributors:</span>{project["contributors"]?.length}</p>
+              </ArchivedProjectBox>:
+
+               <ProjectBox onClick={()=>{
                   history.push(`/project/${project.id}`);
                 }}>
                       <div className="name">{project.name}</div>
                       <div className="line"/>
                       <br/>
-                      <p ><span >Start date:</span> 1/3/21</p>
-                      <p><span >Est. Completion:</span> 12/2/21</p>
+                      <p ><span >Start date:</span> {formatDate(project["start_date"])}</p>
+                      <p><span >Est. Completion:</span>{formatDate(project["end_date"])}</p>
                       <br/>
                       <p><span>Task Count:</span> 13/30</p>
-                      <p><span>Volunteers:</span> 4</p>
-                </ProjectBox>)
+                      <p><span>Contributors:</span> 4</p>
+                </ProjectBox>
+                
+                )
               })
             }
           </Row>
@@ -90,15 +110,15 @@ export default function Landing() {
 
 const Row = styled.div`
   display: flex;
-  width: 100%;
   gap: 20px;
+  overflow:scroll;
 `
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  width: 100%;
+  width: calc(100vw - 160px);
   padding: 3vh 40px 10vh 40px;
   h1 {
     font-family: Baloo 2;
@@ -204,7 +224,7 @@ const LinkBox = styled.div`
 
 
 const ProjectsSection = styled.div`
-  width:100%
+  width:100%;
 `
 const ProjectBox = styled.a`
   height:194px;
@@ -235,6 +255,46 @@ const ProjectBox = styled.a`
   }
   p{
     font-family: Helvetica Neue;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 17px;
+  }
+  span{
+    font-weight:bold;
+  }
+`
+
+const ArchivedProjectBox = styled.a`
+  height:194px;
+  min-width:244px;
+  cursor: pointer;
+  text-decoration: none;
+  background: #B6B6B6;
+  border: 1px solid #0CC998;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 20px 15px;
+  .name {
+    color: white;
+    font-family: Baloo 2;
+    font-weight:normal;
+    font-size: 32px;
+    line-height: 28px;
+    font-weight:800;
+  }
+
+  .line {
+    background-color: #0CC998;
+    width: 50px;
+    height: 3px;
+    margin-top:5px;
+    border-radius: 11px;
+  }
+  p{
+    font-family: Helvetica Neue;
+    color: white;
     font-style: normal;
     font-weight: 300;
     font-size: 14px;

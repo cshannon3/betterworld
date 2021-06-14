@@ -63,7 +63,7 @@ const Line = styled.hr`
 
 const Panel = styled.div`
   min-height: 100vh;
-  width: 12%;
+  //width: 15vw;
   min-width: 160px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   overflow: auto;

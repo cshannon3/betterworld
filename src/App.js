@@ -20,6 +20,7 @@ import Splash from 'containers/1_Splash/Splash'
 import Landing from 'containers/2_Landing/Landing'
 import ProjectPage from 'containers/3_Project_Page/ProjectPage'
 import CommitteePage from 'containers/CommitteePage/CommitteePage'
+import AddItemPage from 'containers/Add_Item_Page/AddItemPage'
 import { ModalProvider } from 'styled-react-modal';
 import data from "dummydata";
 
@@ -159,6 +160,7 @@ function setupCommitteeListener(){
           <ModalProvider>
             <div className="App__container">
               <Switch>
+              <Route path="/addItem" component={AddItemPage} />
                 <Route path="/project/:projectId" component={ProjectPage} />
                 <Route path="/committee/:committeeId" component={CommitteePage} />
                 <Route exact path="/">
