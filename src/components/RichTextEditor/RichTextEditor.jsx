@@ -5,7 +5,8 @@ import { GrBlockQuote } from "react-icons/gr";
 import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
 //https://blog.logrocket.com/building-rich-text-editors-in-react-using-draft-js-and-react-draft-wysiwyg/
 //https://draftjs.org/docs/api-reference-data-conversion
-//STILL ISN'T TAKING CSS?
+//June 18 - STILL ISN'T TAKING CSS? Can't test because projects broken
+//Tried changing here, css, and in ladder
 
 
 export function MyEditor({content, onSave, onCancel}) {
@@ -161,6 +162,7 @@ function getBlockStyle(block) {
     }
 }
 
+//think this is the button but css isn't taking
 class StyleButton extends React.Component {
     constructor() {
         super();

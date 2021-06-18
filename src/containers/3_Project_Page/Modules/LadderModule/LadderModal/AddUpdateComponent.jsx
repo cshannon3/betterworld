@@ -83,7 +83,7 @@ const AddUpdateButton = ({
 }
 
 const ButtonOne = styled.button`
-    background: pink;
+    background: #0CC998;
     border-radius: 72.2872px;
     height:35px;
     width:144px;

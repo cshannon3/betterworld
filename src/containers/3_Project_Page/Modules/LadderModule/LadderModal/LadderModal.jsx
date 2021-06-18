@@ -54,9 +54,10 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                         <div className="tasks">
                             <StagesComponent data={data && data["stages"]} />
                         </div>
-                        <div className="buttons">
+                        <div className="buttons" >
                             <AddUpdateComponent
                                 type={"offer to help"}
+                                style={{color: "#0CC998"}}
                                 stages={stages}
                                 user={ctrctx.user}
                                 onSave={(newUpdate) => {
@@ -67,6 +68,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
                             />
                             <AddUpdateComponent
                                 type={"request help"}
+                                style={{color: "#0595A5"}}
                                 stages={stages}
                                 user={ctrctx.user}
                                 onSave={(newUpdate) => {

@@ -23,10 +23,10 @@ export default function AtAGlanceModule() {
             <LargeText>3/21/21</LargeText>
             <SmallText>Last Updated</SmallText>
           </InternalDiv>
-          <InternalDiv>
+          <FinalInternalDiv>
             <LargeText>3\71</LargeText>
             <SmallText>Edits This Week</SmallText>
-          </InternalDiv>
+          </FinalInternalDiv>
         </DivContainer>
     </AtAGlanceBox>);
 }
@@ -47,6 +47,12 @@ const InternalDiv = styled.div`
   margin: 10px;
   padding: 5px;
   border-right: dashed 1px lightgrey;
+  text-align: center;
+`
+const FinalInternalDiv = styled.div`
+  max-width: 150px;
+  margin: 10px;
+  padding: 5px;
   text-align: center;
 `
 
