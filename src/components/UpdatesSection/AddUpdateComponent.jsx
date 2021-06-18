@@ -9,9 +9,10 @@ import {cleanUpdateModel} from "data_models/updatemodel";
 const StyledModal = Modal.styled`
 width: 362px;
 height: 236px;
-  display: flex;
-  flex-direction:column;
-  justify-content: space-between;
+border-radius: 10px;
+  // display: flex;
+  // flex-direction:column;
+  // justify-content: space-between;
   background-color: white;
 `
 const updateTypeInfo = {
