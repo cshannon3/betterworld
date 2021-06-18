@@ -13,7 +13,8 @@ export const cleanCommitteeModel = (committeeData) => {
         contributors:[],
         events:[],
         pointPerson:{},
-        responsibilities:[]
+        responsibilities:[],
+        resources:[]
     };
 
     let cleanModel = {...blank, ...d};

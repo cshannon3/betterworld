@@ -54,7 +54,7 @@ return (
 
                         })}
                     </UpdatesList>
-                    </UpdatesContainer>
+  </UpdatesContainer>
 )
 }
 
@@ -62,10 +62,12 @@ export default UpdatesSection;
 
 const UpdatesList = styled.div`
 overflow:scroll;
-height:87%;
+height: calc( 100% - 95px  );
+padding:15px;
 `  
 const UpdatesMenu = styled.div`
     display:flex;
+    height:75px;
     justify-content: space-between;
     >div{
         display:flex;
@@ -75,23 +77,22 @@ const UpdatesMenu = styled.div`
         font-style: normal;
         font-weight: 800;
         font-size: 21px;
-        line-height: 33px;
         display: flex;
         align-items: center;
     }
     padding: 0px 0px 10px 20px;
     ${({ isLadderModal }) => isLadderModal && `
-        padding:20px 0px;
+        padding:20px 0px 0px 10px;
   `}
 `    
 const UpdatesContainer = styled.div`
 width:100%;
-height:66vh;
+height:100%;
 ${({ isLadderModal }) => isLadderModal && `
     width:350px;
     background-color:#F8F8F8;
     margin: 15px;
-    height:100%;
+    height:95%;
   `}
 `                      
 // console.log(newSectionData);

@@ -258,7 +258,7 @@ const UpdateBoxCSS = styled.div`
 background-color: #FFFFFF;
 border: 1px solid #EEEEEE;
 box-sizing: border-box;
-margin:5%;
+margin-bottom:20px;
 
 .topbar{
     display:flex;
