@@ -28,13 +28,24 @@ export default function ProjectPage() {
     appCtx.getProjectData(projectId)
   );
 
-  console.log(projectData);
+  // let helpRequests = [];
+  // if(!projectData["isArchived"]){
+  //   projectData["sections"].forEach((section)=>{
+  //     if(section["updates"]) section["updates"].forEach((update)=>{
+  //       if(update && update["type"]=="request help"){
+  //         helpRequests.push({...update, "name":section.name})
+  //       }
+  //     });
+  //   });
+  // }
+
+
+ // console.log(helpRequests);
   //dummyData["Immigration Justice Zine"]
   return (
     <ProjectContext.Provider
       value={{
         data: projectData,
-
         updateSection: (sectionData) => {
           let sections = [...projectData["sections"]];
           let s = sections.findIndex((sec) => sec.id == sectionData.Id);
@@ -99,7 +110,7 @@ export default function ProjectPage() {
           </Con>
         ) : (
           <ContentContainer>
-            <ProjectInfoModule />
+            <ProjectInfoModule  />
             <AtAGlanceModule />
             <LadderModule />
           </ContentContainer>

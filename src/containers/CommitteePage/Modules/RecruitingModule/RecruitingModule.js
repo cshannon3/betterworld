@@ -7,9 +7,10 @@ import * as styles from 'styles/sharedStyles';
 
 export default function RecruitingModule({committeeData}) {
    return ( <RecruitingBox>
-        <styles.GreyTitleBar>Recruiting</styles.GreyTitleBar>
+        <styles.GreyTitleBar>New Members</styles.GreyTitleBar>
         <div> 
-          <div> Income/Expenses</div>
+          {/*TODO styling for new member*/}
+          <div> Member 1</div>
           <div> Recent Activity</div>
         </div>
         <div> 
@@ -20,8 +21,9 @@ export default function RecruitingModule({committeeData}) {
 
 
 const RecruitingBox = styled.div`
-  display: grid;
-  grid-area: 3 / 1 / span 1 / span 2;
+  //display: grid;
+  //grid-area: 3 / 1 / span 1 / span 2;
+  height:50%;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;

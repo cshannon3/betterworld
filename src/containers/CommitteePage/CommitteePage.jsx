@@ -61,6 +61,8 @@ export default function CommitteePage() {
       <Row>
           <LeftPanel />
           <ContentContainer>
+            
+            <Column>
             <CommitteeInfoModule 
               committeeData={committeeData}
               user={ctrctx.user}
@@ -74,7 +76,9 @@ export default function CommitteePage() {
            
            
             <CustomModule />
-            <AtAGlanceModule />
+            </Column>
+            <Column>
+            <AtAGlanceModule committeeData={committeeData} />
             {/* <CalendarModule /> */}
             <UpdateDiv> 
               <UpdatesSection
@@ -95,6 +99,7 @@ export default function CommitteePage() {
                             
                         </UpdatesSection>
                 </UpdateDiv>
+                </Column>
           </ContentContainer>
       </Row>
                           
@@ -109,17 +114,27 @@ const Row = styled.div`
 `
 
 const ContentContainer = styled.div`
-  display: grid;
+  //display: grid;
   width: 100%;
+  height:100%;
   padding: 5vh 50px 3vh 40px ;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 20px 10px;
+  display: flex;
+  //grid-template-columns: 1fr 1fr 1fr 1fr;
+ // grid-template-rows: 1fr 1fr 1fr;
+ // grid-gap: 20px 10px;
 
 `
 
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  height:100%;
+  width:100%;
+
+`
 const UpdateDiv = styled.div`
-  display: grid;
-  grid-area: 2 / 3 / span 2 / span 2;
-  height:66vh;
+ // display: grid;
+ // grid-area: 2 / 3 / span 2 / span 2;
+  height:60%;
+  padding:5px;
 `;

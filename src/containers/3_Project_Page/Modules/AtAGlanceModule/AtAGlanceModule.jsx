@@ -6,6 +6,9 @@ import docIcon from 'assets/Landing/google-docs.png';
 import sheetsIcon from 'assets/Landing/google-sheets.png';
 
 export default function AtAGlanceModule() {
+
+
+  
    return ( <AtAGlanceBox>
         <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
         <DivContainer >
