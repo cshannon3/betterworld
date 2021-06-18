@@ -163,51 +163,49 @@ const GalleryStyle = styled.div`
 `;
 
 const ArtifactLink = styled.p`
-font-family: Helvetica;
-font-size: 16px;
-line-height: 18px;
-align-items: center;
+  font-family: Helvetica;
+  font-size: 16px;
+  line-height: 18px;
+  align-items: center;
 `;
 const ArtifactTitle = styled.h2`
-font-family: Helvetica;
-font-weight: bold;
-font-size: 20px;
-padding-bottom:10px;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 20px;
+  padding-bottom: 10px;
 `;
 
 const TimeSpanTitle = styled.div`
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 28.1311px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28.1311px;
 `;
 const TimeSpan = styled.div`
-font-family: Baloo 2;
-font-style: normal;
-font-weight: bold;
-font-size: 40px;
-padding-bottom:10px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 40px;
+  padding-bottom: 10px;
 `;
 
 const Contibutors = styled.p`
-font-family: Helvetica;
-font-style: normal;
-font-weight: bold;
-font-size: 11.3495px;
-line-height: 15px;
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11.3495px;
+  line-height: 15px;
 `;
-
 
 const ContributorBox = styled.div`
-height:60px;
-background: grey;
-margin-bottom:20px;
+  height: 60px;
+  background: grey;
+  margin-bottom: 20px;
 `;
-
 
 const OverviewTextStyle = styled.div`
   width: 100%;
-  padding:20px;
+  padding: 20px;
 `;
 
 const Con = styled.div`
