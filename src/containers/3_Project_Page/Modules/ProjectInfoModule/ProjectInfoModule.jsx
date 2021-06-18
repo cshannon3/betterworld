@@ -40,10 +40,9 @@ export default function ProjectInfoModule() {
       });
   });
 
-  console.log(helpRequests);
 
   return (
-    <ProjectTitleBox>
+    <ProjectInfoContainer>
       <HelpRequestsModal
         data={projectData}
         isOpen={modalIsOpen}
@@ -57,11 +56,11 @@ export default function ProjectInfoModule() {
           </ProjectsSubtitle>
           <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
         </div>
-      </div>
+      
       <ProjectsSubtitle>{`Point Person: ${projectData["point_person"]["name"]}`}</ProjectsSubtitle>
       <DescriptionText>{ctx.data["description"]}</DescriptionText>
-
-      <div>
+      </div>
+      <UpdatesRow >
         <UpdatesText>{`${totalUpdates.length} Total Updates `}</UpdatesText>
         <UpdatesText
           onClick={() => {
@@ -70,19 +69,38 @@ export default function ProjectInfoModule() {
         >
           {`${helpRequests.length} Open Help Requests`}{" "}
         </UpdatesText>
-      </div>
-    </ProjectTitleBox>
+      </UpdatesRow >
+    </ProjectInfoContainer>
   );
 }
+
+
+const ProjectInfoContainer = styled.div`
+  height:100%;
+  width:50%;
+  padding: 0px 50px 0px 0px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+
+
+const ProjectsTitle = styled.h2`
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 60px;
+  line-height: 70px;
+  display: flex;
+  align-items: center;
+  color: #0cc998;
+`;
 
 const ProjectsSubtitle = styled.p`
   font-family: Baloo 2;
   font-style: normal;
   font-weight: 800;
   font-size: 16px;
-  display: flex;
-  align-items: center;
-  letter-spacing: -0.02em;
   color: #000000;
   span {
     color: #0cc998;
@@ -90,6 +108,11 @@ const ProjectsSubtitle = styled.p`
   white-space: pre-wrap;
 `;
 
+
+const UpdatesRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
 const UpdatesText = styled.p`
   font-style: normal;
   font-weight: 600;
@@ -106,35 +129,18 @@ const DescriptionText = styled.p`
   line-height: 24px;
 `;
 
-const DateTitle = styled.h2`
-  font-family: Baloo 2;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 40px;
-  line-height: 70px;
-  display: flex;
-  align-items: center;
-  letter-spacing: -0.02em;
-  color: black;
-`;
-const ProjectsTitle = styled.h2`
-  font-family: Baloo 2;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 60px;
-  line-height: 70px;
-  display: flex;
-  align-items: center;
-  letter-spacing: -0.02em;
-  color: #0cc998;
-`;
 
-const ProjectTitleBox = styled.div`
-  display: grid;
-  grid-area: 1 / 1 / span 2 / span 2;
-  padding: 0px 50px 0px 0px;
-  &:nth-child(1) > div {
-    display: flex;
-    justify-content: space-between;
-  }
-`;
+
+
+
+// const DateTitle = styled.h2`
+//   font-family: Baloo 2;
+//   font-style: normal;
+//   font-weight: bold;
+//   font-size: 40px;
+//   line-height: 70px;
+//   display: flex;
+//   align-items: center;
+//   letter-spacing: -0.02em;
+//   color: black;
+// `;

@@ -133,8 +133,6 @@ const Column = styled.div`
 
 `
 const UpdateDiv = styled.div`
- // display: grid;
- // grid-area: 2 / 3 / span 2 / span 2;
   height:60%;
   padding:5px;
 `;
