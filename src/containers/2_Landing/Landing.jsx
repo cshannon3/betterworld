@@ -24,6 +24,16 @@ export default function Landing() {
     return d.substring(0, d.length-13)
   }
 
+ 
+  const getNumUpdates= (projectData)=>{
+    let numUpdates = 0;
+    projectData["sections"].forEach((section) => {
+      if (section["updates"])
+        numUpdates+= section["updates"].length;
+    });
+    return numUpdates;
+  }
+
   return (
     <Row>
       <LeftPanel />
@@ -93,8 +103,8 @@ export default function Landing() {
                       <p ><span >Start date:</span> {formatDate(project["start_date"])}</p>
                       <p><span >Est. Completion:</span>{formatDate(project["end_date"])}</p>
                       <br/>
-                      <p><span>Task Count:</span> 13/30</p>
-                      <p><span>Contributors:</span> 4</p>
+                      <p><span>Updates:</span> {getNumUpdates(project)}</p>
+                      <p><span>Contributors:</span> {project["contributors"]?.length}</p>
                 </ProjectBox>
                 
                 )
