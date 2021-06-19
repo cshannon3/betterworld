@@ -1,13 +1,12 @@
 
 
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import { useHistory } from "react-router-dom"
 import {
   provider,
   getUserData,
   createNewUser,
-  updateUserData,
   getProjects,
   getCommittees
 } from 'shared/firebase';
@@ -32,17 +31,17 @@ const App = () => {
   const [committeesData, setCommitteesData] = useState(null)
   //const [currentProjectID, setCurrentProjectID] = useState(null);
 
-function setupProjectListener(){
-  projectsListener = getProjects({groupID:"cmu-against-ice"}).onSnapshot(function (querySnapshot) {
-   let  _projectsData = {};
-    querySnapshot.forEach(function (doc) {
-      _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+  function setupProjectListener(){
+    projectsListener = getProjects({groupID:"cmu-against-ice"}).onSnapshot(function (querySnapshot) {
+    let  _projectsData = {};
+      querySnapshot.forEach(function (doc) {
+        _projectsData[doc.id] = { ...doc.data(), "id": doc.id };
+      });
+      //console.log(_projectsData);
+      setProjectsData(_projectsData);
+      window.localStorage.setItem("projects", JSON.stringify(_projectsData));
     });
-    console.log(_projectsData);
-    setProjectsData(_projectsData);
-    window.localStorage.setItem("projects", JSON.stringify(_projectsData));
-  });
-}
+  }
 function setupCommitteeListener(){
   committeesListener = getCommittees({groupID:"cmu-against-ice"}).onSnapshot(function (querySnapshot) {
    let  _committeesData = {};
@@ -66,9 +65,9 @@ function setupCommitteeListener(){
       else if (_projectsData)  setProjectsData(_projectsData);
       if(!committeesListener) setupCommitteeListener();
       else if (_committeesData)  setCommitteesData(_committeesData);
-    
     }
   }
+
   useEffect(()=>{
     if(!user){
       let _user = JSON.parse(window.localStorage.getItem("user"));
@@ -80,7 +79,7 @@ function setupCommitteeListener(){
    });
 
   return (
-    <Router>
+    <Router >
       <React.Fragment>
         <ControlContext.Provider
           value={{

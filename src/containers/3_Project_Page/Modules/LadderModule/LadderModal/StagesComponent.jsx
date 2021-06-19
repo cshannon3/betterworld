@@ -15,7 +15,9 @@ const StagesComponent = ({data={}}) => {
 
     const columns = useMemo(() => [
         { width: 300, Header: 'Stage', accessor: 'name',
-            Cell: ({ cell }) => (  <StageTitle> {cell.value} </StageTitle> ) },
+            Cell: ({ cell }) => 
+            (  <StageTitle status={cell.row.values["status"]}> {cell.value} </StageTitle> ) 
+        },
         { Header: 'Status',accessor: 'status',
             Cell: ({ cell }) => (
                 <StageStatus>
@@ -107,8 +109,6 @@ const TitleBar = styled(styles.GreyTitleBar)`
     padding-right:20px;
 `
 
-
-
 const LinkBox = styled.div`
     height:40px;
     min-width:40px;
@@ -145,6 +145,7 @@ const TableSection = styled.section`
     }
 `;
 
+
 //could keep as "blocked" and black?
 const StageTitle = styled.div`
     font-family: Baloo 2;
@@ -156,42 +157,12 @@ const StageTitle = styled.div`
     align-items: center;
     border-left:5px solid;
     padding:30px 5px;
+    ${({ status }) => 
+    (status==="in progress") ? `border-left:5px solid #EFF265;`:
+    (status==="not started")?`border-left:5px solid #ffcc81;`
+    :`border-left:5px solid #0CC998;`
+}
 `;
-
-const NotStartedStageTitle = styled.div`
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 25px;
-    display: flex;
-    align-items: center;
-    border-left:5px solid #ffcc81;
-    padding:30px 5px;
-`;
-const InProgStageTitle = styled.div`
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 25px;
-    display: flex;
-    align-items: center;
-    border-left:5px solid #EFF265;
-    padding:30px 5px;
-`;
-const DoneStageTitle = styled.div`
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 25px;
-    display: flex;
-    align-items: center;
-    border-left:5px solid #0CC998;
-    padding:30px 5px;
-`;
-
 
 const StageStatus =styled.div`
 font-family: Helvetica;

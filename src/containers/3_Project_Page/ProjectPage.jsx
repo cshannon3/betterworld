@@ -5,7 +5,7 @@ import ReactModal from "react-modal";
 import LeftPanel from "containers/Panels/LeftPanel";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 
 import {
   LadderModule,
@@ -39,8 +39,7 @@ export default function ProjectPage() {
   //   });
   // }
 
-
- // console.log(helpRequests);
+  // console.log(helpRequests);
   //dummyData["Immigration Justice Zine"]
   return (
     <ProjectContext.Provider
@@ -78,28 +77,27 @@ export default function ProjectPage() {
                 <TimeSpanTitle>Timespan</TimeSpanTitle>
                 <TimeSpan>March 2020</TimeSpan>
                 <Contibutors>Contributors</Contibutors>
-                <ContributorBox>
-
-                </ContributorBox>
+                <ContributorBox></ContributorBox>
                 <ArtifactTitle>Artifacts</ArtifactTitle>
                 <ResourceBox>
-                {projectData["resources"] && projectData["resources"].map((data) =>
-             
-              <ArtifactLink><a href={data.url} target="_blank">
-                {data.name}
-              </a>
-              </ArtifactLink>
-        
-            )}
+                  {projectData["resources"] &&
+                    projectData["resources"].map((data) => (
+                      <ArtifactLink>
+                        <a href={data.url} target="_blank">
+                          {data.name}
+                        </a>
+                      </ArtifactLink>
+                    ))}
                 </ResourceBox>
-
               </AtAG>
             </Flex>
             <div>
               <Flex>
                 <OverviewTextStyle>
                   <TextSubtitle>Description</TextSubtitle>
-                  <TextBody>{projectData["description"] ?? "No description"}</TextBody>
+                  <TextBody>
+                    {projectData["description"] ?? "No description"}
+                  </TextBody>
                 </OverviewTextStyle>
                 <OverviewTextStyle>
                   <TextSubtitle>Outcome</TextSubtitle>
@@ -110,8 +108,10 @@ export default function ProjectPage() {
           </Con>
         ) : (
           <ContentContainer>
-            <ProjectInfoModule  />
-            <AtAGlanceModule />
+            <Flex>
+              <ProjectInfoModule />
+              <AtAGlanceModule projectData={projectData} />
+            </Flex>
             <LadderModule />
           </ContentContainer>
         )}
@@ -120,12 +120,14 @@ export default function ProjectPage() {
   );
 }
 
-
-
 const Slideshow = ({ images }) => {
   const slideRef = useRef();
   return (
-    <Slide ref={slideRef} easing="ease" style={{ width: "100%", paddingTop:"50px"}}>
+    <Slide
+      ref={slideRef}
+      easing="ease"
+      style={{ width: "100%", paddingTop: "50px" }}
+    >
       {/* <SlideImg src={"https://images.unsplash.com/photo-1623141629222-287c9e385a40?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"}/> */}
       {images.map((i) => {
         return (
@@ -134,8 +136,7 @@ const Slideshow = ({ images }) => {
               backgroundImage: `url(${i.url})`,
               width: "400px",
               height: "300px",
-              margin: 'auto',
-              
+              margin: "auto",
             }}
           ></EachSlide>
         );
@@ -147,15 +148,16 @@ const Slideshow = ({ images }) => {
 const Flex = styled.div`
   display: flex;
   width: 100%;
+  height:50%;
 `;
 const AtAG = styled.div`
-padding-left:10px;
-padding-top:40px;
+  padding-left: 10px;
+  padding-top: 40px;
   width: 100%;
 `;
 
 const ResourceBox = styled.div`
-padding-left:20px;
+  padding-left: 20px;
 `;
 const GalleryStyle = styled.div`
   width: 50%;
@@ -163,51 +165,49 @@ const GalleryStyle = styled.div`
 `;
 
 const ArtifactLink = styled.p`
-font-family: Helvetica;
-font-size: 16px;
-line-height: 18px;
-align-items: center;
+  font-family: Helvetica;
+  font-size: 16px;
+  line-height: 18px;
+  align-items: center;
 `;
 const ArtifactTitle = styled.h2`
-font-family: Helvetica;
-font-weight: bold;
-font-size: 20px;
-padding-bottom:10px;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 20px;
+  padding-bottom: 10px;
 `;
 
 const TimeSpanTitle = styled.div`
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 28.1311px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28.1311px;
 `;
 const TimeSpan = styled.div`
-font-family: Baloo 2;
-font-style: normal;
-font-weight: bold;
-font-size: 40px;
-padding-bottom:10px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 40px;
+  padding-bottom: 10px;
 `;
 
 const Contibutors = styled.p`
-font-family: Helvetica;
-font-style: normal;
-font-weight: bold;
-font-size: 11.3495px;
-line-height: 15px;
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11.3495px;
+  line-height: 15px;
 `;
-
 
 const ContributorBox = styled.div`
-height:60px;
-background: grey;
-margin-bottom:20px;
+  height: 60px;
+  background: grey;
+  margin-bottom: 20px;
 `;
-
 
 const OverviewTextStyle = styled.div`
   width: 100%;
-  padding:20px;
+  padding: 20px;
 `;
 
 const Con = styled.div`
@@ -217,18 +217,17 @@ const Con = styled.div`
   flex-direction: column;
 `;
 const EachSlide = styled.div`
-
-height: 250px;
-width:200px;
-background-size: cover;
- div {
+  height: 250px;
+  width: 200px;
+  background-size: cover;
+  div {
     display: flex;
     align-items: center;
     justify-content: center;
     background-size: cover;
     height: 150px;
   }
-  
+
   span {
     padding: 20px;
     font-size: 20px;
@@ -258,12 +257,12 @@ const TitleText = styled.h1`
 `;
 
 const TextBody = styled.p`
-font-family: Helvetica;
-font-style: normal;
-font-weight: normal;
-font-size: 18px;
-line-height: 24px;
-color: #000000;
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 24px;
+  color: #000000;
 `;
 
 const Row = styled.div`
@@ -271,27 +270,26 @@ const Row = styled.div`
   width: 100%;
 `;
 const ContentContainer = styled.div`
-  display: grid;
+  //display: grid;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   padding: 5vh 50px 3vh 40px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-gap: 20px 10px;
+  //grid-template-columns: 1fr 1fr 1fr 1fr;
+  //grid-template-rows: 1fr 1fr 1fr 1fr;
+  //grid-gap: 20px 10px;
 `;
 
 const TextSubtitle = styled.div`
-font-family: Baloo 2;
-font-style: normal;
-font-weight: 800;
-font-size: 26px;
-line-height: 41px;
-display: flex;
-align-items: center;
-letter-spacing: -0.02em;
-color: #000000;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 41px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+  color: #000000;
 `;
-
 
 // const slideImages = [
 //     "https://images.unsplash.com/photo-1623141629222-287c9e385a40?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format",

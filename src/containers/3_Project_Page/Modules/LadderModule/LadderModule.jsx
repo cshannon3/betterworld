@@ -176,11 +176,11 @@ const TitleBar = styled(styles.GreyTitleBar)`
 `
 
 const TaskOverviewBox = styled.div`
-  display: grid;
-  grid-area: 3 / 1 / span 2 / span 4;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
+  height:calc( 50% - 20px );
+  margin-top:20px; 
 `
 const TableSection = styled.section`
     table {
