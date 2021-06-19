@@ -9,9 +9,12 @@ import sheetsIcon from 'assets/Landing/google-sheets.png';
 
 export default function AtAGlanceModule({ projectData }) {
   const formatDate = (d) =>{
-    return d.substring(0, d.length-13)
+    return d.substring(0, d.length-18)
   }
+
   
+  let contributorsText = projectData["contributors"].map((data) => (data.name)).join();
+  console.log(contributorsText);
   return (
     <AtAGlanceBox>
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
@@ -19,12 +22,14 @@ export default function AtAGlanceModule({ projectData }) {
         <Row>
           <Box>
             <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
-            <ul>
-              {projectData["contributors"] &&
-                projectData["contributors"].map((data) => (
-                  <li>{data.name}</li>
-                ))}
-            </ul>
+
+              {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
+
+                // projectData["contributors"].map((data) => (
+                //   <UserText>{data.name},</UserText>
+                // ))
+                
+                }
           </Box>
           <Box>
           <SubtitleBold>Target Date</SubtitleBold>
@@ -113,7 +118,19 @@ const SubtitleBold= styled.h2`
 
 const TargetDateText = styled.h2`
   font-weight: bold;
-  font-size: 30px;
+  font-size: 24px;
   padding: 10px 0px;
 `;
 
+const UserText = styled.div`
+  padding-top: 10px;
+  font-size: 16px;
+`;
+
+
+// <ul>
+//               {projectData["contributors"] &&
+//                 projectData["contributors"].map((data) => (
+//                   <li>{data.name}</li>
+//                 ))}
+//             </ul>

@@ -18,7 +18,7 @@ export default function ProjectInfoModule({projectData, totalUpdates, helpReques
           <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
         </div>
       
-      <ProjectsSubtitle>{`Point Person: ${projectData["point_person"]["name"]}`}</ProjectsSubtitle>
+      <PointPerson>{`Point Person: ${projectData["point_person"]["name"]}`}</PointPerson>
       <DescriptionText>{projectData["description"]}</DescriptionText>
       </div>
       <UpdatesRow >
@@ -59,7 +59,6 @@ const ProjectsTitle = styled.h2`
 
 const ProjectsSubtitle = styled.p`
   font-family: Baloo 2;
-  font-style: normal;
   font-weight: 800;
   font-size: 16px;
   color: #000000;
@@ -67,7 +66,14 @@ const ProjectsSubtitle = styled.p`
     color: #0cc998;
   }
   white-space: pre-wrap;
+  padding-bottom: 15px;
 `;
+const PointPerson = styled(ProjectsSubtitle)`
+  padding-top: 15px;
+`;
+
+
+
 
 
 const UpdatesRow = styled.div`
@@ -86,7 +92,7 @@ const UpdatesText = styled.p`
 const DescriptionText = styled.p`
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
 `;
 
