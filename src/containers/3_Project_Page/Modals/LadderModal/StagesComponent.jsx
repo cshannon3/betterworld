@@ -23,23 +23,11 @@ const StagesComponent = ({data={}}) => {
                 <StageStatus>
                       {cell.value}
                       </StageStatus>
-            // <select name="stages" id="stages" onChange={()=>
-            //   {
-            //     var x = document.getElementById("stages").value;
-            //     console.log(x);
-            //     setSelectedStage(x);
-            //   }
-            //   }>
-            //   {["In Progress"].map((m)=>(
-            //   <option value={m}
-            //   >{m}</option>))}
-            // </select>
-            //    </StageStatus>
                  )
             },
         {Header: 'Link',accessor: 'active_doc',
              Cell: ({ cell }) => (  <LinkBox  > <img src={docIcon}/> </LinkBox> ) },
-        { Header: 'People', accessor: 'contributors', },
+        // { Header: 'People', accessor: 'contributors', },
     ], []);
     const filterTypes = useMemo(() => ({
         fuzzyText: fuzzyTextFilterFn,

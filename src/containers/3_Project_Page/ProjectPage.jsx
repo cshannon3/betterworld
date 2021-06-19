@@ -27,9 +27,7 @@ export default function ProjectPage() {
   const appCtx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
   const projectId = urlParts[urlParts.length - 1];
-  console.log(projectId);
-  
-  
+
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
@@ -88,11 +86,13 @@ const ActiveProjectPage = ({projectData}) => {
  
   //const [modalType,setModalType] =useState(null);
   
-  function openLadderModal(cell) {
-      setLadderModalData(cell.row.original);
+  function openLadderModal(row) {
+      setLadderModalData(row);
       setIsUpdatesModalOpen(false);
       setIsLadderModalOpen(true);
   }
+
+
 
   function closeLadderModal(){
     //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.

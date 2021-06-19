@@ -90,6 +90,7 @@ const HelpUpdatesList = ({
           .map((updateData) => {
             return (
               <UpdateBox
+               key={updateData.id}
                 id={updateData.id}
                 updateData={updateData}
                 isSelector={selectorOpen == updateData.id}

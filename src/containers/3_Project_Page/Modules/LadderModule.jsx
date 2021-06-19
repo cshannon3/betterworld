@@ -16,89 +16,80 @@ fuzzyTextFilterFn.autoRemove = (value) => !value;
 
 
 
-function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) {
-    const count = preGlobalFilteredRows.length
-    const [value, setValue] = useState(globalFilter);
-
-    const onChange = useAsyncDebounce((value) => {
-        setGlobalFilter(value || undefined);
-    }, 200);
-
-    const handleChange = (event) => {
-        setValue(event.target.value);
-        onChange(event.target.value);
-    };
-
-    return (
-        <th>
-            Search:{' '}
-            <Input
-                value={value || ''}
-                placeholder={`${count} sections...`}
-                onChange={handleChange}
-            />
-        </th>
-    );
-}
-
-function Search({ state, preGlobalFilteredRows, setGlobalFilter }) {
-    return (
-            <GlobalFilter
-                preGlobalFilteredRows={preGlobalFilteredRows}
-                globalFilter={state.globalFilter}
-                setGlobalFilter={setGlobalFilter}
-            />
-       
-    );
-}
-
-
-
 
 function LadderModule({projectData, openLadderModal}) {
    // const ctx = useContext(ProjectContext);
     const data = projectData["sections"];
+    let contributors = {};
+    let statuses = {}
+    data.forEach((section)=>{
+        let names = [];
+        if(section["stages"]){
+         section.stages.forEach((stage)=>{
+            
+            if(stage["contributors"]){
+                stage["contributors"].forEach((contributor)=>{
+                    if (contributor.name  && !names.includes(contributor.name)){
+                        names.push(contributor.name)
+                    }
+                });
+            }
+        });
+        contributors[section["id"]]=[...names]
+        }
+    });
+    data.forEach((section)=>{
+        let stat = section["stages"].find((stage)=> stage.name===section["status"])["status"];
+        statuses[section["id"]]=stat;
+    });
+
+    
 
     const columns = useMemo(() => [
         {
-            width: 300,
-            Header: 'Section',
+           
+            Header: 'Name',
             accessor: 'name',
             Cell: ({ cell }) => (
-                <span value={cell.value} 
-                 onClick={()=>openLadderModal(cell)}
+                <SectionTitle value={cell.value} 
+                 onClick={()=>openLadderModal(cell.row.original)}
                 >
                   {cell.value}
-                </span>
-              )
+                </SectionTitle>
+              ),
+              width:200
         },
         {
-            Header: 'Contributors',
-            accessor: 'contributors',
+            width: 300,
+            Header: 'Team',
+            accessor: 'id',
             Cell: ({ cell }) => (
-                <span  
-                 onClick={()=>openLadderModal(cell)}
-                >
-                  {cell.value}
+                <span >
+                  {contributors[cell.value].join()}
                 </span>
               )
         },
         {
             Header: 'Status',
             accessor: 'status',
+            Cell: ({ cell }) => (
+                <div>
+                  {cell.value} 
+                  <br/>({statuses[cell.row.original.id]})
+                </div>
+            )
         },
-        // {
-        //     Header: 'Ways To Help',
-        //     accessor: 'help_requests',
-        //     Cell: ({ cell }) => {
-        //         const helpRequests = cell.value;
-        //         console.log(helpRequests);
-        //        return ( <span  onClick={()=>openModal(cell, "helpRequests")}>
-        //           {helpRequests.length}
-        //         </span>
-        //         )
-        //     }
-        // },
+        {
+            Header: 'Updates',
+            accessor: 'updates',
+            Cell: ({ cell }) => (
+                <div >
+                  {cell.value ? cell.value.length : 0} Updates
+                  <br/> 
+                  {cell.value ? cell.value.filter(update=>update["type"] == "request help").length : 0} Help Requests
+                </div>
+              )
+        },
     ], []);
 
     const filterTypes = useMemo(() => ({
@@ -130,20 +121,12 @@ function LadderModule({projectData, openLadderModal}) {
         <TableSection >
             <TitleBar> 
                 <div>
-                    <span>Project Ladder</span>
+                    <span>Sections Overview</span>
                 </div> 
-                <Search
-                        state={state}
-                        preGlobalFilteredRows={preGlobalFilteredRows}
-                        setGlobalFilter={setGlobalFilter}
-                    /> 
-                <div>
-                    <button>Edit</button>
-                    <button>Add Section</button>
-                </div>
+                
             </TitleBar>
          
-            <table  {...getTableProps()}>
+            <table  {...getTableProps()} >
                 <thead>
                     {headerGroups.map((headerGroup) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
@@ -170,7 +153,7 @@ function LadderModule({projectData, openLadderModal}) {
                     {rows.map((row) => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}>
+                            <TableRow {...row.getRowProps()}  onClick={()=>openLadderModal(row.original)}>
                                 {row.cells.map((cell) => (
                                     <td
                                         {...cell.getCellProps()}
@@ -178,7 +161,7 @@ function LadderModule({projectData, openLadderModal}) {
                                         {cell.render('Cell')}
                                     </td>
                                 ))}
-                            </tr>
+                            </TableRow>
                         );
                     })}
                 </tbody>
@@ -187,12 +170,14 @@ function LadderModule({projectData, openLadderModal}) {
         </TaskOverviewBox>
     );
 }
-
+//getTrGroupProps={(state, rowInfo, column, instance) => { return { onMouseEnter: (e, handleOriginal) =>{}}}
 
 const TitleBar = styled(styles.GreyTitleBar)`
     display:flex;
     justify-content: space-between;
     padding-right:20px;
+    font-family: Baloo 2;
+    font-weight: 800;
 `
 
 const TaskOverviewBox = styled.div`
@@ -227,6 +212,24 @@ const TableSection = styled.section`
 `;
 
 
+const SectionTitle = styled.div`
+font-family: Baloo 2;
+font-size: 14px;
+width:300px;
+`;
+
+
+const TableRow = styled.tr`
+background-color: #FBFBFB;
+cursor: pointer;
+ &:hover {
+     background-color: #CFFCF0;
+ }
+`;
+
+
+
+
 const Input = styled.input`
     margin-left: 1rem;
     font-size: 2rem;
@@ -243,31 +246,51 @@ const Input = styled.input`
 export default LadderModule;
 
 
-/* <LadderModal
-data={modalData}
-isOpen={modalIsOpen}
-modalType={modalType}
-onRequestClose={closeModal}
->
-</LadderModal> */
-//     const [modalIsOpen,setIsOpen] =useState(false);
-//     const [modalData,setModalData] =useState(null);
-//     const [modalType,setModalType] =useState(null);
-    
-//     function openModal(cell, type) {
-//         setModalType(type);
-//         console.log(cell)
-//         setModalData(cell.row.original);
-        
-//         setIsOpen(true);
-//     }
 
-//   function closeModal(){
-//     //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
-//     var uri = window.location.toString();
-//     if (uri.indexOf("#") > 0) {
-//         var clean_uri = uri.substring(0, uri.indexOf("#"));
-//         window.history.replaceState({}, document.title, clean_uri);
-//     }
-//     setIsOpen(false);
-//   }
+
+/* <Search
+                        state={state}
+                        preGlobalFilteredRows={preGlobalFilteredRows}
+                        setGlobalFilter={setGlobalFilter}
+                    /> 
+                <div>
+                    <button>Edit</button>
+                    <button>Add Section</button>
+                </div> */
+// function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) {
+//     const count = preGlobalFilteredRows.length
+//     const [value, setValue] = useState(globalFilter);
+
+//     const onChange = useAsyncDebounce((value) => {
+//         setGlobalFilter(value || undefined);
+//     }, 200);
+
+//     const handleChange = (event) => {
+//         setValue(event.target.value);
+//         onChange(event.target.value);
+//     };
+
+//     return (
+//         <th>
+//             Search:{' '}
+//             <Input
+//                 value={value || ''}
+//                 placeholder={`${count} sections...`}
+//                 onChange={handleChange}
+//             />
+//         </th>
+//     );
+// }
+
+// function Search({ state, preGlobalFilteredRows, setGlobalFilter }) {
+//     return (
+//             <GlobalFilter
+//                 preGlobalFilteredRows={preGlobalFilteredRows}
+//                 globalFilter={state.globalFilter}
+//                 setGlobalFilter={setGlobalFilter}
+//             />
+       
+//     );
+// }
+
+

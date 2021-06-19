@@ -11,6 +11,8 @@ const UpdatesSection = ({
     updateUpdates=(newUpdates)=>{},
     setSelectorOpen=(updateId)=>{},
 }) =>{
+
+    console.log("UPDATES SECTIONS");
 return (
     <UpdatesContainer isLadderModal={stages!=null}>
     <UpdatesMenu isLadderModal={stages!=null}>
@@ -31,6 +33,7 @@ return (
     <UpdatesList>
                         {updates &&updates.sort((a,b)=>b.date-a.date).map((updateData) => {
                             return <UpdateBox
+                                key={updateData.id}
                                 id={updateData.id}
                                 updateData={updateData}
                                 isSelector={selectorOpen==updateData.id}

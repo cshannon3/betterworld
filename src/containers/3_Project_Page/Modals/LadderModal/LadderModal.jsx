@@ -33,10 +33,10 @@ function LadderModal({ data, isOpen, onRequestClose }) {
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
-        console.log(data);
+       // console.log(data);
         const stages = data["stages"].map((st)=>st.name);
 
-        console.log(userName);
+     //   console.log(userName);
         return (
             <WidgetContainer>
                 <MainContainer>
@@ -52,7 +52,7 @@ function LadderModal({ data, isOpen, onRequestClose }) {
 
                         </div>
                         <div className="tasks">
-                            <StagesComponent data={data && data["stages"]} />
+                            <StagesComponent data={data && data["stages"]} /> 
                         </div>
                         <div className="buttons" >
                             <AddUpdateComponent
@@ -110,6 +110,7 @@ function LadderModal({ data, isOpen, onRequestClose }) {
     if (!data) return (null)
     return (
         <StyledModal
+            key={data["id"]}
             isOpen={isOpen}
             onBackgroundClick={onRequestClose}
             onEscapeKeydown={onRequestClose}>
