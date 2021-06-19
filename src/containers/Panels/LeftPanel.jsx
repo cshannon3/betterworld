@@ -66,6 +66,7 @@ const PhotoIcon = styled.img`
   max-width: 100px;
   display: block;
   margin: 5vh auto 20px auto;
+  cursor:pointer;
 `
 const MenuText = styled.h4`
 width: 100%;

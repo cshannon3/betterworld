@@ -129,7 +129,6 @@ const ContentContainer = styled.div`
   flex-direction: column;
   justify-content:space-between;
   max-width: calc(100vw - 160px);
-
   padding: 3vh 40px 10vh 40px;
   h1 {
     font-family: Baloo 2;
@@ -180,6 +179,7 @@ const CommitteeSection = styled.div`
 `
 const CommitteeBox = styled.div`
     position: relative;
+    cursor:pointer;
     height:111px;
     min-width:244px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

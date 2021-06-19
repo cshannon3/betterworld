@@ -59,6 +59,7 @@ export default function AtAGlanceModule({ committeeData }) {
 
 const AtAGlanceBox = styled.div`
   height: 40%;
+  background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
 
