@@ -16,7 +16,7 @@ const StyledModal = Modal.styled`
   background-color:white;
 `;
 
-function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests }) {
+function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests, showAllUpdates}) {
   const ctrctx = useContext(ControlContext);
   const [selectorOpen, setSelectorOpen] = useState(null);
   const [sectionData, setSectionData] = useState(data);

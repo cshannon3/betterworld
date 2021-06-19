@@ -1,7 +1,7 @@
-import ProjectContext from '../../ProjectContext';
+import ProjectContext from '../ProjectContext';
 import {useContext} from 'react';
 import styled from "styled-components";
-import * as styles from '../../../../styles/sharedStyles';
+import * as styles from '../../../styles/sharedStyles';
 import docIcon from 'assets/Landing/google-docs.png';
 import sheetsIcon from 'assets/Landing/google-sheets.png';
 

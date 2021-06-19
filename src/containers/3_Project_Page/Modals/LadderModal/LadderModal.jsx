@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from "styled-components"
 import Modal from 'styled-react-modal'
-import * as styles from '../../../../../styles/sharedStyles';
+import * as styles from '../../../../styles/sharedStyles';
 import StagesComponent from "./StagesComponent";
-import ProjectContext from '../../../ProjectContext';
+import ProjectContext from '../../ProjectContext';
 import ControlContext from 'shared/control-context';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import { cleanUpdateModel } from 'data_models/updatemodel';
@@ -17,7 +17,7 @@ const StyledModal = Modal.styled`
   height: 85vh;
   background-color:white;
 `
-function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
+function LadderModal({ data, isOpen, onRequestClose }) {
     const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
 

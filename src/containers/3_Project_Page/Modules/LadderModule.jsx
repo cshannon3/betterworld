@@ -1,49 +1,73 @@
 import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
-//import cn from 'classnames';
+import { useAsyncDebounce } from 'react-table';
 
-import LadderModal from './LadderModal/LadderModal';
-import Search from './Search';
+//import styles from './search.module.css';
 import styled from "styled-components"
-import * as styles from '../../../../styles/sharedStyles';
+
+import LadderModal from '../Modals/LadderModal/LadderModal';
+import * as styles from '../../../styles/sharedStyles';
 import {fuzzyTextFilterFn} from "shared/utils";
-import ProjectContext from '../../ProjectContext';
+import ProjectContext from '../ProjectContext';
 
 
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-function LadderModule() {
-    const ctx = useContext(ProjectContext);
-    const data = ctx.data["sections"];
-    const [modalIsOpen,setIsOpen] =useState(false);
-    const [modalData,setModalData] =useState(null);
-    const [modalType,setModalType] =useState(null);
-    
-    function openModal(cell, type) {
-        setModalType(type);
-        console.log(cell)
-        setModalData(cell.row.original);
-        
-        setIsOpen(true);
-    }
 
-  function closeModal(){
-    //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
-    var uri = window.location.toString();
-    if (uri.indexOf("#") > 0) {
-        var clean_uri = uri.substring(0, uri.indexOf("#"));
-        window.history.replaceState({}, document.title, clean_uri);
-    }
-    setIsOpen(false);
-  }
+
+function GlobalFilter({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) {
+    const count = preGlobalFilteredRows.length
+    const [value, setValue] = useState(globalFilter);
+
+    const onChange = useAsyncDebounce((value) => {
+        setGlobalFilter(value || undefined);
+    }, 200);
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+        onChange(event.target.value);
+    };
+
+    return (
+        <th>
+            Search:{' '}
+            <Input
+                value={value || ''}
+                placeholder={`${count} sections...`}
+                onChange={handleChange}
+            />
+        </th>
+    );
+}
+
+function Search({ state, preGlobalFilteredRows, setGlobalFilter }) {
+    return (
+            <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+            />
+       
+    );
+}
+
+
+
+
+function LadderModule({projectData, openLadderModal}) {
+   // const ctx = useContext(ProjectContext);
+    const data = projectData["sections"];
+
     const columns = useMemo(() => [
         {
             width: 300,
             Header: 'Section',
             accessor: 'name',
             Cell: ({ cell }) => (
-                <span value={cell.value} onClick={()=>openModal(cell, "overview")}>
+                <span value={cell.value} 
+                 onClick={()=>openLadderModal(cell)}
+                >
                   {cell.value}
                 </span>
               )
@@ -52,7 +76,9 @@ function LadderModule() {
             Header: 'Contributors',
             accessor: 'contributors',
             Cell: ({ cell }) => (
-                <span  onClick={()=>openModal(cell,"contributors")}>
+                <span  
+                 onClick={()=>openLadderModal(cell)}
+                >
                   {cell.value}
                 </span>
               )
@@ -100,13 +126,7 @@ function LadderModule() {
 
     return (
         <TaskOverviewBox>
-        <LadderModal
-          data={modalData}
-          isOpen={modalIsOpen}
-          modalType={modalType}
-          onRequestClose={closeModal}
-        >
-        </LadderModal>
+   
         <TableSection >
             <TitleBar> 
                 <div>
@@ -206,4 +226,48 @@ const TableSection = styled.section`
     }
 `;
 
+
+const Input = styled.input`
+    margin-left: 1rem;
+    font-size: 2rem;
+    background-color: white;
+    color: black;
+    border: none;
+    outline: none;
+    &::placeholder {
+        color: black;
+        opacity: 0.2;   
+    }
+`;
+
 export default LadderModule;
+
+
+/* <LadderModal
+data={modalData}
+isOpen={modalIsOpen}
+modalType={modalType}
+onRequestClose={closeModal}
+>
+</LadderModal> */
+//     const [modalIsOpen,setIsOpen] =useState(false);
+//     const [modalData,setModalData] =useState(null);
+//     const [modalType,setModalType] =useState(null);
+    
+//     function openModal(cell, type) {
+//         setModalType(type);
+//         console.log(cell)
+//         setModalData(cell.row.original);
+        
+//         setIsOpen(true);
+//     }
+
+//   function closeModal(){
+//     //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
+//     var uri = window.location.toString();
+//     if (uri.indexOf("#") > 0) {
+//         var clean_uri = uri.substring(0, uri.indexOf("#"));
+//         window.history.replaceState({}, document.title, clean_uri);
+//     }
+//     setIsOpen(false);
+//   }
