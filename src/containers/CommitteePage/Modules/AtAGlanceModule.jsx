@@ -1,11 +1,12 @@
-import CommitteeContext from "../../CommitteeContext";
 
-import { useContext } from "react";
 import styled from "styled-components";
 import * as styles from "styles/sharedStyles";
 //goal of at a glance: people photos, resource # and repsonisbilities
 
 export default function AtAGlanceModule({ committeeData }) {
+  
+  const contributorsText = committeeData["contributors"].map((data) => (data.name)).join();
+  console.log(contributorsText);
   return (
     <AtAGlanceBox>
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
@@ -13,8 +14,7 @@ export default function AtAGlanceModule({ committeeData }) {
         <Row>
           <Box>
             <SubtitleBold>Contributors</SubtitleBold>
-            <div> 5 Google Docs</div>
-            <div> 11 Google Sheets</div>
+            <UserText>{contributorsText}</UserText>
           </Box>
           <Box>
             <SubtitleBold>Committee Responsibilities</SubtitleBold>
@@ -58,10 +58,7 @@ export default function AtAGlanceModule({ committeeData }) {
 }
 
 const AtAGlanceBox = styled.div`
-  //display: grid;
   height: 40%;
-  //grid-area: 1 / 3 / span 1 / span 2;
-  background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
 
@@ -71,6 +68,7 @@ const AtAGlanceBox = styled.div`
   }
   li {
     margin-left: 20px;
+    font-size: 16px;
   }
 `;
 
@@ -111,5 +109,11 @@ const ArtifactTitle = styled.h2`
 const SubtitleBold= styled.h2`
   font-family: Helvetica;
   font-weight: bold;
+  font-size: 16px;
+`;
+
+
+const UserText = styled.div`
+  padding-top: 10px;
   font-size: 16px;
 `;

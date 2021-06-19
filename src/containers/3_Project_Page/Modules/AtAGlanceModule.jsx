@@ -14,7 +14,7 @@ export default function AtAGlanceModule({ projectData }) {
 
   
   let contributorsText = projectData["contributors"].map((data) => (data.name)).join();
-  console.log(contributorsText);
+
   return (
     <AtAGlanceBox>
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>

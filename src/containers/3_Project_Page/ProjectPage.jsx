@@ -143,6 +143,10 @@ const ActiveProjectPage = ({projectData}) => {
 }
 
 const ArchivedProjectPage = ({projectData}) => {
+
+
+  let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
+
 return (<Con>
             <div>
               <h1>CMU AGAINST ICE</h1>
@@ -161,8 +165,10 @@ return (<Con>
               <AtAG>
                 <TimeSpanTitle>Timespan</TimeSpanTitle>
                 <TimeSpan>March 2020</TimeSpan>
-                <Contibutors>Contributors</Contibutors>
-                <ContributorBox></ContributorBox>
+                <ArtifactTitle>Contributors</ArtifactTitle>
+               
+                {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>}
+         
                 <ArtifactTitle>Artifacts</ArtifactTitle>
                 <ResourceBox>
                   {projectData["resources"] &&
@@ -220,6 +226,11 @@ const Slideshow = ({ images }) => {
   );
 };
 
+
+const UserText = styled.div`
+  padding-bottom: 20px;
+  font-size: 16px;
+`;
 const Flex = styled.div`
   display: flex;
   width: 100%;
@@ -263,7 +274,7 @@ const TimeSpan = styled.div`
   font-style: normal;
   font-weight: bold;
   font-size: 40px;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
 `;
 
 const Contibutors = styled.p`
@@ -311,15 +322,6 @@ const EachSlide = styled.div`
   }
 `;
 
-const GallaryBox = styled.div`
-  display: grid;
-  grid-area: 1 / 1 / span 2 / span 2;
-  padding: 0px 50px 0px 0px;
-  &:nth-child(1) > div {
-    display: flex;
-    justify-content: space-between;
-  }
-`;
 
 const TitleText = styled.h1`
   font-family: Baloo 2;
