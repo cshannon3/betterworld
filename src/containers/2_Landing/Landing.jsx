@@ -128,7 +128,8 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  width: calc(100vw - 160px);
+  max-width: calc(100vw - 160px);
+
   padding: 3vh 40px 10vh 40px;
   h1 {
     font-family: Baloo 2;
@@ -167,7 +168,6 @@ const ContentContainer = styled.div`
 `
 const OverviewSection = styled.div`
   width:100%;
-  min-height:
 `
 const QuickLinksSection = styled.div`
   width:100%;
@@ -222,9 +222,6 @@ const CommitteeBox = styled.div`
 const LinkBox = styled.div`
     height:60px;
     min-width:60px;
-    // background: white;
-    // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    // border-radius: 3px;
     img{
       height:54px;
       width:60px;
