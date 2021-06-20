@@ -122,13 +122,18 @@ const Row = styled.div`
   display: flex;
   gap: 20px;
   overflow:scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar{
+    display: none;
+  } 
 `
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  max-width: calc(100vw - 160px);
+  max-width: calc(100vw - 170px);
   padding: 3vh 40px 10vh 40px;
   h1 {
     font-family: Baloo 2;
@@ -165,8 +170,8 @@ const ContentContainer = styled.div`
     color: #000000;
   }
 `
-const OverviewSection = styled.div`
-  width:100%;
+ const OverviewSection = styled.div`
+  
 `
 const QuickLinksSection = styled.div`
   width:100%;
@@ -175,7 +180,7 @@ const QuickLinksSection = styled.div`
 // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 // border-radius: 3px;
 const CommitteeSection = styled.div`
-  width:100%
+  width:100%;
 `
 const CommitteeBox = styled.div`
     position: relative;
@@ -203,7 +208,7 @@ const CommitteeBox = styled.div`
         color:white;
         font-family: Baloo 2;
         font-weight:normal;
-        font-size: 32px;
+        font-size: 26px;
         line-height: 28px;
       }
       .name {
@@ -231,7 +236,7 @@ const LinkBox = styled.div`
 
 
 const ProjectsSection = styled.div`
-  width:100%;
+  //width:100%;
 `
 const ProjectBox = styled.a`
   height:194px;
@@ -248,7 +253,7 @@ const ProjectBox = styled.a`
     color: #0CC998;
     font-family: Baloo 2;
     font-weight:normal;
-    font-size: 32px;
+    font-size: 26px;
     line-height: 28px;
     font-weight:800;
   }
@@ -287,7 +292,7 @@ const ArchivedProjectBox = styled.a`
     color: white;
     font-family: Baloo 2;
     font-weight:normal;
-    font-size: 32px;
+    font-size: 26px;
     line-height: 28px;
     font-weight:800;
   }
