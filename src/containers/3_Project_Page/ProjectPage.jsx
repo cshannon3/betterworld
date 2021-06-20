@@ -11,9 +11,13 @@ import {
   LadderModule,
   ProjectInfoModule,
   AtAGlanceModule,
-  UpcomingEventsModule,
-  //HelpWantedModule,
 } from "./Modules/modules";
+import {
+  HelpRequestsModal, 
+  LadderModal
+} from "./Modals/index"
+
+
 import ProjectContext from "./ProjectContext";
 //import dummyData from './DummyData';
 import ControlContext from "../../shared/control-context";
@@ -23,24 +27,14 @@ export default function ProjectPage() {
   const appCtx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
   const projectId = urlParts[urlParts.length - 1];
-  console.log(projectId);
+
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
 
-  // let helpRequests = [];
-  // if(!projectData["isArchived"]){
-  //   projectData["sections"].forEach((section)=>{
-  //     if(section["updates"]) section["updates"].forEach((update)=>{
-  //       if(update && update["type"]=="request help"){
-  //         helpRequests.push({...update, "name":section.name})
-  //       }
-  //     });
-  //   });
-  // }
 
-  // console.log(helpRequests);
-  //dummyData["Immigration Justice Zine"]
+
+
   return (
     <ProjectContext.Provider
       value={{
@@ -58,7 +52,102 @@ export default function ProjectPage() {
       <Row>
         <LeftPanel />
         {projectData["isArchived"] ? (
-          <Con>
+          <ArchivedProjectPage projectData={projectData}/>
+        ) : (
+         <ActiveProjectPage projectData={projectData}/>
+        )}
+      </Row>
+    </ProjectContext.Provider>
+  );
+}
+
+
+const ActiveProjectPage = ({projectData}) => {
+
+
+  const [isLadderModalOpen,setIsLadderModalOpen] =useState(false);
+  const [isUpdatesModalOpen,setIsUpdatesModalOpen] =useState(false);
+  const [ladderModalData,setLadderModalData] =useState(null);
+  const [isOnlyHelpUpdates,setIsOnlyHelpUpdates] =useState(false);
+
+
+  let helpRequests = [];
+  let totalUpdates = [];
+
+  projectData["sections"].forEach((section) => {
+    if (section["updates"])
+      section["updates"].forEach((update) => {
+        totalUpdates.push({ ...update, section_name: section.name });
+        if (update && update["type"] == "request help") {
+          helpRequests.push({ ...update, section_name: section.name });
+        }
+      });
+  });
+ 
+  //const [modalType,setModalType] =useState(null);
+  
+  function openLadderModal(row) {
+      setLadderModalData(row);
+      setIsUpdatesModalOpen(false);
+      setIsLadderModalOpen(true);
+  }
+
+
+
+  function closeLadderModal(){
+    //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
+    var uri = window.location.toString();
+    if (uri.indexOf("#") > 0) {
+        var clean_uri = uri.substring(0, uri.indexOf("#"));
+        window.history.replaceState({}, document.title, clean_uri);// This might be a problem
+    }
+    setLadderModalData(null);
+    setIsLadderModalOpen(false);
+  }
+
+  function openUpdatesModal() {  setIsLadderModalOpen(false); setIsUpdatesModalOpen(true);}
+  function closeUpdatesModal() {setIsUpdatesModalOpen(false);}
+
+  return (
+    <ContentContainer>
+        <LadderModal
+          data={ladderModalData}
+          isOpen={isLadderModalOpen}
+          onRequestClose={closeLadderModal} >
+      </LadderModal>
+      <HelpRequestsModal
+          data={projectData}
+          isOpen={isUpdatesModalOpen}
+          onRequestClose={closeUpdatesModal}
+          helpRequests={helpRequests}
+          isOnlyHelpUpdates={isOnlyHelpUpdates}
+          >
+      </HelpRequestsModal>
+
+    <Flex>
+      <ProjectInfoModule 
+          projectData={projectData}
+          setIsUpdatesModalOpen={openUpdatesModal}
+          totalUpdates={totalUpdates}
+          helpRequests={helpRequests}
+
+      />
+      <AtAGlanceModule projectData={projectData} />
+    </Flex>
+    <LadderModule 
+        projectData={projectData}
+        openLadderModal={openLadderModal}
+    />
+  </ContentContainer>
+  );
+}
+
+const ArchivedProjectPage = ({projectData}) => {
+
+
+  let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
+
+return (<Con>
             <div>
               <h1>CMU AGAINST ICE</h1>
               <TitleText>{projectData.name} (Archived)</TitleText>
@@ -76,8 +165,10 @@ export default function ProjectPage() {
               <AtAG>
                 <TimeSpanTitle>Timespan</TimeSpanTitle>
                 <TimeSpan>March 2020</TimeSpan>
-                <Contibutors>Contributors</Contibutors>
-                <ContributorBox></ContributorBox>
+                <ArtifactTitle>Contributors</ArtifactTitle>
+               
+                {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>}
+         
                 <ArtifactTitle>Artifacts</ArtifactTitle>
                 <ResourceBox>
                   {projectData["resources"] &&
@@ -105,20 +196,10 @@ export default function ProjectPage() {
                 </OverviewTextStyle>
               </Flex>
             </div>
-          </Con>
-        ) : (
-          <ContentContainer>
-            <Flex>
-              <ProjectInfoModule />
-              <AtAGlanceModule projectData={projectData} />
-            </Flex>
-            <LadderModule />
-          </ContentContainer>
-        )}
-      </Row>
-    </ProjectContext.Provider>
-  );
+          </Con>);
 }
+
+
 
 const Slideshow = ({ images }) => {
   const slideRef = useRef();
@@ -145,6 +226,11 @@ const Slideshow = ({ images }) => {
   );
 };
 
+
+const UserText = styled.div`
+  padding-bottom: 20px;
+  font-size: 16px;
+`;
 const Flex = styled.div`
   display: flex;
   width: 100%;
@@ -165,34 +251,34 @@ const GalleryStyle = styled.div`
 `;
 
 const ArtifactLink = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-size: 16px;
   line-height: 18px;
   align-items: center;
 `;
 const ArtifactTitle = styled.h2`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-weight: bold;
   font-size: 20px;
   padding-bottom: 10px;
 `;
 
 const TimeSpanTitle = styled.div`
-  font-family: Baloo 2;
+  font-family:'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 28.1311px;
 `;
 const TimeSpan = styled.div`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 40px;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
 `;
 
 const Contibutors = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-style: normal;
   font-weight: bold;
   font-size: 11.3495px;
@@ -236,18 +322,9 @@ const EachSlide = styled.div`
   }
 `;
 
-const GallaryBox = styled.div`
-  display: grid;
-  grid-area: 1 / 1 / span 2 / span 2;
-  padding: 0px 50px 0px 0px;
-  &:nth-child(1) > div {
-    display: flex;
-    justify-content: space-between;
-  }
-`;
 
 const TitleText = styled.h1`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 60px;
@@ -257,7 +334,7 @@ const TitleText = styled.h1`
 `;
 
 const TextBody = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
@@ -280,7 +357,7 @@ const ContentContainer = styled.div`
 `;
 
 const TextSubtitle = styled.div`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: 800;
   font-size: 26px;
@@ -291,6 +368,20 @@ const TextSubtitle = styled.div`
   color: #000000;
 `;
 
+
+  // let helpRequests = [];
+  // if(!projectData["isArchived"]){
+  //   projectData["sections"].forEach((section)=>{
+  //     if(section["updates"]) section["updates"].forEach((update)=>{
+  //       if(update && update["type"]=="request help"){
+  //         helpRequests.push({...update, "name":section.name})
+  //       }
+  //     });
+  //   });
+  // }
+
+  // console.log(helpRequests);
+  //dummyData["Immigration Justice Zine"]
 // const slideImages = [
 //     "https://images.unsplash.com/photo-1623141629222-287c9e385a40?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format",
 //     "https://firebasestorage.googleapis.com/v0/b/betterworld2.appspot.com/o/images%2FScreen%20Shot%202021-06-06%20at%2011.30.40%20PM.png?alt=media&token=bc853697-074f-4a2a-ad2d-f8e9060f91d0",

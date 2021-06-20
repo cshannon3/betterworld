@@ -24,6 +24,16 @@ export default function Landing() {
     return d.substring(0, d.length-13)
   }
 
+ 
+  const getNumUpdates= (projectData)=>{
+    let numUpdates = 0;
+    projectData["sections"].forEach((section) => {
+      if (section["updates"])
+        numUpdates+= section["updates"].length;
+    });
+    return numUpdates;
+  }
+
   return (
     <Row>
       <LeftPanel />
@@ -93,8 +103,8 @@ export default function Landing() {
                       <p ><span >Start date:</span> {formatDate(project["start_date"])}</p>
                       <p><span >Est. Completion:</span>{formatDate(project["end_date"])}</p>
                       <br/>
-                      <p><span>Task Count:</span> 13/30</p>
-                      <p><span>Contributors:</span> 4</p>
+                      <p><span>Updates:</span> {getNumUpdates(project)}</p>
+                      <p><span>Contributors:</span> {project["contributors"]?.length}</p>
                 </ProjectBox>
                 
                 )
@@ -112,16 +122,21 @@ const Row = styled.div`
   display: flex;
   gap: 20px;
   overflow:scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar{
+    display: none;
+  } 
 `
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  width: calc(100vw - 160px);
+  max-width: calc(100vw - 170px);
   padding: 3vh 40px 10vh 40px;
   h1 {
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-style: normal;
     font-weight: bold;
     font-size: 60px;
@@ -132,7 +147,7 @@ const ContentContainer = styled.div`
     color: #0CC998;
   }
   h2 {
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-style: normal;
     font-weight: 800;
     font-size: 26px;
@@ -145,7 +160,7 @@ const ContentContainer = styled.div`
     color: black;
   }
   p {
-    font-family: Helvetica Neue;
+    font-family: 'Helvetica Neue';
     font-style: normal;
     font-weight: 200;
     font-size: 22px;
@@ -155,9 +170,8 @@ const ContentContainer = styled.div`
     color: #000000;
   }
 `
-const OverviewSection = styled.div`
-  width:100%;
-  min-height:
+ const OverviewSection = styled.div`
+  
 `
 const QuickLinksSection = styled.div`
   width:100%;
@@ -166,10 +180,11 @@ const QuickLinksSection = styled.div`
 // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 // border-radius: 3px;
 const CommitteeSection = styled.div`
-  width:100%
+  width:100%;
 `
 const CommitteeBox = styled.div`
     position: relative;
+    cursor:pointer;
     height:111px;
     min-width:244px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -191,9 +206,9 @@ const CommitteeBox = styled.div`
 
       .name, .order {
         color:white;
-        font-family: Baloo 2;
+        font-family: 'Baloo 2';
         font-weight:normal;
-        font-size: 32px;
+        font-size: 26px;
         line-height: 28px;
       }
       .name {
@@ -212,9 +227,6 @@ const CommitteeBox = styled.div`
 const LinkBox = styled.div`
     height:60px;
     min-width:60px;
-    // background: white;
-    // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    // border-radius: 3px;
     img{
       height:54px;
       width:60px;
@@ -224,7 +236,7 @@ const LinkBox = styled.div`
 
 
 const ProjectsSection = styled.div`
-  width:100%;
+  //width:100%;
 `
 const ProjectBox = styled.a`
   height:194px;
@@ -241,7 +253,7 @@ const ProjectBox = styled.a`
     color: #0CC998;
     font-family: Baloo 2;
     font-weight:normal;
-    font-size: 32px;
+    font-size: 26px;
     line-height: 28px;
     font-weight:800;
   }
@@ -280,7 +292,7 @@ const ArchivedProjectBox = styled.a`
     color: white;
     font-family: Baloo 2;
     font-weight:normal;
-    font-size: 32px;
+    font-size: 26px;
     line-height: 28px;
     font-weight:800;
   }

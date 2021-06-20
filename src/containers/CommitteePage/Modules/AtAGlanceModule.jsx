@@ -1,34 +1,29 @@
-import ProjectContext from '../../ProjectContext';
-import {useContext} from 'react';
-import styled from "styled-components";
-import * as styles from '../../../../styles/sharedStyles';
-import docIcon from 'assets/Landing/google-docs.png';
-import sheetsIcon from 'assets/Landing/google-sheets.png';
 
+import styled from "styled-components";
+import * as styles from "styles/sharedStyles";
 //goal of at a glance: people photos, resource # and repsonisbilities
 
-export default function AtAGlanceModule({ projectData }) {
-  const formatDate = (d) =>{
-    return d.substring(0, d.length-13)
-  }
+export default function AtAGlanceModule({ committeeData }) {
   
+  const contributorsText = committeeData["contributors"].map((data) => (data.name)).join();
+  console.log(contributorsText);
   return (
     <AtAGlanceBox>
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
       <Column>
         <Row>
           <Box>
-            <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
-            <ul>
-              {projectData["contributors"] &&
-                projectData["contributors"].map((data) => (
-                  <li>{data.name}</li>
-                ))}
-            </ul>
+            <SubtitleBold>Contributors</SubtitleBold>
+            <UserText>{contributorsText}</UserText>
           </Box>
           <Box>
-          <SubtitleBold>Target Date</SubtitleBold>
-          <TargetDateText>{formatDate(projectData["end_date"])}</TargetDateText>
+            <SubtitleBold>Committee Responsibilities</SubtitleBold>
+            <ul>
+              {committeeData["responsibilities"] &&
+                committeeData["responsibilities"].map((data) => (
+                  <li>{data}</li>
+                ))}
+            </ul>
           </Box>
         </Row>
 
@@ -36,8 +31,8 @@ export default function AtAGlanceModule({ projectData }) {
           <Box>
            <SubtitleBold> Useful Links</SubtitleBold>
             <ResourceBox>
-              {projectData["resources"] &&
-                projectData["resources"].map((data) => (
+              {committeeData["resources"] &&
+                committeeData["resources"].map((data) => (
                   <ArtifactLink>
                     <a href={data.url} target="_blank">
                       {data.name}
@@ -49,8 +44,8 @@ export default function AtAGlanceModule({ projectData }) {
           <Box>
          <SubtitleBold> Schedule</SubtitleBold>
           <ul>
-              {projectData["schedule"] &&
-                projectData["schedule"].map((data) => (
+              {committeeData["schedule"] &&
+                committeeData["schedule"].map((data) => (
                   <li>{data}</li>
                 ))}
             </ul>
@@ -63,8 +58,7 @@ export default function AtAGlanceModule({ projectData }) {
 }
 
 const AtAGlanceBox = styled.div`
-  height:100%;
-  width:50%;
+  height: 40%;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
@@ -75,6 +69,7 @@ const AtAGlanceBox = styled.div`
   }
   li {
     margin-left: 20px;
+    font-size: 16px;
   }
 `;
 
@@ -101,19 +96,25 @@ const ResourceBox = styled.div`
 `;
 
 const ArtifactLink = styled.p`
+  font-family: 'Helvetica';
   font-size: 16px;
   line-height: 18px;
   align-items: center;
 `;
-
+const ArtifactTitle = styled.h2`
+  font-family: 'Helvetica';
+  font-weight: bold;
+  font-size: 20px;
+  padding-bottom: 10px;
+`;
 const SubtitleBold= styled.h2`
+  font-family: 'Helvetica';
   font-weight: bold;
   font-size: 16px;
 `;
 
-const TargetDateText = styled.h2`
-  font-weight: bold;
-  font-size: 30px;
-  padding: 10px 0px;
-`;
 
+const UserText = styled.div`
+  padding-top: 10px;
+  font-size: 16px;
+`;

@@ -41,7 +41,7 @@ export default function CommitteeInfoModule({committeeData, user, onSave}) {
 
 
 const CommitteesSubtitle = styled.h2`
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-style: normal;
     font-weight: 800;
     font-size: 16px;
@@ -52,7 +52,7 @@ const CommitteesSubtitle = styled.h2`
     color: #000000;
 `;
 const DescriptionText = styled.p`
-font-family: Helvetica;
+font-family: 'Helvetica';
 font-style: normal;
 font-weight: normal;
 font-size: 18px;
@@ -61,7 +61,7 @@ padding-top:50px;
 `;
 
 const CommitteesTitle = styled.h2`
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-style: normal;
     font-weight: bold;
     font-size: 60px;

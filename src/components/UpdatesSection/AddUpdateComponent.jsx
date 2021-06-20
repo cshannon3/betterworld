@@ -124,6 +124,7 @@ const ButtonOne = styled.button`
     height:35px;
     width:144px;
     margin:10px;
+    cursor: pointer;
 `;
 const TitleBar = styled(styles.GreenTitleBar)`
     width:100%;

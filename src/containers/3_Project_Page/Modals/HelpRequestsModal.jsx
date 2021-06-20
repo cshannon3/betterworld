@@ -14,9 +14,10 @@ const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
   background-color:white;
+  border-radius: 10px;
 `;
 
-function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests }) {
+function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests, showAllUpdates}) {
   const ctrctx = useContext(ControlContext);
   const [selectorOpen, setSelectorOpen] = useState(null);
   const [sectionData, setSectionData] = useState(data);
@@ -90,6 +91,7 @@ const HelpUpdatesList = ({
           .map((updateData) => {
             return (
               <UpdateBox
+               key={updateData.id}
                 id={updateData.id}
                 updateData={updateData}
                 isSelector={selectorOpen == updateData.id}
@@ -151,9 +153,5 @@ const SectionTitle = styled.div`
   justify-content: space-between;
 
 `;
-
-  // overflow:scroll;
-  // height:87%;
-
 
 export default HelpRequestsModal;

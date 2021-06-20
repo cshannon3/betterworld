@@ -16,19 +16,4 @@ const ProjectContext = createContext({
 
 export default ProjectContext;
 
-    // addSectionToProject: () =>{},
-    // editSection:()=>{},
-    // removeSectionFromProject:()=>{},
-    // getSectionData: ()=>{},
-    // addMemberToSection: () =>{},
-    // removeMemberFromSection: () =>{},
-    // getStageData: ()=>{},
-    
-    // addMemberToStage: ()=>{},
-    // removeMemberFromStage: ()=>{ },
-
-    // addHelpRequestToStage:()=>{},
-    // handleHelpRequest:()=>{},
-
-    // addResourceToStage: ()=>{},
-    // removeResourceFromStage: ()=>{},
+   

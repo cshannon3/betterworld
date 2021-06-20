@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from "styled-components"
 import Modal from 'styled-react-modal'
-import * as styles from '../../../../../styles/sharedStyles';
+import * as styles from '../../../../styles/sharedStyles';
 import StagesComponent from "./StagesComponent";
-import ProjectContext from '../../../ProjectContext';
+import ProjectContext from '../../ProjectContext';
 import ControlContext from 'shared/control-context';
 import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import { cleanUpdateModel } from 'data_models/updatemodel';
@@ -16,8 +16,9 @@ const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
   background-color:white;
+  border-radius: 50px;
 `
-function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
+function LadderModal({ data, isOpen, onRequestClose }) {
     const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
 
@@ -33,10 +34,10 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
-        console.log(data);
+       // console.log(data);
         const stages = data["stages"].map((st)=>st.name);
 
-        console.log(userName);
+     //   console.log(userName);
         return (
             <WidgetContainer>
                 <MainContainer>
@@ -52,7 +53,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
 
                         </div>
                         <div className="tasks">
-                            <StagesComponent data={data && data["stages"]} />
+                            <StagesComponent data={data && data["stages"]} /> 
                         </div>
                         <div className="buttons" >
                             <AddUpdateComponent
@@ -110,6 +111,7 @@ function LadderModal({ data, isOpen, onRequestClose, modalType, subtitle }) {
     if (!data) return (null)
     return (
         <StyledModal
+            key={data["id"]}
             isOpen={isOpen}
             onBackgroundClick={onRequestClose}
             onEscapeKeydown={onRequestClose}>
@@ -134,10 +136,12 @@ height: 100%;
 width:100%;
 display:flex;
 background-color: white;
+border-radius: 10px;
+
 `
 
 const DescriptionHeader= styled.div`
-font-family: Baloo 2;
+font-family: 'Baloo 2';
 font-size: 21px;
 font-style: normal;
 font-weight: 400;
@@ -155,10 +159,12 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
     >div{
         display:flex;
     }
+    border-radius: 10px 10px 0px 0px;
 `
 const MainContainer = styled.div`
 background-color: white;
 flex-grow:1;
+margin:30px;
 >div{
     display:flex;
     flex-direction:column;
@@ -167,9 +173,9 @@ flex-grow:1;
     margin:auto;
 }
 .header{
-    height:33%;
+    height:20%;
     display:flex;
-    padding:50px;
+    padding-top:20px;
     justify-content:space-between;
     .date{
         color:green;
@@ -197,36 +203,36 @@ const TitleBar = styled(styles.GreyTitleBar)`
 `
 
 
-const UpdatesMenu = styled.div`
-    display:flex;
-    justify-content: space-between;
-    padding:20px 0px;
-    >div{
-        display:flex;
-    }
-    h3{
-        font-family: Baloo 2;
-        font-style: normal;
-        font-weight: 800;
-        font-size: 21px;
-        line-height: 33px;
-        display: flex;
-        align-items: center;
-    }
-`
+// const UpdatesMenu = styled.div`
+//     display:flex;
+//     justify-content: space-between;
+//     padding:20px 0px;
+//     >div{
+//         display:flex;
+//     }
+//     h3{
+//         font-family: Baloo 2;
+//         font-style: normal;
+//         font-weight: 800;
+//         font-size: 21px;
+//         line-height: 33px;
+//         display: flex;
+//         align-items: center;
+//     }
+// `
 
 
 
-const UpdatesContainer = styled.div`
-background-color:#F8F8F8;
-margin: 15px;
-width:350px;
-`
+// const UpdatesContainer = styled.div`
+// background-color:#F8F8F8;
+// margin: 15px;
+// width:350px;
+// `
 
-const UpdatesList = styled.div`
-overflow:scroll;
-height:87%;
-`
+// const UpdatesList = styled.div`
+// overflow:scroll;
+// height:87%;
+// `
 /*const TableSection = styled.section`
     table {
         width:100%;

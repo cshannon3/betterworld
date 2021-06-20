@@ -1,29 +1,39 @@
-import CommitteeContext from "../../CommitteeContext";
-
-import { useContext } from "react";
+import ProjectContext from '../ProjectContext';
+import {useContext} from 'react';
 import styled from "styled-components";
-import * as styles from "styles/sharedStyles";
+import * as styles from '../../../styles/sharedStyles';
+import docIcon from 'assets/Landing/google-docs.png';
+import sheetsIcon from 'assets/Landing/google-sheets.png';
+
 //goal of at a glance: people photos, resource # and repsonisbilities
 
-export default function AtAGlanceModule({ committeeData }) {
+export default function AtAGlanceModule({ projectData }) {
+  const formatDate = (d) =>{
+    return d.substring(0, d.length-18)
+  }
+
+  
+  let contributorsText = projectData["contributors"].map((data) => (data.name)).join();
+
   return (
     <AtAGlanceBox>
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
       <Column>
         <Row>
           <Box>
-            <SubtitleBold>Contributors</SubtitleBold>
-            <div> 5 Google Docs</div>
-            <div> 11 Google Sheets</div>
+            <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
+
+              {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
+
+                // projectData["contributors"].map((data) => (
+                //   <UserText>{data.name},</UserText>
+                // ))
+                
+                }
           </Box>
           <Box>
-            <SubtitleBold>Committee Responsibilities</SubtitleBold>
-            <ul>
-              {committeeData["responsibilities"] &&
-                committeeData["responsibilities"].map((data) => (
-                  <li>{data}</li>
-                ))}
-            </ul>
+          <SubtitleBold>Target Date</SubtitleBold>
+          <TargetDateText>{formatDate(projectData["end_date"])}</TargetDateText>
           </Box>
         </Row>
 
@@ -31,8 +41,8 @@ export default function AtAGlanceModule({ committeeData }) {
           <Box>
            <SubtitleBold> Useful Links</SubtitleBold>
             <ResourceBox>
-              {committeeData["resources"] &&
-                committeeData["resources"].map((data) => (
+              {projectData["resources"] &&
+                projectData["resources"].map((data) => (
                   <ArtifactLink>
                     <a href={data.url} target="_blank">
                       {data.name}
@@ -44,8 +54,8 @@ export default function AtAGlanceModule({ committeeData }) {
           <Box>
          <SubtitleBold> Schedule</SubtitleBold>
           <ul>
-              {committeeData["schedule"] &&
-                committeeData["schedule"].map((data) => (
+              {projectData["schedule"] &&
+                projectData["schedule"].map((data) => (
                   <li>{data}</li>
                 ))}
             </ul>
@@ -58,9 +68,8 @@ export default function AtAGlanceModule({ committeeData }) {
 }
 
 const AtAGlanceBox = styled.div`
-  //display: grid;
-  height: 40%;
-  //grid-area: 1 / 3 / span 1 / span 2;
+  height:95%;
+  width:50%;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
@@ -97,19 +106,31 @@ const ResourceBox = styled.div`
 `;
 
 const ArtifactLink = styled.p`
-  font-family: Helvetica;
   font-size: 16px;
   line-height: 18px;
   align-items: center;
 `;
-const ArtifactTitle = styled.h2`
-  font-family: Helvetica;
-  font-weight: bold;
-  font-size: 20px;
-  padding-bottom: 10px;
-`;
+
 const SubtitleBold= styled.h2`
-  font-family: Helvetica;
   font-weight: bold;
   font-size: 16px;
 `;
+
+const TargetDateText = styled.h2`
+  font-weight: bold;
+  font-size: 24px;
+  padding: 10px 0px;
+`;
+
+const UserText = styled.div`
+  padding-top: 10px;
+  font-size: 16px;
+`;
+
+
+// <ul>
+//               {projectData["contributors"] &&
+//                 projectData["contributors"].map((data) => (
+//                   <li>{data.name}</li>
+//                 ))}
+//             </ul>

@@ -1,54 +1,15 @@
-import ProjectContext from "../../ProjectContext";
+import ProjectContext from "../ProjectContext";
 
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
-import HelpRequestsModal from "./HelpRequestsModal";
+import HelpRequestsModal from "../Modals/HelpRequestsModal";
 //need to put in SmallCirclePhoto or CirclePhoto
 
-export default function ProjectInfoModule() {
-  const ctx = useContext(ProjectContext);
-  const projectData = ctx.data;
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [modalData, setModalData] = useState(null);
-  // const [modalType,setModalType] =useState(null);
-
-  function openModal(cell, type) {
-    setModalData(cell.row.original);
-
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
-    // var uri = window.location.toString();
-    // if (uri.indexOf("#") > 0) {
-    //     var clean_uri = uri.substring(0, uri.indexOf("#"));
-    //     window.history.replaceState({}, document.title, clean_uri);
-    // }
-    setIsOpen(false);
-  }
-  let helpRequests = [];
-  let totalUpdates = [];
-
-  projectData["sections"].forEach((section) => {
-    if (section["updates"])
-      section["updates"].forEach((update) => {
-        totalUpdates.push({ ...update, section_name: section.name });
-        if (update && update["type"] == "request help") {
-          helpRequests.push({ ...update, section_name: section.name });
-        }
-      });
-  });
-
-
+export default function ProjectInfoModule({projectData, totalUpdates, helpRequests, setIsUpdatesModalOpen, }) {
+ // const ctx = useContext(ProjectContext);
+  //const projectData = ctx.data;
   return (
     <ProjectInfoContainer>
-      <HelpRequestsModal
-        data={projectData}
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        helpRequests={helpRequests}
-      ></HelpRequestsModal>
       <div>
         <div>
           <ProjectsSubtitle>
@@ -57,14 +18,14 @@ export default function ProjectInfoModule() {
           <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
         </div>
       
-      <ProjectsSubtitle>{`Point Person: ${projectData["point_person"]["name"]}`}</ProjectsSubtitle>
-      <DescriptionText>{ctx.data["description"]}</DescriptionText>
+      <PointPerson>{`Point Person: ${projectData["point_person"]["name"]}`}</PointPerson>
+      <DescriptionText>{projectData["description"]}</DescriptionText>
       </div>
       <UpdatesRow >
         <UpdatesText>{`${totalUpdates.length} Total Updates `}</UpdatesText>
         <UpdatesText
           onClick={() => {
-            setIsOpen(true);
+            setIsUpdatesModalOpen(true);
           }}
         >
           {`${helpRequests.length} Open Help Requests`}{" "}
@@ -86,7 +47,7 @@ const ProjectInfoContainer = styled.div`
 
 
 const ProjectsTitle = styled.h2`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 60px;
@@ -97,8 +58,7 @@ const ProjectsTitle = styled.h2`
 `;
 
 const ProjectsSubtitle = styled.p`
-  font-family: Baloo 2;
-  font-style: normal;
+  font-family: 'Baloo 2';
   font-weight: 800;
   font-size: 16px;
   color: #000000;
@@ -106,7 +66,14 @@ const ProjectsSubtitle = styled.p`
     color: #0cc998;
   }
   white-space: pre-wrap;
+  padding-bottom: 15px;
 `;
+const PointPerson = styled(ProjectsSubtitle)`
+  padding-top: 15px;
+`;
+
+
+
 
 
 const UpdatesRow = styled.div`
@@ -125,10 +92,42 @@ const UpdatesText = styled.p`
 const DescriptionText = styled.p`
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
 `;
 
+
+//const [modalIsOpen, setIsOpen] = useState(false);
+  // const [modalData, setModalData] = useState(null);
+  // // const [modalType,setModalType] =useState(null);
+
+  // function openModal(cell, type) {
+  //   setModalData(cell.row.original);
+
+  //   setIsOpen(true);
+  // }
+
+  // function closeModal() {
+  //   //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
+  //   // var uri = window.location.toString();
+  //   // if (uri.indexOf("#") > 0) {
+  //   //     var clean_uri = uri.substring(0, uri.indexOf("#"));
+  //   //     window.history.replaceState({}, document.title, clean_uri);
+  //   // }
+  //   setIsOpen(false);
+  // }
+  // let helpRequests = [];
+  // let totalUpdates = [];
+
+  // projectData["sections"].forEach((section) => {
+  //   if (section["updates"])
+  //     section["updates"].forEach((update) => {
+  //       totalUpdates.push({ ...update, section_name: section.name });
+  //       if (update && update["type"] == "request help") {
+  //         helpRequests.push({ ...update, section_name: section.name });
+  //       }
+  //     });
+  // });
 
 
 

@@ -9,6 +9,7 @@ import UserIcon from '../../assets/Panel/user1.png'
 import { useHistory } from "react-router-dom";
 import './panel.css';
 
+// TODO highlight the active tab
 
 export default function LeftPanel() {
     const {
@@ -31,18 +32,7 @@ export default function LeftPanel() {
                 <PhotoIcon src={EarthIcon} alt='Overview' />
                 <MenuText>OVERVIEW</MenuText>
             </div>
-            {/* <div id="projectSideLink" onClick={()=>{
-              history.push("/project/immigrationjustice");
-            }}>
-                <PhotoIcon src={FolderIcon} alt='Projects' />
-                <MenuText>PROJECTS</MenuText>
-            </div>
-            <div id="committeeSideLink" onClick={()=>{
-              history.push("/committee");
-            }}>
-                <PhotoIcon src={NetworkIcon} alt='Committees' />
-                <MenuText>COMMITTEES</MenuText>
-            </div> */}
+           
             <div id="myInfoSideLink">
                 <PhotoIcon src={UserIcon} alt='Projects' />
                 <MenuText>MY INFO</MenuText>
@@ -63,10 +53,10 @@ const Line = styled.hr`
 
 const Panel = styled.div`
   min-height: 100vh;
-  //width: 15vw;
-  min-width: 160px;
+  max-width: 150px;
+  min-width: 150px;
+  width:150px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  overflow: auto;
   background: linear-gradient(180deg, #0CCB97 0%, #00529D 96.87%);
 `
 
@@ -76,6 +66,7 @@ const PhotoIcon = styled.img`
   max-width: 100px;
   display: block;
   margin: 5vh auto 20px auto;
+  cursor:pointer;
 `
 const MenuText = styled.h4`
 width: 100%;
@@ -101,12 +92,26 @@ const LogoutBtn = styled.button`
   width: 100px;
   font-size: 14px;
   display: block;
-  margin-left: 3%;
   position: absolute;
   bottom: 3vh;
+  margin-left:25px;
   cursor: pointer;
   background: #C4C4C4;
   border: none;
   padding: 10px;
   border-radius: 10px;
 `
+
+
+ /* <div id="projectSideLink" onClick={()=>{
+              history.push("/project/immigrationjustice");
+            }}>
+                <PhotoIcon src={FolderIcon} alt='Projects' />
+                <MenuText>PROJECTS</MenuText>
+            </div>
+            <div id="committeeSideLink" onClick={()=>{
+              history.push("/committee");
+            }}>
+                <PhotoIcon src={NetworkIcon} alt='Committees' />
+                <MenuText>COMMITTEES</MenuText>
+            </div> */
