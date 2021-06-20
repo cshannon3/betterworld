@@ -34,10 +34,7 @@ function LadderModal({ data, isOpen, onRequestClose }) {
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
-       // console.log(data);
         const stages = data["stages"].map((st)=>st.name);
-
-     //   console.log(userName);
         return (
             <WidgetContainer>
                 <MainContainer>
@@ -81,8 +78,6 @@ function LadderModal({ data, isOpen, onRequestClose }) {
                         </div>
                     </div>
                 </MainContainer>
-                {/* <UpdatesContainer> */}
-                    {sectionData && ("updates" in sectionData) &&
                         <UpdatesSection
                             updates={sectionData["updates"]}
                             stages={stages}
@@ -99,9 +94,8 @@ function LadderModal({ data, isOpen, onRequestClose }) {
                                 console.log("setting selector");
                             }}
                         >
-
                         </UpdatesSection>
-                    }
+                    
 
                 {/* </UpdatesContainer> */}
             </WidgetContainer>
@@ -127,6 +121,7 @@ function LadderModal({ data, isOpen, onRequestClose }) {
 
 
 };
+
 
 
 
@@ -163,6 +158,7 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
 `
 const MainContainer = styled.div`
 background-color: white;
+width:500px;
 flex-grow:1;
 margin:30px;
 >div{

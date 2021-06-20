@@ -11,6 +11,7 @@ import { cleanReplyModel } from "data_models/updatemodel";
 import ControlContext from "shared/control-context";
 import UpdateReply from "./UpdateReply";
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
+
 const UpdateBox = ({
   updateData,
   isSelector,
@@ -26,6 +27,7 @@ const UpdateBox = ({
   const [isEditingReply, setIsReplyEditing] = useState(false);
   const [isShowingReplies, setIsShowingReplies] = useState(false);
   const [activeReply, setActiveReply] = useState(null);
+  const [isHovering, setIsHovering] = useState(false);
 
   const [content, setContent] = useState(updateData["content"]);
 
@@ -56,30 +58,35 @@ const UpdateBox = ({
   const TypeRow = () => {
     return <TypeRowDiv>Update Type</TypeRowDiv>;
   };
+
   const HeaderRow = () => {
     return (
       <div className={"topbar"}>
         <div className={"author"}>
           {updateData["author"]}
-          <span className={"stage"}> &#8226; {updateData["stage"]}</span>
+          <span className={"stage"}> {`  •  ${updateData["stage"]}`}</span>
         </div>
-        <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
-        {isCurrentUser && (
-          <div>
+
+        {isHovering &&  (isCurrentUser ? (
+          <div className={"icons"}>
             <AiOutlineEdit
+            className="icon"
+            size={18}
               onClick={() => {
                 setIsEditing(!isEditing);
               }}
             />
             <AiOutlineDelete
+             className="icon"
+            size={18}
               onClick={() => {
                 deleteUpdate(updateData);
               }}
             />
-          </div>
-        )}
-        <BsReply
-          onClick={() => {
+             <BsReply
+              className="icon"
+             size={18}
+            onClick={() => {
             setActiveReply(
               cleanReplyModel({
                 author: userName,
@@ -90,12 +97,44 @@ const UpdateBox = ({
             setIsReplyEditing(true);
           }}
         />
+        </div>
+         ) : ((updateData["type"] == "request help") && updateData["status"] && updateData["status"]!="done")?
+         <div>
+             <ButtonOne>Offer Help</ButtonOne>
+             <BsReply
+            size={18}
+            onClick={() => {
+              setActiveReply(
+                cleanReplyModel({
+                  author: userName,
+                  authorId: userId,
+                  date: Date.now(),
+                })
+              );
+              setIsReplyEditing(true);
+            }}
+          />
+         </div>
+
+         :( <BsReply
+            size={18}
+            onClick={() => {
+              setActiveReply(
+                cleanReplyModel({
+                  author: userName,
+                  authorId: userId,
+                  date: Date.now(),
+                })
+              );
+              setIsReplyEditing(true);
+            }}
+          />))
+        }
+       
       </div>
     );
   };
-  const ContentRow = () => {
-    return <p className={"content"}>{updateData["content"]}</p>;
-  };
+
   function ContentRowEdit() {
     return (
       <div className={"content"}>
@@ -109,56 +148,37 @@ const UpdateBox = ({
           onCancel={() => {
             setIsEditing(false);
           }}
-          //changeHandler={(value) => setContent(value)}
         />
       </div>
     );
   }
 
-  const FlagRow = () => {
-    return <div></div>;
-  };
+  const ReactionsRepliesRow = () => {
 
-  const HelpReqFlagRow = () => {
     return (
-      <HelpReqFlagRow >
-        <div>Help Requested</div>
-      </HelpReqFlagRow>
-    );
-  };
-
-  const HelpOfferFlagRow = () => {
-    return (
-      <div>
-        <div>Offer to Help Pending</div>
+      <div className="flex-row">
+        <div>
+          <SlackCounter
+            user={userName}
+            counters={updateData["reactions"]}
+            onAdd={() => setSelectorOpen(updateData)}
+            onSelect={(emoji) => handleSelect(emoji)}
+          />
+        </div>
+        <div 
+        className={"num_replies"} 
+        onClick={() => setIsShowingReplies(!isShowingReplies)}
+        >
+          {updateData["replies"] && updateData["replies"].length>0 && (isShowingReplies ? (
+            <FiChevronUp className="arrow-icon" size={18}/>) : (<FiChevronDown className="arrow-icon" size={18}/>
+          ))}
+          {updateData["replies"]? `${updateData["replies"].length} Replies`: "0 Replies"}
+        </div>
       </div>
     );
   };
 
-  const ReactionRow = () => {
-    return (
-      <SlackCounter
-        user={userName}
-        counters={updateData["reactions"]}
-        onAdd={() => setSelectorOpen(updateData)}
-        onSelect={(emoji) => handleSelect(emoji)}
-      />
-    );
-  };
 
-  const RepliesInfoRow = () => {
-    if (!updateData["replies"]) return null;
-    return (
-      <div>
-        {isShowingReplies ? (
-          <FiChevronUp onClick={() => setIsShowingReplies(false)} />
-        ) : (
-          <FiChevronDown onClick={() => setIsShowingReplies(true)} />
-        )}
-        {`${updateData["replies"].length} Replies`}
-      </div>
-    );
-  };
   const RepliesListRow = () => {
     return (
       <div>
@@ -234,45 +254,49 @@ const UpdateBox = ({
             setActiveReply(null);
             setIsReplyEditing(false);
           }}
-          //changeHandler={(value) => setContent(value)}
+         
         />
       </div>
     );
   };
 
-  return updateData["type"] == "offer to help" ? (
-    <OfferHelpBox key={updateData["id"]}>
-      <HelpReqFlagRow />
-      <HeaderRow />
-      {isEditing ? <ContentRowEdit /> : <ContentRow />}
-      <ReactionRow />
-      <RepliesInfoRow />
-      {isShowingReplies && <RepliesListRow />}
+  return (
+    <div key={updateData["id"]}
+    onMouseEnter={()=> setIsHovering(true)}
+    onMouseLeave={()=> setIsHovering(false)}
+    >
+
+      {updateData["type"] == "offer to help" ? (
+        <OfferHelp>
+          <div className="flag">Help Offered</div>
+        </OfferHelp>
+      ) : updateData["type"] == "request help" ? (
+        <HelpReq>
+          <div className="flag">Help Requested</div>
+        </HelpReq>
+      ) : null}
+      <UpdateBoxCSS type={updateData["type"]}>
+        <HeaderRow />
+        <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
+        {isEditing ? (
+          <ContentRowEdit />
+        ) : (
+          <p className={"content"}>{updateData["content"]}</p>
+        )}
+        <div></div>
+
+        <ReactionsRepliesRow />
+        {(isEditingReply||isShowingReplies) && 
+        <DividerSection>
+           <hr className ={"line1"}/> <p className ={"text"}>Replies</p> <hr className ={"line2"}/>
+    </DividerSection>
+        }
+        {isShowingReplies && <RepliesListRow />}
+        {isEditingReply && <ReplyEditRow />}
+      </UpdateBoxCSS>
+
       {isSelector && <SlackSelector onSelect={handleSelect} />}
-      {isEditingReply && <ReplyEditRow />}
-    </OfferHelpBox>
-  ) : updateData["type"] == "request help" ? (
-    <RequestBox key={updateData["id"]}>
-      <HelpOfferFlagRow />
-      <HeaderRow />
-      {isEditing ? <ContentRowEdit /> : <ContentRow />}
-      <ReactionRow />
-      <RepliesInfoRow />
-      {isShowingReplies && <RepliesListRow />}
-      {isSelector && <SlackSelector onSelect={handleSelect} />}
-      {isEditingReply && <ReplyEditRow />}
-    </RequestBox>
-  ) : (
-    <UpdateBoxCSS key={updateData["id"]}>
-      <HeaderRow />
-      {isEditing ? <ContentRowEdit /> : <ContentRow />}
-      <FlagRow />
-      <ReactionRow />
-      <RepliesInfoRow />
-      {isShowingReplies && <RepliesListRow />}
-      {isSelector && <SlackSelector onSelect={handleSelect} />}
-      {isEditingReply && <ReplyEditRow />}
-    </UpdateBoxCSS>
+    </div>
   );
 };
 
@@ -281,20 +305,20 @@ const UpdateBoxCSS = styled.div`
   border: 1px solid #eeeeee;
   box-sizing: border-box;
   margin-bottom: 20px;
+  padding: 15px 10px 10px 10px;
 
   .topbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 5px;
+
   }
   .author {
     font-family: "Baloo 2";
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
-    line-height: 25px;
     display: flex;
+    line-height: 18px;
     align-items: center;
     letter-spacing: -0.02em;
     color: #0cc998;
@@ -303,27 +327,84 @@ const UpdateBoxCSS = styled.div`
     font-family: "Baloo 2";
     font-style: normal;
     font-weight: bold;
-    font-size: 12px;
-    line-height: 19px;
+    font-size: 16px;
+    white-space: pre-wrap;
+
     display: flex;
     align-items: center;
     color: #5b5b5b;
   }
-  .content {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
+    
   .date {
     font-family: "Baloo 2";
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
     line-height: 19px;
-    text-align: right;
     letter-spacing: -0.02em;
+    color: black;
 
-    color: #0cc998;
   }
+  .icons{
+      height:18px;
+  }
+  .icon{
+    cursor:pointer;
+  }
+  .arrow-icon{
+      padding-top:5px;
+      width:25px;
+  }
+  .content {
+    font-size: 14px;
+    font-family: Inter;
+    
+  }
+  .num_replies{
+    font-size: 12px;
+    font-family: Inter;
+  }
+
+  .flex-row {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  border-radius: 5px;
+
+  ${({ type }) =>
+    type === "offer to help"
+      ? `
+  background-color: #fff7ec;
+  border-radius: 5px 0px 5px 5px ;
+`
+      : type === "request help"
+      ? `
+  background-color: #fff4f4;
+  border: 2px solid #cb0101;
+  border-radius: 5px 0px 5px 5px ;
+`
+      : `border-left:10px solid #0CC998;`}
+`;
+
+
+const DividerSection = styled.div`
+    display:flex;
+    align-items:center;
+    margin: 5px 0px;
+    color:grey;
+    .line1{
+        width:10%;
+    }
+    .line2{
+        width:80%;
+    }
+    .text{
+        padding: 0px 2px 3px 3px;
+    }
+
 `;
 const TypeRowDiv = styled.div`
   height: 40px;
@@ -331,26 +412,129 @@ const TypeRowDiv = styled.div`
   width: 100%;
 `;
 
-const OfferHelpBox = styled(UpdateBoxCSS)`
-  background-color: #fff4f4;
-  border: 2px solid #cb0101;
-  border-radius: 5px;
-`;
-
-const RequestBox = styled(UpdateBoxCSS)`
-  background-color: #fff7ec;
-  border-radius: 5px;
-`;
-const HelpReqFlagRow = styled.div`
-  background-color: #cb0101;
+const HelpReq = styled.div`
   height: 18px;
-  width:50%;
-
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  .flag {
+    width: 120px;
+    background-color: #cb0101;
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+    padding-left: 10px;
+    padding-top: 3px;
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+  }
 `;
 
-const HelpOfferFlagRow = styled.div`
-  background-color: #eaa828;
-  width: 149px;
+const OfferHelp = styled.div`
   height: 18px;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  .flag {
+    width: 120px;
+    background-color: #eaa828;
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+    padding-left: 10px;
+    padding-top: 3px;
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 11px;
+  }
+`;
+
+
+const ButtonOne = styled.button`
+    background: #0CC998;
+    border-radius: 2px;
+    font-family: Baloo 2;
+    font-weight: bold;
+    color: white;
+    width:100px;
+    margin-right:10px;
+    cursor: pointer;
+    font-size: 12px;
+    outline: none; 
+    border:none;
 `;
 export default UpdateBox;
+
+
+  //   const RepliesInfoRow = () => {
+  //     if (!updateData["replies"]) return null;
+  //     return (
+  //       <div>
+  //         {isShowingReplies ? (
+  //           <FiChevronUp onClick={() => setIsShowingReplies(false)} />
+  //         ) : (
+  //           <FiChevronDown onClick={() => setIsShowingReplies(true)} />
+  //         )}
+  //         {`${updateData["replies"].length} Replies`}
+  //       </div>
+  //     );
+  //   };
+//OFFER TO HELP PENDING
+/*
+  
+  updateData["type"] == "offer to help" ? (
+    <div key={updateData["id"]}>
+      <HelpOfferFlagRow />
+
+      <OfferHelpBox>
+        <HeaderRow />
+        {isEditing ? <ContentRowEdit /> : <ContentRow />}
+        <ReactionRow />
+        <RepliesInfoRow />
+        {isShowingReplies && <RepliesListRow />}
+        {isSelector && <SlackSelector onSelect={handleSelect} />}
+        {isEditingReply && <ReplyEditRow />}
+      </OfferHelpBox>
+    </div>
+  ) : updateData["type"] == "request help" ? (
+    <div key={updateData["id"]}>
+      <HelpReqFlagRow />
+
+      <RequestBox>
+        <HeaderRow />
+        {isEditing ? <ContentRowEdit /> : <ContentRow />}
+        <ReactionRow />
+        <RepliesInfoRow />
+        {isShowingReplies && <RepliesListRow />}
+        {isSelector && <SlackSelector onSelect={handleSelect} />}
+        {isEditingReply && <ReplyEditRow />}
+      </RequestBox>
+    </div>
+  ) :
+*/
+// const HelpOfferFlagRow = styled.div`
+//   background-color: ;
+//   width: 149px;
+//   height: 18px;
+// `;
+// const RequestBox = styled(UpdateBoxCSS)`
+//   background-color: #fff4f4;
+//   border: 2px solid #cb0101;
+//   border-radius: 5px;
+// `;
+
+// const OfferHelpBox = styled(UpdateBoxCSS)`
+//   background-color: #fff7ec;
+//   border-radius: 5px;
+// `;
+// <RequestBox key={updateData["id"]}>
+//   <HelpOfferFlagRow />
+//   <HeaderRow />
+//   {isEditing ? <ContentRowEdit /> : <ContentRow />}
+//   <ReactionRow />
+//   <RepliesInfoRow />
+//   {isShowingReplies && <RepliesListRow />}
+//   {isSelector && <SlackSelector onSelect={handleSelect} />}
+//   {isEditingReply && <ReplyEditRow />}
+// </RequestBox>
