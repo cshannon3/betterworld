@@ -15,8 +15,8 @@ const UpdatesSection = ({
   return (
     <UpdatesContainer isLadderModal={stages != null}>
       <UpdatesMenu isLadderModal={stages != null}>
-        <div>
-          <h3>Updates</h3>
+        <div className={"updateTitle"}>
+          Updates
         </div>
         <div>
           {/* <button>Filter</button> */}
@@ -77,6 +77,7 @@ const UpdatesSection = ({
 
 export default UpdatesSection;
 
+
 const UpdatesList = styled.div`
   overflow: scroll;
   height: calc(100% - 95px);
@@ -88,6 +89,14 @@ const UpdatesMenu = styled.div`
   justify-content: space-between;
   > div {
     display: flex;
+  }
+  .updateTitle{
+    font-family: 'Baloo 2';
+    font-size: 21px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 33px;
+    letter-spacing: 0em;
   }
   h3 {
     font-family: Baloo 2;

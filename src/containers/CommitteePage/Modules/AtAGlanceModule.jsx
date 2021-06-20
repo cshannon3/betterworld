@@ -12,10 +12,7 @@ export default function AtAGlanceModule({ committeeData }) {
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
       <Column>
         <Row>
-          <Box>
-            <SubtitleBold>Contributors</SubtitleBold>
-            <UserText>{contributorsText}</UserText>
-          </Box>
+          
           <Box>
             <SubtitleBold>Committee Responsibilities</SubtitleBold>
             <ul>
@@ -57,6 +54,10 @@ export default function AtAGlanceModule({ committeeData }) {
   );
 }
 
+/* <Box>
+            <SubtitleBold>Contributors</SubtitleBold>
+            <UserText>{contributorsText}</UserText>
+          </Box> */
 const AtAGlanceBox = styled.div`
   height: 40%;
   background: #ffffff;

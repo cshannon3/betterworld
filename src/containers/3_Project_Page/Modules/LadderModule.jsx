@@ -65,7 +65,7 @@ function LadderModule({projectData, openLadderModal}) {
             accessor: 'id',
             Cell: ({ cell }) => (
                 <span >
-                  {contributors[cell.value].join()}
+                  {contributors[cell.value].join(", ")}
                 </span>
               )
         },
@@ -175,9 +175,10 @@ function LadderModule({projectData, openLadderModal}) {
 const TitleBar = styled(styles.GreyTitleBar)`
     display:flex;
     justify-content: space-between;
-    padding-right:20px;
+    padding-right:10px;
     font-family: 'Baloo 2';
     font-weight: 800;
+    font-size: 14px;
 `
 
 const TaskOverviewBox = styled.div`
@@ -201,10 +202,12 @@ const TableSection = styled.section`
         text-align: left;
     }
     th {
-        font-size: 1.5rem;
+        font-size: 18px;
+        font-weight:bold;
+        font-family: 'Baloo 2';
     }
     td {
-        font-size: 1rem;
+        font-size: 14px;
     }
     span {
         margin-left: 1rem;
@@ -214,7 +217,8 @@ const TableSection = styled.section`
 
 const SectionTitle = styled.div`
 font-family: 'Baloo 2';
-font-size: 14px;
+font-size: 18px;
+font-weight: 500;
 width:300px;
 `;
 
@@ -230,18 +234,18 @@ cursor: pointer;
 
 
 
-const Input = styled.input`
-    margin-left: 1rem;
-    font-size: 2rem;
-    background-color: white;
-    color: black;
-    border: none;
-    outline: none;
-    &::placeholder {
-        color: black;
-        opacity: 0.2;   
-    }
-`;
+// const Input = styled.input`
+//     margin-left: 1rem;
+//     font-size: 2rem;
+//     background-color: white;
+//     color: black;
+//     border: none;
+//     outline: none;
+//     &::placeholder {
+//         color: black;
+//         opacity: 0.2;   
+//     }
+// `;
 
 export default LadderModule;
 

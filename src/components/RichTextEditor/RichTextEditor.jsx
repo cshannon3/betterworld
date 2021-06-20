@@ -1,4 +1,5 @@
 import React from 'react';
+import {  useEffect } from "react";
 import "./RichTextEditor.css"
 import { Editor, EditorState, RichUtils, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
 import { GrBlockQuote } from "react-icons/gr";
@@ -9,17 +10,27 @@ import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListB
 //Tried changing here, css, and in ladder
 
 
-export function MyEditor({content, onSave, onCancel}) {
+export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel}) {
 
     const [editorState, setEditorState] = React.useState(
       () => content !== undefined ? EditorState.createWithContent(ContentState.createFromText(content)) : EditorState.createEmpty(),
     );
+    useEffect(() => {
+        const raw = convertToRaw(editorState.getCurrentContent());
+        const blocks =raw.blocks;
+        const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
+        onChange(value);
+        
+    }, [editorState])
 
     return (
     <div>
     <div className="RichEditor-root">
 
-         <Editor editorState={editorState} onChange={setEditorState} />
+         <Editor 
+         editorState={editorState}
+          onChange={setEditorState} 
+        />
     </div>
      <button onClick={()=>{
         const raw = convertToRaw(editorState.getCurrentContent());

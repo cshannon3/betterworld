@@ -328,7 +328,7 @@ const TitleText = styled.h1`
   font-style: normal;
   font-weight: bold;
   font-size: 60px;
-  line-height: 94px;
+  line-height: 70px;
 
   color: #0cc998;
 `;
@@ -347,13 +347,11 @@ const Row = styled.div`
   width: 100%;
 `;
 const ContentContainer = styled.div`
-  //display: grid;
+
   width: 100%;
   height: 100vh;
   padding: 5vh 50px 3vh 40px;
-  //grid-template-columns: 1fr 1fr 1fr 1fr;
-  //grid-template-rows: 1fr 1fr 1fr 1fr;
-  //grid-gap: 20px 10px;
+ 
 `;
 
 const TextSubtitle = styled.div`

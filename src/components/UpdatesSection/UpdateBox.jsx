@@ -29,7 +29,9 @@ const UpdateBox = ({
   const [activeReply, setActiveReply] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const [content, setContent] = useState(updateData["content"]);
+  const [editContent, setEditContent] = useState("");
+
+  let content = updateData["content"];
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -67,7 +69,7 @@ const UpdateBox = ({
           <span className={"stage"}> {`  •  ${updateData["stage"]}`}</span>
         </div>
 
-        {isHovering &&  (isCurrentUser ? (
+        {isHovering && (isCurrentUser ? (
           <div className={"icons"}>
             <AiOutlineEdit
             className="icon"
@@ -94,13 +96,29 @@ const UpdateBox = ({
                 date: Date.now(),
               })
             );
-            setIsReplyEditing(true);
+                setEditContent("");
+              content="";
+              setIsReplyEditing(true);
+            
           }}
         />
         </div>
          ) : ((updateData["type"] == "request help") && updateData["status"] && updateData["status"]!="done")?
-         <div>
-             <ButtonOne>Offer Help</ButtonOne>
+         <div className={"icons"}>
+             <ButtonOne
+             onClick={()=>{
+                setActiveReply(
+                    cleanReplyModel({
+                      author: userName,
+                      authorId: userId,
+                      date: Date.now(),
+                    })
+                  );
+                  setEditContent("");
+                  content="";
+                  setIsReplyEditing(true);
+             }}
+             >Offer Help</ButtonOne>
              <BsReply
             size={18}
             onClick={() => {
@@ -111,7 +129,10 @@ const UpdateBox = ({
                   date: Date.now(),
                 })
               );
+              setEditContent("");
+              content="";
               setIsReplyEditing(true);
+             
             }}
           />
          </div>
@@ -126,6 +147,8 @@ const UpdateBox = ({
                   date: Date.now(),
                 })
               );
+              setEditContent("");
+              content="";
               setIsReplyEditing(true);
             }}
           />))
@@ -190,6 +213,8 @@ const UpdateBox = ({
             isEditing={activeReply && reply.id == activeReply.id}
             setIsEditing={(r) => {
               setActiveReply(r);
+              setEditContent(r.content);
+              content = editContent;
               setIsReplyEditing(true);
             }}
             deleteReply={(r) => {
@@ -215,10 +240,14 @@ const UpdateBox = ({
 
   const ReplyEditRow = () => {
     return (
-      <div className={"content"}>
+      <div className={"content content_edit"}>
         <MyEditor
-          content={activeReply.content}
-          onSave={(val) => {
+          content={editContent}
+          onChange={(val)=>{
+              content=val;
+            }}
+          
+            onSave={(val) => {
             console.log(val);
             //setActiveReply({...activeReply, "content":val});
             let newUpdateData;
@@ -262,8 +291,16 @@ const UpdateBox = ({
 
   return (
     <div key={updateData["id"]}
-    onMouseEnter={()=> setIsHovering(true)}
-    onMouseLeave={()=> setIsHovering(false)}
+    onMouseEnter={()=> {
+
+        setEditContent(content);
+        setIsHovering(true);
+    }}
+    onMouseLeave={()=> {
+        console.log(content);
+        setEditContent(content);
+        setIsHovering(false);
+    }}
     >
 
       {updateData["type"] == "offer to help" ? (
@@ -275,7 +312,7 @@ const UpdateBox = ({
           <div className="flag">Help Requested</div>
         </HelpReq>
       ) : null}
-      <UpdateBoxCSS type={updateData["type"]}>
+      <UpdateBoxCSS type={updateData["type"]} status= {updateData["status"]} >
         <HeaderRow />
         <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
         {isEditing ? (
@@ -310,7 +347,7 @@ const UpdateBoxCSS = styled.div`
   .topbar {
     display: flex;
     justify-content: space-between;
-
+    
   }
   .author {
     font-family: "Baloo 2";
@@ -346,7 +383,9 @@ const UpdateBoxCSS = styled.div`
 
   }
   .icons{
+      max-height:18px;
       height:18px;
+      display: flex;
   }
   .icon{
     cursor:pointer;
@@ -358,6 +397,7 @@ const UpdateBoxCSS = styled.div`
   .content {
     font-size: 14px;
     font-family: Inter;
+
     
   }
   .num_replies{
@@ -374,19 +414,26 @@ const UpdateBoxCSS = styled.div`
 
   border-radius: 5px;
 
-  ${({ type }) =>
-    type === "offer to help"
+  ${({ type, status }) =>
+    type === "offer to help" 
       ? `
   background-color: #fff7ec;
   border-radius: 5px 0px 5px 5px ;
 `
-      : type === "request help"
+      : 
+      (type === "request help" && status!=="done")
       ? `
   background-color: #fff4f4;
   border: 2px solid #cb0101;
   border-radius: 5px 0px 5px 5px ;
 `
-      : `border-left:10px solid #0CC998;`}
+      : 
+      (type === "request help"&& status==="done")?
+      `
+  background-color: #EAA828;
+  border: 2px solid #cb0101;
+  border-radius: 5px 0px 5px 5px ;
+` :  `border-left:10px solid #0CC998;`}
 `;
 
 
@@ -458,7 +505,9 @@ const ButtonOne = styled.button`
     font-weight: bold;
     color: white;
     width:100px;
-    margin-right:10px;
+    height:18px;
+    margin:0px 5px 0px 0px;
+    padding:0px;
     cursor: pointer;
     font-size: 12px;
     outline: none; 

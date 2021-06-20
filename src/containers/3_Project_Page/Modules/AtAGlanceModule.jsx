@@ -13,27 +13,27 @@ export default function AtAGlanceModule({ projectData }) {
   }
 
   
-  let contributorsText = projectData["contributors"].map((data) => (data.name)).join();
+  let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
 
   return (
     <AtAGlanceBox>
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
       <Column>
         <Row>
-          <Box>
-            <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
-
-              {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
-
-                // projectData["contributors"].map((data) => (
-                //   <UserText>{data.name},</UserText>
-                // ))
-                
-                }
-          </Box>
+         
           <Box>
           <SubtitleBold>Target Date</SubtitleBold>
           <TargetDateText>{formatDate(projectData["end_date"])}</TargetDateText>
+          </Box>
+          <Box>
+         <SubtitleBold> Schedule</SubtitleBold>
+          <ul>
+              {projectData["schedule"] &&
+                projectData["schedule"].map((data) => (
+                  <li>{data}</li>
+                ))}
+            </ul>
+
           </Box>
         </Row>
 
@@ -52,15 +52,17 @@ export default function AtAGlanceModule({ projectData }) {
             </ResourceBox>
           </Box>
           <Box>
-         <SubtitleBold> Schedule</SubtitleBold>
-          <ul>
-              {projectData["schedule"] &&
-                projectData["schedule"].map((data) => (
-                  <li>{data}</li>
-                ))}
-            </ul>
+            <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
 
+              {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
+
+                // projectData["contributors"].map((data) => (
+                //   <UserText>{data.name},</UserText>
+                // ))
+                
+                }
           </Box>
+        
         </Row>
       </Column>
     </AtAGlanceBox>
@@ -87,6 +89,7 @@ const Row = styled.div`
   display: flex;
   width: 100%;
   height: 50%;
+  padding:10px;
 `;
 
 const Column = styled.div`
@@ -99,20 +102,24 @@ const Box = styled.div`
   width: 50%;
   height: 100%;
   padding: 10px;
+  max-width:50%;
+
 `;
 
 const ResourceBox = styled.div`
-  padding-left: 20px;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size:12px;
 `;
 
 const ArtifactLink = styled.p`
-  font-size: 16px;
+  font-size: 12px;
   line-height: 18px;
   align-items: center;
 `;
 
-const SubtitleBold= styled.h2`
-  font-weight: bold;
+const SubtitleBold= styled.p`
+  font-weight: 500;
   font-size: 16px;
 `;
 
@@ -122,9 +129,11 @@ const TargetDateText = styled.h2`
   padding: 10px 0px;
 `;
 
-const UserText = styled.div`
+const UserText = styled.p`
   padding-top: 10px;
-  font-size: 16px;
+  padding-left:10px;
+  font-size: 12px;
+  width:75%;
 `;
 
 

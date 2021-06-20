@@ -108,6 +108,7 @@ const ContentContainer = styled.div`
   height: 100%;
   padding: 5vh 50px 3vh 40px;
   display: flex;
+
 `;
 
 const Column = styled.div`

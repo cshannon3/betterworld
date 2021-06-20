@@ -51,7 +51,7 @@ function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests, showAll
               <div>
                 <SectionTitle> 
                 <h2>{sectionData.name}</h2>
-                <p>Status: tbd</p>
+                <p>Status: {sectionData.status}</p>
                 </SectionTitle>
                 <HelpUpdatesList
                   updates={helpRequests.filter((hr)=>hr["section_name"]===sectionData.name)}
@@ -151,7 +151,9 @@ const SectionTitle = styled.div`
   display:flex;
   padding: 20px 20px;
   justify-content: space-between;
-
+  font-family: 'Baloo 2';
+  font-size: 14px;
+  font-weight: bold;
 `;
 
 export default HelpRequestsModal;

@@ -18,6 +18,15 @@ const StagesComponent = ({data={}}) => {
             Cell: ({ cell }) => 
             (  <StageTitle status={cell.row.values["status"]}> {cell.value} </StageTitle> ) 
         },
+        { Header: 'People',accessor: 'contributors',
+        Cell: ({ cell }) => (
+            <div>
+                  {cell.value && cell.value.map((c)=>(
+                      <p>{c.name}</p>
+                      ))}
+                  </div>
+             )
+        },
         { Header: 'Status',accessor: 'status',
             Cell: ({ cell }) => (
                 <StageStatus>
@@ -25,6 +34,7 @@ const StagesComponent = ({data={}}) => {
                       </StageStatus>
                  )
             },
+       
         {Header: 'Link',accessor: 'active_doc',
              Cell: ({ cell }) => (  <LinkBox  > <img src={docIcon}/> </LinkBox> ) },
         // { Header: 'People', accessor: 'contributors', },
@@ -122,12 +132,12 @@ const TableSection = styled.section`
         padding-bottom:10px;
         font-family: 'Baloo 2';
         font-style: normal;
-        font-weight: normal;
+        font-weight: bold;
         font-size: 21px;
         line-height: 33px;
     }
     td {
-        font-size: 1rem;
+        font-size: 16px;
     }
     span {
         margin-left: 1rem;

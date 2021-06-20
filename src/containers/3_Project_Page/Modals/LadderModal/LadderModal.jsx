@@ -35,19 +35,25 @@ function LadderModal({ data, isOpen, onRequestClose }) {
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
         const stages = data["stages"].map((st)=>st.name);
+        console.log(sectionData["description"]);
         return (
             <WidgetContainer>
                 <MainContainer>
                     <div>
+                       <div>
                         <div className="header">
                             <div className="description">
                             <DescriptionHeader>Description</DescriptionHeader>
-                                Hello
+                             
                             </div>
                             <div className="dates">
                                 3/4/5
                             </div>
 
+                        </div>
+                         <div>
+                             <p className="descriptionText">  {sectionData["description"]}</p>
+                             </div>
                         </div>
                         <div className="tasks">
                             <StagesComponent data={data && data["stages"]} /> 
@@ -139,10 +145,9 @@ const DescriptionHeader= styled.div`
 font-family: 'Baloo 2';
 font-size: 21px;
 font-style: normal;
-font-weight: 400;
+font-weight: 600;
 line-height: 33px;
 letter-spacing: 0em;
-text-align: center;
 `
 const CloseBox = styled.div`
     cursor:pointer;
@@ -161,22 +166,27 @@ background-color: white;
 width:500px;
 flex-grow:1;
 margin:30px;
->div{
-    display:flex;
-    flex-direction:column;
-    height:100%;
-    justify-content: center;
-    margin:auto;
-}
+// >div{
+//     display:flex;
+//     flex-direction:column;
+//     height:100%;
+//     margin:auto;
+// }
 .header{
     height:20%;
     display:flex;
-    padding-top:20px;
+    padding-top:15px;
     justify-content:space-between;
     .date{
         color:green;
     }
 }
+
+.descriptionText{
+    font-size:16px;
+    padding: 10px 0px 60px 0px;
+}
+
 .tasks{
     height:400px;
     flex-grow:1;

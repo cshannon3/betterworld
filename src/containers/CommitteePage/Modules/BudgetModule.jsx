@@ -48,8 +48,9 @@ export default function BudgetModule({committeeData}) {
 }
 
 const BudgetBox = styled.div`
-  display: grid;
-  grid-area: 3 / 1 / span 1 / span 2;
+ // display: grid;
+  //grid-area: 3 / 1 / span 1 / span 2;
+  margin-right:30px;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
