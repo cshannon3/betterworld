@@ -251,26 +251,26 @@ const GalleryStyle = styled.div`
 `;
 
 const ArtifactLink = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-size: 16px;
   line-height: 18px;
   align-items: center;
 `;
 const ArtifactTitle = styled.h2`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-weight: bold;
   font-size: 20px;
   padding-bottom: 10px;
 `;
 
 const TimeSpanTitle = styled.div`
-  font-family: Baloo 2;
+  font-family:'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 28.1311px;
 `;
 const TimeSpan = styled.div`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 40px;
@@ -278,7 +278,7 @@ const TimeSpan = styled.div`
 `;
 
 const Contibutors = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-style: normal;
   font-weight: bold;
   font-size: 11.3495px;
@@ -324,7 +324,7 @@ const EachSlide = styled.div`
 
 
 const TitleText = styled.h1`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 60px;
@@ -334,7 +334,7 @@ const TitleText = styled.h1`
 `;
 
 const TextBody = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
@@ -357,7 +357,7 @@ const ContentContainer = styled.div`
 `;
 
 const TextSubtitle = styled.div`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: 800;
   font-size: 26px;

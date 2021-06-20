@@ -23,6 +23,7 @@ import AddItemPage from 'containers/Add_Item_Page/AddItemPage'
 import { ModalProvider } from 'styled-react-modal';
 import data from "dummydata";
 
+
 let userListener, projectsListener, committeesListener;
 
 const App = () => {

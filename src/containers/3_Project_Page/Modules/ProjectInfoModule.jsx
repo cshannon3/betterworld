@@ -47,7 +47,7 @@ const ProjectInfoContainer = styled.div`
 
 
 const ProjectsTitle = styled.h2`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 60px;
@@ -58,7 +58,7 @@ const ProjectsTitle = styled.h2`
 `;
 
 const ProjectsSubtitle = styled.p`
-  font-family: Baloo 2;
+  font-family: 'Baloo 2';
   font-weight: 800;
   font-size: 16px;
   color: #000000;

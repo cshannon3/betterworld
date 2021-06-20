@@ -176,7 +176,7 @@ const TitleBar = styled(styles.GreyTitleBar)`
     display:flex;
     justify-content: space-between;
     padding-right:20px;
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-weight: 800;
 `
 
@@ -213,7 +213,7 @@ const TableSection = styled.section`
 
 
 const SectionTitle = styled.div`
-font-family: Baloo 2;
+font-family: 'Baloo 2';
 font-size: 14px;
 width:300px;
 `;

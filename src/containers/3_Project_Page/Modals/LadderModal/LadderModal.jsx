@@ -16,6 +16,7 @@ const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
   background-color:white;
+  border-radius: 50px;
 `
 function LadderModal({ data, isOpen, onRequestClose }) {
     const ctrctx = useContext(ControlContext);
@@ -135,10 +136,12 @@ height: 100%;
 width:100%;
 display:flex;
 background-color: white;
+border-radius: 10px;
+
 `
 
 const DescriptionHeader= styled.div`
-font-family: Baloo 2;
+font-family: 'Baloo 2';
 font-size: 21px;
 font-style: normal;
 font-weight: 400;
@@ -156,10 +159,12 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
     >div{
         display:flex;
     }
+    border-radius: 10px 10px 0px 0px;
 `
 const MainContainer = styled.div`
 background-color: white;
 flex-grow:1;
+margin:30px;
 >div{
     display:flex;
     flex-direction:column;
@@ -168,9 +173,9 @@ flex-grow:1;
     margin:auto;
 }
 .header{
-    height:33%;
+    height:20%;
     display:flex;
-    padding:50px;
+    padding-top:20px;
     justify-content:space-between;
     .date{
         color:green;
@@ -198,36 +203,36 @@ const TitleBar = styled(styles.GreyTitleBar)`
 `
 
 
-const UpdatesMenu = styled.div`
-    display:flex;
-    justify-content: space-between;
-    padding:20px 0px;
-    >div{
-        display:flex;
-    }
-    h3{
-        font-family: Baloo 2;
-        font-style: normal;
-        font-weight: 800;
-        font-size: 21px;
-        line-height: 33px;
-        display: flex;
-        align-items: center;
-    }
-`
+// const UpdatesMenu = styled.div`
+//     display:flex;
+//     justify-content: space-between;
+//     padding:20px 0px;
+//     >div{
+//         display:flex;
+//     }
+//     h3{
+//         font-family: Baloo 2;
+//         font-style: normal;
+//         font-weight: 800;
+//         font-size: 21px;
+//         line-height: 33px;
+//         display: flex;
+//         align-items: center;
+//     }
+// `
 
 
 
-const UpdatesContainer = styled.div`
-background-color:#F8F8F8;
-margin: 15px;
-width:350px;
-`
+// const UpdatesContainer = styled.div`
+// background-color:#F8F8F8;
+// margin: 15px;
+// width:350px;
+// `
 
-const UpdatesList = styled.div`
-overflow:scroll;
-height:87%;
-`
+// const UpdatesList = styled.div`
+// overflow:scroll;
+// height:87%;
+// `
 /*const TableSection = styled.section`
     table {
         width:100%;

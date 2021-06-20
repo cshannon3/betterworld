@@ -52,11 +52,11 @@ const StagesComponent = ({data={}}) => {
     } = useTable({ columns, data, filterTypes }, useGlobalFilter, useSortBy);
 
     return (<TableSection >
-        <TitleBar>
+        {/* <TitleBar>
             <div>
                 <span>Stages</span>
             </div>
-        </TitleBar>
+        </TitleBar> */}
 
         <table  {...getTableProps()}>
             <thead>
@@ -91,11 +91,7 @@ export default StagesComponent;
 
 
 
-const TitleBar = styled(styles.GreyTitleBar)`
-    display:flex;
-    justify-content: space-between;
-    padding-right:20px;
-`
+
 
 const LinkBox = styled.div`
     height:40px;
@@ -119,11 +115,16 @@ const TableSection = styled.section`
     }
     th,td {
         grid-column: span 2;
-    //    padding: 1rem;
         text-align: left;
+        
     }
     th {
-        font-size: 1.5rem;
+        padding-bottom:10px;
+        font-family: 'Baloo 2';
+        font-style: normal;
+        font-weight: normal;
+        font-size: 21px;
+        line-height: 33px;
     }
     td {
         font-size: 1rem;
@@ -136,8 +137,7 @@ const TableSection = styled.section`
 
 //could keep as "blocked" and black?
 const StageTitle = styled.div`
-    font-family: Baloo 2;
-    font-style: normal;
+    font-family: 'Baloo 2';
     font-weight: bold;
     font-size: 16px;
     line-height: 25px;
@@ -146,14 +146,16 @@ const StageTitle = styled.div`
     border-left:5px solid;
     padding:30px 5px;
     ${({ status }) => 
-    (status==="in progress") ? `border-left:5px solid #EFF265;`:
-    (status==="not started")?`border-left:5px solid #ffcc81;`
-    :`border-left:5px solid #0CC998;`
+    (status==="in progress") ? `border-left:10px solid #EFF265;`:
+    (status==="not started")?`border-left:10px solid #ffcc81;`
+    :`border-left:10px solid #0CC998;`
 }
 `;
 
+
+
 const StageStatus =styled.div`
-font-family: Helvetica;
+font-family: 'Helvetica';
 font-style: normal;
 font-weight: bold;
 font-size: 10px;
@@ -163,6 +165,12 @@ align-items: center;
 text-transform: uppercase;
 `
 
+
+// const TitleBar = styled(styles.GreyTitleBar)`
+//     display:flex;
+//     justify-content: space-between;
+//     padding-right:20px;
+// `
   /* <Search
             state={state}
             preGlobalFilteredRows={preGlobalFilteredRows}

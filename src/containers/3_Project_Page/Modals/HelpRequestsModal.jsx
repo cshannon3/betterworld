@@ -14,6 +14,7 @@ const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
   background-color:white;
+  border-radius: 10px;
 `;
 
 function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests, showAllUpdates}) {
@@ -152,9 +153,5 @@ const SectionTitle = styled.div`
   justify-content: space-between;
 
 `;
-
-  // overflow:scroll;
-  // height:87%;
-
 
 export default HelpRequestsModal;

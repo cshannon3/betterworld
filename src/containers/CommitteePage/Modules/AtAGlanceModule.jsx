@@ -96,19 +96,19 @@ const ResourceBox = styled.div`
 `;
 
 const ArtifactLink = styled.p`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-size: 16px;
   line-height: 18px;
   align-items: center;
 `;
 const ArtifactTitle = styled.h2`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-weight: bold;
   font-size: 20px;
   padding-bottom: 10px;
 `;
 const SubtitleBold= styled.h2`
-  font-family: Helvetica;
+  font-family: 'Helvetica';
   font-weight: bold;
   font-size: 16px;
 `;

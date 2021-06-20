@@ -136,7 +136,7 @@ const ContentContainer = styled.div`
   max-width: calc(100vw - 170px);
   padding: 3vh 40px 10vh 40px;
   h1 {
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-style: normal;
     font-weight: bold;
     font-size: 60px;
@@ -147,7 +147,7 @@ const ContentContainer = styled.div`
     color: #0CC998;
   }
   h2 {
-    font-family: Baloo 2;
+    font-family: 'Baloo 2';
     font-style: normal;
     font-weight: 800;
     font-size: 26px;
@@ -160,7 +160,7 @@ const ContentContainer = styled.div`
     color: black;
   }
   p {
-    font-family: Helvetica Neue;
+    font-family: 'Helvetica Neue';
     font-style: normal;
     font-weight: 200;
     font-size: 22px;
@@ -206,7 +206,7 @@ const CommitteeBox = styled.div`
 
       .name, .order {
         color:white;
-        font-family: Baloo 2;
+        font-family: 'Baloo 2';
         font-weight:normal;
         font-size: 26px;
         line-height: 28px;

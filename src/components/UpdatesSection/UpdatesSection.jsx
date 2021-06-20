@@ -92,7 +92,7 @@ const UpdatesContainer = styled.div`
 width:100%;
 height:100%;
 ${({ isLadderModal }) => isLadderModal && `
-    width:350px;
+    width:40%;
     background-color:#F8F8F8;
     margin: 15px;
     height:95%;
