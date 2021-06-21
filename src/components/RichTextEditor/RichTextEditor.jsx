@@ -1,6 +1,7 @@
 import React from 'react';
 import {  useEffect } from "react";
-import "./RichTextEditor.css"
+import "./RichTextEditor.css";
+//import styled from "styled-components";
 import { Editor, EditorState, RichUtils, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
 import { GrBlockQuote } from "react-icons/gr";
 import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
@@ -20,19 +21,19 @@ export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel}) {
         const blocks =raw.blocks;
         const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
         onChange(value);
-        
+
     }, [editorState])
 
     return (
-    <div>
-    <div className="RichEditor-root">
+    <div >
 
+    <div className="RichEditor-root">
          <Editor 
          editorState={editorState}
           onChange={setEditorState} 
         />
     </div>
-     <button onClick={()=>{
+     <button className={"button"} onClick={()=>{
         const raw = convertToRaw(editorState.getCurrentContent());
         const blocks =raw.blocks;
         const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
@@ -40,7 +41,7 @@ export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel}) {
        // console.log(raw, notRaw);
         onSave(value);
      }}>save</button>
-     <button onClick={onCancel}>cancel</button>
+     <button className={"button grey"} onClick={onCancel}>cancel</button>
      </div>
     );
   }
@@ -257,3 +258,18 @@ const InlineStyleControls = (props) => {
         </React.Fragment>
     );
 };
+
+
+
+// const ButtonOne = styled.button`
+//     background: #0CC998;
+//     border-radius: 72.2872px;
+//     font-family: Baloo 2;
+//     font-style: normal;
+//     font-weight: bold;
+//     color: white;
+//     height:35px;
+//     width:144px;
+//     margin:10px;
+//     cursor: pointer;
+// `;

@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import ReactModal from "react-modal";
-
 import LeftPanel from "containers/Panels/LeftPanel";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
@@ -19,7 +17,6 @@ import {
 
 
 import ProjectContext from "./ProjectContext";
-//import dummyData from './DummyData';
 import ControlContext from "../../shared/control-context";
 import { updateProject } from "shared/firebase";
 
@@ -31,10 +28,6 @@ export default function ProjectPage() {
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
-
-
-
-
   return (
     <ProjectContext.Provider
       value={{
@@ -86,11 +79,7 @@ const ActiveProjectPage = ({projectData}) => {
       });
   });
  
-  //const [modalType,setModalType] =useState(null);
-  
   function openLadderModal(row) {
-
-      
       setIsUpdatesModalOpen(false);
       setIsLadderModalOpen(true);
       setLadderModalData(row);
@@ -380,6 +369,9 @@ const TextSubtitle = styled.div`
   //     });
   //   });
   // }
+
+  //const [modalType,setModalType] =useState(null);
+  
 
   // console.log(helpRequests);
   //dummyData["Immigration Justice Zine"]

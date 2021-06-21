@@ -10,10 +10,7 @@ const StyledModal = Modal.styled`
 width: 362px;
 height: 236px;
 border-radius: 10px;
-  // display: flex;
-  // flex-direction:column;
-  // justify-content: space-between;
-  background-color: white;
+background-color: white;
 `
 const updateTypeInfo = {
   "default": {
@@ -38,12 +35,8 @@ const updateTypeInfo = {
 const AddUpdateComponent = ({
   isModalOpen = false,
   type="default",
-  //title = "Add Update",
   onSave = () => { },
-  //saveText = "Save",
-  //userName = "",
   user = null,
-  //description = "",
   stages = null
 }) => {
 
@@ -65,11 +58,12 @@ const AddUpdateComponent = ({
         isOpen={isOpen}
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}>
-        <div>
+        
+      <div>
           <TitleBar>{buttonData.title}</TitleBar>
-        </div>
+          <Wrapper>
         <MenuLine>
-          <span>{user&&user.displayName}</span>
+          <span  class="displayName">{user&&user.displayName}</span>
           {stages &&
             <div class="dropdown">
               <select name="stages" id="stages" onChange={() => {
@@ -108,11 +102,17 @@ const AddUpdateComponent = ({
           onCancel={() => { }}
           changeHandler={(value) => setContent(value)}
         />
-
+    </Wrapper>
+    </div>
       </StyledModal>
     </div>
   )
 }
+
+
+const Wrapper = styled.div`
+    margin:10px;
+`;
 
 const ButtonOne = styled.button`
     background: #0CC998;
@@ -129,10 +129,14 @@ const ButtonOne = styled.button`
 const TitleBar = styled(styles.GreenTitleBar)`
     width:100%;
 `
-
 const MenuLine = styled.div`
-display:flex;
-
+  display:flex;
+  justify-content:space-between;
+  height:30px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size:14px;
 `;
 
 export default AddUpdateComponent;

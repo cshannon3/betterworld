@@ -1,9 +1,13 @@
+
+
 .RichEditor-root {
     background: #dad9d926;
     border: 1px solid #9f9e9e;
     font-family: sans-serif;
     font-size: 14px;
     padding: 10px 15px 15px 15px;
+    height:100px;
+    margin-bottom: 10px;
   }
 
   .RichEditor-root--focused {
@@ -15,6 +19,7 @@
     cursor: text;
     font-size: 16px;
     background-color: whitesmoke;
+
     /* margin-top: 10px; */
   }
 
@@ -80,4 +85,20 @@
 
   .RichEditor-activeButton {
     color: #5890ff;
+  }
+
+  .button{
+    background: #0CC998;
+    border-radius: 5px;
+    font-family: Baloo 2;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    height:30px;
+    width:144px;
+    margin:10px;
+    cursor: pointer;
+  }
+  .grey{
+    background-color:grey;
   }
