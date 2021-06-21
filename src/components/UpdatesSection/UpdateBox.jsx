@@ -4,7 +4,7 @@ import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import RichEditor, { MyEditor } from "../RichTextEditor/RichTextEditor";
+import  { MyEditor } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { BsReply } from "react-icons/bs";
 import { cleanReplyModel } from "data_models/updatemodel";
@@ -16,7 +16,7 @@ const UpdateBox = ({
   updateData,
   isSelector,
   setSelectorOpen = () => {},
-  updateUpdates = () => {},
+  updateUpdate = () => {},
   deleteUpdate = () => {},
 }) => {
   const ctrctx = useContext(ControlContext);
@@ -47,12 +47,12 @@ const UpdateBox = ({
       ];
       const newUpdateData = { ...updateData, reactions: newReactions };
       console.log(newReactions);
-      updateUpdates(newUpdateData);
+      updateUpdate(newUpdateData);
       setSelectorOpen(newUpdateData);
     } else {
       const newReactions = [...updateData.reactions, { emoji, by: userName }];
       const newUpdateData = { ...updateData, reactions: newReactions };
-      updateUpdates(newUpdateData);
+      updateUpdate(newUpdateData);
       console.log(newUpdateData);
       setSelectorOpen(newUpdateData);
     }
@@ -96,7 +96,7 @@ const UpdateBox = ({
                 date: Date.now(),
               })
             );
-                setEditContent("");
+              setEditContent("");
               content="";
               setIsReplyEditing(true);
             
@@ -165,7 +165,7 @@ const UpdateBox = ({
           content={content}
           onSave={(val) => {
             const newUpdateData = { ...updateData, content: val };
-            updateUpdates(newUpdateData);
+            updateUpdate(newUpdateData);
             setIsEditing(false);
           }}
           onCancel={() => {
@@ -226,10 +226,10 @@ const UpdateBox = ({
                   ...updateData,
                   replies: updateData["replies"].filter((u) => u.id != r.id),
                 };
-                updateUpdates(newUpdateData);
+                updateUpdate(newUpdateData);
                 setActiveReply(null);
                 setIsReplyEditing(false);
-                //updateUpdates(newUpdateData);
+                //updateUpdate(newUpdateData);
               }
             }}
           />
@@ -259,7 +259,7 @@ const UpdateBox = ({
               let u = newReplies.findIndex((v) => v.id == activeReply.id);
               newReplies[u] = { ...activeReply, content: val };
               newUpdateData = { ...updateData, replies: newReplies };
-              //updateUpdates(newUpdateData);
+              //updateUpdate(newUpdateData);
             } else if (updateData.replies) {
               newUpdateData = {
                 ...updateData,
@@ -271,10 +271,12 @@ const UpdateBox = ({
             } else {
               newUpdateData = {
                 ...updateData,
-                replies: [{ ...activeReply, content: val }],
+                "replies": [{ ...activeReply, content: val }],
               };
             }
-            updateUpdates(newUpdateData);
+            console.log("reply");
+            console.log(newUpdateData);
+            updateUpdate(newUpdateData);
            // console.log(newUpdateData);
             setActiveReply(null);
             setIsReplyEditing(false);

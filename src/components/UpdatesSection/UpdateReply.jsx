@@ -2,7 +2,7 @@ import styled from "styled-components";
 import _ from 'lodash';
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-
+import { useState } from "react";
 
 const UpdateReply = ({
     reply,
@@ -13,20 +13,23 @@ const UpdateReply = ({
 }) => {
     
     const isCurrentUser = reply.author == userName;
-  
+    const [isHovering, setIsHovering] = useState(false);
+
     const HeaderRow = () => {
         return (<div className={"topbar"}>
             <div className={"author"}>{reply["author"]}
                  </div>
-            <div className={"date"}>
-                {formatTimestamp(reply["date"])}
-            </div>
-            {isCurrentUser &&
-                <div>
+          
+            { isHovering && isCurrentUser &&
+                <div className={"icons"}>
                     <AiOutlineEdit
+                     size={18}
+                    className={"icon"}
                         onClick={() => {setIsEditing(reply) }}
                     />
                     <AiOutlineDelete
+                     size={18}
+                        className={"icon"}
                         onClick={() => { deleteReply(reply); }}
                     />
                 </div>
@@ -42,8 +45,16 @@ const UpdateReply = ({
   
     return isEditing? null:
     (
-                <ReplyBoxCSS key={reply["id"]}>
+                <ReplyBoxCSS key={reply["id"]}
+                    onMouseEnter={()=> {
+                        setIsHovering(true);
+                    }}
+                    onMouseLeave={()=> {
+                        setIsHovering(false);
+                    }}
+                >
                     <HeaderRow/>
+                    <div className={"date"}>{formatTimestamp(reply["date"])}</div>
                    <ContentRow/>
                 </ReplyBoxCSS>
             );
@@ -55,13 +66,11 @@ const ReplyBoxCSS = styled.div`
 background-color: #FFFFFF;
 border: 1px solid #EEEEEE;
 box-sizing: border-box;
-margin:2%;
-
+margin:1px;
+margin-bottom: 20px;
 .topbar{
     display:flex;
     justify-content: space-between;
-    align-items:center;
-    padding:5px;
 }
 .author{
     font-family: Baloo 2;
@@ -74,33 +83,53 @@ margin:2%;
     letter-spacing: -0.02em;
     color: #0CC998;
 }
-.stage{
-    font-family: Baloo 2;
+
+.content {
+    font-size: 14px;
+    font-family: Inter;
+  }
+.date {
+    font-family: "Baloo 2";
     font-style: normal;
     font-weight: bold;
     font-size: 12px;
-    line-height: 19px;
+    line-height: 15px;
+    letter-spacing: -0.02em;
+    color: black;
+
+  }
+  .icons{
+    max-height:18px;
+    height:18px;
     display: flex;
-    align-items: center;
-    color: #5B5B5B;
+}
+.icon{
+  cursor:pointer;
+}
+.arrow-icon{
+    padding-top:5px;
+    width:25px;
 }
 .content {
-    padding-left:5px;
-    padding-right:5px;
+    padding-top:5px;
+  font-size: 14px;
+  font-family: Inter;
 }
-.date{
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 19px;
-    text-align: right;
-    letter-spacing: -0.02em;
 
-    color: #0CC998;
-}
+.flex-row {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  border-radius: 5px;
+
+
 
 `
+
+
 
 
 export default UpdateReply;

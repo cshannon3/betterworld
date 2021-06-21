@@ -2,7 +2,7 @@ import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
 import * as styles from '../../styles/sharedStyles';
-import { MyEditor } from "../RichTextEditor/RichTextEditor";
+import { MyEditor } from "../MyEditor/MyEditor";
 import {cleanUpdateModel} from "data_models/updatemodel";
 
 
@@ -94,12 +94,17 @@ const AddUpdateComponent = ({
                  data["stage"]=selectedStage;
                }
                const newUpdate = cleanUpdateModel(data);
-               return onSave(newUpdate);
+               
+               onSave(newUpdate);
+               toggleModal();
               //onSave({ stage: selectedStage, content: val })
               //setContent(value)
             }
           }
-          onCancel={() => { }}
+          onCancel={() => {
+            toggleModal();
+            console.log("oncancel");
+           }}
           changeHandler={(value) => setContent(value)}
         />
     </Wrapper>

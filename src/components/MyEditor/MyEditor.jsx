@@ -10,7 +10,7 @@ import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListB
 //Tried changing here, css, and in ladder
 //This was super annoying
 
-export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel}) {
+export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel=()=>{}}) {
 
     const [editorState, setEditorState] = React.useState(
       () => content !== undefined ? EditorState.createWithContent(ContentState.createFromText(content)) : EditorState.createEmpty(),
@@ -38,7 +38,7 @@ export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel}) {
         const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
         onSave(value);
      }}>save</SaveButton>
-     <CancelButton className={"button grey"} onClick={onCancel}>cancel</CancelButton>
+     <CancelButton className={"button grey"} onClick={()=>onCancel()}>cancel</CancelButton>
      </div>
     );
   }
