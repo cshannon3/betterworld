@@ -18,24 +18,18 @@ const StyledModal = Modal.styled`
   background-color:white;
   border-radius: 50px;
 `
-function LadderModal({ data, isOpen, onRequestClose }) {
+const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
+
     const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
 
     const [selectorOpen, setSelectorOpen] = useState(null);
-    const [sectionData, setSectionData] = useState(data);
-    useEffect(() => {
-        if(sectionData ==null){
-            setSectionData(data);
-        }
-      });
 
-    function InnerComponent() {
+    const InnerComponent = () =>{
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
         const stages = data["stages"].map((st)=>st.name);
-        console.log(sectionData["description"]);
         return (
             <WidgetContainer>
                 <MainContainer>
@@ -52,7 +46,7 @@ function LadderModal({ data, isOpen, onRequestClose }) {
 
                         </div>
                          <div>
-                             <p className="descriptionText">  {sectionData["description"]}</p>
+                             <p className="descriptionText">  {data["description"]}</p>
                              </div>
                         </div>
                         <div className="tasks">
@@ -65,9 +59,11 @@ function LadderModal({ data, isOpen, onRequestClose }) {
                                 stages={stages}
                                 user={ctrctx.user}
                                 onSave={(newUpdate) => {
-                                    const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    //const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
-                                    setSectionData(newSectionData)
+                                    setLadderData(newSectionData);
+                                    //setSectionData(newSectionData)
                                 }}
                             />
                             <AddUpdateComponent
@@ -76,28 +72,34 @@ function LadderModal({ data, isOpen, onRequestClose }) {
                                 stages={stages}
                                 user={ctrctx.user}
                                 onSave={(newUpdate) => {
-                                    const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
-                                    setSectionData(newSectionData)
+                                    setLadderData(newSectionData);
+                                    // const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    // ctx.updateSection(newSectionData);
+                                    // setSectionData(newSectionData)
                                 }}
                             />
                         </div>
                     </div>
                 </MainContainer>
                         <UpdatesSection
-                            updates={sectionData["updates"]}
+                            updates={data["updates"]}
                             stages={stages}
                             user={ctrctx.user}
                             selectorOpen={selectorOpen}
                             updateUpdates={(newUpdates)=>{
-                                let newSectionData = {...sectionData,  "updates":newUpdates}
+                                
+                                const newSectionData = {...data,  "updates":newUpdates}
                                 ctx.updateSection(newSectionData);
-                                setSectionData(newSectionData);
+                                setLadderData(newSectionData);
+                                // ctx.updateSection(newSectionData);
+                                // setSectionData(newSectionData);
                             }}
                             setSelectorOpen={(id)=>{
                                 if(selectorOpen!=id)setSelectorOpen(id);
                                 else setSelectorOpen(null);
-                                console.log("setting selector");
+                               
                             }}
                         >
                         </UpdatesSection>
@@ -208,6 +210,18 @@ const TitleBar = styled(styles.GreyTitleBar)`
     padding-right:20px;
 `
 
+    //const [sectionData, setSectionData] = useState(data);
+   
+   
+    // useEffect(() => {
+    //     if(sectionData ==null){
+    //         //console.log("SECT");
+    //         setSectionData(data);
+    //     }
+    //   });
+    //  console.log("sectionData");
+       // console.log(sectionData);
+      
 
 // const UpdatesMenu = styled.div`
 //     display:flex;

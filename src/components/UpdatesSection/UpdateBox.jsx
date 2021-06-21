@@ -39,7 +39,7 @@ const UpdateBox = ({
 
   function handleSelect(emoji) {
     const index = _.findIndex(updateData["reactions"], { emoji, by: userName });
-    console.log(index);
+   // console.log(index);
     if (index > -1) {
       const newReactions = [
         ...updateData["reactions"].slice(0, index),
@@ -248,7 +248,7 @@ const UpdateBox = ({
             }}
           
             onSave={(val) => {
-            console.log(val);
+          //  console.log(val);
             //setActiveReply({...activeReply, "content":val});
             let newUpdateData;
             if (
@@ -275,7 +275,7 @@ const UpdateBox = ({
               };
             }
             updateUpdates(newUpdateData);
-            console.log(newUpdateData);
+           // console.log(newUpdateData);
             setActiveReply(null);
             setIsReplyEditing(false);
           }}
@@ -297,7 +297,7 @@ const UpdateBox = ({
         setIsHovering(true);
     }}
     onMouseLeave={()=> {
-        console.log(content);
+     //   console.log(content);
         setEditContent(content);
         setIsHovering(false);
     }}

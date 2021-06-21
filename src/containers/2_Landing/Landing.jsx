@@ -13,7 +13,6 @@ export default function Landing() {
   projectsData = projectsData?Object.values(projectsData):[];
   
   
-  //const committeeData = ctrctx.data["committees"];
   const committeeData = Object.values(ctrctx.getCommitteesData());
   const quickData = ctrctx.data["quick_links"];
   console.log(committeeData);
@@ -35,7 +34,7 @@ export default function Landing() {
   }
 
   return (
-    <Row>
+    <RowWrapper>
       <LeftPanel />
       <ContentContainer>
         <OverviewSection>
@@ -106,17 +105,25 @@ export default function Landing() {
                       <p><span>Updates:</span> {getNumUpdates(project)}</p>
                       <p><span>Contributors:</span> {project["contributors"]?.length}</p>
                 </ProjectBox>
-                
                 )
               })
             }
           </Row>
         </ProjectsSection>
       </ContentContainer>
-    </Row>
+    </RowWrapper>
   )
 }
 
+const RowWrapper = styled.div`
+  display: flex;
+  overflow:hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar{
+    display: none;
+  } 
+`
 
 const Row = styled.div`
   display: flex;

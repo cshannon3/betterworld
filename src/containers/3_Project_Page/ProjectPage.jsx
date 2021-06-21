@@ -41,11 +41,13 @@ export default function ProjectPage() {
         data: projectData,
         updateSection: (sectionData) => {
           let sections = [...projectData["sections"]];
-          let s = sections.findIndex((sec) => sec.id == sectionData.Id);
+          let s = sections.findIndex((sec) => sec.id == sectionData.id);
+    
           sections[s] = sectionData;
           const newData = { ...projectData, sections: sections };
           updateProject(newData.id, newData);
           setProjectData(newData);
+          
         },
       }}
     >
@@ -87,9 +89,11 @@ const ActiveProjectPage = ({projectData}) => {
   //const [modalType,setModalType] =useState(null);
   
   function openLadderModal(row) {
-      setLadderModalData(row);
+
+      
       setIsUpdatesModalOpen(false);
       setIsLadderModalOpen(true);
+      setLadderModalData(row);
   }
 
 
@@ -113,6 +117,7 @@ const ActiveProjectPage = ({projectData}) => {
         <LadderModal
           data={ladderModalData}
           isOpen={isLadderModalOpen}
+          setLadderData={(newData)=>{setLadderModalData(newData)}}
           onRequestClose={closeLadderModal} >
       </LadderModal>
       <HelpRequestsModal
@@ -120,8 +125,7 @@ const ActiveProjectPage = ({projectData}) => {
           isOpen={isUpdatesModalOpen}
           onRequestClose={closeUpdatesModal}
           helpRequests={helpRequests}
-          isOnlyHelpUpdates={isOnlyHelpUpdates}
-          >
+          isOnlyHelpUpdates={isOnlyHelpUpdates} >
       </HelpRequestsModal>
 
     <Flex>
@@ -143,7 +147,6 @@ const ActiveProjectPage = ({projectData}) => {
 }
 
 const ArchivedProjectPage = ({projectData}) => {
-
 
   let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
 

@@ -10,8 +10,8 @@ const UpdatesSection = ({
   updateUpdates = (newUpdates) => {},
   setSelectorOpen = (updateId) => {},
 }) => {
-  console.log("UPDATES SECTIONS");
-  console.log(updates);
+//   console.log("UPDATES SECTIONS");
+//   console.log(updates);
   return (
     <UpdatesContainer isLadderModal={stages != null}>
       <UpdatesMenu isLadderModal={stages != null}>
@@ -25,6 +25,7 @@ const UpdatesSection = ({
             stages={stages}
             user={user}
             onSave={(newUpdate) => {
+                console.log("On Save");
               if (updates) updateUpdates([...updates, newUpdate]);
               else updateUpdates([newUpdate]);
             }}

@@ -83,7 +83,12 @@ export async function createProject(projectData, { groupID = "cmu-against-ice" }
 
 export async function updateProject(projectId, projectData) {
     // Add team
-    await getProjectRef({ id: projectId, groupID: "cmu-against-ice" }).update(projectData);
+    console.log(projectId);
+    console.log( projectData);
+    console.log("test");
+    await getProjectRef({ id: projectId, groupID: "cmu-against-ice" }).update(projectData).then((e)=>{
+        console.log("Go");
+    });
 }
 
 
