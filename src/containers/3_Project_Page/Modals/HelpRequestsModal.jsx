@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
 import * as styles from "styles/sharedStyles";
-//import ProjectContext from '../../../ProjectContext';
+import ProjectContext from '../../../ProjectContext';
 import ControlContext from "shared/control-context";
 import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import { cleanUpdateModel } from "data_models/updatemodel";
@@ -10,6 +10,8 @@ import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
 import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 
+
+// TODO update this to actually be able to handle live data
 const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
@@ -17,11 +19,11 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
 `;
 
-function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests, showAllUpdates}) {
+function HelpRequestsModal({ data, setUpdatesData, isOpen, onRequestClose, helpRequests, showAllUpdates}) {
   const ctrctx = useContext(ControlContext);
   const [selectorOpen, setSelectorOpen] = useState(null);
-  const [sectionData, setSectionData] = useState(data);
-  //const ctx = useContext(ProjectContext);
+  //const [sectionData, setSectionData] = useState(data);
+  const ctx = useContext(ProjectContext);
   const sections = data["sections"];
   const sectionList = sections.map((s) => s.name);
 
@@ -59,13 +61,16 @@ function HelpRequestsModal({ data, isOpen, onRequestClose, helpRequests, showAll
                   user={ctrctx.user}
                   selectorOpen={selectorOpen}
                   updateUpdates={(newUpdates) => {
+                    //const newSectionData = {...data, "updates":newUpdates}
+                    //ctx.updateSection(newSectionData);
+                    //setUpdatesData(newSectionData);
                     //let newSectionData = {...sectionData,  "updates":newUpdates}
                     //ctx.updateSection(newSectionData);
                     //setSectionData(newSectionData);
                   }}
                   setSelectorOpen={(id) => {
-                    //if(selectorOpen!=id)setSelectorOpen(id);
-                    // else setSelectorOpen(null);
+                    if(selectorOpen!=id)setSelectorOpen(id);
+                    else setSelectorOpen(null);
                     // console.log("setting selector");
                   }}
                 ></HelpUpdatesList>
