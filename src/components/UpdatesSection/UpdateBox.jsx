@@ -4,7 +4,7 @@ import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import  { MyEditor } from "../MyEditor/MyEditor";
+import { MyEditor } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { BsReply } from "react-icons/bs";
 import { cleanReplyModel } from "data_models/updatemodel";
@@ -32,6 +32,8 @@ const UpdateBox = ({
   const [editContent, setEditContent] = useState("");
 
   let content = updateData["content"];
+ 
+  const hasOfferedHelp = updateData["replies"]&&updateData["replies"].filter((rep)=>(rep.type==="offer to help" && rep.author == userName)).length>0;
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -39,7 +41,7 @@ const UpdateBox = ({
 
   function handleSelect(emoji) {
     const index = _.findIndex(updateData["reactions"], { emoji, by: userName });
-   // console.log(index);
+    // console.log(index);
     if (index > -1) {
       const newReactions = [
         ...updateData["reactions"].slice(0, index),
@@ -69,45 +71,28 @@ const UpdateBox = ({
           <span className={"stage"}> {`  •  ${updateData["stage"]}`}</span>
         </div>
 
-        {isHovering && (isCurrentUser ? (
-          <div className={"icons"}>
-            <AiOutlineEdit
-            className="icon"
-            size={18}
-              onClick={() => {
-                setIsEditing(!isEditing);
-              }}
-            />
-            <AiOutlineDelete
-             className="icon"
-            size={18}
-              onClick={() => {
-                deleteUpdate(updateData);
-              }}
-            />
-             <BsReply
-              className="icon"
-             size={18}
-            onClick={() => {
-            setActiveReply(
-              cleanReplyModel({
-                author: userName,
-                authorId: userId,
-                date: Date.now(),
-              })
-            );
-              setEditContent("");
-              content="";
-              setIsReplyEditing(true);
-            
-          }}
-        />
-        </div>
-         ) : ((updateData["type"] == "request help") && updateData["status"] && updateData["status"]!="done")?
-         <div className={"icons"}>
-             <ButtonOne
-             onClick={()=>{
-                setActiveReply(
+        {isHovering &&
+          (isCurrentUser ? (
+            <div className={"icons"}>
+              <AiOutlineEdit
+                className="icon"
+                size={18}
+                onClick={() => {
+                  setIsEditing(!isEditing);
+                }}
+              />
+              <AiOutlineDelete
+                className="icon"
+                size={18}
+                onClick={() => {
+                  deleteUpdate(updateData);
+                }}
+              />
+              <BsReply
+                className="icon"
+                size={18}
+                onClick={() => {
+                  setActiveReply(
                     cleanReplyModel({
                       author: userName,
                       authorId: userId,
@@ -115,45 +100,67 @@ const UpdateBox = ({
                     })
                   );
                   setEditContent("");
-                  content="";
+                  content = "";
                   setIsReplyEditing(true);
-             }}
-             >Offer Help</ButtonOne>
-             <BsReply
-            size={18}
-            onClick={() => {
-              setActiveReply(
-                cleanReplyModel({
-                  author: userName,
-                  authorId: userId,
-                  date: Date.now(),
-                })
-              );
-              setEditContent("");
-              content="";
-              setIsReplyEditing(true);
-             
-            }}
-          />
-         </div>
-
-         :( <BsReply
-            size={18}
-            onClick={() => {
-              setActiveReply(
-                cleanReplyModel({
-                  author: userName,
-                  authorId: userId,
-                  date: Date.now(),
-                })
-              );
-              setEditContent("");
-              content="";
-              setIsReplyEditing(true);
-            }}
-          />))
-        }
-       
+                }}
+              />
+            </div>
+          ) : updateData["type"] == "request help" &&
+            updateData["status"] &&
+            updateData["status"] != "done" &&
+            !hasOfferedHelp ? (
+            <div className={"icons"}>
+              <ButtonOne
+                onClick={() => {
+                  setActiveReply(
+                    cleanReplyModel({
+                      author: userName,
+                      authorId: userId,
+                      date: Date.now(),
+                      type: "offer to help"
+                    })
+                  );
+                  setEditContent("");
+                  content = "";
+                  setIsReplyEditing(true);
+                }}
+              >
+                Offer Help
+              </ButtonOne>
+              <BsReply
+                size={18}
+                onClick={() => {
+                  setActiveReply(
+                    cleanReplyModel({
+                      author: userName,
+                      authorId: userId,
+                      date: Date.now(),
+                    })
+                  );
+                  setEditContent("");
+                  content = "";
+                  setIsReplyEditing(true);
+                }}
+              />
+            </div>
+          ) : 
+          (
+            <BsReply
+              size={18}
+              onClick={() => {
+                setActiveReply(
+                  cleanReplyModel({
+                    author: userName,
+                    authorId: userId,
+                    date: Date.now(),
+                  })
+                );
+                setEditContent("");
+                content = "";
+                setIsReplyEditing(true);
+              }}
+            />
+          ))}
       </div>
     );
   };
@@ -175,9 +182,14 @@ const UpdateBox = ({
       </div>
     );
   }
+  const HelpResponseRow = () => {
+    return (
+      <div></div>
+    );
+  };
+
 
   const ReactionsRepliesRow = () => {
-
     return (
       <div className="flex-row">
         <div>
@@ -188,24 +200,29 @@ const UpdateBox = ({
             onSelect={(emoji) => handleSelect(emoji)}
           />
         </div>
-        <div 
-        className={"num_replies"} 
-        onClick={() => setIsShowingReplies(!isShowingReplies)}
+        <div
+          className={"num_replies"}
+          onClick={() => setIsShowingReplies(!isShowingReplies)}
         >
-          {updateData["replies"] && updateData["replies"].length>0 && (isShowingReplies ? (
-            <FiChevronUp className="arrow-icon" size={18}/>) : (<FiChevronDown className="arrow-icon" size={18}/>
-          ))}
-          {updateData["replies"]? `${updateData["replies"].length} Replies`: "0 Replies"}
+          {updateData["replies"] &&
+            updateData["replies"].length > 0 &&
+            (isShowingReplies ? (
+              <FiChevronUp className="arrow-icon" size={18} />
+            ) : (
+              <FiChevronDown className="arrow-icon" size={18} />
+            ))}
+          {updateData["replies"]
+            ? `${updateData["replies"].length} Replies`
+            : "0 Replies"}
         </div>
       </div>
     );
   };
 
-
   const RepliesListRow = () => {
     return (
       <div>
-        {updateData["replies"].map((reply) => (
+        {updateData["replies"].filter((rep)=>rep.type!=="offer to help").map((reply) => (
           <UpdateReply
             id={reply.id}
             reply={reply}
@@ -241,14 +258,26 @@ const UpdateBox = ({
   const ReplyEditRow = () => {
     return (
       <div className={"content content_edit"}>
+        <FlexRow>
+        <div class="dropdown">
+              <select name="stages" id="stages" value={activeReply.type} onChange={() => {
+                var x = document.getElementById("stages").value;
+                //setSelectedStage(x);
+              }
+              }>
+                {["", "offer to help"].map((m) => (
+                  <option value={m}
+                  >{m}</option>))}
+              </select>
+            </div>
+        </FlexRow>
         <MyEditor
           content={editContent}
-          onChange={(val)=>{
-              content=val;
-            }}
-          
-            onSave={(val) => {
-          //  console.log(val);
+          onChange={(val) => {
+            content = val;
+          }}
+          onSave={(val) => {
+            //  console.log(val);
             //setActiveReply({...activeReply, "content":val});
             let newUpdateData;
             if (
@@ -271,13 +300,10 @@ const UpdateBox = ({
             } else {
               newUpdateData = {
                 ...updateData,
-                "replies": [{ ...activeReply, content: val }],
+                replies: [{ ...activeReply, content: val }],
               };
             }
-            console.log("reply");
-            console.log(newUpdateData);
             updateUpdate(newUpdateData);
-           // console.log(newUpdateData);
             setActiveReply(null);
             setIsReplyEditing(false);
           }}
@@ -285,26 +311,66 @@ const UpdateBox = ({
             setActiveReply(null);
             setIsReplyEditing(false);
           }}
-         
         />
       </div>
     );
   };
 
-  return (
-    <div key={updateData["id"]}
-    onMouseEnter={()=> {
 
+  const PinnedHelpReplyRow = () => {
+    
+    if(!updateData["replies"] || updateData["replies"].filter((rep)=>rep.type==="offer to help").length == 0){
+      return null;
+    }
+
+    const reply = updateData["replies"].filter((rep)=>rep.type==="offer to help")[0];
+    return  ( 
+    <div style={{paddingTop:"10px"}}>
+    <UpdateReply
+     id={reply.id}
+     reply={reply}
+     userName={userName}
+     isEditing={activeReply && reply.id == activeReply.id}
+     setIsEditing={(r) => {
+       setActiveReply(r);
+       setEditContent(r.content);
+       content = editContent;
+       setIsReplyEditing(true);
+     }}
+     deleteReply={(r) => {
+       if (
+         updateData.replies &&
+         updateData.replies.find((v) => v.id == r.id)
+       ) {
+         const newUpdateData = {
+           ...updateData,
+           replies: updateData["replies"].filter((u) => u.id != r.id),
+         };
+         updateUpdate(newUpdateData);
+         setActiveReply(null);
+         setIsReplyEditing(false);
+         //updateUpdate(newUpdateData);
+       }
+     }}
+   />
+   </div>
+   
+   )
+  }
+
+  return (
+    <div
+      key={updateData["id"]}
+      onMouseEnter={() => {
         setEditContent(content);
         setIsHovering(true);
-    }}
-    onMouseLeave={()=> {
-     //   console.log(content);
+      }}
+      onMouseLeave={() => {
+        //   console.log(content);
         setEditContent(content);
         setIsHovering(false);
-    }}
+      }}
     >
-
       {updateData["type"] == "offer to help" ? (
         <OfferHelp>
           <div className="flag">Help Offered</div>
@@ -314,7 +380,7 @@ const UpdateBox = ({
           <div className="flag">Help Requested</div>
         </HelpReq>
       ) : null}
-      <UpdateBoxCSS type={updateData["type"]} status= {updateData["status"]} >
+      <UpdateBoxCSS type={updateData["type"]} status={updateData["status"]}>
         <HeaderRow />
         <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
         {isEditing ? (
@@ -322,22 +388,30 @@ const UpdateBox = ({
         ) : (
           <p className={"content"}>{updateData["content"]}</p>
         )}
-        <div></div>
-
+       
+        
+       <PinnedHelpReplyRow/>
         <ReactionsRepliesRow />
-        {(isEditingReply||isShowingReplies) && 
-        <DividerSection>
-           <hr className ={"line1"}/> <p className ={"text"}>Replies</p> <hr className ={"line2"}/>
-    </DividerSection>
-        }
+        {(isEditingReply || isShowingReplies) && (
+          <DividerSection>
+            <hr className={"line1"} /> <p className={"text"}>Replies</p>{" "}
+            <hr className={"line2"} />
+          </DividerSection>
+        )}
         {isShowingReplies && <RepliesListRow />}
         {isEditingReply && <ReplyEditRow />}
+      
       </UpdateBoxCSS>
 
       {isSelector && <SlackSelector onSelect={handleSelect} />}
     </div>
   );
 };
+
+const FlexRow = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
 
 const UpdateBoxCSS = styled.div`
   background-color: #ffffff;
@@ -349,7 +423,6 @@ const UpdateBoxCSS = styled.div`
   .topbar {
     display: flex;
     justify-content: space-between;
-    
   }
   .author {
     font-family: "Baloo 2";
@@ -373,7 +446,7 @@ const UpdateBoxCSS = styled.div`
     align-items: center;
     color: #5b5b5b;
   }
-    
+
   .date {
     font-family: "Baloo 2";
     font-style: normal;
@@ -382,27 +455,24 @@ const UpdateBoxCSS = styled.div`
     line-height: 19px;
     letter-spacing: -0.02em;
     color: black;
-
   }
-  .icons{
-      max-height:18px;
-      height:18px;
-      display: flex;
+  .icons {
+    max-height: 18px;
+    height: 18px;
+    display: flex;
   }
-  .icon{
-    cursor:pointer;
+  .icon {
+    cursor: pointer;
   }
-  .arrow-icon{
-      padding-top:5px;
-      width:25px;
+  .arrow-icon {
+    padding-top: 5px;
+    width: 25px;
   }
   .content {
     font-size: 14px;
     font-family: Inter;
-
-    
   }
-  .num_replies{
+  .num_replies {
     font-size: 12px;
     font-family: Inter;
   }
@@ -417,43 +487,40 @@ const UpdateBoxCSS = styled.div`
   border-radius: 5px;
 
   ${({ type, status }) =>
-    type === "offer to help" 
+    type === "offer to help"
       ? `
   background-color: #fff7ec;
   border-radius: 5px 0px 5px 5px ;
 `
-      : 
-      (type === "request help" && status!=="done")
+      : type === "request help" && status !== "done"
       ? `
   background-color: #fff4f4;
   border: 2px solid #cb0101;
   border-radius: 5px 0px 5px 5px ;
 `
-      : 
-      (type === "request help"&& status==="done")?
-      `
+      : type === "request help" && status === "done"
+      ? `
   background-color: #EAA828;
   border: 2px solid #cb0101;
   border-radius: 5px 0px 5px 5px ;
-` :  `border-left:10px solid #0CC998;`}
+`
+      : `border-left:10px solid #0CC998;`}
 `;
 
-
 const DividerSection = styled.div`
-    display:flex;
-    align-items:center;
-    margin: 5px 0px;
-    color:grey;
-    .line1{
-        width:10%;
-    }
-    .line2{
-        width:80%;
-    }
-    .text{
-        padding: 0px 2px 3px 3px;
-    }
-
+  display: flex;
+  align-items: center;
+  margin: 5px 0px;
+  color: grey;
+  .line1 {
+    width: 10%;
+  }
+  .line2 {
+    width: 80%;
+  }
+  .text {
+    padding: 0px 2px 3px 3px;
+  }
 `;
 const TypeRowDiv = styled.div`
   height: 40px;
@@ -499,38 +566,38 @@ const OfferHelp = styled.div`
   }
 `;
 
-
 const ButtonOne = styled.button`
-    background: #0CC998;
-    border-radius: 2px;
-    font-family: Baloo 2;
-    font-weight: bold;
-    color: white;
-    width:100px;
-    height:18px;
-    margin:0px 5px 0px 0px;
-    padding:0px;
-    cursor: pointer;
-    font-size: 12px;
-    outline: none; 
-    border:none;
+  background: #0cc998;
+  border-radius: 2px;
+  font-family: Baloo 2;
+  font-weight: bold;
+  color: white;
+  width: 100px;
+  height: 18px;
+  margin: 0px 5px 0px 0px;
+  padding: 0px;
+  cursor: pointer;
+  font-size: 12px;
+  outline: none;
+  border: none;
 `;
 export default UpdateBox;
 
+// Offer help
 
-  //   const RepliesInfoRow = () => {
-  //     if (!updateData["replies"]) return null;
-  //     return (
-  //       <div>
-  //         {isShowingReplies ? (
-  //           <FiChevronUp onClick={() => setIsShowingReplies(false)} />
-  //         ) : (
-  //           <FiChevronDown onClick={() => setIsShowingReplies(true)} />
-  //         )}
-  //         {`${updateData["replies"].length} Replies`}
-  //       </div>
-  //     );
-  //   };
+//   const RepliesInfoRow = () => {
+//     if (!updateData["replies"]) return null;
+//     return (
+//       <div>
+//         {isShowingReplies ? (
+//           <FiChevronUp onClick={() => setIsShowingReplies(false)} />
+//         ) : (
+//           <FiChevronDown onClick={() => setIsShowingReplies(true)} />
+//         )}
+//         {`${updateData["replies"].length} Replies`}
+//       </div>
+//     );
+//   };
 //OFFER TO HELP PENDING
 /*
   
