@@ -23,13 +23,22 @@ const UpdateBox = ({
   const userId = ctrctx.user && ctrctx.user.id;
   const userName = ctrctx.user && ctrctx.user.displayName;
   const isCurrentUser = updateData.author == userName;
+  const isOfferHelp = updateData["type"] == "offer to help";
+  const isRequestHelp =  updateData["type"] && (updateData["type"] == "request help" );
+  const hasOfferedHelp = updateData["replies"]&&updateData["replies"].filter((rep)=>(rep.type==="offer to help" && rep.author == userName)).length>0;
+  const isRequestHelpDone = updateData["status"] && updateData["status"] != "done";
+
+
+
+
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingReply, setIsReplyEditing] = useState(false);
   const [isShowingReplies, setIsShowingReplies] = useState(false);
   const [activeReply, setActiveReply] = useState(null);
   const [isHovering, setIsHovering] = useState(false);
-
   const [editContent, setEditContent] = useState("");
+
+
 
   let content = updateData["content"];
  
@@ -71,9 +80,27 @@ const UpdateBox = ({
           <span className={"stage"}> {`  •  ${updateData["stage"]}`}</span>
         </div>
 
-        {isHovering &&
+        {
+        isHovering &&
           (isCurrentUser ? (
             <div className={"icons"}>
+            { isRequestHelp&&isRequestHelpDone &&<ButtonOne
+            onClick={() => {
+              // setActiveReply(
+              //   cleanReplyModel({
+              //     author: userName,
+              //     authorId: userId,
+              //     date: Date.now(),
+              //     type: "offer to help"
+              //   })
+              // );
+              // setEditContent("");
+              // content = "";
+              // setIsReplyEditing(true);
+            }}
+          >
+            Done?
+          </ButtonOne> }
               <AiOutlineEdit
                 className="icon"
                 size={18}
@@ -105,9 +132,7 @@ const UpdateBox = ({
                 }}
               />
             </div>
-          ) : updateData["type"] == "request help" &&
-            updateData["status"] &&
-            updateData["status"] != "done" &&
+          ) : isRequestHelp &&isRequestHelpDone  &&
             !hasOfferedHelp ? (
             <div className={"icons"}>
               <ButtonOne
@@ -371,11 +396,11 @@ const UpdateBox = ({
         setIsHovering(false);
       }}
     >
-      {updateData["type"] == "offer to help" ? (
+      {isOfferHelp? (
         <OfferHelp>
           <div className="flag">Help Offered</div>
         </OfferHelp>
-      ) : updateData["type"] == "request help" ? (
+      ) : isRequestHelp ? (
         <HelpReq>
           <div className="flag">Help Requested</div>
         </HelpReq>
