@@ -8,6 +8,7 @@ const UpdateReply = ({
   reply,
   userName,
   isEditing = false,
+  updateReplyStatus = (id, newStatus) => {},
   setIsEditing = () => {},
   deleteReply = () => {},
 }) => {
@@ -18,11 +19,8 @@ const UpdateReply = ({
     return (
       <div className={"topbar"}>
         <div className={"author"}>{reply["author"]}</div>
-
-
-        { isHovering && isCurrentUser &&
-         ( <div className={"icons"}>
-           
+        {isHovering && isCurrentUser && (
+          <div className={"icons"}>
             <AiOutlineEdit
               size={18}
               className={"icon"}
@@ -37,9 +35,8 @@ const UpdateReply = ({
                 deleteReply(reply);
               }}
             />
-           
-          </div>)
-    }
+          </div>
+        )}
       </div>
     );
   };
@@ -48,11 +45,12 @@ const UpdateReply = ({
   };
 
   return isEditing ? null : (
-    <div>
-     {(reply["type"]==="offer to help") && <OfferHelp>
-        <div className="flag">Help Offered</div>
-      </OfferHelp>
-    }
+    <div style={{paddingTop:'10px'}}>
+      {reply["type"] === "offer to help" && (
+        <OfferHelp status={reply["status"]} type={reply["type"]}>
+          <div className="flag">Help Offered</div>
+        </OfferHelp>
+      )}
 
       <ReplyBoxCSS
         key={reply["id"]}
@@ -69,24 +67,14 @@ const UpdateReply = ({
         <div className={"date"}>{formatTimestamp(reply["date"])}</div>
         <ContentRow />
         <FlexRow>
-        <ButtonOne
+         {reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
             onClick={() => {
-            //   setActiveReply(
-            //     cleanReplyModel({
-            //       author: userName,
-            //       authorId: userId,
-            //       date: Date.now(),
-            //       type: "offer to help"
-            //     })
-            //   );
-            //   setEditContent("");
-            //   content = "";
-            //   setIsReplyEditing(true);
+              updateReplyStatus(reply.id, "done");
             }}
           >
             Done?
-          </ButtonOne>
-          </FlexRow>
+          </ButtonOne>}
+        </FlexRow>
       </ReplyBoxCSS>
     </div>
   );
@@ -134,7 +122,6 @@ const ReplyBoxCSS = styled.div`
     max-height: 18px;
     height: 18px;
     display: flex;
-
   }
   .icon {
     cursor: pointer;
@@ -163,8 +150,8 @@ const ReplyBoxCSS = styled.div`
 `
       : type === "offer to help" && status === "done"
       ? `
-  background-color: #EAA828;
-  border: 2px solid #cb0101;
+      background-color: #E6FAF5;
+      border: 2px solid #0CC998;
   border-radius: 5px 0px 5px 5px ;
 `
       : `border-left:1px solid #0CC998;`}
@@ -174,11 +161,10 @@ const OfferHelp = styled.div`
   height: 18px;
   display: flex;
   width: 100%;
-  margin-left:10px;
+  margin-left: 10px;
   justify-content: flex-end;
   .flag {
     width: 120px;
-    background-color: #eaa828;
     color: white;
     border-radius: 5px 5px 0px 0px;
     padding-left: 10px;
@@ -187,6 +173,12 @@ const OfferHelp = styled.div`
     font-style: normal;
     font-weight: bold;
     font-size: 11px;
+    ${({ type, status }) =>
+      type === "offer to help" && status === "done"
+        ? `
+  background-color: #0CC998;
+`
+        : `background-color: #eaa828;`}
   }
 `;
 
@@ -206,9 +198,21 @@ const ButtonOne = styled.button`
   border: none;
 `;
 
-
 const FlexRow = styled.div`
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 `;
+
 export default UpdateReply;
+
+//   setActiveReply(
+//     cleanReplyModel({
+//       author: userName,
+//       authorId: userId,
+//       date: Date.now(),
+//       type: "offer to help"
+//     })
+//   );
+//   setEditContent("");
+//   content = "";
+//   setIsReplyEditing(true);
