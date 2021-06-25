@@ -24,6 +24,7 @@ export default function LeftPanel() {
             <section>
                 <PhotoUrl src={user && user.photoUrl} alt='Profile' />
                 {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
+                {user&& user.isAdmin && <MemberType>Admin</MemberType>}
             </section>
             <Line />
             <div className="active" id="overviewSideLink" onClick={()=>{
@@ -42,6 +43,14 @@ export default function LeftPanel() {
     )
 }
 
+
+const MemberType = styled.h2`
+font-family: 'Baloo 2';
+  font-size:20px;
+  width: 100%;
+  text-align:center;
+  color:#000000;
+`
 
 
 const Line = styled.hr`

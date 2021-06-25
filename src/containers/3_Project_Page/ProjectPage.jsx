@@ -12,7 +12,8 @@ import {
 } from "./Modules/modules";
 import {
   HelpRequestsModal, 
-  LadderModal
+  LadderModal,
+  EditProjectModal
 } from "./Modals/index"
 
 
@@ -47,9 +48,9 @@ export default function ProjectPage() {
       <Row>
         <LeftPanel />
         {projectData["isArchived"] ? (
-          <ArchivedProjectPage projectData={projectData}/>
+          <ArchivedProjectPage projectData={projectData} user={appCtx.user}/>
         ) : (
-         <ActiveProjectPage projectData={projectData}/>
+         <ActiveProjectPage projectData={projectData} user={appCtx.user}/>
         )}
       </Row>
     </ProjectContext.Provider>
@@ -57,11 +58,12 @@ export default function ProjectPage() {
 }
 
 
-const ActiveProjectPage = ({projectData}) => {
+const ActiveProjectPage = ({projectData, user}) => {
 
 
   const [isLadderModalOpen,setIsLadderModalOpen] =useState(false);
   const [isUpdatesModalOpen,setIsUpdatesModalOpen] =useState(false);
+  const [isEditProjectModalOpen,setIsEditProjectModalOpen] =useState(false);
   const [ladderModalData,setLadderModalData] =useState(null);
   const [isOnlyHelpUpdates,setIsOnlyHelpUpdates] =useState(false);
 
@@ -85,8 +87,6 @@ const ActiveProjectPage = ({projectData}) => {
       setLadderModalData(row);
   }
 
-
-
   function closeLadderModal(){
     //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
     var uri = window.location.toString();
@@ -100,6 +100,7 @@ const ActiveProjectPage = ({projectData}) => {
 
   function openUpdatesModal() {  setIsLadderModalOpen(false); setIsUpdatesModalOpen(true);}
   function closeUpdatesModal() {setIsUpdatesModalOpen(false);}
+  function closeEditProjectModal() {setIsEditProjectModalOpen(false);}
 
   return (
     <ContentContainer>
@@ -116,14 +117,20 @@ const ActiveProjectPage = ({projectData}) => {
           helpRequests={helpRequests}
           isOnlyHelpUpdates={isOnlyHelpUpdates} >
       </HelpRequestsModal>
+      <EditProjectModal
+          projectData={projectData}
+          isOpen={isEditProjectModalOpen}
+          onRequestClose={closeEditProjectModal}>
+      </EditProjectModal>
 
     <Flex>
       <ProjectInfoModule 
           projectData={projectData}
           setIsUpdatesModalOpen={openUpdatesModal}
+          setIsEditProjectModalOpen={()=>setIsEditProjectModalOpen(true)}
           totalUpdates={totalUpdates}
           helpRequests={helpRequests}
-
+          isUserAdmin={user && user.isAdmin}
       />
       <AtAGlanceModule projectData={projectData} />
     </Flex>
@@ -135,7 +142,7 @@ const ActiveProjectPage = ({projectData}) => {
   );
 }
 
-const ArchivedProjectPage = ({projectData}) => {
+const ArchivedProjectPage = ({projectData , user}) => {
 
   let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
 
