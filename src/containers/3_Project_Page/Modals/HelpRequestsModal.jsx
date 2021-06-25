@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
 import * as styles from "styles/sharedStyles";
-import ProjectContext from '../../../ProjectContext';
+import ProjectContext from '../ProjectContext';
 import ControlContext from "shared/control-context";
 import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import { cleanUpdateModel } from "data_models/updatemodel";
