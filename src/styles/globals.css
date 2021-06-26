@@ -9,6 +9,8 @@
     --gray: #EEEEEE;
 
     --black: #000;
+    --primary-green: #0CC998, 100%;
+
     
 }
 
@@ -35,3 +37,21 @@ body {
 p, h1, h2, h3, h4, h5, h6,  div, li {
     font-family: 'Inter';
 }
+
+h1 {
+    font-family: 'Baloo 2';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 60px;
+    color: var(--primary-green);
+}
+
+/*Section Header*/
+h2 { 
+    font-family: 'Baloo 2';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 26px;
+    color: var(--black);
+}
+
