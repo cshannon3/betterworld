@@ -187,7 +187,7 @@ color: #000000;
 
 export const GreyTitleBar = styled.div`
 height:38px;
-background: grey;
+background: #E3E7EA;
 border-radius: 3px 3px 0px 0px;
 display: flex;
 align-items: center;

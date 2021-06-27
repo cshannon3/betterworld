@@ -15,7 +15,7 @@ import {
 import {
   HelpRequestsModal,
   LadderModal,
-  EditProjectModal
+  EditProjectInfoModal
 } from "./Modals/index"
 
 
@@ -123,11 +123,11 @@ const ActiveProjectPage = ({projectData, user}) => {
           helpRequests={helpRequests}
           isOnlyHelpUpdates={isOnlyHelpUpdates} >
       </HelpRequestsModal>
-      <EditProjectModal
+      <EditProjectInfoModal
           projectData={projectData}
           isOpen={isEditProjectModalOpen}
           onRequestClose={closeEditProjectModal}>
-      </EditProjectModal>
+      </EditProjectInfoModal>
 
     <Flex>
       <ProjectInfoModule

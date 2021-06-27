@@ -1,7 +1,8 @@
 import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import { useAsyncDebounce } from 'react-table';
-
+import { AvatarGroup } from '@material-ui/lab';
+import { Avatar } from '@material-ui/core';
 //import styles from './search.module.css';
 import styled from "styled-components"
 
@@ -13,8 +14,6 @@ import ProjectContext from '../ProjectContext';
 
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
-
-
 
 
 function LadderModule({projectData, openLadderModal}) {
@@ -52,11 +51,11 @@ function LadderModule({projectData, openLadderModal}) {
             Header: 'Name',
             accessor: 'name',
             Cell: ({ cell }) => (
-                <SectionTitle value={cell.value} 
+                <styles.RegularBodyText value={cell.value} 
                  onClick={()=>openLadderModal(cell.row.original)}
                 >
                   {cell.value}
-                </SectionTitle>
+                </styles.RegularBodyText>
               ),
               width:200
         },
@@ -65,9 +64,15 @@ function LadderModule({projectData, openLadderModal}) {
             Header: 'Team',
             accessor: 'id',
             Cell: ({ cell }) => (
-                <span >
-                  {contributors[cell.value].join(", ")}
-                </span>
+                <div >
+                    <AvatarGroup max={4}>
+            
+                            <Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+                            <Avatar alt="Travis Howard" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+                            
+                    </AvatarGroup>
+                  {/* {contributors[cell.value].join(", ")} */}
+                </div>
               )
         },
         {
@@ -75,8 +80,10 @@ function LadderModule({projectData, openLadderModal}) {
             accessor: 'status',
             Cell: ({ cell }) => (
                 <div>
+                <styles.RegularBodyText>
                   {cell.value} 
                   <br/>({statuses[cell.row.original.id]})
+                </styles.RegularBodyText>
                 </div>
             )
         },
@@ -85,9 +92,11 @@ function LadderModule({projectData, openLadderModal}) {
             accessor: 'updates',
             Cell: ({ cell }) => (
                 <div >
+                    <styles.RegularBodyText>
                   {cell.value ? cell.value.length : 0} Updates
                   <br/> 
                   {cell.value ? cell.value.filter(update=>update["type"] == "request help").length : 0} Help Requests
+                    </styles.RegularBodyText>
                 </div>
               )
         },
@@ -104,7 +113,7 @@ function LadderModule({projectData, openLadderModal}) {
             });
         },
     }), [])
-
+    
     const {
         getTableProps,
         getTableBodyProps,
@@ -124,7 +133,7 @@ function LadderModule({projectData, openLadderModal}) {
                 <div>
                     <span>Sections Overview</span>
                 </div> 
-                
+                <button>edit sections</button>
             </TitleBar>
          
             <table  {...getTableProps()} >
@@ -189,6 +198,7 @@ const TaskOverviewBox = styled.div`
   height:calc( 50% - 20px );
   margin-top:20px; 
 `
+
 const TableSection = styled.section`
     table {
         width:100%;
@@ -216,12 +226,12 @@ const TableSection = styled.section`
 `;
 
 
-const SectionTitle = styled.div`
-font-family: 'Baloo 2';
-font-size: 18px;
-font-weight: 500;
-width:300px;
-`;
+// const SectionTitle = styled.div`
+// font-family: 'Baloo 2';
+// font-size: 18px;
+// font-weight: 500;
+// width:300px;
+// `;
 
 
 const TableRow = styled.tr`

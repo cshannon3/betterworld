@@ -19,7 +19,7 @@ const StyledModal = Modal.styled`
   background-color:white;
   border-radius: 10px;
 `;
-export default function EditProjectModal({
+export default function EditProjectInfoModal({
     projectData,
     updateProject = () =>{},
     isOpen, 
@@ -39,7 +39,7 @@ export default function EditProjectModal({
     const [inputFileList, setInputFileList] = useState([
       { name: "", description: "", file: null },
     ]);
-    
+    const [sectionsList, setSectionsList] = useState(projectData.sections??[]);
     const onImageChange = (e, index) => {
       const reader = new FileReader();
       let file = e.target.files[0]; // get the supplied file
@@ -67,6 +67,12 @@ export default function EditProjectModal({
       const list = [...inputList];
       list[index][name] = value;
       setInputList(list);
+    };
+    const handleSectionChange = (e, index) => {
+      const { name, value } = e.target;
+      const list = [...sectionsList];
+      list[index][name] = value;
+      setSectionsList(list);
     };
     // handle click event of the Add button
     const handleAddClick = () => {
@@ -220,6 +226,34 @@ export default function EditProjectModal({
               })}
             </ResourceTab>
             <h2>Sections</h2>
+            {sectionsList.map((x, i) => {
+                return (
+                  <div>
+                  <InputBox>
+                    <input
+                      name="name"
+                      placeholder="Enter Resource Name"
+                      value={x.name}
+                      onChange={(e) => handleSectionChange(e, i)}
+                    />
+                    <div className="btn-box">
+                      {sectionsList.length !== 1 && (
+                        <button
+                          className="mr10"
+                          onClick={() => handleRemoveClick(i)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                     
+                    </div>
+                  </InputBox>
+                
+                  </div>
+                   
+                );
+              })}
+            <AddSectionButton onClick={handleAddClick}>Add Section</AddSectionButton>
             <h2>Target Date</h2>
             <h2>Schedule Events</h2>
             <button onClick={handleUpload}>Submit</button>
@@ -228,11 +262,8 @@ export default function EditProjectModal({
         </StyledModal>
     );
   }
-  
- 
   const FormStyle = styled.div`
       padding:20px;
-     
       input{
         width:80%;
       }
@@ -243,3 +274,12 @@ export default function EditProjectModal({
   `;
 
 
+  const InputBox = styled.div`
+    display:flex;
+    padding-left: 30px;
+  `;
+
+
+  const AddSectionButton = styled.button`
+  margin-left: 30px;
+  `;

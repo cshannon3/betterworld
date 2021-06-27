@@ -4,6 +4,9 @@ import styled from "styled-components";
 import * as styles from '../../../styles/sharedStyles';
 import docIcon from 'assets/Landing/google-docs.png';
 import sheetsIcon from 'assets/Landing/google-sheets.png';
+import { AvatarGroup } from '@material-ui/lab';
+import { Avatar } from '@material-ui/core';
+
 
 //goal of at a glance: people photos, resource # and repsonisbilities
 
@@ -54,13 +57,20 @@ export default function AtAGlanceModule({ projectData }) {
           <Box>
             <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
 
-              {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
+          <AvatarGroup max={4}>
+            <Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+            <Avatar alt="Travis Howard" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+            <Avatar alt="Cindy Baker" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+            <Avatar alt="Agnes Walker" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+            <Avatar alt="Trevor Henderson" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
+          </AvatarGroup>
+              {/* {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
 
                 // projectData["contributors"].map((data) => (
                 //   <UserText>{data.name},</UserText>
                 // ))
                 
-                }
+                } */}
           </Box>
         
         </Row>
