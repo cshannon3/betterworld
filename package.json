@@ -24,6 +24,7 @@
     "react-dom": "^17.0.1",
     "react-icons": "^4.2.0",
     "react-images-upload": "^1.2.8",
+    "react-mentions": "^4.3.0",
     "react-modal": "^3.13.1",
     "react-multi-select-component": "^4.0.2",
     "react-responsive": "^8.2.0",

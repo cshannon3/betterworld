@@ -17,8 +17,6 @@ fuzzyTextFilterFn.autoRemove = (value) => !value;
 
 
 function LadderModule({projectData, openLadderModal}) {
-   // const ctx = useContext(ProjectContext);
-    
    const data = projectData["sections"];
     let contributors = {};
     let statuses = {}
@@ -113,7 +111,7 @@ function LadderModule({projectData, openLadderModal}) {
             });
         },
     }), [])
-    
+
     const {
         getTableProps,
         getTableBodyProps,

@@ -23,7 +23,7 @@ import AddItemPage from 'containers/Add_Item_Page/AddItemPage'
 import { ModalProvider } from 'styled-react-modal';
 import data from "dummydata";
 import { useMediaQuery } from 'react-responsive';
- 
+
 
 let userListener, projectsListener, committeesListener;
 

@@ -4,7 +4,7 @@ import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import { MyEditor } from "../MyEditor/MyEditor";
+import { MyEditor, MyEditor2 } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { BsReply } from "react-icons/bs";
 import { cleanReplyModel } from "data_models/updatemodel";
@@ -41,9 +41,11 @@ const UpdateBox = ({
   const [isHovering, setIsHovering] = useState(false);
   const [editContent, setEditContent] = useState("");
 
-  let content = updateData["content"];
+  let content = ""; 
+  //updateData["content"];
 
   useEffect(() => {
+
     // Update the document title using the browser API
   });
 
@@ -181,7 +183,7 @@ const UpdateBox = ({
   function ContentRowEdit() {
     return (
       <div className={"content"}>
-        <MyEditor
+        <MyEditor2
           content={content}
           onSave={(val) => {
             const newUpdateData = { ...updateData, content: val };
@@ -301,7 +303,7 @@ const UpdateBox = ({
             </select>
           </div>
         </FlexRow>
-        <MyEditor
+        <MyEditor2
           content={editContent}
           onChange={(val) => {
             content = val;
@@ -408,12 +410,15 @@ const UpdateBox = ({
     <div
       key={updateData["id"]}
       onMouseEnter={() => {
-        setEditContent(content);
+        console.log(editContent);
+        //setEditContent(content);
         setIsHovering(true);
       }}
       onMouseLeave={() => {
         //   console.log(content);
+        console.log(editContent);
         setEditContent(content);
+        console.log(content);
         setIsHovering(false);
       }}
     >
