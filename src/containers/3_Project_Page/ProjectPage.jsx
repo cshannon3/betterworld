@@ -4,6 +4,8 @@ import LeftPanel from "containers/Panels/LeftPanel";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import Tooltip from "@material-ui/core/Tooltip";
+import { useMediaQuery } from 'react-responsive';
+ 
 
 import {
   LadderModule,
@@ -30,6 +32,8 @@ export default function ProjectPage() {
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
+
+  
   return (
     <ProjectContext.Provider
       value={{
@@ -46,6 +50,7 @@ export default function ProjectPage() {
         },
       }}
     >
+
       <Row>
         <LeftPanel />
         {projectData["isArchived"] ? (
@@ -144,6 +149,7 @@ const ActiveProjectPage = ({projectData, user}) => {
 }
 
 const ArchivedProjectPage = ({projectData , user}) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
   let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
 
@@ -152,8 +158,8 @@ return (<Con>
               <PageSubtitleText>CMU AGAINST ICE</PageSubtitleText>
               <PageTitleText>{projectData.name} (Archived)</PageTitleText>
             </div>
-            <Flex>
-              <GalleryStyle>
+            <Flex isMobile={isMobile}>
+              <div className={"GalleryStyle"}>
                 <Slideshow
                   images={
                     projectData["display_images"] ??
@@ -161,7 +167,7 @@ return (<Con>
                     []
                   }
                 />
-              </GalleryStyle>
+              </div>
               <AtAG>
                 <PageSubtitleText>Timespan</PageSubtitleText>
                 <EmphasizedSmallBodyText>March 2020</EmphasizedSmallBodyText>
@@ -183,7 +189,7 @@ return (<Con>
               </AtAG>
             </Flex>
             <div>
-              <Flex>
+              <Flex isMobile={isMobile}>
                 <OverviewTextStyle>
                   <PageSubtitleText>Description</PageSubtitleText>
                   <RegularBodyText>
@@ -234,8 +240,24 @@ const UserText = styled.div`
 const Flex = styled.div`
   display: flex;
   width: 100%;
-  height:50%;
+  
+  ${({ isMobile }) =>
+    isMobile
+      ? `
+  flex-direction: column;
+
+`
+      :`height:50%;
+      .GalleryStyle{
+        width: 50%;
+        height: 50vh;
+      }
+      `}
+
+
 `;
+
+
 const AtAG = styled.div`
   padding-left: 10px;
   padding-top: 40px;

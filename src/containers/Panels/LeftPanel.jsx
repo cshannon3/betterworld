@@ -8,8 +8,13 @@ import EarthIcon from '../../assets/Panel/planet-earth1.png'
 import UserIcon from '../../assets/Panel/user1.png'
 import { useHistory } from "react-router-dom";
 import './panel.css';
+import { Drawer } from '@material-ui/core';
 
 // TODO highlight the active tab
+//https://material-ui.com/components/drawers/
+import { useMediaQuery } from 'react-responsive';
+ 
+
 
 export default function LeftPanel() {
     const {
@@ -17,9 +22,16 @@ export default function LeftPanel() {
         logoutUser,
     } = useContext(ControlContext);
     let history = useHistory();
+    const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
-
-    return (
+    console.log(isMobile);
+    return isMobile? (
+      <Drawer
+          variant={isMobile?"temporary":"permenant"}
+          anchor="left"
+          open={false}
+          onClose={()=>{}}
+        >
         <Panel>
             <section>
                 <PhotoUrl src={user && user.photoUrl} alt='Profile' />
@@ -40,7 +52,27 @@ export default function LeftPanel() {
             </div>
             <LogoutBtn className='logoutBtn' onClick={() => logoutUser()}>Log Out</LogoutBtn>
         </Panel>
-    )
+        </Drawer>
+    ): (<Panel>
+            <section>
+                <PhotoUrl src={user && user.photoUrl} alt='Profile' />
+                {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
+                {user&& user.isAdmin && <MemberType>Admin</MemberType>}
+            </section>
+            <Line />
+            <div className="active" id="overviewSideLink" onClick={()=>{
+              history.push("/");
+            }}>
+                <PhotoIcon src={EarthIcon} alt='Overview' />
+                <MenuText>OVERVIEW</MenuText>
+            </div>
+           
+            <div id="myInfoSideLink">
+                <PhotoIcon src={UserIcon} alt='Projects' />
+                <MenuText>MY INFO</MenuText>
+            </div>
+            <LogoutBtn className='logoutBtn' onClick={() => logoutUser()}>Log Out</LogoutBtn>
+        </Panel> )
 }
 
 

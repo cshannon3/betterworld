@@ -8,11 +8,17 @@ import {committeeIcons} from "dummydata"
 import { NavLink } from 'react-router-dom'
 import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
 
+import { useMediaQuery } from 'react-responsive';
+ 
+
+
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
   let projectsData= ctrctx.getProjectsData();
   projectsData = projectsData?Object.values(projectsData):[];
-  
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
+
+
   
   const committeeData = Object.values(ctrctx.getCommitteesData());
   const quickData = ctrctx.data["quick_links"];
@@ -37,7 +43,7 @@ export default function Landing() {
   return (
     <RowWrapper>
       <LeftPanel />
-      <ContentContainer>
+      <ContentContainer isMobile={isMobile}>
         <OverviewSection>
           <PageSubtitleText>BETTERWORLD</PageSubtitleText>
           <PageTitleText>CMU Against ICE</PageTitleText>
@@ -140,7 +146,11 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  max-width: calc(100vw - 170px);
+  ${({ isMobile }) =>
+  isMobile ?
+  ` max-width: calc(100vw );
+`: `max-width: calc(100vw - 170px);`
+}
   padding: 3vh 40px 10vh 40px;
  
 `

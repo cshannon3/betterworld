@@ -22,7 +22,8 @@ import CommitteePage from 'containers/CommitteePage/CommitteePage'
 import AddItemPage from 'containers/Add_Item_Page/AddItemPage'
 import { ModalProvider } from 'styled-react-modal';
 import data from "dummydata";
-
+import { useMediaQuery } from 'react-responsive';
+ 
 
 let userListener, projectsListener, committeesListener;
 
@@ -30,7 +31,10 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [projectsData, setProjectsData] = useState(null);
   const [committeesData, setCommitteesData] = useState(null)
-  //const [currentProjectID, setCurrentProjectID] = useState(null);
+
+  const isBigScreen = useMediaQuery({ query: '(min-device-width: 1824px)' })
+  //const isMobile = useMediaQuery({ query: '(max-width: 1224px)' })
+  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
 
   function setupProjectListener(){
     projectsListener = getProjects({groupID:"cmu-against-ice"}).onSnapshot(function (querySnapshot) {
@@ -84,6 +88,7 @@ function setupCommitteeListener(){
       <React.Fragment>
         <ControlContext.Provider
           value={{
+            //isMobile:()=>{return useMediaQuery({ query: '(max-width: 1224px)' })},
             data: data,
             user, // ID of current user
             projectsData:projectsData,
@@ -163,13 +168,16 @@ function setupCommitteeListener(){
               <Route path="/addItem" component={AddItemPage} />
                 <Route path="/project/:projectId" component={ProjectPage} />
                 <Route path="/committee/:committeeId" component={CommitteePage} />
+                <Route path="/:groupId" component={Landing}/>
+                
                 <Route exact path="/">
                   {/*Conditional rendering based on whether user logged in*/}
                   {user ? <Landing /> : <Splash />}
                 </Route>
+                
+
               </Switch>
             </div>
-
           </ModalProvider>
         </ControlContext.Provider>
       </React.Fragment>

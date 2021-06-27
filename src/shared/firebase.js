@@ -29,7 +29,6 @@ export function getUserRef(userId) { return db.collection("users").doc(userId); 
 
 // export const getProjectRef = id => { return db.collection('projects').doc(id);};
 
-
 export async function createNewUser(result) {
     let data = {
         "id": result.user.uid,
@@ -42,6 +41,13 @@ export async function createNewUser(result) {
     await setUserData(result.user.uid, data);
     return data;
 }
+
+
+export async function moveUsers(committeeId, committeeData) {
+    // Add team
+    await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
+}
+
 
 
 export async function getUserData(userId) {
@@ -65,6 +71,8 @@ export async function updateUserData(userId, data) { await getUserRef(userId).up
 //     // Add team
 //     await getProjectRef(projectId).update(projectData);
 // }
+
+
 
 
 export const getProjects = ({ groupID = "cmu-against-ice" }) => { 
