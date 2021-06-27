@@ -22,14 +22,16 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
 
     const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
-
     const [selectorOpen, setSelectorOpen] = useState(null);
+    
+
 
     const InnerComponent = () =>{
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
         const stages = data["stages"].map((st)=>st.name);
+        // TODO connect to users    
         return (
             <WidgetContainer>
                 <MainContainer>
@@ -50,7 +52,7 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                         </div>
                         </div>
                         <div className="tasks">
-                            <StagesComponent data={data && data["stages"]} /> 
+                            <StagesComponent data={data["stages"].map((dd)=>{ return {...dd, "contributors": [...data["contributors"].filter((c)=>c.projects[ctx.data.id].roles.filter((r)=>r.stageId===dd.id).length)]} })} /> 
                         </div>
                         <div className="buttons" >
                             <AddUpdateComponent

@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
+import {allUsers} from 'data/users';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -43,11 +44,103 @@ export async function createNewUser(result) {
 }
 
 
-export async function moveUsers(committeeId, committeeData) {
-    // Add team
-    await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
-}
+export const getMembers = ({ groupID = "cmu-against-ice" }) => { 
+    return db.collection("groups").doc(groupID).collection('members'); 
+};
 
+// export async function moveUsers() {
+//     // Add team
+//     // db.collection("users").
+//     // await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
+//     // committeesListener = 
+
+//     let  _usersData = {};
+//     allUsers.forEach((u)=>{
+//         _usersData[u.email] = {...u, userType:"member", isSignedOn:false, } ;
+//     });
+//     const users = await db.collection("users").get();
+//     users.forEach((doc)=>{
+//         const d = doc.data();
+        
+//         if(d.email in _usersData){
+//             _usersData[d.email] = {..._usersData[d.email], ...d, id:doc.id, isSignedOn:true, userType:"member"}
+//             console.log(_usersData[d.email]);
+//         }
+//         else {
+//             _usersData[d.email] = {...d, id:doc.id,isSignedOn:true, userType:"guest", name: d.displayName, bio:"", pronouns:""}
+//         }
+        
+
+//     });
+
+//     const members = db.collection("groups").doc("cmu-against-ice").collection('members');
+//     for (var k in _usersData ){
+//        members.doc(k).set({..._usersData[k]});
+//     }
+    
+// }
+
+
+// export async function updateContributors() {
+//     // Add team
+//     // db.collection("users").
+//     // await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
+//     // committeesListener = 
+
+//     let  _usersData = {};
+//     const members = await db.collection("groups").doc("cmu-against-ice").collection('members').get();
+//     members.forEach((doc)=>{
+//          _usersData[doc.id] = {...doc.data(), projects:{}, committees:{}};
+//     });
+
+//     const projects = await db.collection("groups").doc('cmu-against-ice').collection('projects').get();
+    
+//     projects.forEach((doc)=>{
+//         const d = doc.data();
+//         if("contributors" in d){
+//             d.contributors.forEach((y)=>{
+//                 if(y.email && y.email in _usersData){
+//                     let proj = {"projectName":d.name, "roles":[]}; // Roles are parts where they are directly accountable -- can be project, section, or stage, and types
+//                     if("sections" in d){
+//                         d.sections.forEach((s)=>{
+//                             if("stages" in s){
+//                                 s.stages.forEach((st)=>{
+//                                     if("contributors" in st){
+                                       
+//                                         st.contributors.forEach((c)=>{
+//                                             console.log(c.name)
+//                                             if(_usersData[y.email].name.includes(c.name)){
+//                                                 console.log( c.name)
+//                                                 proj["roles"].push({
+//                                                     "section":s.name,
+//                                                     "sectionId":s.id,
+//                                                     "stage": st.name,
+//                                                     "stageId":st.id,
+//                                                     "role": "lead",
+//                                                     "type": st.type,
+//                                                 })
+//                                             }
+//                                         });
+//                                     }
+//                                 });
+//                             }
+//                         });
+//                     }
+//                     _usersData[y.email]["projects"][doc.id]=proj;
+//                 }
+//             });
+//         }
+
+       
+//     });
+//     console.log(_usersData);
+
+//     const membersRef = await db.collection("groups").doc("cmu-against-ice").collection('members');
+//     for (var k in _usersData ){
+//        membersRef.doc(k).set({..._usersData[k]});
+//     }
+    
+// }
 
 
 export async function getUserData(userId) {

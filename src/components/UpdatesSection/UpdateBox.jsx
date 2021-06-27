@@ -124,7 +124,7 @@ const UpdateBox = ({
                 }}
               />
             </div>
-          ) : isRequestHelp && isRequestHelpDone && !hasOfferedHelp ? (
+          ) : isRequestHelp && !isRequestHelpDone && !hasOfferedHelp ? (
             <div className={"icons"}>
               <ButtonOne
                 onClick={() => {
@@ -410,15 +410,15 @@ const UpdateBox = ({
     <div
       key={updateData["id"]}
       onMouseEnter={() => {
-        console.log(editContent);
+        //console.log(editContent);
         //setEditContent(content);
         setIsHovering(true);
       }}
       onMouseLeave={() => {
         //   console.log(content);
-        console.log(editContent);
+        //console.log(editContent);
         setEditContent(content);
-        console.log(content);
+        //console.log(content);
         setIsHovering(false);
       }}
     >

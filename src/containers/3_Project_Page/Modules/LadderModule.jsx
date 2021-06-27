@@ -16,26 +16,11 @@ import ProjectContext from '../ProjectContext';
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
 
-function LadderModule({projectData, openLadderModal}) {
+function LadderModule({projectData, openLadderModal, contributors}) {
    const data = projectData["sections"];
-    let contributors = {};
+   // let contributors = {};
     let statuses = {}
-    data.forEach((section)=>{
-        let names = [];
-        if(section["stages"]){
-         section.stages.forEach((stage)=>{
-            
-            if(stage["contributors"]){
-                stage["contributors"].forEach((contributor)=>{
-                    if (contributor.name  && !names.includes(contributor.name)){
-                        names.push(contributor.name)
-                    }
-                });
-            }
-        });
-        contributors[section["id"]]=[...names]
-        }
-    });
+   
     data.forEach((section)=>{
         let stat = section["stages"].find((stage)=> stage.name===section["status"])["status"];
         statuses[section["id"]]=stat;
@@ -63,13 +48,14 @@ function LadderModule({projectData, openLadderModal}) {
             accessor: 'id',
             Cell: ({ cell }) => (
                 <div >
-                    <AvatarGroup max={4}>
-            
-                            <Avatar alt="Remy Sharp" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
-                            <Avatar alt="Travis Howard" src="https://lh3.googleusercontent.com/a-/AOh14Gjt8tXXPWL5FbUpVUrMbNlfGeK7S7tr0q-yMPHj3cg=s96-c" />
-                            
-                    </AvatarGroup>
-                  {/* {contributors[cell.value].join(", ")} */}
+                    <AvatarGroup max={3}>
+                        {contributors[cell.value].map((c)=>{
+                            return ("photoUrl" in c) ?
+                               <Avatar alt="Remy Sharp" src={c.photoUrl}/>
+                                 :
+                                 <Avatar alt="Remy Sharp" >{c.name[0]}</Avatar>
+                        })}
+                                 </AvatarGroup>
                 </div>
               )
         },

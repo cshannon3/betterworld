@@ -77,7 +77,9 @@ const ActiveProjectPage = ({projectData, user}) => {
   let helpRequests = [];
   let totalUpdates = [];
 
-  projectData["sections"].forEach((section) => {
+
+
+  projectData["sections"]?.forEach((section) => {
     if (section["updates"])
       section["updates"].forEach((update) => {
         totalUpdates.push({ ...update, section_name: section.name });
@@ -86,11 +88,27 @@ const ActiveProjectPage = ({projectData, user}) => {
         }
       });
   });
+  let contributorsSections = {};
+
+  projectData["sections"]?.forEach((section)=>{
+         
+        let names = [];
+        console.log(projectData["contributors"]);
+        projectData["contributors"]?.forEach((contr)=>{
+            if(contr.projects[projectData.id].roles.filter((role)=>role.sectionId==section.id).length){
+                names.push(contr);
+            }
+        });
+        contributorsSections[section["id"]]=[...names]
+  });
+
+
+
 
   function openLadderModal(row) {
       setIsUpdatesModalOpen(false);
       setIsLadderModalOpen(true);
-      setLadderModalData(row);
+      setLadderModalData({...row, contributors: contributorsSections[row.id]});
   }
 
   function closeLadderModal(){
@@ -143,6 +161,7 @@ const ActiveProjectPage = ({projectData, user}) => {
     <LadderModule
         projectData={projectData}
         openLadderModal={openLadderModal}
+        contributors={contributorsSections}
     />
   </ContentContainer>
   );

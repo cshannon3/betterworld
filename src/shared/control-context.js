@@ -19,7 +19,9 @@ const ControlContext = createContext({
 
   committeesData:null,
   getCommitteeData: ()=>{},
-  getCommitteesData:()=>{}
+  getCommitteesData:()=>{},
+
+  membersData:null,
 
 
 

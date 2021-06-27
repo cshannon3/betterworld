@@ -5,7 +5,6 @@ export default {
       fontWeight: 'normal',
     },
    
-    overflow: 'auto',
      height:'100px',
      maxHeight:'100px', 
   
