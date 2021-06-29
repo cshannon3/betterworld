@@ -5,7 +5,7 @@ import ReactModal from "react-modal";
 
 import LeftPanel from "containers/Panels/LeftPanel";
 
-import ControlContext from "../../shared/control-context";
+import ControlContext from "shared/control-context";
 import ImageUploader from "react-images-upload";
 
 import firebase from "firebase/app";
@@ -16,7 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import MultiSelect from "react-multi-select-component";
-import { allUsers } from "./users";
+import { allUsers } from "data/users";
 import { createProject } from "shared/firebase";
 
 //https://github.com/femioladeji/react-slideshow
@@ -24,6 +24,9 @@ import { createProject } from "shared/firebase";
 //https://jakehartnell.github.io/react-images-upload/
 //https://www.cluemediator.com/add-or-remove-input-fields-dynamically-with-reactjs
 //https://react-slideshow.herokuapp.com/api
+
+
+
 
 export default function AddItemPage() {
   const storage = firebase.storage();
@@ -40,6 +43,8 @@ export default function AddItemPage() {
   const [inputFileList, setInputFileList] = useState([
     { name: "", description: "", file: null },
   ]);
+
+
   const onImageChange = (e, index) => {
     const reader = new FileReader();
     let file = e.target.files[0]; // get the supplied file
@@ -47,8 +52,6 @@ export default function AddItemPage() {
     if (file) {
       reader.onload = () => {
         if (reader.readyState === 2) {
-        //   console.log(file);
-        //   setImage(file);
             const list = [...inputFileList];
             list[index]["file"] = e.target.files[0];
             setInputFileList(list);
@@ -82,7 +85,6 @@ export default function AddItemPage() {
   // handle input change
   const handleInputFileChange = (e, index) => {
     const { name, value } = e.target;
-
     const list = [...inputFileList];
     list[index][name] = value;
     setInputFileList(list);
@@ -111,24 +113,7 @@ export default function AddItemPage() {
     setInputFileList(list);
   };
 
-  const uploadToFirebase = () => {
-    //1.
-    if (image) {
-      //2.
-      const storageRef = storage.ref();
-      //3.
-      const imageRef = storageRef.child(image.name);
-      //4.
-      imageRef
-        .put(image)
-        //5.
-        .then(() => {
-          alert("Image uploaded successfully to Firebase.");
-        });
-    } else {
-      alert("Please upload an image first.");
-    }
-  };
+  // 
 
   function handleUpload(e) {
     console.log("hello");
@@ -318,6 +303,25 @@ const ResourceTab = styled.div`
   padding-left: 30px;
 `;
 
+
+//const uploadToFirebase = () => {
+  //   //1.
+  //   if (image) {
+  //     //2.
+  //     const storageRef = storage.ref();
+  //     //3.
+  //     const imageRef = storageRef.child(image.name);
+  //     //4.
+  //     imageRef
+  //       .put(image)
+  //       //5.
+  //       .then(() => {
+  //         alert("Image uploaded successfully to Firebase.");
+  //       });
+  //   } else {
+  //     alert("Please upload an image first.");
+  //   }
+  // };
 // const cleanReplyModel = (replyData) => {
 //     let d = replyData !== null && replyData !== undefined ? replyData : {};
 //     return {

@@ -10,7 +10,8 @@ const ControlContext = createContext({
   setUser:     ()=>{},
   data:        null,
   projectsData: null,
- 
+  isMobile: ()=>{},
+  isLandscape:false,
   currentProjectID: null,
   setCurrentProjectID: ()=>{},
   getProjectData: ()=>{},
@@ -18,7 +19,9 @@ const ControlContext = createContext({
 
   committeesData:null,
   getCommitteeData: ()=>{},
-  getCommitteesData:()=>{}
+  getCommitteesData:()=>{},
+
+  membersData:null,
 
 
 

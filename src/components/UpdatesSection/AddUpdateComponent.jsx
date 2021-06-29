@@ -2,7 +2,7 @@ import Modal from 'styled-react-modal'
 import { useState } from 'react';
 import styled from "styled-components"
 import * as styles from '../../styles/sharedStyles';
-import { MyEditor } from "../MyEditor/MyEditor";
+import { MyEditor2 } from "../MyEditor/MyEditor";
 import {cleanUpdateModel} from "data_models/updatemodel";
 
 
@@ -79,7 +79,7 @@ const AddUpdateComponent = ({
           }
         </MenuLine>
 
-        <MyEditor
+        <MyEditor2
           content={content}
           onSave={
             (val) => {

@@ -13,7 +13,7 @@ import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 
 // TODO update this to actually be able to handle live data
 const StyledModal = Modal.styled`
-  width: 90vw;
+  width: 500px;
   height: 85vh;
   background-color:white;
   border-radius: 10px;

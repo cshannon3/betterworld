@@ -11,8 +11,7 @@ import styled from "styled-components"
 //in progress, not started, blocked, or Done
 //Has to be done before actual status getting because div has left borer for indicator
 
-const StagesComponent = ({data={}}) => {
-
+const StagesComponent = ({data=[]}) => {
     const columns = useMemo(() => [
         { width: 300, Header: 'Stage', accessor: 'name',
             Cell: ({ cell }) => 
@@ -21,9 +20,10 @@ const StagesComponent = ({data={}}) => {
         { Header: 'People',accessor: 'contributors',
         Cell: ({ cell }) => (
             <div>
-                  {cell.value && cell.value.map((c)=>(
+               
+                   {cell.value && cell.value.map((c)=>(
                       <p>{c.name}</p>
-                      ))}
+                      ))} 
                   </div>
              )
         },
@@ -39,6 +39,8 @@ const StagesComponent = ({data={}}) => {
              Cell: ({ cell }) => (  <LinkBox  > <img src={docIcon}/> </LinkBox> ) },
         // { Header: 'People', accessor: 'contributors', },
     ], []);
+
+
     const filterTypes = useMemo(() => ({
         fuzzyText: fuzzyTextFilterFn,
         text(rows, id, filterValue) {
@@ -62,12 +64,6 @@ const StagesComponent = ({data={}}) => {
     } = useTable({ columns, data, filterTypes }, useGlobalFilter, useSortBy);
 
     return (<TableSection >
-        {/* <TitleBar>
-            <div>
-                <span>Stages</span>
-            </div>
-        </TitleBar> */}
-
         <table  {...getTableProps()}>
             <thead>
                 {headerGroups.map((headerGroup) => (

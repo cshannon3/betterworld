@@ -4,6 +4,8 @@ import LeftPanel from "containers/Panels/LeftPanel";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import Tooltip from "@material-ui/core/Tooltip";
+import { useMediaQuery } from 'react-responsive';
+ 
 
 import {
   LadderModule,
@@ -11,14 +13,16 @@ import {
   AtAGlanceModule,
 } from "./Modules/modules";
 import {
-  HelpRequestsModal, 
-  LadderModal
+  HelpRequestsModal,
+  LadderModal,
+  EditProjectInfoModal
 } from "./Modals/index"
 
 
 import ProjectContext from "./ProjectContext";
 import ControlContext from "../../shared/control-context";
 import { updateProject } from "shared/firebase";
+import { PageTitleText,PageSubtitleText, RegularBodyText, EmphasizedSmallBodyText } from "styles/sharedStyles";
 
 export default function ProjectPage() {
   const appCtx = useContext(ControlContext);
@@ -28,6 +32,8 @@ export default function ProjectPage() {
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
+
+  
   return (
     <ProjectContext.Provider
       value={{
@@ -35,21 +41,22 @@ export default function ProjectPage() {
         updateSection: (sectionData) => {
           let sections = [...projectData["sections"]];
           let s = sections.findIndex((sec) => sec.id == sectionData.id);
-    
+
           sections[s] = sectionData;
           const newData = { ...projectData, sections: sections };
           updateProject(newData.id, newData);
           setProjectData(newData);
-          
+
         },
       }}
     >
+
       <Row>
         <LeftPanel />
         {projectData["isArchived"] ? (
-          <ArchivedProjectPage projectData={projectData}/>
+          <ArchivedProjectPage projectData={projectData} user={appCtx.user}/>
         ) : (
-         <ActiveProjectPage projectData={projectData}/>
+         <ActiveProjectPage projectData={projectData} user={appCtx.user}/>
         )}
       </Row>
     </ProjectContext.Provider>
@@ -57,11 +64,12 @@ export default function ProjectPage() {
 }
 
 
-const ActiveProjectPage = ({projectData}) => {
+const ActiveProjectPage = ({projectData, user}) => {
 
 
   const [isLadderModalOpen,setIsLadderModalOpen] =useState(false);
   const [isUpdatesModalOpen,setIsUpdatesModalOpen] =useState(false);
+  const [isEditProjectModalOpen,setIsEditProjectModalOpen] =useState(false);
   const [ladderModalData,setLadderModalData] =useState(null);
   const [isOnlyHelpUpdates,setIsOnlyHelpUpdates] =useState(false);
 
@@ -69,7 +77,9 @@ const ActiveProjectPage = ({projectData}) => {
   let helpRequests = [];
   let totalUpdates = [];
 
-  projectData["sections"].forEach((section) => {
+
+
+  projectData["sections"]?.forEach((section) => {
     if (section["updates"])
       section["updates"].forEach((update) => {
         totalUpdates.push({ ...update, section_name: section.name });
@@ -78,14 +88,28 @@ const ActiveProjectPage = ({projectData}) => {
         }
       });
   });
- 
+  let contributorsSections = {};
+
+  projectData["sections"]?.forEach((section)=>{
+         
+        let names = [];
+        console.log(projectData["contributors"]);
+        projectData["contributors"]?.forEach((contr)=>{
+            if(contr.projects[projectData.id].roles.filter((role)=>role.sectionId==section.id).length){
+                names.push(contr);
+            }
+        });
+        contributorsSections[section["id"]]=[...names]
+  });
+
+
+
+
   function openLadderModal(row) {
       setIsUpdatesModalOpen(false);
       setIsLadderModalOpen(true);
-      setLadderModalData(row);
+      setLadderModalData({...row, contributors: contributorsSections[row.id]});
   }
-
-
 
   function closeLadderModal(){
     //window.location = window.location.toString().split("#")[0]; // add it as a hash to the URL.
@@ -100,6 +124,7 @@ const ActiveProjectPage = ({projectData}) => {
 
   function openUpdatesModal() {  setIsLadderModalOpen(false); setIsUpdatesModalOpen(true);}
   function closeUpdatesModal() {setIsUpdatesModalOpen(false);}
+  function closeEditProjectModal() {setIsEditProjectModalOpen(false);}
 
   return (
     <ContentContainer>
@@ -116,36 +141,44 @@ const ActiveProjectPage = ({projectData}) => {
           helpRequests={helpRequests}
           isOnlyHelpUpdates={isOnlyHelpUpdates} >
       </HelpRequestsModal>
+      <EditProjectInfoModal
+          projectData={projectData}
+          isOpen={isEditProjectModalOpen}
+          onRequestClose={closeEditProjectModal}>
+      </EditProjectInfoModal>
 
     <Flex>
-      <ProjectInfoModule 
+      <ProjectInfoModule
           projectData={projectData}
           setIsUpdatesModalOpen={openUpdatesModal}
+          setIsEditProjectModalOpen={()=>setIsEditProjectModalOpen(true)}
           totalUpdates={totalUpdates}
           helpRequests={helpRequests}
-
+          isUserAdmin={user && user.isAdmin}
       />
       <AtAGlanceModule projectData={projectData} />
     </Flex>
-    <LadderModule 
+    <LadderModule
         projectData={projectData}
         openLadderModal={openLadderModal}
+        contributors={contributorsSections}
     />
   </ContentContainer>
   );
 }
 
-const ArchivedProjectPage = ({projectData}) => {
+const ArchivedProjectPage = ({projectData , user}) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
   let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
 
 return (<Con>
             <div>
-              <h1>CMU AGAINST ICE</h1>
-              <TitleText>{projectData.name} (Archived)</TitleText>
+              <PageSubtitleText>CMU AGAINST ICE</PageSubtitleText>
+              <PageTitleText>{projectData.name} (Archived)</PageTitleText>
             </div>
-            <Flex>
-              <GalleryStyle>
+            <Flex isMobile={isMobile}>
+              <div className={"GalleryStyle"}>
                 <Slideshow
                   images={
                     projectData["display_images"] ??
@@ -153,15 +186,15 @@ return (<Con>
                     []
                   }
                 />
-              </GalleryStyle>
+              </div>
               <AtAG>
-                <TimeSpanTitle>Timespan</TimeSpanTitle>
-                <TimeSpan>March 2020</TimeSpan>
-                <ArtifactTitle>Contributors</ArtifactTitle>
-               
+                <PageSubtitleText>Timespan</PageSubtitleText>
+                <EmphasizedSmallBodyText>March 2020</EmphasizedSmallBodyText>
+                <PageSubtitleText>Contributors</PageSubtitleText>
+
                 {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>}
-         
-                <ArtifactTitle>Artifacts</ArtifactTitle>
+
+                <PageSubtitleText>Artifacts</PageSubtitleText>
                 <ResourceBox>
                   {projectData["resources"] &&
                     projectData["resources"].map((data) => (
@@ -175,16 +208,16 @@ return (<Con>
               </AtAG>
             </Flex>
             <div>
-              <Flex>
+              <Flex isMobile={isMobile}>
                 <OverviewTextStyle>
-                  <TextSubtitle>Description</TextSubtitle>
-                  <TextBody>
+                  <PageSubtitleText>Description</PageSubtitleText>
+                  <RegularBodyText>
                     {projectData["description"] ?? "No description"}
-                  </TextBody>
+                  </RegularBodyText>
                 </OverviewTextStyle>
                 <OverviewTextStyle>
-                  <TextSubtitle>Outcome</TextSubtitle>
-                  <TextBody>{projectData["outcome"] ?? "No Outcome"}</TextBody>
+                  <PageSubtitleText>Outcome</PageSubtitleText>
+                  <RegularBodyText>{projectData["outcome"] ?? "No Outcome"}</RegularBodyText>
                 </OverviewTextStyle>
               </Flex>
             </div>
@@ -226,8 +259,24 @@ const UserText = styled.div`
 const Flex = styled.div`
   display: flex;
   width: 100%;
-  height:50%;
+  
+  ${({ isMobile }) =>
+    isMobile
+      ? `
+  flex-direction: column;
+
+`
+      :`height:50%;
+      .GalleryStyle{
+        width: 50%;
+        height: 50vh;
+      }
+      `}
+
+
 `;
+
+
 const AtAG = styled.div`
   padding-left: 10px;
   padding-top: 40px;
@@ -242,32 +291,10 @@ const GalleryStyle = styled.div`
   height: 50vh;
 `;
 
-const ArtifactLink = styled.p`
-  font-family: 'Helvetica';
-  font-size: 16px;
-  line-height: 18px;
+const ArtifactLink = styled(RegularBodyText)`
   align-items: center;
 `;
-const ArtifactTitle = styled.h2`
-  font-family: 'Helvetica';
-  font-weight: bold;
-  font-size: 20px;
-  padding-bottom: 10px;
-`;
 
-const TimeSpanTitle = styled.div`
-  font-family:'Baloo 2';
-  font-style: normal;
-  font-weight: bold;
-  font-size: 28.1311px;
-`;
-const TimeSpan = styled.div`
-  font-family: 'Baloo 2';
-  font-style: normal;
-  font-weight: bold;
-  font-size: 40px;
-  padding-bottom: 30px;
-`;
 
 const Contibutors = styled.p`
   font-family: 'Helvetica';
@@ -315,24 +342,24 @@ const EachSlide = styled.div`
 `;
 
 
-const TitleText = styled.h1`
-  font-family: 'Baloo 2';
-  font-style: normal;
-  font-weight: bold;
-  font-size: 60px;
-  line-height: 70px;
+// const TitleText = styled.h1`
+//   font-family: 'Baloo 2';
+//   font-style: normal;
+//   font-weight: bold;
+//   font-size: 60px;
+//   line-height: 70px;
 
-  color: #0cc998;
-`;
+//   color: #0cc998;
+// `;
 
-const TextBody = styled.p`
-  font-family: 'Helvetica';
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 24px;
-  color: #000000;
-`;
+// const TextBody = styled.p`
+//   font-family: 'Helvetica';
+//   font-style: normal;
+//   font-weight: normal;
+//   font-size: 18px;
+//   line-height: 24px;
+//   color: #000000;
+// `;
 
 const Row = styled.div`
   display: flex;
@@ -343,20 +370,20 @@ const ContentContainer = styled.div`
   width: 100%;
   height: 100vh;
   padding: 5vh 50px 3vh 40px;
- 
+
 `;
 
-const TextSubtitle = styled.div`
-  font-family: 'Baloo 2';
-  font-style: normal;
-  font-weight: 800;
-  font-size: 26px;
-  line-height: 41px;
-  display: flex;
-  align-items: center;
-  letter-spacing: -0.02em;
-  color: #000000;
-`;
+// const TextSubtitle = styled.div`
+//   font-family: 'Baloo 2';
+//   font-style: normal;
+//   font-weight: 800;
+//   font-size: 26px;
+//   line-height: 41px;
+//   display: flex;
+//   align-items: center;
+//   letter-spacing: -0.02em;
+//   color: #000000;
+// `;
 
 
   // let helpRequests = [];
@@ -371,7 +398,7 @@ const TextSubtitle = styled.div`
   // }
 
   //const [modalType,setModalType] =useState(null);
-  
+
 
   // console.log(helpRequests);
   //dummyData["Immigration Justice Zine"]

@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import HelpRequestsModal from "../Modals/HelpRequestsModal";
 //need to put in SmallCirclePhoto or CirclePhoto
 
-export default function ProjectInfoModule({projectData, totalUpdates, helpRequests, setIsUpdatesModalOpen, }) {
+export default function ProjectInfoModule({projectData, totalUpdates, helpRequests, setIsUpdatesModalOpen,setIsEditProjectModalOpen, isUserAdmin}) {
  // const ctx = useContext(ProjectContext);
   //const projectData = ctx.data;
   return (
@@ -22,7 +22,13 @@ export default function ProjectInfoModule({projectData, totalUpdates, helpReques
       <DescriptionText>{projectData["description"]}</DescriptionText>
       </div>
       <UpdatesRow >
-        <UpdatesText>{`${totalUpdates.length} Total Updates `}</UpdatesText>
+       { isUserAdmin? 
+      (<UpdatesText
+        onClick={() => {
+          setIsEditProjectModalOpen(true);
+        }}>Edit Project(Admin Only)</UpdatesText>)
+      : <UpdatesText>{`${totalUpdates.length} Total Updates `}</UpdatesText>
+      }
         <UpdatesText
           onClick={() => {
             setIsUpdatesModalOpen(true);

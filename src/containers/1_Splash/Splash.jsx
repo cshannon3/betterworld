@@ -10,13 +10,31 @@ export default function Splash () {
     <LoginContainer>
       <Title>Better<Blue>World</Blue></Title>
       <Subtitle>Virtual Collaboration Made Easy</Subtitle>
+      <FlexRow>
+<div>
+    CMU Against ICE
       <Button id="LoginPage-login-button" onClick={() => appCtx.loginUser()}>
         <Img src={GoogleLogo} />
         Sign In with Google
       </Button>
+</div>
+<div>
+      Activism Now
+      <Button id="LoginPage-login" onClick={() => appCtx.loginUser()}>
+        <Img src={GoogleLogo} />
+        Sign In with Google
+      </Button>
+      </div>
+     </FlexRow>
     </LoginContainer>
   )
 }
+
+const FlexRow = styled.div`
+  display:flex;
+  margin: 40vh auto 0 auto;
+  justify-content:space-evenly
+`
 
 const Title = styled.h1`
   font-size: 72px;
@@ -49,7 +67,7 @@ const Subtitle = styled.h4`
 const Button = styled.button`
   font-size: 18px;
   padding: 20px 20px;
-  margin: 40vh auto 0 auto;
+
   background: #FFFFFF;
   box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.25);
   border: none;

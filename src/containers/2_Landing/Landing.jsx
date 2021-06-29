@@ -6,12 +6,19 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { useHistory } from "react-router-dom";
 import {committeeIcons} from "dummydata"
 import { NavLink } from 'react-router-dom'
+import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
+
+import { useMediaQuery } from 'react-responsive';
+ 
+
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
   let projectsData= ctrctx.getProjectsData();
   projectsData = projectsData?Object.values(projectsData):[];
-  
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
+
+
   
   const committeeData = Object.values(ctrctx.getCommitteesData());
   const quickData = ctrctx.data["quick_links"];
@@ -36,14 +43,14 @@ export default function Landing() {
   return (
     <RowWrapper>
       <LeftPanel />
-      <ContentContainer>
+      <ContentContainer isMobile={isMobile}>
         <OverviewSection>
-          <h3>BETTERWORLD</h3>
-          <h1>CMU Against ICE</h1>
-          <p>We align ourselves with student movements mobilizing with Mijente under the #NoTechForICE campaign and organize to challenge the dominant narratives at CMU and in broader society.</p>
+          <PageSubtitleText>BETTERWORLD</PageSubtitleText>
+          <PageTitleText>CMU Against ICE</PageTitleText>
+          <LargeBodyText>We align ourselves with student movements mobilizing with Mijente under the #NoTechForICE campaign and organize to challenge the dominant narratives at CMU and in broader society.</LargeBodyText>
         </OverviewSection>
         <QuickLinksSection>
-          <h3>Quick Links</h3>
+          <PageSubtitleText>Quick Links</PageSubtitleText>
           <Row>
           {quickData.map((data) =>
               <Tooltip title={data.tip}>
@@ -57,7 +64,7 @@ export default function Landing() {
           </Row>
         </QuickLinksSection>
         <CommitteeSection>
-          <h2> Committees</h2>
+          <SectionHeaderText> Committees</SectionHeaderText>
           <Row>
             {committeeData.map((data) =>
               <CommitteeBox onClick={()=>{
@@ -65,7 +72,7 @@ export default function Landing() {
               }}>
                 <div className="contentBox">
                   <div className="order">{`0${data["order"]}`}</div>
-                  <div className="name">{data["name"]}</div>
+                  <ProjectCardTextWhite className="name">{data["name"]}</ProjectCardTextWhite>
                   <div className="line" />
                 </div>
                 <img src={committeeIcons[data["id"]]} alt={data["name"]} />
@@ -74,7 +81,7 @@ export default function Landing() {
           </Row>
         </CommitteeSection>
         <ProjectsSection>
-          <h2> Projects/Actions</h2>
+          <SectionHeaderText> Projects/Actions</SectionHeaderText>
           <Row>
             {
               projectsData.sort((a,b)=>a["end_date"]>b["end_date"]?-1:1).map((project)=>{
@@ -83,27 +90,26 @@ export default function Landing() {
                <ArchivedProjectBox onClick={()=>{
                 history.push(`/project/${project.id}`);
               }}>
-                    <div className="name">{project.name}</div>
+                    <ProjectCardText isArchived={project["isArchived"]}>{project.name}</ProjectCardText>
                     <div className="line"/>
                     <br/>
-                    <p ><span >Start date:</span>{formatDate(project["start_date"])}</p>
-                    <p><span >End Date: </span> {formatDate(project["end_date"])}</p>
+                    <SmallestBodyTextWhite><span >Start date:</span>{formatDate(project["start_date"])}</SmallestBodyTextWhite>
+                    <SmallestBodyTextWhite><span >End Date: </span> {formatDate(project["end_date"])}</SmallestBodyTextWhite>
                     <br/>
-                    <p><span>Updates:</span> 22</p>
-                    <p><span>Contributors:</span>{project["contributors"]?.length}</p>
+                    <SmallestBodyTextWhite><span>Updates:</span> 22</SmallestBodyTextWhite>
+                    <SmallestBodyTextWhite><span>Contributors:</span>{project["contributors"]?.length}</SmallestBodyTextWhite>
               </ArchivedProjectBox>:
 
                <ProjectBox onClick={()=>{
                   history.push(`/project/${project.id}`);
                 }}>
-                      <div className="name">{project.name}</div>
+                      <ProjectCardText>{project.name}</ProjectCardText>
                       <div className="line"/>
                       <br/>
-                      <p ><span >Start date:</span> {formatDate(project["start_date"])}</p>
-                      <p><span >Est. Completion:</span>{formatDate(project["end_date"])}</p>
+                      <SmallestBodyTextBlack ><span >Start date:</span> {formatDate(project["start_date"])}</SmallestBodyTextBlack>
+                      <SmallestBodyTextBlack ><span >Est. Completion:</span>{formatDate(project["end_date"])}</SmallestBodyTextBlack>
                       <br/>
-                      <p><span>Updates:</span> {getNumUpdates(project)}</p>
-                      <p><span>Contributors:</span> {project["contributors"]?.length}</p>
+                      <SmallestBodyTextBlack ><span>Updates:</span> {getNumUpdates(project)}</SmallestBodyTextBlack>
                 </ProjectBox>
                 )
               })
@@ -140,52 +146,19 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content:space-between;
-  max-width: calc(100vw - 170px);
+  ${({ isMobile }) =>
+  isMobile ?
+  ` max-width: calc(100vw );
+`: `max-width: calc(100vw - 170px);`
+}
   padding: 3vh 40px 10vh 40px;
-  h1 {
-    font-family: 'Baloo 2';
-    font-style: normal;
-    font-weight: bold;
-    font-size: 60px;
-    line-height: 94px;
-    display: flex;
-    align-items: center;
-    letter-spacing: -0.02em;
-    color: #0CC998;
-  }
-  h2 {
-    font-family: 'Baloo 2';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 26px;
-    color: black;
-  }
-  h3 {
-    font-weight: 800;
-    font-size: 21px;
-    line-height: 33px;
-    color: black;
-  }
-  p {
-    font-family: 'Helvetica Neue';
-    font-style: normal;
-    font-weight: 200;
-    font-size: 22px;
-    line-height: 27px;
-    display: flex;
-    align-items: center;
-    color: #000000;
-  }
+ 
 `
  const OverviewSection = styled.div`
-  
 `
 const QuickLinksSection = styled.div`
   width:100%;
 `
-// background: #FFFFFF;
-// box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-// border-radius: 3px;
 const CommitteeSection = styled.div`
   width:100%;
 `
@@ -211,16 +184,14 @@ const CommitteeBox = styled.div`
       padding-left: 30px;
       height:100px;
 
-      .name, .order {
+     .order {
         color:white;
         font-family: 'Baloo 2';
         font-weight:normal;
         font-size: 26px;
         line-height: 28px;
       }
-      .name {
-        font-weight:800;
-      }
+  
       .line {
         background-color:white;
         width: 50px;
@@ -256,32 +227,6 @@ const ProjectBox = styled.a`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
   padding: 20px 15px;
-  .name {
-    color: #0CC998;
-    font-family: Baloo 2;
-    font-weight:normal;
-    font-size: 26px;
-    line-height: 28px;
-    font-weight:800;
-  }
-
-  .line {
-    background-color: #0CC998;
-    width: 50px;
-    height: 3px;
-    margin-top:5px;
-    border-radius: 11px;
-  }
-  p{
-    font-family: Helvetica Neue;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 17px;
-  }
-  span{
-    font-weight:bold;
-  }
 `
 
 const ArchivedProjectBox = styled.a`
@@ -295,31 +240,5 @@ const ArchivedProjectBox = styled.a`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
   padding: 20px 15px;
-  .name {
-    color: white;
-    font-family: Baloo 2;
-    font-weight:normal;
-    font-size: 26px;
-    line-height: 28px;
-    font-weight:800;
-  }
-
-  .line {
-    background-color: #0CC998;
-    width: 50px;
-    height: 3px;
-    margin-top:5px;
-    border-radius: 11px;
-  }
-  p{
-    font-family: Helvetica Neue;
-    color: white;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 17px;
-  }
-  span{
-    font-weight:bold;
-  }
+ 
 `

@@ -16,6 +16,8 @@ import ControlContext from "shared/control-context";
 import { updateCommittee } from "shared/firebase";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import { useWindowWidth } from "@react-hook/window-size";
+import { useMediaQuery } from 'react-responsive';
+ 
 
 //import dummyData from 'dummydata';
 //starting dev
@@ -24,6 +26,7 @@ export default function CommitteePage() {
   const ctrctx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
   const committeeId = urlParts[urlParts.length - 1];
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
   const [committeeData, setCommitteeData] = useState(
     ctrctx.getCommitteeData(committeeId)
@@ -51,8 +54,9 @@ export default function CommitteePage() {
   return (
     <Row>
       <LeftPanel />
-      <ContentContainer>
-        <Column>
+
+    {!isMobile? ( <ContentContainer isMobile={isMobile}>
+        <Column isMobile={isMobile}>
           <CommitteeInfoModule
             committeeData={committeeData}
             user={ctrctx.user}
@@ -68,7 +72,7 @@ export default function CommitteePage() {
 
           <CustomModule />
         </Column>
-        <Column>
+        <Column isMobile={isMobile}>
           <AtAGlanceModule committeeData={committeeData} />
           {/* <CalendarModule /> */}
           <UpdateDiv>
@@ -92,8 +96,49 @@ export default function CommitteePage() {
             ></UpdatesSection>
           </UpdateDiv>
         </Column>
-      </ContentContainer>
+      </ContentContainer>)
+       :(
+        <ContentContainer isMobile={isMobile}>
+       <Column isMobile={isMobile}>
+        <CommitteeInfoModule
+          committeeData={committeeData}
+          user={ctrctx.user}
+          onSave={(newUpdate) => {
+            let newCommitteeData = {
+              ...committeeData,
+              updates: [...committeeData.updates, newUpdate],
+            };
+            updateCommittee(committeeId, newCommitteeData);
+            setCommitteeData(newCommitteeData);
+          }}
+        />
+
+        <CustomModule />
+        <UpdateDiv>
+            <UpdatesSection
+              updates={"updates" in committeeData ? committeeData.updates : []}
+              user={ctrctx.user}
+              selectorOpen={selectorOpen}
+              updateUpdates={(newUpdates) => {
+                let newCommitteeData = {
+                  ...committeeData,
+                  updates: newUpdates,
+                };
+                updateCommittee(committeeId, newCommitteeData);
+                setCommitteeData(newCommitteeData);
+              }}
+              setSelectorOpen={(id) => {
+                if (selectorOpen != id) setSelectorOpen(id);
+                else setSelectorOpen(null);
+                console.log("setting selector");
+              }}
+            ></UpdatesSection>
+          </UpdateDiv>
+        </Column>
+        </ContentContainer>
+        )}
     </Row>
+   
   );
 }
 
@@ -105,18 +150,21 @@ const Row = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: 100%;
+  //height: 100%;
   padding: 5vh 50px 3vh 40px;
   display: flex;
-
+${({isMobile})=>
+isMobile&& ` flex-direction: column;`
+}
 `;
 
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+//  height: 100%;
   width: 100%;
 `;
+
 const UpdateDiv = styled.div`
   height: 60%;
   padding: 5px;

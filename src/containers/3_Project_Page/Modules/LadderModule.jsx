@@ -1,7 +1,8 @@
 import { useMemo, useState, useContext } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 import { useAsyncDebounce } from 'react-table';
-
+import { AvatarGroup } from '@material-ui/lab';
+import { Avatar } from '@material-ui/core';
 //import styles from './search.module.css';
 import styled from "styled-components"
 
@@ -15,30 +16,11 @@ import ProjectContext from '../ProjectContext';
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
 
-
-
-function LadderModule({projectData, openLadderModal}) {
-   // const ctx = useContext(ProjectContext);
-    
+function LadderModule({projectData, openLadderModal, contributors}) {
    const data = projectData["sections"];
-    let contributors = {};
+   // let contributors = {};
     let statuses = {}
-    data.forEach((section)=>{
-        let names = [];
-        if(section["stages"]){
-         section.stages.forEach((stage)=>{
-            
-            if(stage["contributors"]){
-                stage["contributors"].forEach((contributor)=>{
-                    if (contributor.name  && !names.includes(contributor.name)){
-                        names.push(contributor.name)
-                    }
-                });
-            }
-        });
-        contributors[section["id"]]=[...names]
-        }
-    });
+   
     data.forEach((section)=>{
         let stat = section["stages"].find((stage)=> stage.name===section["status"])["status"];
         statuses[section["id"]]=stat;
@@ -52,11 +34,11 @@ function LadderModule({projectData, openLadderModal}) {
             Header: 'Name',
             accessor: 'name',
             Cell: ({ cell }) => (
-                <SectionTitle value={cell.value} 
+                <styles.RegularBodyText value={cell.value} 
                  onClick={()=>openLadderModal(cell.row.original)}
                 >
                   {cell.value}
-                </SectionTitle>
+                </styles.RegularBodyText>
               ),
               width:200
         },
@@ -65,9 +47,16 @@ function LadderModule({projectData, openLadderModal}) {
             Header: 'Team',
             accessor: 'id',
             Cell: ({ cell }) => (
-                <span >
-                  {contributors[cell.value].join(", ")}
-                </span>
+                <div >
+                    <AvatarGroup max={3}>
+                        {contributors[cell.value].map((c)=>{
+                            return ("photoUrl" in c) ?
+                               <Avatar alt="Remy Sharp" src={c.photoUrl}/>
+                                 :
+                                 <Avatar alt="Remy Sharp" >{c.name[0]}</Avatar>
+                        })}
+                                 </AvatarGroup>
+                </div>
               )
         },
         {
@@ -75,8 +64,10 @@ function LadderModule({projectData, openLadderModal}) {
             accessor: 'status',
             Cell: ({ cell }) => (
                 <div>
+                <styles.RegularBodyText>
                   {cell.value} 
                   <br/>({statuses[cell.row.original.id]})
+                </styles.RegularBodyText>
                 </div>
             )
         },
@@ -85,9 +76,11 @@ function LadderModule({projectData, openLadderModal}) {
             accessor: 'updates',
             Cell: ({ cell }) => (
                 <div >
+                    <styles.RegularBodyText>
                   {cell.value ? cell.value.length : 0} Updates
                   <br/> 
                   {cell.value ? cell.value.filter(update=>update["type"] == "request help").length : 0} Help Requests
+                    </styles.RegularBodyText>
                 </div>
               )
         },
@@ -124,7 +117,7 @@ function LadderModule({projectData, openLadderModal}) {
                 <div>
                     <span>Sections Overview</span>
                 </div> 
-                
+                <button>edit sections</button>
             </TitleBar>
          
             <table  {...getTableProps()} >
@@ -189,6 +182,7 @@ const TaskOverviewBox = styled.div`
   height:calc( 50% - 20px );
   margin-top:20px; 
 `
+
 const TableSection = styled.section`
     table {
         width:100%;
@@ -216,12 +210,12 @@ const TableSection = styled.section`
 `;
 
 
-const SectionTitle = styled.div`
-font-family: 'Baloo 2';
-font-size: 18px;
-font-weight: 500;
-width:300px;
-`;
+// const SectionTitle = styled.div`
+// font-family: 'Baloo 2';
+// font-size: 18px;
+// font-weight: 500;
+// width:300px;
+// `;
 
 
 const TableRow = styled.tr`

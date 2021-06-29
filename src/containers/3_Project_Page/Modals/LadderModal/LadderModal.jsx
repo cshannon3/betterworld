@@ -16,20 +16,22 @@ const StyledModal = Modal.styled`
   width: 90vw;
   height: 85vh;
   background-color:white;
-  border-radius: 50px;
+  border-radius: 30px;
 `
 const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
 
     const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
-
     const [selectorOpen, setSelectorOpen] = useState(null);
+    
+
 
     const InnerComponent = () =>{
 
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
         const stages = data["stages"].map((st)=>st.name);
+        // TODO connect to users    
         return (
             <WidgetContainer>
                 <MainContainer>
@@ -37,20 +39,20 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                        <div>
                         <div className="header">
                             <div className="description">
-                            <DescriptionHeader>Description</DescriptionHeader>
+                            <styles.PageSubtitleText>Description</styles.PageSubtitleText>
                              
                             </div>
-                            <div className="dates">
+                            <styles.RegularBodyText >
                                 3/4/5
-                            </div>
+                            </styles.RegularBodyText>
 
                         </div>
                          <div>
-                             <p className="descriptionText">  {data["description"]}</p>
-                             </div>
+                             <styles.RegularBodyText style={{padding:"20px 20px 20px 0px"}}>  {data["description"]}</styles.RegularBodyText>
+                        </div>
                         </div>
                         <div className="tasks">
-                            <StagesComponent data={data && data["stages"]} /> 
+                            <StagesComponent data={data["stages"].map((dd)=>{ return {...dd, "contributors": [...data["contributors"].filter((c)=>c.projects[ctx.data.id].roles.filter((r)=>r.stageId===dd.id).length)]} })} /> 
                         </div>
                         <div className="buttons" >
                             <AddUpdateComponent
@@ -75,9 +77,6 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                                     const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
                                     setLadderData(newSectionData);
-                                    // const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-                                    // ctx.updateSection(newSectionData);
-                                    // setSectionData(newSectionData)
                                 }}
                             />
                         </div>
@@ -93,8 +92,6 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                                 const newSectionData = {...data,  "updates":newUpdates}
                                 ctx.updateSection(newSectionData);
                                 setLadderData(newSectionData);
-                                // ctx.updateSection(newSectionData);
-                                // setSectionData(newSectionData);
                             }}
                             setSelectorOpen={(id)=>{
                                 if(selectorOpen!=id)setSelectorOpen(id);
@@ -163,6 +160,8 @@ const GreenTitleBar = styled(styles.GreenTitleBar)`
     }
     border-radius: 10px 10px 0px 0px;
 `
+
+
 const MainContainer = styled.div`
 background-color: white;
 width:500px;
