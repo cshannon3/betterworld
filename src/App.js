@@ -17,12 +17,15 @@ import ControlContext from "shared/control-context";
 //Screens
 import Splash from "containers/1_Splash/Splash";
 import Landing from "containers/2_Landing/Landing";
-import ProjectPage from "containers/3_Project_Page/ProjectPage";
-import CommitteePage from "containers/CommitteePage/CommitteePage";
+import ProjectsPage from "containers/Projects/ProjectsPage";
+import ProjectPage from "containers/Projects/Project_Page/ProjectPage";
+import CommitteePage from "containers/Committees/CommitteePage/CommitteePage";
+import CommitteesPage from "containers/Committees/CommitteesPage";
 import AddItemPage from "containers/Add_Item_Page/AddItemPage";
 import { ModalProvider } from "styled-react-modal";
 import data from "dummydata";
 import { useMediaQuery } from "react-responsive";
+import ProfilePage from "containers/ProfilePage/ProfilePage";
 
 let userListener, projectsListener, committeesListener, membersListener;
 
@@ -32,9 +35,9 @@ const App = () => {
   const [committeesData, setCommitteesData] = useState(null);
   const [membersData, setMembersData] = useState(null);
 
-  const isBigScreen = useMediaQuery({ query: "(min-device-width: 1824px)" });
+  //const isBigScreen = useMediaQuery({ query: "(min-device-width: 1824px)" });
   //const isMobile = useMediaQuery({ query: '(max-width: 1224px)' })
-  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  //const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
 
   function setupProjectListener() {
     projectsListener = getProjects({ groupID: "cmu-against-ice" }).onSnapshot(
@@ -158,7 +161,6 @@ const App = () => {
                 currentID !== null &&
                 currentID in projectsData ) 
               {
-                console.log("HELLO");
                 let _projectData = projectsData[currentID];
         
                 if(membersData){
@@ -233,11 +235,15 @@ const App = () => {
             <div className="App__container">
               <Switch>
                 <Route path="/addItem" component={AddItemPage} />
-                <Route path="/project/:projectId" component={ProjectPage} />
+                <Route path="/projects/:projectId" component={ProjectPage} />
+                <Route path="/projects" component={ProjectsPage} />
+                <Route path="/myinfo" component={ProfilePage} />
+                
                 <Route
-                  path="/committee/:committeeId"
+                  path="/committees/:committeeId"
                   component={CommitteePage}
                 />
+                <Route path="/committees" component={CommitteesPage} />
                 <Route path="/:groupId" component={Landing} />
 
                 <Route exact path="/">

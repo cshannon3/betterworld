@@ -7,7 +7,7 @@ import { Avatar } from '@material-ui/core';
 import styled from "styled-components"
 
 import LadderModal from '../Modals/LadderModal/LadderModal';
-import * as styles from '../../../styles/sharedStyles';
+import * as styles from 'styles/sharedStyles';
 import {fuzzyTextFilterFn} from "shared/utils";
 import ProjectContext from '../ProjectContext';
 

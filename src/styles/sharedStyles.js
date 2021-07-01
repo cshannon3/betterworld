@@ -2,13 +2,28 @@
 import styled from "styled-components"
 import "styles/globals.css";
 
+export const BreadcrumbText = styled.p`
+font-family: 'Baloo 2';
+font-style: normal;
+font-weight: 800;
+font-size: 16px;
+`
+
+export const Breadcrumbs = styled.div`
+  font-size: 14px; 
+  margin-bottom: 10px;
+  display: flex;
+`;
+export const Arrow = styled.p`
+  margin: 0 10px 0 10px;
+`
+
 
 export const PageTitleText = styled.div`
   font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
   font-size: 60px;
-  line-height: 94px;
   letter-spacing: -0.02em;
   color: #0CC998;
 `;

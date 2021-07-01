@@ -45,9 +45,22 @@ export default function LeftPanel() {
                 <PhotoIcon src={EarthIcon} alt='Overview' />
                 <MenuText>OVERVIEW</MenuText>
             </div>
-           
-            <div id="myInfoSideLink">
-                <PhotoIcon src={UserIcon} alt='Projects' />
+            <div id="projectSideLink" onClick={()=>{
+              history.push("/project/immigrationjustice");
+            }}>
+                <PhotoIcon src={FolderIcon} alt='Projects' />
+                <MenuText>PROJECTS</MenuText>
+            </div>
+            <div id="committeeSideLink" onClick={()=>{
+              history.push("/committee");
+            }}>
+                <PhotoIcon src={NetworkIcon} alt='Committees' />
+                <MenuText>COMMITTEES</MenuText>
+            </div>
+            <div id="myInfoSideLink"onClick={()=>{
+              history.push("/myinfo");
+            }}>
+                <PhotoIcon src={UserIcon} alt='User' />
                 <MenuText>MY INFO</MenuText>
             </div>
             <LogoutBtn className='logoutBtn' onClick={() => logoutUser()}>Log Out</LogoutBtn>
@@ -66,8 +79,21 @@ export default function LeftPanel() {
                 <PhotoIcon src={EarthIcon} alt='Overview' />
                 <MenuText>OVERVIEW</MenuText>
             </div>
-           
-            <div id="myInfoSideLink">
+            <div id="projectSideLink" onClick={()=>{
+              history.push("/projects");
+            }}>
+                <PhotoIcon src={FolderIcon} alt='Projects' />
+                <MenuText>PROJECTS</MenuText>
+            </div>
+            <div id="committeeSideLink" onClick={()=>{
+              history.push("/committees");
+            }}>
+                <PhotoIcon src={NetworkIcon} alt='Committees' />
+                <MenuText>COMMITTEES</MenuText>
+            </div>
+            <div id="myInfoSideLink" onClick={()=>{
+              history.push("/myinfo");
+            }}>
                 <PhotoIcon src={UserIcon} alt='Projects' />
                 <MenuText>MY INFO</MenuText>
             </div>
@@ -81,7 +107,7 @@ font-family: 'Baloo 2';
   font-size:20px;
   width: 100%;
   text-align:center;
-  color:#000000;
+  color:white;
 `
 
 

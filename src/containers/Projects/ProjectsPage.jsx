@@ -5,24 +5,17 @@ import ControlContext from '../../shared/control-context';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useHistory } from "react-router-dom";
 import {committeeIcons} from "dummydata"
-import { NavLink } from 'react-router-dom'
+import { useMediaQuery } from 'react-responsive';
 import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
 
-import { useMediaQuery } from 'react-responsive';
- 
 
 
-export default function Landing() {
+export default function ProjectsPage() {
   const ctrctx = useContext(ControlContext);
   let projectsData= ctrctx.getProjectsData();
   projectsData = projectsData?Object.values(projectsData):[];
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
-
-  
-  const committeeData = Object.values(ctrctx.getCommitteesData());
-  const quickData = ctrctx.data["quick_links"];
-  console.log(committeeData);
 
   let history = useHistory();
 
@@ -44,42 +37,11 @@ export default function Landing() {
     <RowWrapper>
       <LeftPanel />
       <ContentContainer isMobile={isMobile}>
-        <OverviewSection>
+      <OverviewSection>
           <PageSubtitleText>BETTERWORLD</PageSubtitleText>
           <PageTitleText>CMU Against ICE</PageTitleText>
-          <LargeBodyText>We align ourselves with student movements mobilizing with Mijente under the #NoTechForICE campaign and organize to challenge the dominant narratives at CMU and in broader society.</LargeBodyText>
-        </OverviewSection>
-        <QuickLinksSection>
-          <PageSubtitleText>Quick Links</PageSubtitleText>
-          <Row>
-          {quickData.map((data) =>
-              <Tooltip title={data.tip}>
-              <a href={data.url} target="_blank">
-                <LinkBox>
-                  <img src={data.icon} alt={data.title} />
-                </LinkBox>
-              </a>
-            </Tooltip>
-            )}
-          </Row>
-        </QuickLinksSection>
-        <CommitteeSection>
-          <SectionHeaderText> Committees</SectionHeaderText>
-          <Row>
-            {committeeData.map((data) =>
-              <CommitteeBox onClick={()=>{
-                history.push(`/committees/${data.id}`);
-              }}>
-                <div className="contentBox">
-                  <div className="order">{`0${data["order"]}`}</div>
-                  <ProjectCardTextWhite className="name">{data["name"]}</ProjectCardTextWhite>
-                  <div className="line" />
-                </div>
-                <img src={committeeIcons[data["id"]]} alt={data["name"]} />
-              </CommitteeBox>
-            )}
-          </Row>
-        </CommitteeSection>
+       </OverviewSection>
+        
         <ProjectsSection>
           <SectionHeaderText> Projects/Actions</SectionHeaderText>
           <Row>
@@ -134,7 +96,7 @@ const RowWrapper = styled.div`
 const Row = styled.div`
   display: flex;
   gap: 20px;
-  overflow:scroll;
+  flex-wrap: wrap;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar{
@@ -145,7 +107,6 @@ const Row = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content:space-between;
   ${({ isMobile }) =>
   isMobile ?
   ` max-width: calc(100vw );
@@ -156,62 +117,6 @@ const ContentContainer = styled.div`
 `
  const OverviewSection = styled.div`
 `
-const QuickLinksSection = styled.div`
-  width:100%;
-`
-const CommitteeSection = styled.div`
-  width:100%;
-`
-const CommitteeBox = styled.div`
-    position: relative;
-    cursor:pointer;
-    height:111px;
-    min-width:244px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 3px;
-    background: #0CC998;
-    img {
-      position: absolute;
-      top:0px;
-      right:0px;
-      height:111px;
-      min-width:244px;
-    }
-    .contentBox{
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      padding-left: 30px;
-      height:100px;
-
-     .order {
-        color:white;
-        font-family: 'Baloo 2';
-        font-weight:normal;
-        font-size: 26px;
-        line-height: 28px;
-      }
-  
-      .line {
-        background-color:white;
-        width: 50px;
-        height: 3px;
-        margin-top:5px;
-        border-radius: 11px;
-      }
-    }
-`
-
-const LinkBox = styled.div`
-    height:60px;
-    min-width:60px;
-    img{
-      height:54px;
-      width:60px;
-      margin:3px;
-    }
-`
-
 
 const ProjectsSection = styled.div`
   //width:100%;
@@ -219,6 +124,7 @@ const ProjectsSection = styled.div`
 const ProjectBox = styled.a`
   height:194px;
   min-width:244px;
+  width:244px;
   cursor: pointer;
   text-decoration: none;
   background: #FAFAFA;
@@ -232,6 +138,7 @@ const ProjectBox = styled.a`
 const ArchivedProjectBox = styled.a`
   height:194px;
   min-width:244px;
+  width:244px;
   cursor: pointer;
   text-decoration: none;
   background: #B6B6B6;

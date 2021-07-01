@@ -1,21 +1,18 @@
-import ProjectContext from '../ProjectContext';
-import {useContext} from 'react';
+import ProjectContext from "../ProjectContext";
+import { useContext } from "react";
 import styled from "styled-components";
-import * as styles from '../../../styles/sharedStyles';
-import docIcon from 'assets/Landing/google-docs.png';
-import sheetsIcon from 'assets/Landing/google-sheets.png';
-import { AvatarGroup } from '@material-ui/lab';
-import { Avatar } from '@material-ui/core';
+import * as styles from "styles/sharedStyles";
+import docIcon from "assets/Landing/google-docs.png";
+import sheetsIcon from "assets/Landing/google-sheets.png";
+import { AvatarGroup } from "@material-ui/lab";
+import { Avatar } from "@material-ui/core";
 // import Badge from '@material-ui/core/Badge';
 // import { makeStyles, withStyles } from '@material-ui/core/styles';
 
-
-
 export default function AtAGlanceModule({ projectData }) {
-  const formatDate = (d) =>{
-    return d.substring(0, d.length-18)
-  }
-
+  const formatDate = (d) => {
+    return d.substring(0, d.length - 18);
+  };
 
   //let contributorsText = projectData["contributors"].map((data) => (data.name)).join(", ");
 
@@ -24,26 +21,24 @@ export default function AtAGlanceModule({ projectData }) {
       <styles.GreenTitleBar>At A Glance Box</styles.GreenTitleBar>
       <Column>
         <Row>
-
           <Box>
-          <SubtitleBold>Target Date</SubtitleBold>
-          <TargetDateText>{formatDate(projectData["end_date"])}</TargetDateText>
+            <SubtitleBold>Target Date</SubtitleBold>
+            <TargetDateText>
+              {formatDate(projectData["end_date"])}
+            </TargetDateText>
           </Box>
           <Box>
-         <SubtitleBold> Schedule</SubtitleBold>
-          <ul>
+            <SubtitleBold> Schedule</SubtitleBold>
+            <ul>
               {projectData["schedule"] &&
-                projectData["schedule"].map((data) => (
-                  <li>{data}</li>
-                ))}
+                projectData["schedule"].map((data) => <li>{data}</li>)}
             </ul>
-
           </Box>
         </Row>
 
         <Row>
           <Box>
-           <SubtitleBold> Useful Links</SubtitleBold>
+            <SubtitleBold> Useful Links</SubtitleBold>
             <ResourceBox>
               {projectData["resources"] &&
                 projectData["resources"].map((data) => (
@@ -56,29 +51,22 @@ export default function AtAGlanceModule({ projectData }) {
             </ResourceBox>
           </Box>
           <Box>
-            <SubtitleBold>{`Contributors (${projectData["contributors"] && projectData["contributors"].length})`}</SubtitleBold>
-<ContributorsStyle>
-          <AvatarGroup max={5}>
-            {projectData["contributors"] && projectData["contributors"].map((c)=>{
-             return ("photoUrl" in c) ?
-
-            <Avatar alt="Remy Sharp" src={c.photoUrl}/>
-              :
-              <Avatar alt="Remy Sharp" >{c.name[0]}</Avatar>
-
-            })
-          }
-          </AvatarGroup>
-          </ContributorsStyle>
-              {/* {projectData["contributors"] &&  <UserText>{contributorsText}</UserText>
-
-                // projectData["contributors"].map((data) => (
-                //   <UserText>{data.name},</UserText>
-                // ))
-
-                } */}
+            <SubtitleBold>{`Contributors (${
+              projectData["contributors"] && projectData["contributors"].length
+            })`}</SubtitleBold>
+            <ContributorsStyle>
+              <AvatarGroup max={5}>
+                {projectData["contributors"] &&
+                  projectData["contributors"].map((c) => {
+                    return "photoUrl" in c ? (
+                      <Avatar alt="Remy Sharp" src={c.photoUrl} />
+                    ) : (
+                      <Avatar alt="Remy Sharp">{c.name[0]}</Avatar>
+                    );
+                  })}
+              </AvatarGroup>
+            </ContributorsStyle>
           </Box>
-
         </Row>
       </Column>
     </AtAGlanceBox>
@@ -86,8 +74,8 @@ export default function AtAGlanceModule({ projectData }) {
 }
 
 const AtAGlanceBox = styled.div`
-  height:95%;
-  width:50%;
+  height: 95%;
+  width: 50%;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
@@ -101,14 +89,14 @@ const AtAGlanceBox = styled.div`
   }
 `;
 const ContributorsStyle = styled.div`
-padding-top:10px;
+  padding-top: 10px;
 `;
 
 const Row = styled.div`
   display: flex;
   width: 100%;
   height: 50%;
-  padding:10px;
+  padding: 10px;
 `;
 
 const Column = styled.div`
@@ -121,14 +109,13 @@ const Box = styled.div`
   width: 50%;
   height: 100%;
   padding: 10px;
-  max-width:50%;
-
+  max-width: 50%;
 `;
 
 const ResourceBox = styled.div`
   padding-left: 10px;
   padding-top: 10px;
-  font-size:12px;
+  font-size: 12px;
 `;
 
 const ArtifactLink = styled.p`
@@ -137,7 +124,7 @@ const ArtifactLink = styled.p`
   align-items: center;
 `;
 
-const SubtitleBold= styled.p`
+const SubtitleBold = styled.p`
   font-weight: 500;
   font-size: 16px;
 `;
@@ -150,12 +137,10 @@ const TargetDateText = styled.h2`
 
 const UserText = styled.p`
   padding-top: 10px;
-  padding-left:10px;
+  padding-left: 10px;
   font-size: 12px;
-  width:75%;
+  width: 75%;
 `;
-
-
 
 // const StyledBadge = withStyles((theme) => ({
 //   badge: {
@@ -191,7 +176,6 @@ const UserText = styled.p`
 //                   <li>{data.name}</li>
 //                 ))}
 //             </ul>
-
 
 // <StyledBadge
 //              overlap="circle"
