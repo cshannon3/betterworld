@@ -48,6 +48,114 @@ export const getMembers = ({ groupID = "cmu-against-ice" }) => {
     return db.collection("groups").doc(groupID).collection('members'); 
 };
 
+
+
+export const getUpdates = () => { 
+    const groupID = "cmu-against-ice" ;
+    return db.collection("groups").doc(groupID).collection('updates'); 
+};
+
+
+export const getUpdateRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('updates').doc(id); };
+
+export async function createUpdate(updateData) {
+    const groupID = "cmu-against-ice" ;
+   console.log("createUpdate");
+    console.log(updateData);
+    let res = await db.collection("groups").doc(groupID).collection("updates").add(updateData);
+    // let userData = await getUserData(user.id);
+    return { ...res, "id": res.id };
+}
+
+export async function updateUpdate(updateId, updateData) {
+    const groupID = "cmu-against-ice" ;
+    await db.collection("groups").doc(groupID).collection("updates").doc(updateId).update(updateData).then((e)=>{
+        console.log("Go");
+    });
+}
+export async function deleteUpdate(updateId) {
+    const groupID = "cmu-against-ice" ;
+    await db.collection("groups").doc(groupID).collection("updates").doc(updateId).delete().then((e)=>{
+        console.log("deleted");
+    });
+}
+
+
+
+
+
+
+
+export async function getUserData(userId) {
+    let res = await getUserRef(userId).get()
+    return (res.exists) ? { ...res.data(), "id": userId } : false;
+}
+
+
+async function setUserData(userId, data) { await getUserRef(userId).set(data); }
+export async function updateUserData(userId, data) { await getUserRef(userId).update(data); }
+
+
+
+
+
+
+export const getProjects = ({ groupID = "cmu-against-ice" }) => { 
+    return db.collection("groups").doc(groupID).collection('projects'); 
+};
+
+
+export const getProjectRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('projects').doc(id); };
+
+export async function createProject(projectData, { groupID = "cmu-against-ice" }) {
+    // Add team
+    
+    let res = await db.collection("groups").doc(groupID).collection("projects").add(projectData);
+    // let userData = await getUserData(user.id);
+    return { ...res, "id": res.id };
+}
+
+export async function updateProject(projectId, projectData) {
+    // Add team
+    console.log(projectId);
+    console.log( projectData);
+    console.log("test");
+    await getProjectRef({ id: projectId, groupID: "cmu-against-ice" }).update(projectData).then((e)=>{
+        console.log("Go");
+    });
+}
+
+
+export const getCommitteeRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
+
+export const getCommittees = ({ groupID = "cmu-against-ice" }) => { 
+    return db.collection("groups").doc(groupID).collection('committees'); 
+};
+
+export async function updateCommittee(committeeId, committeeData) {
+    // Add team
+    await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
+}
+
+
+
+
+
+
+
+
+// export async function createProject(projectData) {
+//     // Add team
+//     let res = await db.collection("projects").add(projectData);
+//    // let userData = await getUserData(user.id);
+//     return {...res, "id":res.id};
+// }
+
+// export async function updateProject(projectId, projectData) {
+//     // Add team
+//     await getProjectRef(projectId).update(projectData);
+// }
+
 // export async function moveUsers() {
 //     // Add team
 //     // db.collection("users").
@@ -141,65 +249,3 @@ export const getMembers = ({ groupID = "cmu-against-ice" }) => {
 //     }
     
 // }
-
-
-export async function getUserData(userId) {
-    let res = await getUserRef(userId).get()
-    return (res.exists) ? { ...res.data(), "id": userId } : false;
-}
-
-
-async function setUserData(userId, data) { await getUserRef(userId).set(data); }
-export async function updateUserData(userId, data) { await getUserRef(userId).update(data); }
-
-
-// export async function createProject(projectData) {
-//     // Add team
-//     let res = await db.collection("projects").add(projectData);
-//    // let userData = await getUserData(user.id);
-//     return {...res, "id":res.id};
-// }
-
-// export async function updateProject(projectId, projectData) {
-//     // Add team
-//     await getProjectRef(projectId).update(projectData);
-// }
-
-
-
-
-export const getProjects = ({ groupID = "cmu-against-ice" }) => { 
-    return db.collection("groups").doc(groupID).collection('projects'); 
-};
-
-
-export const getProjectRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('projects').doc(id); };
-
-export async function createProject(projectData, { groupID = "cmu-against-ice" }) {
-    // Add team
-    let res = await db.collection("groups").doc(groupID).collection("projects").add(projectData);
-    // let userData = await getUserData(user.id);
-    return { ...res, "id": res.id };
-}
-
-export async function updateProject(projectId, projectData) {
-    // Add team
-    console.log(projectId);
-    console.log( projectData);
-    console.log("test");
-    await getProjectRef({ id: projectId, groupID: "cmu-against-ice" }).update(projectData).then((e)=>{
-        console.log("Go");
-    });
-}
-
-
-export const getCommitteeRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
-
-export const getCommittees = ({ groupID = "cmu-against-ice" }) => { 
-    return db.collection("groups").doc(groupID).collection('committees'); 
-};
-
-export async function updateCommittee(committeeId, committeeData) {
-    // Add team
-    await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
-}

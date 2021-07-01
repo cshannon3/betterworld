@@ -20,16 +20,13 @@ export default function ProjectInfoModule({projectData, totalUpdates, helpReques
     <ProjectInfoContainer>
       <div>
         <div>
-          <ProjectsSubtitle>
-            CMU AGAINST ICE<span> PROJECTS</span>
-          </ProjectsSubtitle>
           <Breadcrumbs>
-              <NavLink to='/'>CMU AGAINST ICE</NavLink>
-              <Arrow> &gt; </Arrow>
-              <NavLink to='/team'>Projects</NavLink>
-              <Arrow> &gt; </Arrow>
-              <NavLink to='/folder'>{projectData && projectData["name"]}</NavLink>
-        </Breadcrumbs>
+          <NavLink to='/'><BreadcrumbText>CMU AGAINST ICE</BreadcrumbText></NavLink>
+          <Arrow> &gt; </Arrow>
+          <NavLink to='/projects'><BreadcrumbText>Projects</BreadcrumbText></NavLink>
+          <Arrow> &gt; </Arrow>
+          <NavLink to={`/projects/${projectData.name}`}><BreadcrumbText>{projectData.name}</BreadcrumbText></NavLink>
+      </Breadcrumbs>
           <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
         </div>
       

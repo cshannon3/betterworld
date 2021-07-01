@@ -79,6 +79,7 @@ export default function CommitteePage() {
             <UpdatesSection
               updates={"updates" in committeeData ? committeeData.updates : []}
               user={ctrctx.user}
+              committeeId={committeeId}
               selectorOpen={selectorOpen}
               updateUpdates={(newUpdates) => {
                 let newCommitteeData = {

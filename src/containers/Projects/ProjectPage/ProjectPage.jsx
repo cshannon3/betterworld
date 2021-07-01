@@ -38,14 +38,16 @@ export default function ProjectPage() {
     appCtx.getProjectData(projectId)
   );
 
+  
+
   return (
     <ProjectContext.Provider
       value={{
+        projectId: projectId,
         data: projectData,
         updateSection: (sectionData) => {
           let sections = [...projectData["sections"]];
           let s = sections.findIndex((sec) => sec.id == sectionData.id);
-
           sections[s] = sectionData;
           const newData = { ...projectData, sections: sections };
           updateProject(newData.id, newData);

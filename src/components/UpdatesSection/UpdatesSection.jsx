@@ -1,12 +1,20 @@
 import styled from "styled-components";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
 import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
+import * as fb from "shared/firebase";
+
+/*
+This will update the local da
+*/
 
 const UpdatesSection = ({
   updates = [],
   selectorOpen,
   user = null,
   stages = null,
+  projectId=null,
+  committeeId=null,
+  sectionId=null,
   updateUpdates = (newUpdates) => {},
   setSelectorOpen = (updateId) => {},
 }) => {
@@ -24,9 +32,13 @@ const UpdatesSection = ({
             type={"default"}
             stages={stages}
             user={user}
-            onSave={(newUpdate) => {
+            onSave={async (newUpdate) => {
                 console.log("On Save");
-              if (updates) updateUpdates([...updates, newUpdate]);
+                // add ids to new update
+                const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":committeeId, "sectionId":sectionId}
+                // TODO this gets added to db 
+                await fb.createUpdate(_newUpdate);
+              if (updates) updateUpdates([...updates, _newUpdate]);
               else updateUpdates([newUpdate]);
             }}
           />
@@ -48,6 +60,7 @@ const UpdatesSection = ({
                     let u = newUpdates.findIndex(
                       (up) => up.id == newUpdateData.id
                     );
+                    fb.updateUpdate(newUpdateData.id, newUpdateData);
                     newUpdates[u] = newUpdateData;
                     updateUpdates(newUpdates);
                   }}
@@ -63,6 +76,8 @@ const UpdatesSection = ({
                       let newUpdates = updates.filter(
                         (u) => u.id != updateData.id
                       );
+                      //todo add delete function
+                      fb.deleteUpdate(updateData.id);
                       updateUpdates(newUpdates);
                     } else {
                       return;

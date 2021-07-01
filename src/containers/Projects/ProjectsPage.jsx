@@ -24,12 +24,14 @@ export default function ProjectsPage() {
   }
 
  
+
   const getNumUpdates= (projectData)=>{
     let numUpdates = 0;
-    projectData["sections"].forEach((section) => {
-      if (section["updates"])
-        numUpdates+= section["updates"].length;
-    });
+    if(projectData["updates"]) numUpdates = projectData["updates"].length;
+    // projectData["sections"].forEach((section) => {
+    //   if (section["updates"])
+    //     numUpdates+= section["updates"].length;
+    // });
     return numUpdates;
   }
 

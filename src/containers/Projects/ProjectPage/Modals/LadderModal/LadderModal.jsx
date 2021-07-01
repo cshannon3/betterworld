@@ -9,6 +9,7 @@ import { SlackSelector, SlackCounter } from '@charkour/react-reactions';
 import { cleanUpdateModel } from 'data_models/updatemodel';
 import UpdatesSection from 'components/UpdatesSection/UpdatesSection';
 import AddUpdateComponent from 'components/UpdatesSection/AddUpdateComponent';
+import * as fb from 'shared/firebase';
 
 
 
@@ -22,6 +23,7 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
 
     const ctrctx = useContext(ControlContext);
     const ctx = useContext(ProjectContext);
+  
     const [selectorOpen, setSelectorOpen] = useState(null);
     
 
@@ -31,6 +33,8 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
         if (!isOpen || !ctrctx.user) return null;
         const userName = ctrctx.user["displayName"];
         const stages = data["stages"].map((st)=>st.name);
+        const projectId = ctx.projectId;
+        const sectionId = data.id;
         // TODO connect to users    
         return (
             <WidgetContainer>
@@ -43,7 +47,7 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                              
                             </div>
                             <styles.RegularBodyText >
-                                3/4/5
+                                ---
                             </styles.RegularBodyText>
 
                         </div>
@@ -62,6 +66,7 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                                 user={ctrctx.user}
                                 onSave={(newUpdate) => {
                                     //const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    
                                     const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
                                     ctx.updateSection(newSectionData);
                                     setLadderData(newSectionData);
@@ -74,7 +79,10 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                                 stages={stages}
                                 user={ctrctx.user}
                                 onSave={(newUpdate) => {
-                                    const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
+                                    const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":null, "sectionId":sectionId};
+                                    // todo add new update to DB
+                                    fb.createUpdate(_newUpdate);
+                                    const newSectionData = {...data, "updates":[...data["updates"], _newUpdate]}
                                     ctx.updateSection(newSectionData);
                                     setLadderData(newSectionData);
                                 }}
@@ -86,9 +94,10 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                             updates={data["updates"]}
                             stages={stages}
                             user={ctrctx.user}
+                            projectId={projectId}
+                            sectionId={sectionId}
                             selectorOpen={selectorOpen}
                             updateUpdates={(newUpdates)=>{
-                                
                                 const newSectionData = {...data,  "updates":newUpdates}
                                 ctx.updateSection(newSectionData);
                                 setLadderData(newSectionData);
@@ -167,12 +176,7 @@ background-color: white;
 width:500px;
 flex-grow:1;
 margin:30px;
-// >div{
-//     display:flex;
-//     flex-direction:column;
-//     height:100%;
-//     margin:auto;
-// }
+
 .header{
     height:20%;
     display:flex;

@@ -24,7 +24,7 @@ export default function LeftPanel() {
     let history = useHistory();
     const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
-    console.log(isMobile);
+    //console.log(isMobile);
     return isMobile? (
       <Drawer
           variant={isMobile?"temporary":"permenant"}

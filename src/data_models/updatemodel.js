@@ -6,6 +6,9 @@ export const cleanUpdateModel = (updateData) => {
     
     const blank =  {
         "id":uuidv4(),
+        "committeeId":"",
+        "sectionId":"",
+        "projectId":"",
         "stage":"",
         "type": "default",
         "status": "not started",
@@ -14,7 +17,8 @@ export const cleanUpdateModel = (updateData) => {
         "date":Date.now(),
         "content":"",
         "reactions":[ ],
-        "replies":[]
+        "replies":[],
+        "notifications":[]
     }
     let cleanModel = {...blank, ...d};
     if(cleanModel["replies"] != []){

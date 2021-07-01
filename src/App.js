@@ -8,6 +8,7 @@ import {
   getProjects,
   getCommittees,
   getMembers,
+  getUpdates,
   updateContributors
 } from "shared/firebase";
 //import dummydata from 'shared/dummydata';
@@ -18,7 +19,7 @@ import ControlContext from "shared/control-context";
 import Splash from "containers/1_Splash/Splash";
 import Landing from "containers/2_Landing/Landing";
 import ProjectsPage from "containers/Projects/ProjectsPage";
-import ProjectPage from "containers/Projects/Project_Page/ProjectPage";
+import ProjectPage from "containers/Projects/ProjectPage/ProjectPage";
 import CommitteePage from "containers/Committees/CommitteePage/CommitteePage";
 import CommitteesPage from "containers/Committees/CommitteesPage";
 import AddItemPage from "containers/Add_Item_Page/AddItemPage";
@@ -27,17 +28,32 @@ import data from "dummydata";
 import { useMediaQuery } from "react-responsive";
 import ProfilePage from "containers/ProfilePage/ProfilePage";
 
-let userListener, projectsListener, committeesListener, membersListener;
+let userListener, projectsListener, committeesListener, membersListener, updatesListener;
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [projectsData, setProjectsData] = useState(null);
   const [committeesData, setCommitteesData] = useState(null);
   const [membersData, setMembersData] = useState(null);
+  const [updatesData, setUpdatesData] = useState(null);
 
   //const isBigScreen = useMediaQuery({ query: "(min-device-width: 1824px)" });
   //const isMobile = useMediaQuery({ query: '(max-width: 1224px)' })
   //const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+
+  function setupUpdatesListener() {
+    updatesListener = getUpdates().onSnapshot(
+      function (querySnapshot) {
+        let _updatesData = {};
+        querySnapshot.forEach(function (doc) {
+          _updatesData[doc.id] = { ...doc.data(), id: doc.id };
+        });
+        //console.log(_projectsData);
+        setUpdatesData(_updatesData);
+        window.localStorage.setItem("updates", JSON.stringify(_updatesData));
+      }
+    );
+  }
 
   function setupProjectListener() {
     projectsListener = getProjects({ groupID: "cmu-against-ice" }).onSnapshot(
@@ -52,6 +68,7 @@ const App = () => {
       }
     );
   }
+
 
   function setupCommitteeListener() {
     committeesListener = getCommittees({
@@ -94,6 +111,7 @@ const App = () => {
     let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
     let _committeesData = JSON.parse(window.localStorage.getItem("committees"));
     let _membersData = JSON.parse(window.localStorage.getItem("members"));
+    let _updatesData = JSON.parse(window.localStorage.getItem("updates"));
     if (_user) {
       setUser(_user);
       if (!projectsListener) setupProjectListener();
@@ -102,6 +120,8 @@ const App = () => {
       else if (_committeesData) setCommitteesData(_committeesData);
       if(!membersListener) setupMembersListener();
       else if(_membersData) setMembersData(_membersData);
+      if(!updatesListener) setupUpdatesListener();
+      else if(_updatesData) setUpdatesData(_updatesData);
     }
   };
 
@@ -113,6 +133,7 @@ const App = () => {
     if (!projectsListener) setupProjectListener();
     if (!committeesListener) setupCommitteeListener();
     if(!membersListener) setupMembersListener();
+    if(!updatesListener) setupUpdatesListener();
   });
 
   return (
@@ -135,7 +156,10 @@ const App = () => {
               //let data;
               if (!userData) userData = await createNewUser(result);
               else userData = { id: userId, ...userData };
-              setupProjectListener();
+              if (!projectsListener) setupProjectListener();
+              if (!committeesListener) setupCommitteeListener();
+              if(!membersListener) setupMembersListener();
+              if(!updatesListener) setupUpdatesListener();
               setUser(userData);
               window.localStorage.setItem("user", JSON.stringify(userData));
             },
@@ -172,6 +196,20 @@ const App = () => {
                   _projectData["contributors"]=[];
                 }
                 
+                if(updatesData){
+                  _projectData["updates"]= Object.values(updatesData).filter((v)=>( v.projectId == currentID));
+                    //if(projectData["updates"]) numUpdates = projectData["updates"].length;
+                    _projectData["sections"]?.forEach((section) => {
+                      section["updates"] = Object.values(_projectData["updates"]).filter((v)=>( v.sectionId == section.id));
+                      // if (section["updates"])
+                      //   numUpdates+= section["updates"].length;
+                    });
+                  
+              
+                }else{
+                  _projectData["updates"]= [];
+                }
+                console.log(_projectData["updates"]);
                 return _projectData;
               } else {
 
