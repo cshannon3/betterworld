@@ -3,7 +3,15 @@ import ProjectContext from "../ProjectContext";
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
 import HelpRequestsModal from "../Modals/HelpRequestsModal";
+
+import { Link, NavLink } from "react-router-dom";
 //need to put in SmallCirclePhoto or CirclePhoto
+import {
+  Breadcrumbs,
+  BreadcrumbText,
+  Arrow
+} from "styles/sharedStyles";
+
 
 export default function ProjectInfoModule({projectData, totalUpdates, helpRequests, setIsUpdatesModalOpen,setIsEditProjectModalOpen, isUserAdmin}) {
  // const ctx = useContext(ProjectContext);
@@ -12,9 +20,6 @@ export default function ProjectInfoModule({projectData, totalUpdates, helpReques
     <ProjectInfoContainer>
       <div>
         <div>
-          <ProjectsSubtitle>
-            CMU AGAINST ICE<span> PROJECTS</span>
-          </ProjectsSubtitle>
           <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
         </div>
       

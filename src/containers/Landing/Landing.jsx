@@ -1,12 +1,14 @@
 import React, { useContext, useState, useEffect } from "react"
 import styled from "styled-components"
-import LeftPanel from "containers/Panels/LeftPanel"
-import ControlContext from '../../shared/control-context';
+
+
+import LeftPanel from "components/Panels/LeftPanel"
+import ControlContext from 'shared/control-context';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useHistory } from "react-router-dom";
-import {committeeIcons} from "dummydata"
-import { NavLink } from 'react-router-dom'
-import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
+import {committeeIcons, quickLinks} from "data/dummydata"
+import { LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
+
 
 import { useMediaQuery } from 'react-responsive';
  
@@ -19,10 +21,10 @@ export default function Landing() {
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
 
 
-  
+
+
   const committeeData = Object.values(ctrctx.getCommitteesData());
-  const quickData = ctrctx.data["quick_links"];
-  console.log(committeeData);
+  const quickData = quickLinks;
 
   let history = useHistory();
 
@@ -68,7 +70,7 @@ export default function Landing() {
           <Row>
             {committeeData.map((data) =>
               <CommitteeBox onClick={()=>{
-                history.push(`/committee/${data.id}`);
+                history.push(`/committees/${data.id}`);
               }}>
                 <div className="contentBox">
                   <div className="order">{`0${data["order"]}`}</div>
@@ -88,7 +90,7 @@ export default function Landing() {
                return( 
                project["isArchived"]?
                <ArchivedProjectBox onClick={()=>{
-                history.push(`/project/${project.id}`);
+                history.push(`/projects/${project.id}`);
               }}>
                     <ProjectCardText isArchived={project["isArchived"]}>{project.name}</ProjectCardText>
                     <div className="line"/>
@@ -101,7 +103,7 @@ export default function Landing() {
               </ArchivedProjectBox>:
 
                <ProjectBox onClick={()=>{
-                  history.push(`/project/${project.id}`);
+                  history.push(`/projects/${project.id}`);
                 }}>
                       <ProjectCardText>{project.name}</ProjectCardText>
                       <div className="line"/>

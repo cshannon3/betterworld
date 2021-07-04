@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTable, useSortBy, useGlobalFilter } from 'react-table';
 //import Modal from 'react-modal';
 
-import * as styles from '../../../../styles/sharedStyles';
+import * as styles from '../../../../../styles/sharedStyles';
 import { fuzzyTextFilterFn } from "shared/utils";
 import docIcon from 'assets/Landing/google-docs.png';
 import styled from "styled-components"

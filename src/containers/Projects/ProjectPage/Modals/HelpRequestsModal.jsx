@@ -27,7 +27,7 @@ function HelpRequestsModal({ data, setUpdatesData, isOpen, onRequestClose, helpR
   const sections = data["sections"];
   const sectionList = sections.map((s) => s.name);
 
-  console.log(sectionList);
+  //console.log(sectionList);
   // const [sectionData, setSectionData] = useState(data);
   useEffect(() => {
     //if(sectionData ==null){setSectionData(data); }

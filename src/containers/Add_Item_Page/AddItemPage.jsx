@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import ReactModal from "react-modal";
 
-import LeftPanel from "containers/Panels/LeftPanel";
+import LeftPanel from "components/Panels/LeftPanel";
 
 import ControlContext from "shared/control-context";
 import ImageUploader from "react-images-upload";
@@ -16,7 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import MultiSelect from "react-multi-select-component";
-import { allUsers } from "data/users";
+import { allUsers } from "old/users";
 import { createProject } from "shared/firebase";
 
 //https://github.com/femioladeji/react-slideshow

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 
-import LeftPanel from "containers/Panels/LeftPanel";
+import LeftPanel from "components/Panels/LeftPanel";
 import {
   LadderModule,
   CommitteeInfoModule,
@@ -79,6 +79,7 @@ export default function CommitteePage() {
             <UpdatesSection
               updates={"updates" in committeeData ? committeeData.updates : []}
               user={ctrctx.user}
+              committeeId={committeeId}
               selectorOpen={selectorOpen}
               updateUpdates={(newUpdates) => {
                 let newCommitteeData = {
