@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import LeftPanel from "containers/Panels/LeftPanel";
+import LeftPanel from "components/Panels/LeftPanel";
 import ControlContext from "../../shared/control-context";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useHistory } from "react-router-dom";
-import { committeeIcons } from "dummydata";
+import { committeeIcons } from "data/dummydata";
 import { NavLink } from "react-router-dom";
 import {
   EmphasizedSmallBodyText,

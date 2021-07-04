@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 
-import LeftPanel from "containers/Panels/LeftPanel";
+import LeftPanel from "components/Panels/LeftPanel";
 import {
   LadderModule,
   CommitteeInfoModule,

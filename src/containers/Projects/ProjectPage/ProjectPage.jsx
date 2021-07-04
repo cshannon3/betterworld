@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import LeftPanel from "containers/Panels/LeftPanel";
+import LeftPanel from "components/Panels/LeftPanel";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { useMediaQuery } from "react-responsive";
@@ -153,6 +153,14 @@ const ActiveProjectPage = ({ projectData, user }) => {
         onRequestClose={closeEditProjectModal}
       ></EditProjectInfoModal>
 
+
+      <Breadcrumbs>
+          <NavLink to='/'><BreadcrumbText>CMU AGAINST ICE</BreadcrumbText></NavLink>
+          <Arrow> &gt; </Arrow>
+          <NavLink to='/projects'><BreadcrumbText>Projects</BreadcrumbText></NavLink>
+          <Arrow> &gt; </Arrow>
+          <NavLink to={`/projects/${projectData.name}`}><BreadcrumbText>{projectData.name}</BreadcrumbText></NavLink>
+      </Breadcrumbs>
       <Flex>
         <ProjectInfoModule
           projectData={projectData}
@@ -283,7 +291,7 @@ const Flex = styled.div`
   flex-direction: column;
 
 `
-      : `height:50%;
+      : `height:47%;
       .GalleryStyle{
         width: 50%;
         height: 50vh;

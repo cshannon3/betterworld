@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import MultiSelect from "react-multi-select-component";
-import { allUsers } from "data/users";
+import { allUsers } from "old/users";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
 

@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react"
 import styled from "styled-components"
-import LeftPanel from "containers/Panels/LeftPanel"
+import LeftPanel from "components/Panels/LeftPanel"
 import ControlContext from '../../shared/control-context';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useHistory } from "react-router-dom";
-import {committeeIcons} from "dummydata"
+import {committeeIcons} from "data/dummydata"
 import { NavLink } from 'react-router-dom'
 import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
 
@@ -14,18 +14,22 @@ import { useMediaQuery } from 'react-responsive';
 
 export default function ProfilePage() {
   const ctrctx = useContext(ControlContext);
+
   const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
+    
 
-
+  const [profileData, setProfileData] = useState(
+        ctrctx.getMemberData("conreshan@gmail.com")
+  );
+  console.log(profileData);
   return (
     <RowWrapper>
       <LeftPanel />
       <ContentContainer isMobile={isMobile}>
         <OverviewSection>
           <PageSubtitleText>BETTERWORLD</PageSubtitleText>
-          <PageTitleText>{ctrctx.user.displayName}</PageTitleText>
+          <PageTitleText>{ctrctx.user && ctrctx.user.displayName}</PageTitleText>
         </OverviewSection>
-
       </ContentContainer>
     </RowWrapper>
   )

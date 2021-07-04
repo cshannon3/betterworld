@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
-import {allUsers} from 'data/users';
+import {allUsers} from 'old/users';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -22,8 +22,16 @@ if (!firebase.apps.length) {
     firebase.app(); // if already initialized, use that one
 }
 
+
+
 const db = firebase.firestore();
 export const provider = new firebase.auth.GoogleAuthProvider();
+
+
+export const getCollectionRef = ({groupID, collection}) => { 
+    return db.collection("groups").doc(groupID).collection(collection); 
+};
+
 
 export function getUserRef(userId) { return db.collection("users").doc(userId); }
 // export const getProjects = () => { return db.collection('projects');};
