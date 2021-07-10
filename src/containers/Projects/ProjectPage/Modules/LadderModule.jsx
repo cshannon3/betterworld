@@ -10,6 +10,7 @@ import LadderModal from '../Modals/LadderModal/LadderModal';
 import * as styles from 'styles/sharedStyles';
 import {fuzzyTextFilterFn} from "shared/utils";
 import ProjectContext from '../ProjectContext';
+import { useHistory } from "react-router-dom";
 
 
 // Let the table remove the filter if the string is empty.
@@ -20,6 +21,8 @@ function LadderModule({projectData, openLadderModal, contributors}) {
    const data = projectData["sections"];
    // let contributors = {};
     let statuses = {}
+    const history = useHistory();
+
    
     data.forEach((section)=>{
         let stat = section["stages"].find((stage)=> stage.name===section["status"])["status"];
@@ -35,7 +38,9 @@ function LadderModule({projectData, openLadderModal, contributors}) {
             accessor: 'name',
             Cell: ({ cell }) => (
                 <styles.RegularBodyText value={cell.value} 
-                 onClick={()=>openLadderModal(cell.row.original)}
+                 onClick={()=>history.push(`/${cell.row.original["id"]}`)
+                   // openLadderModal(cell.row.original)
+                }
                 >
                   {cell.value}
                 </styles.RegularBodyText>
@@ -147,7 +152,7 @@ function LadderModule({projectData, openLadderModal, contributors}) {
                     {rows.map((row) => {
                         prepareRow(row);
                         return (
-                            <TableRow {...row.getRowProps()}  onClick={()=>openLadderModal(row.original)}>
+                            <TableRow {...row.getRowProps()}  onClick={()=>history.push(`/projects/${projectData["id"]}/${row.original["id"]}`)}>
                                 {row.cells.map((cell) => (
                                     <td
                                         {...cell.getCellProps()}

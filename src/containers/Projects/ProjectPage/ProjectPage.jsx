@@ -4,7 +4,7 @@ import LeftPanel from "components/Panels/LeftPanel";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { useMediaQuery } from "react-responsive";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink , useParams} from "react-router-dom";
 import {
   LadderModule,
   ProjectInfoModule,
@@ -30,10 +30,14 @@ import {
 } from "styles/sharedStyles";
 
 export default function ProjectPage() {
+ 
+  const  { projectId } = useParams();
+  //console.log(p);
+
   const appCtx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
-  const projectId = urlParts[urlParts.length - 1];
-
+  //const projectId = urlParts[urlParts.length - 1];
+  console.log(urlParts);
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );

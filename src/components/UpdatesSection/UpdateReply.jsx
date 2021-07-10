@@ -19,7 +19,9 @@ const UpdateReply = ({
     return (
       <div className={"topbar"}>
         <div className={"author"}>{reply["author"]}</div>
-        {isHovering && isCurrentUser && (
+        
+        
+        {isHovering && isCurrentUser ? (
           <div className={"icons"}>
             <AiOutlineEdit
               size={18}
@@ -35,8 +37,25 @@ const UpdateReply = ({
                 deleteReply(reply);
               }}
             />
+           { reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
+            onClick={() => {
+              updateReplyStatus(reply.id, "done");
+            }}
+          >
+            Done?
+          </ButtonOne>}
           </div>
-        )}
+        ) :
+         reply["type"] ==="offer to help" && reply["status"]!=="done" ?
+         <OfferHelp status={reply["status"]} type={reply["type"]}>
+          <div className="flag">Help Offered</div>
+        </OfferHelp>
+        : reply["type"] ==="offer to help" && reply["status"]==="done"?
+        <OfferHelp status={reply["status"]} type={reply["type"]}>
+        <div className="flag">Done</div>
+      </OfferHelp>
+    :<div/>
+      }
       </div>
     );
   };
@@ -46,11 +65,7 @@ const UpdateReply = ({
 
   return isEditing ? null : (
     <div style={{paddingTop:'10px'}}>
-      {reply["type"] === "offer to help" && (
-        <OfferHelp status={reply["status"]} type={reply["type"]}>
-          <div className="flag">Help Offered</div>
-        </OfferHelp>
-      )}
+      
 
       <ReplyBoxCSS
         key={reply["id"]}
@@ -63,18 +78,26 @@ const UpdateReply = ({
           setIsHovering(false);
         }}
       >
+        
+
         <HeaderRow />
         <div className={"date"}>{formatTimestamp(reply["date"])}</div>
         <ContentRow />
-        <FlexRow>
+        {/* <FlexRow>
          {reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
             onClick={() => {
               updateReplyStatus(reply.id, "done");
             }}
           >
             Done?
-          </ButtonOne>}
+          </ButtonOne>
+          }
         </FlexRow>
+        {reply["type"] === "offer to help" && (
+        <OfferHelp status={reply["status"]} type={reply["type"]}>
+          <div className="flag">Help Offered</div>
+        </OfferHelp> */}
+      
       </ReplyBoxCSS>
     </div>
   );
@@ -142,34 +165,31 @@ const ReplyBoxCSS = styled.div`
     justify-content: space-between;
     align-items: baseline;
   }
-  ${({ type, status }) =>
-    type === "offer to help" && status !== "done"
-      ? `
-  background-color: white;//#fff7ec;
-  border-radius: 5px 0px 5px 5px ;
-`
-      : type === "offer to help" && status === "done"
-      ? `
-      background-color: #E6FAF5;
-      border: 2px solid #0CC998;
-  border-radius: 5px 0px 5px 5px ;
-`
-      : `border-left:1px solid #0CC998;`}
+  border-left:1px solid #0CC998;
+ 
 `;
 
+
+// ${({ type, status }) =>
+// type === "offer to help" && status !== "done"
+//   ? `
+// background-color: white;//#fff7ec;
+// border-radius: 5px 0px 5px 5px ;
+// `
+//   : type === "offer to help" && status === "done"
+//   ? `
+//   background-color: #E6FAF5;
+// border-radius: 5px 0px 5px 5px ;
+// `
+//   : `border-left:1px solid #0CC998;`}
 const OfferHelp = styled.div`
   height: 18px;
-  display: flex;
-  width: 100%;
-  margin-left: 10px;
-  justify-content: flex-end;
   .flag {
-    width: 120px;
+    width: 100px;
     color: white;
-    border-radius: 5px 5px 0px 0px;
-    padding-left: 10px;
-    padding-top: 3px;
+    border-radius: 5px; 
     font-family: Baloo 2;
+    text-align:center;
     font-style: normal;
     font-weight: bold;
     font-size: 11px;

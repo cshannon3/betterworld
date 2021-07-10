@@ -135,10 +135,10 @@ const UpdatesContainer = styled.div`
   ${({ isLadderModal }) =>
     isLadderModal &&
     `
-    width:40%;
+   // width:40%;
     background-color:#F8F8F8;
     margin: 15px;
-    height:95%;
+    height:80%;
   `}
 `;
 // console.log(newSectionData);

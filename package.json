@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@charkour/react-reactions": "^0.5.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/lab": "*",
     "@material/tooltip": "^11.0.0",
@@ -27,6 +26,7 @@
     "react-mentions": "^4.3.0",
     "react-modal": "^3.13.1",
     "react-multi-select-component": "^4.0.2",
+    "react-reflex": "^4.0.1",
     "react-responsive": "^8.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",

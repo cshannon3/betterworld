@@ -4,7 +4,7 @@ import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
 import { formatTimestamp } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import { MyEditor, MyEditor2 } from "../MyEditor/MyEditor";
+import { MyEditor2 } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { BsReply } from "react-icons/bs";
 import { cleanReplyModel } from "data_models/updatemodel";
@@ -29,8 +29,9 @@ const UpdateBox = ({
   const hasOfferedHelp =
     updateData["replies"] &&
     updateData["replies"].filter(
-      (rep) => rep.type === "offer to help" && rep.author == userName
+      (rep) => rep.type === "offer to help" //&& rep.author == userName
     ).length > 0;
+
   const isRequestHelpDone =
     updateData["status"] && updateData["status"] === "done";
 
@@ -41,11 +42,10 @@ const UpdateBox = ({
   const [isHovering, setIsHovering] = useState(false);
   const [editContent, setEditContent] = useState("");
 
-  let content = ""; 
+  let content = "";
   //updateData["content"];
 
   useEffect(() => {
-
     // Update the document title using the browser API
   });
 
@@ -97,7 +97,11 @@ const UpdateBox = ({
                 className="icon"
                 size={18}
                 onClick={() => {
-                  setIsEditing(!isEditing);
+                  window.localStorage.setItem("editContent", updateData.content);
+                  setIsEditing(true);
+                  setEditContent(updateData.content);
+                  content =updateData.content;
+
                 }}
               />
               <AiOutlineDelete
@@ -124,7 +128,7 @@ const UpdateBox = ({
                 }}
               />
             </div>
-          ) : isRequestHelp && !isRequestHelpDone && !hasOfferedHelp ? (
+          ) : isRequestHelp && !isRequestHelpDone ? ( //&& !hasOfferedHelp 
             <div className={"icons"}>
               <ButtonOne
                 onClick={() => {
@@ -184,7 +188,7 @@ const UpdateBox = ({
     return (
       <div className={"content"}>
         <MyEditor2
-          content={content}
+          content={window.localStorage.getItem("editContent")}
           onSave={(val) => {
             const newUpdateData = { ...updateData, content: val };
             updateUpdate(newUpdateData);
@@ -193,12 +197,21 @@ const UpdateBox = ({
           onCancel={() => {
             setIsEditing(false);
           }}
+          onChange={(val) => {
+            content = val;
+            window.localStorage.setItem("editContent", val);
+          }}
         />
       </div>
     );
   }
   const HelpResponseRow = () => {
-    return <div></div>;
+    if(!hasOfferedHelp) return null;
+
+    const helpReply = updateData["replies"].filter(
+      (rep) => rep.type === "offer to help" //&& rep.author == userName
+    )[0];
+    return <HelpResponseStyle>{`${helpReply.author} offered help:${helpReply.status}`}</HelpResponseStyle>;
   };
 
   const ReactionsRepliesRow = () => {
@@ -233,25 +246,35 @@ const UpdateBox = ({
 
   const RepliesListRow = () => {
     return (
-      <div>
+      <RepliesListStyle>
         {updateData["replies"]
-          .filter((rep) => rep.type !== "offer to help")
+         // .filter((rep) => rep.type !== "offer to help")
           .map((reply) => (
             <UpdateReply
               id={reply.id}
               reply={reply}
               userName={userName}
-              updateReplyStatus={(id, newStatus)=>{
+              updateReplyStatus={(id, newStatus) => {
                 let newUpdateData;
                 if (
                   updateData.replies &&
                   updateData.replies.find((v) => v.id == id)
                 ) {
-    
+                  // TODO notifications
                   let newReplies = updateData["replies"];
                   let u = newReplies.findIndex((v) => v.id == id);
+                  let newNotificaton = {
+                    "userId":updateData.authorId,
+                    "isRead":false,
+                    "type":"reply",
+                  };
+                  let notifs = [...updateData["notifications"], newNotificaton];
+                 
                   newReplies[u] = { ...newReplies[u], status: newStatus };
-                  newUpdateData = { ...updateData, replies: newReplies };
+                  newUpdateData = { ...updateData, replies: newReplies, notificatons: notifs };
+                 
+                 
+
                 }
                 updateUpdate(newUpdateData);
               }}
@@ -279,7 +302,7 @@ const UpdateBox = ({
               }}
             />
           ))}
-      </div>
+      </RepliesListStyle>
     );
   };
 
@@ -316,12 +339,22 @@ const UpdateBox = ({
             ) {
               let newReplies = updateData["replies"];
               let u = newReplies.findIndex((v) => v.id == activeReply.id);
+             
               newReplies[u] = { ...activeReply, content: val };
-              newUpdateData = { ...updateData, replies: newReplies };
+              newUpdateData = { ...updateData, replies: newReplies};
               //updateUpdate(newUpdateData);
             } else if (updateData.replies) {
+             
+              let newNotificaton = {
+                "userId":updateData.authorId,
+                "isRead":false,
+                "type":"reply",
+              };
+              let notifs = [...updateData["notifications"], newNotificaton];
+             
               newUpdateData = {
                 ...updateData,
+                notifications:notifs,
                 replies: [
                   ...updateData["replies"],
                   { ...activeReply, content: val },
@@ -346,68 +379,9 @@ const UpdateBox = ({
     );
   };
 
-  const PinnedHelpReplyRow = () => {
-    if (
-      !updateData["replies"] ||
-      updateData["replies"].filter((rep) => rep.type === "offer to help")
-        .length == 0
-    ) {
-      return null;
-    }
-
-    const reply = updateData["replies"].filter(
-      (rep) => rep.type === "offer to help"
-    )[0];
-    return (
-      <div style={{ paddingTop: "10px" }}>
-        <UpdateReply
-          id={reply.id}
-          reply={reply}
-          userName={userName}
-          isEditing={activeReply && reply.id == activeReply.id}
-          
-          updateReplyStatus={(id, newStatus)=>{
-            let newUpdateData;
-            if (
-              updateData.replies &&
-              updateData.replies.find((v) => v.id == id)
-            ) {
-
-              let newReplies = updateData["replies"];
-              let u = newReplies.findIndex((v) => v.id == id);
-              newReplies[u] = { ...newReplies[u], status: newStatus };
-              newUpdateData = { ...updateData, replies: newReplies };
-            }
-            updateUpdate(newUpdateData);
-          }}
-          setIsEditing={(r) => {
-            setActiveReply(r);
-            setEditContent(r.content);
-            content = editContent;
-            setIsReplyEditing(true);
-          }}
-          deleteReply={(r) => {
-            if (
-              updateData.replies &&
-              updateData.replies.find((v) => v.id == r.id)
-            ) {
-              const newUpdateData = {
-                ...updateData,
-                replies: updateData["replies"].filter((u) => u.id != r.id),
-              };
-              updateUpdate(newUpdateData);
-              setActiveReply(null);
-              setIsReplyEditing(false);
-              //updateUpdate(newUpdateData);
-            }
-          }}
-        />
-      </div>
-    );
-  };
 
   return (
-    <div
+    <UpdateBoxWrapper
       key={updateData["id"]}
       onMouseEnter={() => {
         //console.log(editContent);
@@ -415,21 +389,31 @@ const UpdateBox = ({
         setIsHovering(true);
       }}
       onMouseLeave={() => {
-        //   console.log(content);
-        //console.log(editContent);
-        setEditContent(content);
-        //console.log(content);
+
         setIsHovering(false);
       }}
     >
-      {(isOfferHelp||isRequestHelp) && 
+      {(isOfferHelp || isRequestHelp) && (
         <TopFlagRowStyle>
-          <TopFlag type={updateData["type"]} status={updateData["status"]}>
-            {isOfferHelp?"Help Offered": (isRequestHelpDone?"Request Done":"Help Requested")}</TopFlag>
+          <TopFlag
+            type={updateData["type"]}
+            status={updateData["status"]}
+            state={hasOfferedHelp}
+          >
+            {isOfferHelp
+              ? "Help Offered"
+              : isRequestHelpDone
+              ? "Request Done"
+              : "Help Requested"}
+          </TopFlag>
         </TopFlagRowStyle>
-        }
-       
-      <UpdateBoxCSS type={updateData["type"]} status={updateData["status"]}>
+      )}
+
+      <UpdateBoxCSS
+        type={updateData["type"]}
+        status={updateData["status"]}
+        state={hasOfferedHelp}
+      >
         <HeaderRow />
         <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
         {isEditing ? (
@@ -438,20 +422,23 @@ const UpdateBox = ({
           <p className={"content"}>{updateData["content"]}</p>
         )}
 
-        <PinnedHelpReplyRow />
+        {/* <PinnedHelpReplyRow /> */}
+        <HelpResponseRow/>
         <ReactionsRepliesRow />
-        {(isEditingReply || isShowingReplies) && (
+       
+      
+      </UpdateBoxCSS>
+      {(isEditingReply || isShowingReplies) && (
           <DividerSection>
             <hr className={"line1"} /> <p className={"text"}>Replies</p>{" "}
             <hr className={"line2"} />
           </DividerSection>
         )}
-        {isShowingReplies && <RepliesListRow />}
+      {isShowingReplies && <RepliesListRow />}
         {isEditingReply && <ReplyEditRow />}
-      </UpdateBoxCSS>
 
       {isSelector && <SlackSelector onSelect={handleSelect} />}
-    </div>
+    </UpdateBoxWrapper>
   );
 };
 
@@ -460,13 +447,23 @@ const FlexRow = styled.div`
   justify-content: flex-end;
 `;
 
-const UpdateBoxCSS = styled.div`
-  background-color: #ffffff;
-  border: 1px solid #eeeeee;
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  padding: 15px 10px 10px 10px;
+const UpdateBoxWrapper = styled.div`
+    margin-bottom: 20px;
+    background-color: #ffffff;
 
+`;
+
+const HelpResponseStyle = styled.div`
+    width:100%;
+    text-align: end;
+    padding-top:10px;
+`;
+
+
+const UpdateBoxCSS = styled.div`
+box-sizing: border-box;
+padding: 15px 10px 10px 10px;
+//border: 1px solid #eeeeee;
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -529,15 +526,21 @@ const UpdateBoxCSS = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    height: 30px;
   }
 
-  border-radius: 5px;
-
-  ${({ type, status }) =>
-    type === "offer to help"
+ 
+  ${({ type, status, state }) =>
+    //     type === "offer to help"
+    //       ? `
+    //   background-color: #fff7ec;
+    //   border-radius: 5px 0px 5px 5px ;
+    // `
+    //       :
+    type === "request help" && status !== "done" && state
       ? `
-  background-color: #fff7ec;
-  border-radius: 5px 0px 5px 5px ;
+      border-top:3px solid #EAA828;
+      background-color: #fff7ec;
 `
       : type === "request help" && status !== "done"
       ? `
@@ -551,7 +554,15 @@ const UpdateBoxCSS = styled.div`
   border: 2px solid #0CC998;
   border-radius: 5px 0px 5px 5px ;
 `
-      : `border-left:10px solid #0CC998;`}
+      : `border-top:3px solid grey;
+      border-radius:5px;
+      `}
+`;
+
+
+const RepliesListStyle = styled.div`
+    background-color: #ffffff;
+    padding: 0px 10px 10px 10px;
 `;
 
 const DividerSection = styled.div`
@@ -575,15 +586,13 @@ const TypeRowDiv = styled.div`
   width: 100%;
 `;
 
-
-
 const TopFlagRowStyle = styled.div`
-height: 18px;
-display: flex;
-width: 100%;
-justify-content: flex-end;
+  height: 18px;
+  display: flex;
+  width: 100%;
+  background: #F9F9F9;
+  justify-content: flex-end;
 `;
-
 
 const TopFlag = styled.div`
   width: 120px;
@@ -595,10 +604,14 @@ const TopFlag = styled.div`
   font-style: normal;
   font-weight: bold;
   font-size: 11px;
-  ${({ type, status }) =>
-    type === "offer to help"
+  ${({ type, status, state }) =>
+    //     type === "offer to help"
+    //       ? `
+    //   background-color: #eaa828;
+    // `
+    type === "request help" && status !== "done" && state
       ? `
-  background-color: #eaa828;
+      background-color: #eaa828;
 `
       : type === "request help" && status !== "done"
       ? `
@@ -609,9 +622,7 @@ const TopFlag = styled.div`
   background-color: #0CC998;
 `
       : `background-color: grey;`}
-
 `;
-
 
 const HelpReq = styled.div`
   height: 18px;
@@ -729,3 +740,61 @@ export default UpdateBox;
 //   {isSelector && <SlackSelector onSelect={handleSelect} />}
 //   {isEditingReply && <ReplyEditRow />}
 // </RequestBox>
+
+  // const PinnedHelpReplyRow = () => {
+  //   if (
+  //     !updateData["replies"] ||
+  //     updateData["replies"].filter((rep) => rep.type === "offer to help")
+  //       .length == 0
+  //   ) {
+  //     return null;
+  //   }
+
+  //   const reply = updateData["replies"].filter(
+  //     (rep) => rep.type === "offer to help"
+  //   )[0];
+  //   return (
+  //     <div style={{ paddingTop: "10px" }}>
+  //       <UpdateReply
+  //         id={reply.id}
+  //         reply={reply}
+  //         userName={userName}
+  //         isEditing={activeReply && reply.id == activeReply.id}
+  //         updateReplyStatus={(id, newStatus) => {
+  //           let newUpdateData;
+  //           if (
+  //             updateData.replies &&
+  //             updateData.replies.find((v) => v.id == id)
+  //           ) {
+  //             let newReplies = updateData["replies"];
+  //             let u = newReplies.findIndex((v) => v.id == id);
+  //             newReplies[u] = { ...newReplies[u], status: newStatus };
+  //             newUpdateData = { ...updateData, replies: newReplies };
+  //           }
+  //           updateUpdate(newUpdateData);
+  //         }}
+  //         setIsEditing={(r) => {
+  //           setActiveReply(r);
+  //           setEditContent(r.content);
+  //           content = editContent;
+  //           setIsReplyEditing(true);
+  //         }}
+  //         deleteReply={(r) => {
+  //           if (
+  //             updateData.replies &&
+  //             updateData.replies.find((v) => v.id == r.id)
+  //           ) {
+  //             const newUpdateData = {
+  //               ...updateData,
+  //               replies: updateData["replies"].filter((u) => u.id != r.id),
+  //             };
+  //             updateUpdate(newUpdateData);
+  //             setActiveReply(null);
+  //             setIsReplyEditing(false);
+  //             //updateUpdate(newUpdateData);
+  //           }
+  //         }}
+  //       />
+  //     </div>
+  //   );
+  // };

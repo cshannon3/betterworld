@@ -37,6 +37,7 @@ export default function LeftPanel() {
                 <PhotoUrl src={user && user.photoUrl} alt='Profile' />
                 {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
                 {user&& user.isAdmin && <MemberType>Admin</MemberType>}
+                {user && user.notifications && <p>{`${user.notifications.length} notifications`}</p>}
             </section>
             <Line />
             <div className="active" id="overviewSideLink" onClick={()=>{
@@ -58,7 +59,7 @@ export default function LeftPanel() {
                 <MenuText>COMMITTEES</MenuText>
             </div>
             <div id="myInfoSideLink"onClick={()=>{
-              history.push("/myinfo");
+              history.push("/profile");
             }}>
                 <PhotoIcon src={UserIcon} alt='User' />
                 <MenuText>MY INFO</MenuText>
@@ -71,6 +72,7 @@ export default function LeftPanel() {
                 <PhotoUrl src={user && user.photoUrl} alt='Profile' />
                 {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
                 {user&& user.isAdmin && <MemberType>Admin</MemberType>}
+                {user && user.notifications && <Notifs>{`${user.notifications.length} new notifications`}</Notifs>}
             </section>
             <Line />
             <div className="active" id="overviewSideLink" onClick={()=>{
@@ -92,7 +94,7 @@ export default function LeftPanel() {
                 <MenuText>COMMITTEES</MenuText>
             </div>
             <div id="myInfoSideLink" onClick={()=>{
-              history.push("/myinfo");
+              history.push("/profile");
             }}>
                 <PhotoIcon src={UserIcon} alt='Projects' />
                 <MenuText>MY INFO</MenuText>
@@ -110,6 +112,12 @@ font-family: 'Baloo 2';
   color:white;
 `
 
+
+const Notifs = styled.p`
+  width:100%;
+  text-align: center;
+  color:white;
+`;
 
 const Line = styled.hr`
   height: 1px;

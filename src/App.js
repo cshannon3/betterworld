@@ -20,12 +20,6 @@ import firebase from "firebase/app";
 import ControlContext from "shared/control-context";
 
 //Screens
-//import Splash from "containers/Splash/Splash";
-//import Landing from "containers/Landing/Landing";
-//import ProjectsPage from "containers/Projects/ProjectsPage";
-//import ProjectPage from "containers/Projects/ProjectPage/ProjectPage";
-//import CommitteePage from "containers/Committees/CommitteePage/CommitteePage";
-//import CommitteesPage from "containers/Committees/CommitteesPage";
 import AddItemPage from "containers/Add_Item_Page/AddItemPage";
 import { ModalProvider } from "styled-react-modal";
 import { useMediaQuery } from "react-responsive";
@@ -35,21 +29,16 @@ SplashPage,
 LandingPage,
 ProjectsPage,
 ProjectPage,
+ProjectSectionPage,
 CommitteePage,
 CommitteesPage,
 ProfilePage,
 NotFoundPage,
 } from "containers/pages"
-
-
-
+import ReflexDemo from "components/ResponsiveSplitScreen";
 
 
 let userListener;
-//   projectsListener,
-//   committeesListener,
-//   membersListener,
-//   updatesListener;
 
 let listeners = {
   "projects":null,
@@ -69,6 +58,7 @@ const App = () => {
     if(!user){
       let _user = JSON.parse(window.localStorage.getItem("user"));
       setUser(_user);
+
     }
     Object.keys(listeners).forEach((k)=>{
       if(k in listeners && listeners[k]==null){
@@ -139,6 +129,12 @@ const App = () => {
           break;
       } 
 }
+function sleep(ms) {
+  return new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+}
+
 
 
   window.onload = function () {
@@ -152,7 +148,7 @@ const App = () => {
       let _user = JSON.parse(window.localStorage.getItem("user"));
       if (_user) setUser(_user);
     }
-    setupListenersAndData();
+    //setupListenersAndData();
   });
 
   const isSignedIn = (user && Object.keys(user).length !== 0);
@@ -180,10 +176,37 @@ const App = () => {
            
               if (!userData) userData = await fb.createNewUser(result);
               else userData = { id: userId, ...userData };
-              setUser(userData);
-              window.localStorage.setItem("user", JSON.stringify(userData));
+             
               setupListenersAndData();
               
+              let i = 0;
+              while ( membersData === undefined  && updatesData===undefined && i<10){
+                await sleep(200);
+                i+=1;
+                console.log(i);
+              }
+              if( membersData  && updatesData){
+                userData = {...userData, ...membersData[userData.email], updates:[]};
+                if (updatesData) {
+                  userData["updates"] = Object.values(updatesData).filter(
+                    (v) => v.authorId == userData.userId
+                  );
+                  let allNots = [];
+                  Object.values(updatesData).forEach((update)=>{
+                  
+                    const notifs = update.notifications?.filter((v)=>v.userId==userData.userId);
+                    if(notifs){
+                      allNots.push(...notifs);
+                    }
+                  });
+                  userData["notifications"]= allNots;
+                }
+                
+            }
+              console.log(userData);
+              setUser(userData);
+              window.localStorage.setItem("user", JSON.stringify(userData));
+
             },
             logoutUser: () => {
               firebase
@@ -198,30 +221,51 @@ const App = () => {
                   console.log(error);
                 });
             },
+           
             getMemberData: (email) => {
               if ( !membersData ){ setupListenersAndData(); }
               if( membersData && email in membersData){
                   let _memberData = {...membersData[email], updates:[], isCurrentUser: email===user.email};
                   if(!_memberData.isSignedOn)return _memberData;
+                  
                   const _id = _memberData.userId;
-                  console.log(_id);
                   if (updatesData) {
                     _memberData["updates"] = Object.values(updatesData).filter(
                       (v) => v.authorId == _id
                     );
+                    let allNots = [];
+                    Object.values(updatesData).forEach((update)=>{
+                   
+                      const notifs = update.notifications?.filter((v)=>v.userId==user.id);
+                      if(notifs){
+                        allNots.push(...notifs);
+                      }
+                    });
+                    _memberData["notifications"]= allNots;
                   }
+                  console.log(_memberData);
                   return _memberData;
+              }else{
+                return null;
               }
-              return null;
+              
             },
            
             // getProjectData: (currentID)=>{if(currentID!==null&& data!=null) return data["projects"][currentID] }
             getProjectData: (projectId) => {
               
-              if ( !projectsData ){ setupListenersAndData(); }
-              console.log(projectsData);
-              if (projectId === null || !(projectId in projectsData)) return {};
-              let _projectData = {...projectsData[projectId], contributors:[], updates:[]};
+              let _projectsData = projectsData;
+              if ( !_projectsData ){ 
+                _projectsData = JSON.parse(window.localStorage.getItem("projects"));
+                console.log(_projectsData);
+                if(_projectsData)
+                setProjectsData(_projectsData);
+                //setupListenersAndData(); 
+              }
+             // console.log(projectsData);
+
+              if (projectId == null || _projectsData==null || !(projectId in _projectsData)) return null;
+              let _projectData = {..._projectsData[projectId], contributors:[], updates:[]};
              
                 if (membersData) {
                   _projectData["contributors"] = Object.values(
@@ -278,10 +322,12 @@ const App = () => {
           <ModalProvider>
             <div className="App__container">
               <Switch>
+              <Route path="/re" component={ReflexDemo} />
                 <Route path="/addItem" component={AddItemPage} />
-                <Route path="/projects/:projectId" component={ProjectPage} />
-                <Route path="/projects" component={ProjectsPage} />
-                <Route path="/myinfo" component={ProfilePage} />
+                <Route exact path="/projects/:projectId" component={ProjectPage} />
+                <Route path="/projects/:projectId/:sectionId" component={ProjectSectionPage} />
+                <Route exact path="/projects" component={ProjectsPage} />
+                <Route path="/profile" component={ProfilePage} />
 
                 <Route
                   path="/committees/:committeeId"
