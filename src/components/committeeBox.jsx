@@ -19,7 +19,8 @@ import {
             <div className="line" />
         </div>
         <img src={committeeIcons[id]} alt={name} />
-        </CommitteeBoxStyle>);
+        </CommitteeBoxStyle>
+        );
 }
 
 export default CommitteeBox;

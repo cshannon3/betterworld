@@ -3,11 +3,9 @@ import styled from "styled-components";
 import LeftPanel from "components/Panels/LeftPanel";
 import { useMediaQuery } from "react-responsive";
 import { NavLink } from "react-router-dom";
-import {
-  Breadcrumbs,
-  BreadcrumbText,
-  Arrow,
-} from "styles/sharedStyles";
+import { Breadcrumbs, BreadcrumbText, Arrow } from "styles/sharedStyles";
+import { Drawer } from "@material-ui/core";
+
 //TODO move sizing over from left panel
 
 const ResponsiveSplitScreen = ({
@@ -18,13 +16,14 @@ const ResponsiveSplitScreen = ({
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
 
   const Breadcrumb = () => {
-    if(currentPage=="home")return (
+    if (currentPage == "home")
+      return (
         <Breadcrumbs>
-        <NavLink to="/">
-          <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-        </NavLink>
-      </Breadcrumbs>
-    );
+          <NavLink to="/">
+            <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
+          </NavLink>
+        </Breadcrumbs>
+      );
     return (
       <Breadcrumbs>
         <NavLink to="/">
@@ -37,19 +36,43 @@ const ResponsiveSplitScreen = ({
       </Breadcrumbs>
     );
   };
-
-  return (
-    <RowWrapper>
-      <LeftPanel />
-      <LeftStyle>
-          <Breadcrumb/>
-        <LeftComponent />
-      </LeftStyle>
-      <RightStyle>
-        <RightComponent />
-      </RightStyle>
-    </RowWrapper>
-  );
+  if (!isMobile)
+    return (
+      <RowWrapper>
+        <LeftPanel />
+        <LeftStyle>
+          <Breadcrumb />
+          <LeftComponent />
+        </LeftStyle>
+        <RightStyle>
+          <RightComponent />
+        </RightStyle>
+      </RowWrapper>
+    );
+  else {
+      // TODO mobile layout
+    return (
+      <RowWrapper>
+        <Drawer
+          variant={isMobile ? "temporary" : "permenant"}
+          anchor="left"
+          open={false}
+          onClose={() => {}}
+        >
+          <LeftPanel />
+        </Drawer>
+        <div>
+        <TopStyle>
+          <Breadcrumb />
+          <LeftComponent />
+        </TopStyle>
+        <BottomStyle>
+          <RightComponent />
+        </BottomStyle>
+      </div>
+      </RowWrapper>
+    );
+  }
 };
 export default ResponsiveSplitScreen;
 
@@ -81,5 +104,15 @@ const LeftStyle = styled.div`
 const RightStyle = styled.div`
   width: 50vw;
   background-color: white;
+  padding: 3vh 40px 10vh 40px;
+`;
+
+const TopStyle = styled.div`
+  width: 100%;
+  padding: 3vh 40px 10vh 40px;
+`;
+
+const BottomStyle = styled.div`
+  width: 100%;
   padding: 3vh 40px 10vh 40px;
 `;

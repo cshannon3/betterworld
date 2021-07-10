@@ -10,10 +10,6 @@ import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText
       const getNumUpdates= (projectData)=>{
         let numUpdates = 0;
         if(projectData["updates"]) numUpdates = projectData["updates"].length;
-        // projectData["sections"].forEach((section) => {
-        //   if (section["updates"])
-        //     numUpdates+= section["updates"].length;
-        // });
         return numUpdates;
       }
 

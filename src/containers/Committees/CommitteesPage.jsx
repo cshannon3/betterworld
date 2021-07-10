@@ -16,17 +16,9 @@ import {
   SectionHeaderText,
   SmallestBodyTextBlack,
   SmallestBodyTextWhite,
-  Breadcrumbs,
-  BreadcrumbText,
-  Arrow,
 } from "styles/sharedStyles";
 import CommitteeBox from "components/committeeBox";
-
-
-
-import { useMediaQuery } from "react-responsive";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
-
 
 export default function CommitteesPage() {
   const ctrctx = useContext(ControlContext);
@@ -37,12 +29,11 @@ export default function CommitteesPage() {
 
   let history = useHistory();
 const LeftComponent = ()=>{
-  return (<OverviewSection>
-      <SectionHeaderText> Committees</SectionHeaderText>
-  </OverviewSection>)
-}
-const RightComponent = ()=>{
-  return ( <CommitteeSection>
+  return (<div>
+  <OverviewSection>
+      <PageTitleText> Committees</PageTitleText>
+  </OverviewSection>
+  <CommitteeSection>
   
     <Row>
       {committeeData.map((data) => (
@@ -54,9 +45,14 @@ const RightComponent = ()=>{
         />
       ))}
     </Row>
-  </CommitteeSection>)
+  </CommitteeSection>
+  </div>)
 }
+const RightComponent = ()=>{
+  return ( <div>
 
+  </div>)
+}
   return (
    <ResponsiveSplitScreen
         currentPage={'committees'}
@@ -81,6 +77,5 @@ const OverviewSection = styled.div``;
 
 const CommitteeSection = styled.div`
   width: 100%;
-  padding: 3vh 40px 10vh 40px;
 `;
 

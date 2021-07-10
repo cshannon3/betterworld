@@ -116,6 +116,7 @@ export default function CommitteePage() {
 
         <CustomModule />
         <UpdateDiv>
+          
             <UpdatesSection
               updates={"updates" in committeeData ? committeeData.updates : []}
               user={ctrctx.user}
