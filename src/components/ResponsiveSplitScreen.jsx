@@ -107,9 +107,8 @@ const LeftStyle = styled.div`
 `;
 
 const RightStyle = styled.div`
-  width: 45vw;
+  width:40vw;
   max-width:800px;
-  min-width:500px;
   
   height:100vh;
   background-color: #EEEEEE;

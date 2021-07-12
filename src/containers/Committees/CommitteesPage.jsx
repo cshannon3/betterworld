@@ -25,15 +25,15 @@ export default function CommitteesPage() {
 
   let history = useHistory();
 const LeftComponent = ()=>{
-  return (<div>
-  <OverviewSection>
+  return (<OverviewSection>
+  <div>
       <PageTitleText> Committees</PageTitleText>
       <LargeBodyText>
       Here you’ll find all our committees and what they do.....
 </LargeBodyText>
       <QuickLinksSection/>
       
-  </OverviewSection>
+  </div>
 
   <CommitteeSection>
   
@@ -48,7 +48,7 @@ const LeftComponent = ()=>{
       ))}
     </Row>
   </CommitteeSection>
-  </div>)
+  </OverviewSection>)
 }
 const RightComponent = ()=>{
   return ( <div>
@@ -70,15 +70,28 @@ const Row = styled.div`
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
+  align-content:center;
+  justify-content:space-evenly;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
 `;
-const OverviewSection = styled.div``;
+const OverviewSection = styled.div`
+ width: 100%;
+  height:100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction:column;
+  `;
 
 const CommitteeSection = styled.div`
   width: 100%;
+  height:100%;
+  display:flex;
+  align-content:center;
+  justify-content:center;
 `;
+
 
