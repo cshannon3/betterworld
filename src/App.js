@@ -2,17 +2,6 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 
-
-// import {
-//   provider,
-//   getUserData,
-//   createNewUser,
-//   getProjects,
-//   getCommittees,
-//   getMembers,
-//   getUpdates,
-//   updateContributors,
-// } from "shared/firebase";
 import * as fb from "shared/firebase";
 
 //import dummydata from 'shared/dummydata';
@@ -22,13 +11,12 @@ import ControlContext from "shared/control-context";
 //Screens
 import AddItemPage from "containers/Add_Item_Page/AddItemPage";
 import { ModalProvider } from "styled-react-modal";
-import { useMediaQuery } from "react-responsive";
-//import ProfilePage from "containers/ProfilePage/ProfilePage";
 import {
 SplashPage,
 LandingPage,
 ProjectsPage,
-ProjectPage,
+ActiveProjectPage,
+ArchivedProjectPage,
 ProjectSectionPage,
 CommitteePage,
 CommitteesPage,
@@ -324,7 +312,8 @@ function sleep(ms) {
               <Switch>
               <Route path="/re" component={ReflexDemo} />
                 <Route path="/addItem" component={AddItemPage} />
-                <Route exact path="/projects/:projectId" component={ProjectPage} />
+                <Route exact path="/past-projects/:projectId" component={ArchivedProjectPage} />
+                <Route exact path="/projects/:projectId" component={ActiveProjectPage} />
                 <Route path="/projects/:projectId/:sectionId" component={ProjectSectionPage} />
                 <Route exact path="/projects" component={ProjectsPage} />
                 <Route path="/profile" component={ProfilePage} />

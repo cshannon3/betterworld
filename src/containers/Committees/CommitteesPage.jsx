@@ -4,21 +4,17 @@ import LeftPanel from "components/Panels/LeftPanel";
 import ControlContext from "../../shared/control-context";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useHistory } from "react-router-dom";
-import { committeeIcons } from "data/dummydata";
-import { NavLink } from "react-router-dom";
 import {
-  EmphasizedSmallBodyText,
   LargeBodyText,
-  PageSubtitleText,
   PageTitleText,
-  ProjectCardText,
-  ProjectCardTextWhite,
-  SectionHeaderText,
-  SmallestBodyTextBlack,
-  SmallestBodyTextWhite,
 } from "styles/sharedStyles";
 import CommitteeBox from "components/committeeBox";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
+import UpdatesSection from "components/UpdatesSection/UpdatesSection";
+
+import QuickLinksSection from "components/QuickLinks";
+import AtAGlanceModule from "components/AtAGlanceModule";
+
 
 export default function CommitteesPage() {
   const ctrctx = useContext(ControlContext);
@@ -32,7 +28,13 @@ const LeftComponent = ()=>{
   return (<div>
   <OverviewSection>
       <PageTitleText> Committees</PageTitleText>
+      <LargeBodyText>
+      Here you’ll find all our committees and what they do.....
+</LargeBodyText>
+      <QuickLinksSection/>
+      
   </OverviewSection>
+
   <CommitteeSection>
   
     <Row>
@@ -50,7 +52,8 @@ const LeftComponent = ()=>{
 }
 const RightComponent = ()=>{
   return ( <div>
-
+      <AtAGlanceModule/>
+      <UpdatesSection/>
   </div>)
 }
   return (

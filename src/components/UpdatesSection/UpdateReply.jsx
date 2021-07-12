@@ -83,7 +83,14 @@ const UpdateReply = ({
         <HeaderRow />
         <div className={"date"}>{formatTimestamp(reply["date"])}</div>
         <ContentRow />
-        {/* <FlexRow>
+      
+      
+      </ReplyBoxCSS>
+    </div>
+  );
+};
+
+  /* <FlexRow>
          {reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
             onClick={() => {
               updateReplyStatus(reply.id, "done");
@@ -96,13 +103,7 @@ const UpdateReply = ({
         {reply["type"] === "offer to help" && (
         <OfferHelp status={reply["status"]} type={reply["type"]}>
           <div className="flag">Help Offered</div>
-        </OfferHelp> */}
-      
-      </ReplyBoxCSS>
-    </div>
-  );
-};
-
+        </OfferHelp> */
 const ReplyBoxCSS = styled.div`
   background-color: #ffffff;
   border: 1px solid #eeeeee;

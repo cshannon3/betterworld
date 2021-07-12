@@ -6,16 +6,10 @@ import { NavLink } from "react-router-dom";
 import { Breadcrumbs, BreadcrumbText, Arrow } from "styles/sharedStyles";
 import { Drawer } from "@material-ui/core";
 
-//TODO move sizing over from left panel
+//TODO figure out best way to do breadcrumbs
+const Breadcrumb = ({currentPage}) => {
+    const urlParts = window.location.href.split("/");
 
-const ResponsiveSplitScreen = ({
-  currentPage,
-  LeftComponent,
-  RightComponent,
-}) => {
-  const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
-
-  const Breadcrumb = () => {
     if (currentPage == "home")
       return (
         <Breadcrumbs>
@@ -24,6 +18,7 @@ const ResponsiveSplitScreen = ({
           </NavLink>
         </Breadcrumbs>
       );
+    //TODO nested breadcrumbs
     return (
       <Breadcrumbs>
         <NavLink to="/">
@@ -31,11 +26,20 @@ const ResponsiveSplitScreen = ({
         </NavLink>
         <Arrow> &gt; </Arrow>
         <NavLink to={`/${currentPage}`}>
-          <BreadcrumbText>{currentPage.toUpperCase()}</BreadcrumbText>
+          <BreadcrumbText>{currentPage && currentPage.toUpperCase()}</BreadcrumbText>
         </NavLink>
       </Breadcrumbs>
     );
   };
+
+const ResponsiveSplitScreen = ({
+  currentPage,
+  LeftComponent,
+  RightComponent,
+}) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
+
+  
   if (!isMobile)
     return (
       <RowWrapper>
@@ -76,8 +80,8 @@ const ResponsiveSplitScreen = ({
 };
 export default ResponsiveSplitScreen;
 
+
 export const ResponsiveFullScreen = ({ currentPage, MainComponent }) => {
-  const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
 
   return (
     <RowWrapper>
@@ -97,14 +101,19 @@ const RowWrapper = styled.div`
   }
 `;
 const LeftStyle = styled.div`
-  width: 50vw;
+  width: 55vw;
+  background-color: #FFFFFF;
   padding: 3vh 40px 10vh 40px;
 `;
 
 const RightStyle = styled.div`
-  width: 50vw;
-  background-color: white;
-  padding: 3vh 40px 10vh 40px;
+  width: 45vw;
+  max-width:800px;
+  min-width:500px;
+  
+  height:100vh;
+  background-color: #EEEEEE;
+  padding: 3vh 20px 10vh 20px;
 `;
 
 const TopStyle = styled.div`

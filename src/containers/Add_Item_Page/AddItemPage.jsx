@@ -113,7 +113,7 @@ export default function AddItemPage() {
     setInputFileList(list);
   };
 
-  // 
+
 
   function handleUpload(e) {
     console.log("hello");

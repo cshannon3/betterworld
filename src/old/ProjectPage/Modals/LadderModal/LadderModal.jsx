@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from "styled-components"
 import Modal from 'styled-react-modal'
-import * as styles from '../../../../../styles/sharedStyles';
+import * as styles from '../../../../styles/sharedStyles';
 import StagesComponent from "./StagesComponent";
 import ProjectContext from '../../ProjectContext';
 import ControlContext from 'shared/control-context';

@@ -45,9 +45,9 @@ const UpdateBox = ({
   let content = "";
   //updateData["content"];
 
-  useEffect(() => {
-    // Update the document title using the browser API
-  });
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  // });
 
   function handleSelect(emoji) {
     const index = _.findIndex(updateData["reactions"], { emoji, by: userName });
@@ -97,11 +97,13 @@ const UpdateBox = ({
                 className="icon"
                 size={18}
                 onClick={() => {
-                  window.localStorage.setItem("editContent", updateData.content);
+                  window.localStorage.setItem(
+                    "editContent",
+                    updateData.content
+                  );
                   setIsEditing(true);
                   setEditContent(updateData.content);
-                  content =updateData.content;
-
+                  content = updateData.content;
                 }}
               />
               <AiOutlineDelete
@@ -128,7 +130,7 @@ const UpdateBox = ({
                 }}
               />
             </div>
-          ) : isRequestHelp && !isRequestHelpDone ? ( //&& !hasOfferedHelp 
+          ) : isRequestHelp && !isRequestHelpDone ? ( //&& !hasOfferedHelp
             <div className={"icons"}>
               <ButtonOne
                 onClick={() => {
@@ -206,12 +208,14 @@ const UpdateBox = ({
     );
   }
   const HelpResponseRow = () => {
-    if(!hasOfferedHelp) return null;
+    if (!hasOfferedHelp) return null;
 
     const helpReply = updateData["replies"].filter(
       (rep) => rep.type === "offer to help" //&& rep.author == userName
     )[0];
-    return <HelpResponseStyle>{`${helpReply.author} offered help:${helpReply.status}`}</HelpResponseStyle>;
+    return (
+      <HelpResponseStyle>{`${helpReply.author} offered help:${helpReply.status}`}</HelpResponseStyle>
+    );
   };
 
   const ReactionsRepliesRow = () => {
@@ -248,7 +252,7 @@ const UpdateBox = ({
     return (
       <RepliesListStyle>
         {updateData["replies"]
-         // .filter((rep) => rep.type !== "offer to help")
+          // .filter((rep) => rep.type !== "offer to help")
           .map((reply) => (
             <UpdateReply
               id={reply.id}
@@ -264,17 +268,18 @@ const UpdateBox = ({
                   let newReplies = updateData["replies"];
                   let u = newReplies.findIndex((v) => v.id == id);
                   let newNotificaton = {
-                    "userId":updateData.authorId,
-                    "isRead":false,
-                    "type":"reply",
+                    userId: updateData.authorId,
+                    isRead: false,
+                    type: "reply",
                   };
                   let notifs = [...updateData["notifications"], newNotificaton];
-                 
-                  newReplies[u] = { ...newReplies[u], status: newStatus };
-                  newUpdateData = { ...updateData, replies: newReplies, notificatons: notifs };
-                 
-                 
 
+                  newReplies[u] = { ...newReplies[u], status: newStatus };
+                  newUpdateData = {
+                    ...updateData,
+                    replies: newReplies,
+                    notificatons: notifs,
+                  };
                 }
                 updateUpdate(newUpdateData);
               }}
@@ -339,22 +344,21 @@ const UpdateBox = ({
             ) {
               let newReplies = updateData["replies"];
               let u = newReplies.findIndex((v) => v.id == activeReply.id);
-             
+
               newReplies[u] = { ...activeReply, content: val };
-              newUpdateData = { ...updateData, replies: newReplies};
+              newUpdateData = { ...updateData, replies: newReplies };
               //updateUpdate(newUpdateData);
             } else if (updateData.replies) {
-             
               let newNotificaton = {
-                "userId":updateData.authorId,
-                "isRead":false,
-                "type":"reply",
+                userId: updateData.authorId,
+                isRead: false,
+                type: "reply",
               };
               let notifs = [...updateData["notifications"], newNotificaton];
-             
+
               newUpdateData = {
                 ...updateData,
-                notifications:notifs,
+                notifications: notifs,
                 replies: [
                   ...updateData["replies"],
                   { ...activeReply, content: val },
@@ -379,20 +383,8 @@ const UpdateBox = ({
     );
   };
 
-
   return (
-    <UpdateBoxWrapper
-      key={updateData["id"]}
-      onMouseEnter={() => {
-        //console.log(editContent);
-        //setEditContent(content);
-        setIsHovering(true);
-      }}
-      onMouseLeave={() => {
-
-        setIsHovering(false);
-      }}
-    >
+    <div key={updateData["id"]}>
       {(isOfferHelp || isRequestHelp) && (
         <TopFlagRowStyle>
           <TopFlag
@@ -408,37 +400,44 @@ const UpdateBox = ({
           </TopFlag>
         </TopFlagRowStyle>
       )}
+      <UpdateBoxWrapper>
+        <UpdateBoxCSS
+          type={updateData["type"]}
+          status={updateData["status"]}
+          state={hasOfferedHelp}
+          onMouseEnter={() => {
+            //console.log(editContent);
+            //setEditContent(content);
+            setIsHovering(true);
+          }}
+          onMouseLeave={() => {
+            setIsHovering(false);
+          }}
+        >
+          <HeaderRow />
+          <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
+          {isEditing ? (
+            <ContentRowEdit />
+          ) : (
+            <p className={"content"}>{updateData["content"]}</p>
+          )}
 
-      <UpdateBoxCSS
-        type={updateData["type"]}
-        status={updateData["status"]}
-        state={hasOfferedHelp}
-      >
-        <HeaderRow />
-        <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
-        {isEditing ? (
-          <ContentRowEdit />
-        ) : (
-          <p className={"content"}>{updateData["content"]}</p>
-        )}
-
-        {/* <PinnedHelpReplyRow /> */}
-        <HelpResponseRow/>
-        <ReactionsRepliesRow />
-       
-      
-      </UpdateBoxCSS>
-      {(isEditingReply || isShowingReplies) && (
+          {/* <PinnedHelpReplyRow /> */}
+          <HelpResponseRow />
+          <ReactionsRepliesRow />
+        </UpdateBoxCSS>
+        {(isEditingReply || isShowingReplies) && (
           <DividerSection>
             <hr className={"line1"} /> <p className={"text"}>Replies</p>{" "}
             <hr className={"line2"} />
           </DividerSection>
         )}
-      {isShowingReplies && <RepliesListRow />}
+        {isShowingReplies && <RepliesListRow />}
         {isEditingReply && <ReplyEditRow />}
 
-      {isSelector && <SlackSelector onSelect={handleSelect} />}
-    </UpdateBoxWrapper>
+        {isSelector && <SlackSelector onSelect={handleSelect} />}
+      </UpdateBoxWrapper>
+    </div>
   );
 };
 
@@ -448,22 +447,20 @@ const FlexRow = styled.div`
 `;
 
 const UpdateBoxWrapper = styled.div`
-    margin-bottom: 20px;
-    background-color: #ffffff;
-
+  margin-bottom: 20px;
+  background-color: #ffffff;
 `;
 
 const HelpResponseStyle = styled.div`
-    width:100%;
-    text-align: end;
-    padding-top:10px;
+  width: 100%;
+  text-align: end;
+  padding-top: 10px;
 `;
 
-
 const UpdateBoxCSS = styled.div`
-box-sizing: border-box;
-padding: 15px 10px 10px 10px;
-//border: 1px solid #eeeeee;
+  box-sizing: border-box;
+  padding: 15px 10px 10px 10px;
+  //border: 1px solid #eeeeee;
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -529,7 +526,6 @@ padding: 15px 10px 10px 10px;
     height: 30px;
   }
 
- 
   ${({ type, status, state }) =>
     //     type === "offer to help"
     //       ? `
@@ -559,10 +555,9 @@ padding: 15px 10px 10px 10px;
       `}
 `;
 
-
 const RepliesListStyle = styled.div`
-    background-color: #ffffff;
-    padding: 0px 10px 10px 10px;
+  background-color: #ffffff;
+  padding: 0px 10px 10px 10px;
 `;
 
 const DividerSection = styled.div`
@@ -590,7 +585,6 @@ const TopFlagRowStyle = styled.div`
   height: 18px;
   display: flex;
   width: 100%;
-  background: #F9F9F9;
   justify-content: flex-end;
 `;
 
@@ -741,60 +735,60 @@ export default UpdateBox;
 //   {isEditingReply && <ReplyEditRow />}
 // </RequestBox>
 
-  // const PinnedHelpReplyRow = () => {
-  //   if (
-  //     !updateData["replies"] ||
-  //     updateData["replies"].filter((rep) => rep.type === "offer to help")
-  //       .length == 0
-  //   ) {
-  //     return null;
-  //   }
+// const PinnedHelpReplyRow = () => {
+//   if (
+//     !updateData["replies"] ||
+//     updateData["replies"].filter((rep) => rep.type === "offer to help")
+//       .length == 0
+//   ) {
+//     return null;
+//   }
 
-  //   const reply = updateData["replies"].filter(
-  //     (rep) => rep.type === "offer to help"
-  //   )[0];
-  //   return (
-  //     <div style={{ paddingTop: "10px" }}>
-  //       <UpdateReply
-  //         id={reply.id}
-  //         reply={reply}
-  //         userName={userName}
-  //         isEditing={activeReply && reply.id == activeReply.id}
-  //         updateReplyStatus={(id, newStatus) => {
-  //           let newUpdateData;
-  //           if (
-  //             updateData.replies &&
-  //             updateData.replies.find((v) => v.id == id)
-  //           ) {
-  //             let newReplies = updateData["replies"];
-  //             let u = newReplies.findIndex((v) => v.id == id);
-  //             newReplies[u] = { ...newReplies[u], status: newStatus };
-  //             newUpdateData = { ...updateData, replies: newReplies };
-  //           }
-  //           updateUpdate(newUpdateData);
-  //         }}
-  //         setIsEditing={(r) => {
-  //           setActiveReply(r);
-  //           setEditContent(r.content);
-  //           content = editContent;
-  //           setIsReplyEditing(true);
-  //         }}
-  //         deleteReply={(r) => {
-  //           if (
-  //             updateData.replies &&
-  //             updateData.replies.find((v) => v.id == r.id)
-  //           ) {
-  //             const newUpdateData = {
-  //               ...updateData,
-  //               replies: updateData["replies"].filter((u) => u.id != r.id),
-  //             };
-  //             updateUpdate(newUpdateData);
-  //             setActiveReply(null);
-  //             setIsReplyEditing(false);
-  //             //updateUpdate(newUpdateData);
-  //           }
-  //         }}
-  //       />
-  //     </div>
-  //   );
-  // };
+//   const reply = updateData["replies"].filter(
+//     (rep) => rep.type === "offer to help"
+//   )[0];
+//   return (
+//     <div style={{ paddingTop: "10px" }}>
+//       <UpdateReply
+//         id={reply.id}
+//         reply={reply}
+//         userName={userName}
+//         isEditing={activeReply && reply.id == activeReply.id}
+//         updateReplyStatus={(id, newStatus) => {
+//           let newUpdateData;
+//           if (
+//             updateData.replies &&
+//             updateData.replies.find((v) => v.id == id)
+//           ) {
+//             let newReplies = updateData["replies"];
+//             let u = newReplies.findIndex((v) => v.id == id);
+//             newReplies[u] = { ...newReplies[u], status: newStatus };
+//             newUpdateData = { ...updateData, replies: newReplies };
+//           }
+//           updateUpdate(newUpdateData);
+//         }}
+//         setIsEditing={(r) => {
+//           setActiveReply(r);
+//           setEditContent(r.content);
+//           content = editContent;
+//           setIsReplyEditing(true);
+//         }}
+//         deleteReply={(r) => {
+//           if (
+//             updateData.replies &&
+//             updateData.replies.find((v) => v.id == r.id)
+//           ) {
+//             const newUpdateData = {
+//               ...updateData,
+//               replies: updateData["replies"].filter((u) => u.id != r.id),
+//             };
+//             updateUpdate(newUpdateData);
+//             setActiveReply(null);
+//             setIsReplyEditing(false);
+//             //updateUpdate(newUpdateData);
+//           }
+//         }}
+//       />
+//     </div>
+//   );
+// };

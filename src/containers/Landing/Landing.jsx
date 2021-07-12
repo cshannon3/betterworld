@@ -20,6 +20,8 @@ import {
 import { useMediaQuery } from "react-responsive";
 
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
+import QuickLinksSection from "components/QuickLinks";
+import AtAGlanceModule from "components/AtAGlanceModule";
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
@@ -36,36 +38,25 @@ export default function Landing() {
     return (
       <div>
         <OverviewSection>
-          <PageSubtitleText>BETTERWORLD</PageSubtitleText>
           <PageTitleText>CMU Against ICE</PageTitleText>
+         <P10/>
+         <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
           <LargeBodyText>
             We align ourselves with student movements mobilizing with Mijente
             under the #NoTechForICE campaign and organize to challenge the
             dominant narratives at CMU and in broader society.
           </LargeBodyText>
+         
         </OverviewSection>
-        <QuickLinksSection>
-          <PageSubtitleText>Quick Links</PageSubtitleText>
-          <Row>
-            {quickData.map((data) => (
-              <Tooltip title={data.tip}>
-                <a href={data.url} target="_blank">
-                  <LinkBox>
-                    <img src={data.icon} alt={data.title} />
-                  </LinkBox>
-                </a>
-              </Tooltip>
-            ))}
-          </Row>
-        </QuickLinksSection>
+       <QuickLinksSection/>
+        
       </div>
     );
   };
   const RightComponent = () => {
     return (
       <CommitteeSection>
-        <SectionHeaderText> Committees</SectionHeaderText>
-       
+       <AtAGlanceModule/>
       </CommitteeSection>
     );
   };
@@ -79,15 +70,10 @@ export default function Landing() {
   );
 }
 
-const RowWrapper = styled.div`
-  display: flex;
-  overflow: hidden;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+const P10 = styled.div`
+  padding-top:20px;
 `;
+
 
 const Row = styled.div`
   display: flex;
@@ -100,21 +86,11 @@ const Row = styled.div`
   }
 `;
 
-const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  ${({ isMobile }) =>
-    isMobile
-      ? ` max-width: calc(100vw );
-`
-      : `max-width: calc(100vw - 170px);`}
-  padding: 3vh 40px 10vh 40px;
-`;
+
 const OverviewSection = styled.div``;
-const QuickLinksSection = styled.div`
-  width: 100%;
-`;
+// const QuickLinksSection = styled.div`
+//   width: 100%;
+// `;
 const CommitteeSection = styled.div`
   width: 100%;
 `;
@@ -168,36 +144,24 @@ const LinkBox = styled.div`
   }
 `;
 
-const ProjectsSection = styled.div`
-  //width:100%;
-`;
-const ProjectBox = styled.a`
-  height: 194px;
-  min-width: 244px;
-  cursor: pointer;
-  text-decoration: none;
-  background: #fafafa;
-  border: 1px solid #0cc998;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  padding: 20px 15px;
-`;
 
-const ArchivedProjectBox = styled.a`
-  height: 194px;
-  min-width: 244px;
-  cursor: pointer;
-  text-decoration: none;
-  background: #b6b6b6;
-  border: 1px solid #0cc998;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  padding: 20px 15px;
-`;
 /*
 
+/<QuickLinksSection>
+        <P10/>
+          <PageSubtitleText>Quick Links</PageSubtitleText>
+          <Row>
+            {quickData.map((data) => (
+              <Tooltip title={data.tip}>
+                <a href={data.url} target="_blank">
+                  <LinkBox>
+                    <img src={data.icon} alt={data.title} />
+                  </LinkBox>
+                </a>
+              </Tooltip>
+            ))}
+          </Row>
+        </QuickLinksSection> 
  return (
     <RowWrapper>
       <LeftPanel />

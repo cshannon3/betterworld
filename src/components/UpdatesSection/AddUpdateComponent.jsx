@@ -6,6 +6,8 @@ import { MyEditor2 } from "../MyEditor/MyEditor";
 import {cleanUpdateModel} from "data_models/updatemodel";
 
 
+//TODO remove this
+
 const StyledModal = Modal.styled`
 width: 362px;
 height: 236px;
@@ -145,10 +147,3 @@ const MenuLine = styled.div`
 `;
 
 export default AddUpdateComponent;
-
-/* <textarea rows="4" cols="50">
-            {description}
-      </textarea> */
-/* <button onClick={
-  () => onSave({ stage: selectedStage, content: content })
-}>{saveText}</button> */

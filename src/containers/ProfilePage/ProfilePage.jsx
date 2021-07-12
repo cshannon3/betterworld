@@ -9,7 +9,8 @@ import { NavLink } from 'react-router-dom'
 import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText, ProjectCardText, ProjectCardTextWhite, SectionHeaderText, SmallestBodyTextBlack, SmallestBodyTextWhite } from "styles/sharedStyles";
 import { useMediaQuery } from 'react-responsive';
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
-
+import UpdatesSection from 'components/UpdatesSection/UpdatesSection';
+import AtAGlanceModule from "components/AtAGlanceModule";
 
 
 export default function ProfilePage() {
@@ -37,9 +38,10 @@ export default function ProfilePage() {
     </OverviewSection>)
   }
   const RightComponent = ()=>{
-    return ( <UpdatesSectionStyle  isMobile={isMobile}>
-      Hi
-              </UpdatesSectionStyle>)
+    return ( <div >
+              <AtAGlanceModule/>
+               <UpdatesSection/>
+      </div>)
   }
 
 
