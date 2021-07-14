@@ -20,7 +20,6 @@ export default function CommitteesPage() {
   const ctrctx = useContext(ControlContext);
   let projectsData = ctrctx.getProjectsData();
   projectsData = projectsData ? Object.values(projectsData) : [];
-
   const committeeData = Object.values(ctrctx.getCommitteesData());
 
   let history = useHistory();

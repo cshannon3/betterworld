@@ -148,6 +148,7 @@ function sleep(ms) {
           value={{
             
             user, // ID of current user
+            groupName:"CMU Against ICE",
             projectsData: projectsData,
             committeesData: committeesData,
             membersData: membersData,
@@ -274,6 +275,24 @@ function sleep(ms) {
                 } 
                 return _projectData; 
             },
+            getProjectName: (projectId, sectionId) =>{
+              if (
+                projectsData &&
+                projectId !== null &&
+                projectId in projectsData
+              ) {
+                console.log("get name");
+                if(!sectionId) return projectsData[projectId].name;
+                else if ("sections" in projectsData[projectId]){
+                  let f = projectsData[projectId]["sections"].filter((sec)=>sec.id==sectionId);
+                  if(f && f.length>0){
+                    return [projectsData[projectId].name, f[0]["name"]];
+                  }
+                }
+              }
+              console.log("else");
+              return "";
+            },
             getProjectsData: () => {
               if (projectsData) return projectsData;
               setupListenersAndData();
@@ -299,6 +318,16 @@ function sleep(ms) {
               }
               return false;
             },
+            getCommitteeName: (currentID) => {
+              if (
+                committeesData &&
+                currentID !== null &&
+                currentID in committeesData
+              ) {
+                return committeesData[currentID].name;
+              } 
+               return "committee";
+            },
             getCommitteesData: () => {
               if (committeesData) return committeesData;
               setupListenersAndData();
@@ -310,8 +339,9 @@ function sleep(ms) {
           <ModalProvider>
             <div className="App__container">
               <Switch>
-              <Route path="/re" component={ReflexDemo} />
-                <Route path="/addItem" component={AddItemPage} />
+              {/* <Route path="/re" component={ReflexDemo} />
+                <Route path="/addItem" component={AddItemPage} /> */}
+                
                 <Route exact path="/past-projects/:projectId" component={ArchivedProjectPage} />
                 <Route exact path="/projects/:projectId" component={ActiveProjectPage} />
                 <Route path="/projects/:projectId/:sectionId" component={ProjectSectionPage} />

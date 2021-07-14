@@ -5,32 +5,87 @@ import { useMediaQuery } from "react-responsive";
 import { NavLink } from "react-router-dom";
 import { Breadcrumbs, BreadcrumbText, Arrow } from "styles/sharedStyles";
 import { Drawer } from "@material-ui/core";
+import { useParams } from "react-router-dom";
+import ControlContext from "shared/control-context";
 
 //TODO figure out best way to do breadcrumbs
-const Breadcrumb = ({currentPage}) => {
-    const urlParts = window.location.href.split("/");
+const Breadcrumb = ({ currentPage }) => {
+  const urlParts = window.location.href.split("/");
+  const params = useParams();
+  const appCtx = useContext(ControlContext);
+  const groupName = appCtx.groupName;
+  let breadcrumbData = [["/", groupName], ];
+  
+  if (urlParts.includes("committees")) {
+    breadcrumbData.push(["arrow"]);
+    breadcrumbData.push(["/committees", "Committees"]);
+    if ("committeeId" in params){
+      const committeeName = appCtx.getCommitteeName(params.committeeId);
+      breadcrumbData.push(["arrow"]);
+      breadcrumbData.push([`/committees/${params.committeeId}`, committeeName]);
+    } 
+  } else if (urlParts.includes("projects")) {
+    breadcrumbData.push(["arrow"]);
+    breadcrumbData.push(["/projects", "Projects"]);
+    if ("projectId" in params) {
+      if ("sectionId" in params) {
+        const [projectName, sectionName]= appCtx.getProjectName(params.projectId, params.sectionId);
+        breadcrumbData.push(["arrow"]);
+        breadcrumbData.push([`/projects/${params.projectId}`, projectName]);
+        breadcrumbData.push(["arrow"]);
+        breadcrumbData.push([`/projects/${params.projectId}/${params.sectionId}`, sectionName]);
+      } else {
+        const projectName = appCtx.getProjectName(params.projectId);
+        console.log(projectName);
+        breadcrumbData.push(["arrow"]);
+        breadcrumbData.push([`/projects/${params.projectId}`, projectName]);
+      }
+    } 
+  } else if (urlParts.includes("profile")) {
+    breadcrumbData.push(["arrow"]);
+    breadcrumbData.push([`/profile`, "Profile"]);
+  } else if (urlParts.includes("past-projects")) {
+  } 
 
-    if (currentPage == "home")
-      return (
-        <Breadcrumbs>
-          <NavLink to="/">
-            <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-          </NavLink>
-        </Breadcrumbs>
-      );
-    //TODO nested breadcrumbs
-    return (
-      <Breadcrumbs>
-        <NavLink to="/">
-          <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-        </NavLink>
-        <Arrow> &gt; </Arrow>
-        <NavLink to={`/${currentPage}`}>
-          <BreadcrumbText>{currentPage && currentPage.toUpperCase()}</BreadcrumbText>
-        </NavLink>
-      </Breadcrumbs>
-    );
-  };
+
+  return (
+    <Breadcrumbs>
+     {
+        breadcrumbData.map((bc)=>{
+          return bc[0]==="arrow"? (
+            <Arrow> &gt; </Arrow>
+          )
+          :(  <NavLink to={bc[0]}>
+          <BreadcrumbText>{bc[1]}</BreadcrumbText>
+        </NavLink>)
+
+       })
+  }
+     
+      {/* <NavLink to="/">
+        <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
+      </NavLink> */}
+    </Breadcrumbs>
+  );
+  
+  
+  // if (currentPage == "home")
+    
+  // //TODO nested breadcrumbs
+  // return (
+  //   <Breadcrumbs>
+  //     <NavLink to="/">
+  //       <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
+  //     </NavLink>
+  //     <Arrow> &gt; </Arrow>
+  //     <NavLink to={`/${currentPage}`}>
+  //       <BreadcrumbText>
+  //         {currentPage && currentPage.toUpperCase()}
+  //       </BreadcrumbText>
+  //     </NavLink>
+  //   </Breadcrumbs>
+  // );
+};
 
 const ResponsiveSplitScreen = ({
   currentPage,
@@ -39,7 +94,6 @@ const ResponsiveSplitScreen = ({
 }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
 
-  
   if (!isMobile)
     return (
       <RowWrapper>
@@ -54,7 +108,7 @@ const ResponsiveSplitScreen = ({
       </RowWrapper>
     );
   else {
-      // TODO mobile layout
+    // TODO mobile layout
     return (
       <RowWrapper>
         <Drawer
@@ -66,23 +120,21 @@ const ResponsiveSplitScreen = ({
           <LeftPanel />
         </Drawer>
         <div>
-        <TopStyle>
-          <Breadcrumb />
-          <LeftComponent />
-        </TopStyle>
-        <BottomStyle>
-          <RightComponent />
-        </BottomStyle>
-      </div>
+          <TopStyle>
+            <Breadcrumb />
+            <LeftComponent />
+          </TopStyle>
+          <BottomStyle>
+            <RightComponent />
+          </BottomStyle>
+        </div>
       </RowWrapper>
     );
   }
 };
 export default ResponsiveSplitScreen;
 
-
 export const ResponsiveFullScreen = ({ currentPage, MainComponent }) => {
-
   return (
     <RowWrapper>
       <LeftPanel />
@@ -102,16 +154,16 @@ const RowWrapper = styled.div`
 `;
 const LeftStyle = styled.div`
   width: 55vw;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 3vh 40px 10vh 40px;
 `;
 
 const RightStyle = styled.div`
-  width:40vw;
-  max-width:800px;
-  
-  height:100vh;
-  background-color: #EEEEEE;
+  width: 40vw;
+  max-width: 800px;
+
+  height: 100vh;
+  background-color: #eeeeee;
   padding: 3vh 20px 10vh 20px;
 `;
 

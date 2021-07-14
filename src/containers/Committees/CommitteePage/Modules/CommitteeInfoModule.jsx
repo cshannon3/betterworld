@@ -13,19 +13,6 @@ export default function CommitteeInfoModule({ committeeData, user, onSave }) {
   return (
     <CommitteeTitleBox>
       <div>
-        <Breadcrumbs>
-          <NavLink to="/">
-            <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-          </NavLink>
-          <Arrow> &gt; </Arrow>
-          <NavLink to="/committees">
-            <BreadcrumbText>Committees</BreadcrumbText>
-          </NavLink>
-          <Arrow> &gt; </Arrow>
-          <NavLink to={`/committees/${committeeData.name}`}>
-            <BreadcrumbText>{committeeData.name}</BreadcrumbText>
-          </NavLink>
-        </Breadcrumbs>
         <CommitteesTitle>{committeeData.name}</CommitteesTitle>
 
         <DescriptionText>{committeeData.description}</DescriptionText>

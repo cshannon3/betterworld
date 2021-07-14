@@ -3,6 +3,7 @@ import { createContext } from "react";
 
 // create a context with default values
 const ControlContext = createContext({
+  groupName:null,
   projectId:null,
   committeeId:null,
   sectionId:null,
@@ -19,11 +20,16 @@ const ControlContext = createContext({
   currentProjectID: null,
   setCurrentProjectID: ()=>{},
   getProjectData: ()=>{},
+  getProjectName: (projectId, sectionId)=>{},
   getProjectsData:()=>{},
+
+
 
   committeesData:null,
   getCommitteeData: ()=>{},
   getCommitteesData:()=>{},
+  getCommitteeName:()=>{},
+
 
 
   membersData:null,
