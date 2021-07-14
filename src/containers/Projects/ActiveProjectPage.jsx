@@ -16,6 +16,8 @@ import {
 } from "styles/sharedStyles";
 
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
+import UpdatesSection from "components/UpdatesSection/UpdatesSection";
+
 
 const ActiveProjectPage = () => {
   const { projectId } = useParams();
@@ -83,10 +85,10 @@ const ActiveProjectPage = () => {
 
   const RightComponent = () => {
     return (
-      <div>
+      <RightStyle>
           <AtAGlanceModule projectData={projectData} />
-       
-      </div> 
+          <UpdatesSection/>
+      </RightStyle> 
     );
   };
   return <ResponsiveSplitScreen 
@@ -97,6 +99,14 @@ const ActiveProjectPage = () => {
 
 export default ActiveProjectPage;
 
+
+const RightStyle= styled.div`
+  height:100%
+
+`
+const LeftStyle= styled.div`
+  height:100%
+`
 const ContentContainer = styled.div`
   width: 100%;
   height: 100%;

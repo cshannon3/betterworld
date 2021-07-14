@@ -55,3 +55,16 @@ h2 {
     color: var(--black);
 }
 
+
+.Modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+  }

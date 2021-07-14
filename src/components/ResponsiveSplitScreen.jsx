@@ -145,6 +145,7 @@ export const ResponsiveFullScreen = ({ currentPage, MainComponent }) => {
 
 const RowWrapper = styled.div`
   display: flex;
+  height:100vh;
   overflow: hidden;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -161,8 +162,8 @@ const LeftStyle = styled.div`
 const RightStyle = styled.div`
   width: 40vw;
   max-width: 800px;
-
   height: 100vh;
+  max-height:100vh;
   background-color: #eeeeee;
   padding: 3vh 20px 10vh 20px;
 `;

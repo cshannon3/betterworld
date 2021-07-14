@@ -43,12 +43,27 @@ const ProjectSectionPage = () =>{
     const data = projectData["sections"]?.filter((s)=>s.id==sectionId)[0];
     const LeftComponent = ()=>{
         const stages = data["stages"].map((st)=>st.name);
-
+        const getContributors = (stageData)=>{
+            let _contributors = [];
+            if(!("contributors" in data))return [];
+            data["contributors"].forEach((s)=>{
+                if(projectId in s.projects){
+                    let _roles = s.projects[projectId].roles;
+                    if(_roles && _roles.filter((r)=>r.stageId===stageData.id).length){
+                        _contributors.push(s);
+                    }
+                }
+            })
+            return _contributors;
+        }
+        
         return (  
         <MainContainer>
             <div>
                <div>
+               <h2>{data["name"]}</h2>
                 <div className="header">
+                   
                     <div className="description">
                     <styles.PageSubtitleText>Description</styles.PageSubtitleText>
                      
@@ -63,7 +78,7 @@ const ProjectSectionPage = () =>{
                 </div>
                 </div>
                 <div className="tasks">
-                    <StagesComponent data={data["stages"].map((dd)=>{ return {...dd, "contributors": [...data["contributors"].filter((c)=>c.projects[projectId].roles.filter((r)=>r.stageId===dd.id).length)]} })} /> 
+                    <StagesComponent data={data["stages"].map((dd)=>{ return {...dd, "contributors": getContributors(dd)}})} /> 
                 </div>
                 <div className="buttons" >
                     
@@ -93,22 +108,7 @@ const ProjectSectionPage = () =>{
         return (   
             <UpdatesStyle>
             <UpdatesSection
-                updates={data["updates"]}
-                stages={stages}
-                user={ctrctx.user}
-                projectId={projectId}
-                sectionId={sectionId}
-                selectorOpen={selectorOpen}
-                updateUpdates={(newUpdates)=>{
-                    const newSectionData = {...data,  "updates":newUpdates}
-                   // ctx.updateSection(newSectionData);
-                    //setLadderData(newSectionData);
-                }}
-                setSelectorOpen={(id)=>{
-                    if(selectorOpen!=id)setSelectorOpen(id);
-                    else setSelectorOpen(null);
-                }}
-            >
+             >
             </UpdatesSection>
       </UpdatesStyle>)
       }
@@ -346,8 +346,8 @@ const UpdatesStyle= styled.div`
 
 const MainContainer = styled.div`
 
-margin:30px;
-
+//margin:30px;
+padding-top:50px;
 .header{
     height:20%;
     display:flex;

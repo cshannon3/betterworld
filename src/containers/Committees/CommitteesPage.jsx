@@ -51,7 +51,7 @@ const LeftComponent = ()=>{
 }
 const RightComponent = ()=>{
   return ( <div>
-      <AtAGlanceModule/>
+      {/* <AtAGlanceModule/> */}
       <UpdatesSection/>
   </div>)
 }

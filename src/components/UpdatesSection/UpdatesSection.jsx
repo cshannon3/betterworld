@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext, useRef} from "react";
 import styled from "styled-components";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
 import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
@@ -14,6 +14,7 @@ Send in page info and this automatically gets resources
 
 
 const UpdatesSection = ({
+  allowAddUpdate=true
 }) => {
 
   const appCtx = useContext(ControlContext);
@@ -22,7 +23,7 @@ const UpdatesSection = ({
   const [selectorOpen, setSelectorOpen] = useState(null);
   const urlParts = window.location.href.split("/");
   const params = useParams();
-
+  const positionRef = useRef()
   let updateListener;
 
   const user = appCtx.user;
@@ -39,6 +40,7 @@ const UpdatesSection = ({
 }
 
  useEffect(() => {
+
     if(updates==null){
       if(urlParts.includes("committees") ){
         if("committeeId" in params){
@@ -74,28 +76,14 @@ const UpdatesSection = ({
 
 
   return (
-    <UpdatesContainer >
+    <UpdatesContainer ref={positionRef}>
       <UpdatesMenu >
         <div className={"updateTitle"}>
           Updates
         </div>
         <div>
-        <ButtonOne onClick={()=>setIsAddingUpdate(true)}>{"AddUpdate"}</ButtonOne>
-          {/* <button>Filter</button> */}
-          {/* <AddUpdateComponent
-            type={"default"}
-            stages={[]}
-            user={user}
-            onSave={async (newUpdate) => {
-              //   console.log("On Save");
-              //   // add ids to new update
-              //   const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":committeeId, "sectionId":sectionId}
-              //   // TODO this gets added to db 
-              //   await fb.createUpdate(_newUpdate);
-              // if (updates) updateUpdates([...updates, _newUpdate]);
-              // else updateUpdates([newUpdate]);
-            }}
-          /> */}
+       {allowAddUpdate && <ButtonOne onClick={()=>setIsAddingUpdate(true)}>{"AddUpdate"}</ButtonOne> }
+          
         </div>
       </UpdatesMenu>
       {isAddingUpdate &&
@@ -103,7 +91,8 @@ const UpdatesSection = ({
        onSave={()=>{}}
        onCancel={()=>{setIsAddingUpdate(false);}}
       />}
-      <UpdatesList>
+      <UpdatesList 
+      >
         {updates &&
           updates
             .sort((a, b) => b.date - a.date)
@@ -155,7 +144,8 @@ export default UpdatesSection;
 
 const UpdatesList = styled.div`
   overflow: scroll;
-  height: 50vh;
+  height: 100%;
+  box-sizing: content-box;
   padding: 15px;
 `;
 const UpdatesMenu = styled.div`
@@ -186,6 +176,7 @@ const UpdatesMenu = styled.div`
 const UpdatesContainer = styled.div`
   width: 100%;
   height: 100%;
+  box-sizing: content-box;
 `;
 const ButtonOne = styled.button`
     background: #0CC998;
@@ -216,7 +207,21 @@ const ButtonOne = styled.button`
 // }) => {
 
 //   const urlParts = window.location.href.split("/");
-  
+  /* <button>Filter</button> */
+          /* <AddUpdateComponent
+            type={"default"}
+            stages={[]}
+            user={user}
+            onSave={async (newUpdate) => {
+              //   console.log("On Save");
+              //   // add ids to new update
+              //   const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":committeeId, "sectionId":sectionId}
+              //   // TODO this gets added to db 
+              //   await fb.createUpdate(_newUpdate);
+              // if (updates) updateUpdates([...updates, _newUpdate]);
+              // else updateUpdates([newUpdate]);
+            }}
+          /> */
   
 
 

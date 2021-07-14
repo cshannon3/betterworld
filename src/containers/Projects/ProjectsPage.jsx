@@ -22,7 +22,7 @@ export default function ProjectsPage() {
 
   let history = useHistory();
   const LeftComponent = ()=>{
-    return ( <div>
+    return ( <LeftStyle>
        <OverviewSection>
       <PageTitleText>Projects</PageTitleText>
       <LargeBodyText>
@@ -61,15 +61,17 @@ export default function ProjectsPage() {
      }
    </Row>
  </ProjectsSection>
- </div>
+ </LeftStyle>
  )
   }
   const RightComponent = ()=>{
     return (  
-      <div>
-          <AtAGlanceModule/>
-          <UpdatesSection/>
-      </div> 
+      <RightStyle>
+          {/* <AtAGlanceModule/> */}
+          <UpdatesSection
+          allowAddUpdate={false}
+          />
+      </RightStyle> 
       )
   }
 
@@ -83,6 +85,12 @@ export default function ProjectsPage() {
    );
 }
 
+const RightStyle= styled.div`
+  height:100%
+`
+const LeftStyle= styled.div`
+  height:100%
+`
 
 
 const Row = styled.div`
