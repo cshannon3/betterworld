@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 import LeftPanel from "components/Panels/LeftPanel";
 import ControlContext from "shared/control-context";
@@ -17,51 +18,76 @@ import {
   SmallestBodyTextWhite,
 } from "styles/sharedStyles";
 
-import { useMediaQuery } from "react-responsive";
+import * as fb from "shared/firebase";
 
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import QuickLinksSection from "components/QuickLinks";
 import AtAGlanceModule from "components/AtAGlanceModule";
+import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
+  const [value, loading, error] = useDocument(fb.getGroupRef(), {
+    snapshotListenOptions: { includeMetadataChanges: true },
+  });
+  const [link, setLink] = useState(null);
   let projectsData = ctrctx.getProjectsData();
   projectsData = projectsData ? Object.values(projectsData) : [];
-  const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
-
-  const committeeData = Object.values(ctrctx.getCommitteesData());
-  const quickData = quickLinks;
-
-  let history = useHistory();
 
   const LeftComponent = () => {
+    const groupData = loading ? null : value && value.data();
     return (
       <div>
         <OverviewSection>
           <PageTitleText>CMU Against ICE</PageTitleText>
-         <P10/>
-         <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
-          <LargeBodyText>
-            We align ourselves with student movements mobilizing with Mijente
-            under the #NoTechForICE campaign and organize to challenge the
-            dominant narratives at CMU and in broader society.
-          </LargeBodyText>
-         
+          <P10 />
+          <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
+          {loading && <span>Document: Loading...</span>}
+          {groupData && <LargeBodyText>{groupData.description}</LargeBodyText>}
         </OverviewSection>
-       <QuickLinksSection/>
-        
+        <QuickLinksSection
+          resources={groupData && groupData.resources}
+          clickLink={(_link) => {
+            setLink(_link);
+          }}
+          addLink={(url, name)=>{
+            fb.updateGroup(url,name);
+          }}
+        />
       </div>
     );
   };
   const RightComponent = () => {
+    if (link)
+      return (
+        <div style={{ height: "100%" }}>
+          <button onClick={() => setLink(null)}>X</button>
+          <a href={link} target="_blank">
+            go to
+          </a>
+          <iframe
+            width="100%"
+            height="100%"
+            src={link}
+            allowFullScreen
+          ></iframe>
+        </div>
+      );
     return (
       <CommitteeSection>
-       <AtAGlanceModule/>
+        <AtAGlanceModule />
+        <UpdatesSection/>
       </CommitteeSection>
     );
   };
 
-  return (
+  return link ? (
+    <ResponsiveSplitScreen
+      currentPage={"home"}
+      LeftComponent={LeftComponent}
+      RightComponent={RightComponent}
+    />
+  ) : (
     <ResponsiveSplitScreen
       currentPage={"home"}
       LeftComponent={LeftComponent}
@@ -71,9 +97,8 @@ export default function Landing() {
 }
 
 const P10 = styled.div`
-  padding-top:20px;
+  padding-top: 20px;
 `;
-
 
 const Row = styled.div`
   display: flex;
@@ -85,7 +110,6 @@ const Row = styled.div`
     display: none;
   }
 `;
-
 
 const OverviewSection = styled.div``;
 // const QuickLinksSection = styled.div`
@@ -143,7 +167,6 @@ const LinkBox = styled.div`
     margin: 3px;
   }
 `;
-
 
 /*
 

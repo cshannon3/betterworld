@@ -58,6 +58,18 @@ export const getMembers = ({ groupID = "cmu-against-ice" }) => {
 
 
 
+export const getGroupRef = () => { //{ groupID = "cmu-against-ice" }
+    return db.collection("groups").doc("cmu-against-ice"); 
+};
+
+export async function updateGroup(name, url) {
+    const groupID = "cmu-against-ice" ;
+    const groupData = await db.collection("groups").doc(groupID).get();
+    let _newRes = [...groupData.data()["resources"], {name, url}]
+    db.collection("groups").doc(groupID).update({
+        resources:_newRes
+    });
+}
 export const getUpdates = () => { 
     const groupID = "cmu-against-ice" ;
     return db.collection("groups").doc(groupID).collection('updates'); 
@@ -94,7 +106,6 @@ export function getCommitteeUpdates(committeeId=null) {
     // Add team
     if(committeeId!=null){
         return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "==", committeeId);
- 
     }
     else{
         return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "!=", null);

@@ -12,24 +12,25 @@ import { MentionsInput, Mention } from "react-mentions";
 //TODO get in the current data of where they are --- project section etc
 const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
   const ctrctx = useContext(ControlContext);
-  const userId = ctrctx.user && ctrctx.user.id;
-  const urlParts = window.location.href.split("/");
+ // const userId = ctrctx.user && ctrctx.user.id;
+  //const urlParts = window.location.href.split("/");
 
   const userName = ctrctx.user && ctrctx.user.displayName;
-  let content = "";
-  const [editContent, setEditContent] = useState("");
+ // let content = "";
+ // const [editContent, setEditContent] = useState("");
   const [stage, setStage] = useState("");
   const [type, setType] = useState("default");
-  const [_content, setContent] = useState(content ?? "");
+  const [_content, setContent] = useState("");
 
-  const onChange = () => {
+  // const onChange = () => {
     
-    };
+  //   };
  
   const handleCommentChange = (e) => {
+
     const newContent = e.target.value;
-    setContent(e.target.value);
-    onChange(newContent);
+    setContent(newContent);
+    //onChange(newContent);
   };
   const userMentionData = Object.entries(ctrctx.membersData).map(
     ([k, myUser]) => ({
@@ -43,17 +44,23 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
       <div className={"topbar"}>
         <div className={"author"}>
           {userName}
-          <span className={"stage"}> {`  •  ${stage}`}</span>
         </div>
       </div>
     );
   };
 
-  function ContentRowEdit() {
-    return (
-      <div>
+  // const ContentRowEdit =() =>{
+  //   return (
+     
+  //   );
+  // }
+  return (
+    <UpdateBoxWrapper>
+      <UpdateBoxCSS type={type}>
+        <HeaderRow />
         <RootStyles>
           <MentionsInput
+            key="inputkey"
             value={_content}
             onChange={handleCommentChange}
             style={defaultStyle}
@@ -69,11 +76,11 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
         <SaveButton
           className={"button"}
           onClick={() => {
-            // const raw = convertToRaw(editorState.getCurrentContent());
-            // const blocks =raw.blocks;
             const displayText = swapTags(_content);
-            // const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
-            onSave(displayText);
+            onSave({
+              content:displayText, 
+              contentRaw:_content
+            });
           }}
         >
           save
@@ -82,14 +89,7 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
         <CancelButton className={"button grey"} onClick={() => onCancel()}>
           cancel
         </CancelButton>
-      </div>
-    );
-  }
-  return (
-    <UpdateBoxWrapper>
-      <UpdateBoxCSS type={type}>
-        <HeaderRow />
-        <ContentRowEdit />
+
       </UpdateBoxCSS>
     </UpdateBoxWrapper>
   );

@@ -1,35 +1,33 @@
-import React, { useEffect, useState, useContext, useRef} from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import styled from "styled-components";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
 import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 import * as fb from "shared/firebase";
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ControlContext from "shared/control-context";
 import NewUpdateBox from "./NewUpdateBox";
+import { cleanUpdateModel } from "data_models/updatemodel";
 
 // import {
 /*
 Send in page info and this automatically gets resources
 */
 
-
-const UpdatesSection = ({
-  allowAddUpdate=true
-}) => {
-
+const UpdatesSection = ({ allowAddUpdate = true }) => {
   const appCtx = useContext(ControlContext);
   const [updates, setUpdates] = useState(null);
   const [isAddingUpdate, setIsAddingUpdate] = useState(false);
   const [selectorOpen, setSelectorOpen] = useState(null);
   const urlParts = window.location.href.split("/");
   const params = useParams();
-  const positionRef = useRef()
+  const positionRef = useRef();
   let updateListener;
+  //let committeeId=null, committeeName, projectId=null, projectName, sectionId=null, sectionName;
 
   const user = appCtx.user;
- 
- function setupListener(ref) {
-   updateListener= ref.onSnapshot(function (querySnapshot) {
+
+  function setupListener(ref) {
+    updateListener = ref.onSnapshot(function (querySnapshot) {
       let _updateData = [];
       querySnapshot.forEach(function (doc) {
         _updateData.push({ ...doc.data(), id: doc.id });
@@ -37,62 +35,90 @@ const UpdatesSection = ({
       window.localStorage.setItem("page_updates", JSON.stringify(_updateData));
       setUpdates(_updateData);
     });
-}
+  }
 
- useEffect(() => {
-
-    if(updates==null){
-      if(urlParts.includes("committees") ){
-        if("committeeId" in params){
+  useEffect(() => {
+    if (updates == null) {
+      if (urlParts.includes("committees")) {
+        if ("committeeId" in params) {
+          //committeeId = params.committeeId;
           setupListener(fb.getCommitteeUpdates(params.committeeId));
-        }
-        else setupListener(fb.getCommitteeUpdates());
-      }
-      else if(urlParts.includes("projects")){
-        
-        if("projectId" in params){
-          if("sectionId" in params){
-            setupListener(fb.getProjectUpdates(params.projectId, params.sectionID));
-          }else{
+        } else setupListener(fb.getCommitteeUpdates());
+      } else if (urlParts.includes("projects")) {
+        if ("projectId" in params) {
+          //projectId = params.projectId;
+          if ("sectionId" in params) {
+            //sectionId = params.sectionId;
+            setupListener(
+              fb.getProjectUpdates(params.projectId, params.sectionId)
+            );
+          } else {
             setupListener(fb.getProjectUpdates(params.projectId));
           }
-        }else{
+        } else {
           setupListener(fb.getProjectUpdates());
         }
-      }else if(urlParts.includes("profile")){
+      } else if (urlParts.includes("profile")) {
         setupListener(fb.getUserUpdates(user.id));
-    
-      }else if(urlParts.includes("past-projects")){
-    
-      }else{ // Home
-    
+      } else if (urlParts.includes("past-projects")) {
+      } else {
+        // Home
       }
     }
-    return () => { 
-      if(updateListener) updateListener();
-    }
-  }, [])
- 
-
+    return () => {
+      if (updateListener) updateListener();
+    };
+  }, []);
 
   return (
     <UpdatesContainer ref={positionRef}>
-      <UpdatesMenu >
-        <div className={"updateTitle"}>
-          Updates
-        </div>
+      <UpdatesMenu>
+        <div className={"updateTitle"}>Updates</div>
         <div>
-       {allowAddUpdate && <ButtonOne onClick={()=>setIsAddingUpdate(true)}>{"AddUpdate"}</ButtonOne> }
-          
+          {allowAddUpdate && (
+            <ButtonOne onClick={() => setIsAddingUpdate(true)}>
+              {"AddUpdate"}
+            </ButtonOne>
+          )}
         </div>
       </UpdatesMenu>
-      {isAddingUpdate &&
-       <NewUpdateBox
-       onSave={()=>{}}
-       onCancel={()=>{setIsAddingUpdate(false);}}
-      />}
-      <UpdatesList 
-      >
+      {isAddingUpdate && (
+        <NewUpdateBox
+          key="testKey"
+          onSave={(newUpdateModel) => {
+            let projectName = null,
+              sectionName = null,
+              committeeName = null;
+            let _pid = "projectId" in params ? params.projectId : null;
+            let _sid = "sectionId" in params ? params.sectionId : null;
+            let _cid = "committeeId" in params ? params.committeeId : null;
+            if (_cid) committeeName = appCtx.getCommitteeName(_cid);
+            if (_pid) {
+              const r = appCtx.getProjectName(_pid, _sid);
+              projectName = r[0];
+              sectionName = r[1];
+            }
+            let _newUpdate = cleanUpdateModel({
+              author: appCtx.user.name,
+              authorId: appCtx.user.id,
+              userId: appCtx.user.userId,
+              projectId: _pid,
+              sectionId: _sid,
+              committeeId: _cid,
+              projectName: projectName,
+              sectionName: sectionName,
+              committeeName: committeeName,
+              ...newUpdateModel,
+            }); //appCtx.getCommitteeName(params.committeeId)
+            fb.createUpdate(_newUpdate);
+            console.log(_newUpdate);
+          }}
+          onCancel={() => {
+            setIsAddingUpdate(false);
+          }}
+        />
+      )}
+      <UpdatesList>
         {updates &&
           updates
             .sort((a, b) => b.date - a.date)
@@ -108,28 +134,28 @@ const UpdatesSection = ({
                     // let u = newUpdates.findIndex(
                     //   (up) => up.id == newUpdateData.id
                     // );
-                    // fb.updateUpdate(newUpdateData.id, newUpdateData);
+                    fb.updateUpdate(newUpdateData.id, newUpdateData);
                     // newUpdates[u] = newUpdateData;
                     // updateUpdates(newUpdates);
                   }}
-                  setSelectorOpen={(updateData) =>{
+                  setSelectorOpen={(updateData) => {
                     //setSelectorOpen(updateData.id)
                   }}
                   deleteUpdate={(updateData) => {
-                    // if (
-                    //   window.confirm(
-                    //     "Are you sure? This action cannot be reversed"
-                    //   )
-                    // ) {
-                    //   let newUpdates = updates.filter(
-                    //     (u) => u.id != updateData.id
-                    //   );
-                    //   //todo add delete function
-                    //   fb.deleteUpdate(updateData.id);
-                    //   updateUpdates(newUpdates);
-                    // } else {
-                    //   return;
-                    // }
+                    if (
+                      window.confirm(
+                        "Are you sure? This action cannot be reversed"
+                      )
+                    ) {
+                      // let newUpdates = updates.filter(
+                      //   (u) => u.id != updateData.id
+                      // );
+                      //todo add delete function
+                      fb.deleteUpdate(updateData.id);
+                      //updateUpdates(newUpdates);
+                    } else {
+                      return;
+                    }
                   }}
                 />
               );
@@ -140,7 +166,6 @@ const UpdatesSection = ({
 };
 
 export default UpdatesSection;
-
 
 const UpdatesList = styled.div`
   overflow: scroll;
@@ -155,8 +180,8 @@ const UpdatesMenu = styled.div`
   > div {
     display: flex;
   }
-  .updateTitle{
-    font-family: 'Baloo 2';
+  .updateTitle {
+    font-family: "Baloo 2";
     font-size: 21px;
     font-style: normal;
     font-weight: 600;
@@ -179,19 +204,17 @@ const UpdatesContainer = styled.div`
   box-sizing: content-box;
 `;
 const ButtonOne = styled.button`
-    background: #0CC998;
-    border-radius: 72.2872px;
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    color: white;
-    height:35px;
-    width:144px;
-    margin:10px;
-    cursor: pointer;
+  background: #0cc998;
+  border-radius: 72.2872px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  color: white;
+  height: 35px;
+  width: 144px;
+  margin: 10px;
+  cursor: pointer;
 `;
-
-
 
 // const UpdatesSection = ({
 //   updates = [],
@@ -207,8 +230,8 @@ const ButtonOne = styled.button`
 // }) => {
 
 //   const urlParts = window.location.href.split("/");
-  /* <button>Filter</button> */
-          /* <AddUpdateComponent
+/* <button>Filter</button> */
+/* <AddUpdateComponent
             type={"default"}
             stages={[]}
             user={user}
@@ -222,10 +245,6 @@ const ButtonOne = styled.button`
               // else updateUpdates([newUpdate]);
             }}
           /> */
-  
-
-
-
 
 //   return (
 //     <UpdatesContainer >
@@ -243,7 +262,7 @@ const ButtonOne = styled.button`
 //                 console.log("On Save");
 //                 // add ids to new update
 //                 const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":committeeId, "sectionId":sectionId}
-//                 // TODO this gets added to db 
+//                 // TODO this gets added to db
 //                 await fb.createUpdate(_newUpdate);
 //               if (updates) updateUpdates([...updates, _newUpdate]);
 //               else updateUpdates([newUpdate]);
@@ -299,7 +318,6 @@ const ButtonOne = styled.button`
 // };
 
 // export default UpdatesSection;
-
 
 // const UpdatesList = styled.div`
 //   overflow: scroll;

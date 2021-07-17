@@ -35,7 +35,7 @@ const Breadcrumb = ({ currentPage }) => {
         breadcrumbData.push(["arrow"]);
         breadcrumbData.push([`/projects/${params.projectId}/${params.sectionId}`, sectionName]);
       } else {
-        const projectName = appCtx.getProjectName(params.projectId);
+        const [projectName] = appCtx.getProjectName(params.projectId);
         console.log(projectName);
         breadcrumbData.push(["arrow"]);
         breadcrumbData.push([`/projects/${params.projectId}`, projectName]);

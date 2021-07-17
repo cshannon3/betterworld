@@ -7,25 +7,25 @@ export const cleanUpdateModel = (updateData) => {
     const blank =  {
         "id":uuidv4(),
         "committeeName":"",
-        "committeeId":"",
+        "committeeId":null,
         "sectionName":"",
-        "sectionId":"",
+        "sectionId":null,
         "projectName":"",
-        "projectId":"",
+        "projectId":null,
         "stage":"",
         "type": "default", //  default / request help / offer to help
         "isOnOverview":false,
         "isPinned":false,
         "status": "not started", // not started / done
         "author":"", // name
-        "authorId":"", //
+        "authorId":null, //
+        "userId":null,
         "date":Date.now(),
         "content":"",
-        "reactions":[ ],
+        "contentRaw":null,
+        "reactions":[],
         "replies":[],
         "notifications":[],
-        "isLink":false,
-        "url":null,
 
     }
     let cleanModel = {...blank, ...d};

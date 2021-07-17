@@ -65,47 +65,6 @@ export const quickLinks = [
 
 
 
-// const users = {
-//     "darya":{
-//         "name":"darya",
-//         "id":"darya",
-//         "image_url":"https://ca.slack-edge.com/T017C8TU9S8-U01763PF0KU-f0948675b623-512"
-//     },
-//     "bonnie":{
-//         "name":"bonnie",
-//         "id":"bonnie"
-//     },
-//     "juju":{
-//         "name":"juju",
-//         "id":"juju"
-//     },
-//     "renee":{
-//         "name":"renee",
-//         "id":"renee"
-//     },
-//     "kevin":{
-//         "name":"kevin",
-//         "id":"kevin",
-//         "image_url":"https://ca.slack-edge.com/T017C8TU9S8-U016RAYFM9D-8bca120afe38-512"
-//     },
-//     "cat":{
-//         "name":"cat",
-//         "id":"cat"
-//     },
-//     "connor":{
-//         "name":"connor",
-//         "id":"connor"
-//     },
-//     "sarah":{
-//         "name":"sarah",
-//         "id":"sarah"
-//     },
-//     "kai":{
-//         "name":"kai",
-//         "id":"kai"
-//     },
-// }
-
 
 
 

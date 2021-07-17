@@ -12,11 +12,14 @@ import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import QuickLinksSection from "components/QuickLinks";
 import AtAGlanceModule from "components/AtAGlanceModule";
+import { EditText, EditTextarea } from 'react-edit-text';
+import 'react-edit-text/dist/index.css';
 
 
 
 export default function ProjectsPage() {
   const ctrctx = useContext(ControlContext);
+
   let projectsData= ctrctx.getProjectsData();
   projectsData = projectsData?Object.values(projectsData):[];
 
@@ -25,11 +28,21 @@ export default function ProjectsPage() {
     return ( <LeftStyle>
        <OverviewSection>
       <PageTitleText>Projects</PageTitleText>
-      <LargeBodyText>
-      We are a student group that......
-... nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.
-      </LargeBodyText>
-      <QuickLinksSection/>
+     
+        {
+        ctrctx.editMode? <EditTextarea
+        style={{"font-weight": "200;", "font-size": "16px;"}}
+        defaultValue={`We are a student group that......
+        ... nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.
+             `}
+        /> :
+        <LargeBodyText>
+        We are a student group that......
+        ... nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.
+        </LargeBodyText>
+        }
+       
+      {/* <QuickLinksSection/> */}
    </OverviewSection>
    <ProjectsSection>
 
@@ -90,6 +103,7 @@ const RightStyle= styled.div`
 `
 const LeftStyle= styled.div`
   height:100%
+
 `
 
 
@@ -97,9 +111,11 @@ const Row = styled.div`
   display: flex;
   gap: 20px;
   overflow: scroll;
+  margin-bottom:20px;
 `
 
  const OverviewSection = styled.div`
+    margin-bottom:30px;
 `
 
 const ProjectsSection = styled.div`

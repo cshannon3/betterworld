@@ -11,6 +11,11 @@ import { cleanReplyModel } from "data_models/updatemodel";
 import ControlContext from "shared/control-context";
 import UpdateReply from "./UpdateReply";
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
+import _clone from 'lodash/clone'
+import _escapeRegExp from 'lodash/escapeRegExp'
+import _uniqBy from 'lodash/uniqBy'
+
+
 
 const UpdateBox = ({
   updateData,
@@ -78,7 +83,12 @@ const UpdateBox = ({
       <div className={"topbar"}>
         <div className={"author"}>
           {updateData["author"]}
-          <span className={"stage"}> {`  •  ${updateData["stage"]}`}</span>
+          <span className={"stage"}> 
+          {updateData["stage"] ? `  •  ${updateData["stage"]}`:
+          updateData["sectionName"]? `  •  ${updateData["sectionName"]}`
+          :updateData["projectName"]? `  •  ${updateData["projectName"]}`
+          :''}</span>
+          
         </div>
         {isHovering &&
           (isCurrentUser ? (
@@ -206,6 +216,26 @@ const UpdateBox = ({
         />
       </div>
     );
+  }
+
+  const ContentRow =() =>{
+    if("contentRaw" in updateData){
+      let displayText = _clone(updateData["contentRaw"])
+      //console.log(displayText);
+      const tags = updateData["contentRaw"].match(/@\{\{[^\}]+\}\}/gi) || []
+      tags.map(myTag => {
+        const tagData = myTag.slice(3, -2)
+        const tagDataArray = tagData.split('||')
+        const tagDisplayValue = tagDataArray[2];
+        displayText = displayText.replace(new RegExp(_escapeRegExp(myTag), 'gi'), `<span  style="background-color:#e8f5fa;">@${tagDisplayValue}</span>`)
+       
+      });
+      return (<p className={"content"} dangerouslySetInnerHTML={{__html:displayText}}></p>);
+    }
+    return (<p className={"content"}>{updateData["content"]}</p>);
+  
+   
+    
   }
   const HelpResponseRow = () => {
     if (!hasOfferedHelp) return null;
@@ -419,7 +449,7 @@ const UpdateBox = ({
           {isEditing ? (
             <ContentRowEdit />
           ) : (
-            <p className={"content"}>{updateData["content"]}</p>
+           <ContentRow/>
           )}
 
           {/* <PinnedHelpReplyRow /> */}
@@ -512,6 +542,9 @@ const UpdateBoxCSS = styled.div`
   .content {
     font-size: 14px;
     font-family: Inter;
+  }
+  .mention{
+    background-color:blue;
   }
   .num_replies {
     font-size: 12px;

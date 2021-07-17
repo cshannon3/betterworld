@@ -1,9 +1,6 @@
 import React from 'react';
 import {  useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { Editor, EditorState, RichUtils, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
-import { GrBlockQuote } from "react-icons/gr";
-import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
 import {swapTags, getUsersFromTags} from './tags'
 import defaultStyle from './defaultStyle'
 import ControlContext from "shared/control-context";

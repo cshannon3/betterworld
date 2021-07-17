@@ -39,6 +39,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [projectsData, setProjectsData] = useState(null);
   const [committeesData, setCommitteesData] = useState(null);
+  const [groupData, setGroupData] = useState(null);
   const [membersData, setMembersData] = useState(null);
   const [updatesData, setUpdatesData] = useState(null);
   
@@ -149,6 +150,7 @@ function sleep(ms) {
             
             user, // ID of current user
             groupName:"CMU Against ICE",
+            //getGroupData: async () => await fb.getGroupData(),
             projectsData: projectsData,
             committeesData: committeesData,
             membersData: membersData,
@@ -211,10 +213,10 @@ function sleep(ms) {
                 });
             },
            
-            getMemberData: (email) => {
+            getMemberData: () => {
               if ( !membersData ){ setupListenersAndData(); }
-              if( membersData && email in membersData){
-                  let _memberData = {...membersData[email], updates:[], isCurrentUser: email===user.email};
+              if( membersData && user && user.email in membersData){
+                  let _memberData = {...membersData[user.email], updates:[], isCurrentUser: true};
                   if(!_memberData.isSignedOn)return _memberData;
                   
                   const _id = _memberData.userId;
@@ -246,7 +248,7 @@ function sleep(ms) {
               let _projectsData = projectsData;
               if ( !_projectsData ){ 
                 _projectsData = JSON.parse(window.localStorage.getItem("projects"));
-                console.log(_projectsData);
+                //console.log(_projectsData);
                 if(_projectsData)
                 setProjectsData(_projectsData);
                 //setupListenersAndData(); 
@@ -282,7 +284,7 @@ function sleep(ms) {
                 projectId in projectsData
               ) {
                 console.log("get name");
-                if(!sectionId) return projectsData[projectId].name;
+                if(!sectionId) return [projectsData[projectId].name, null];
                 else if ("sections" in projectsData[projectId]){
                   let f = projectsData[projectId]["sections"].filter((sec)=>sec.id==sectionId);
                   if(f && f.length>0){
@@ -375,131 +377,31 @@ export default App;
 
 
 
-
-
-    // if (!projectsListener) setupProjectListener();
-    // if (!committeesListener) setupCommitteeListener();
-    // if (!membersListener) setupMembersListener();
-    // if (!updatesListener) setupUpdatesListener();
-
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-/*
-
-Get members on project.
-
-
-Members for each 
-
-projects: "immigration" {
-  role: ___
-}
-
-
-
-
-*/
-
-// if (!projectsListener) setupProjectListener();
-              // if (!committeesListener) setupCommitteeListener();
-              // if (!membersListener) setupMembersListener();
-              // if (!updatesListener) setupUpdatesListener();
-              
-             
- // function setupUpdatesListener() {
-  //   updatesListener = getUpdates().onSnapshot(function (querySnapshot) {
-  //     let _updatesData = {};
-  //     querySnapshot.forEach(function (doc) {
-  //       _updatesData[doc.id] = { ...doc.data(), id: doc.id };
-  //     });
-  //     //console.log(_projectsData);
-  //     setUpdatesData(_updatesData);
-  //     window.localStorage.setItem("updates", JSON.stringify(_updatesData));
-  //   });
-  // }
-
-  // function setupProjectListener() {
-  //   projectsListener = getProjects({ groupID: "cmu-against-ice" }).onSnapshot(
-  //     function (querySnapshot) {
-  //       let _projectsData = {};
-  //       querySnapshot.forEach(function (doc) {
-  //         _projectsData[doc.id] = { ...doc.data(), id: doc.id };
-  //       });
-  //       //console.log(_projectsData);
-  //       setProjectsData(_projectsData);
-  //       window.localStorage.setItem("projects", JSON.stringify(_projectsData));
-  //     }
-  //   );
-  // }
-
-  // function setupCommitteeListener() {
-  //   committeesListener = getCommittees({
-  //     groupID: "cmu-against-ice",
-  //   }).onSnapshot(function (querySnapshot) {
-  //     let _committeesData = {};
-  //     querySnapshot.forEach(function (doc) {
-  //       _committeesData[doc.id] = { ...doc.data(), id: doc.id };
-  //     });
-  //     // console.log(_committeesData);
-  //     setCommitteesData(_committeesData);
-  //     window.localStorage.setItem(
-  //       "committees",
-  //       JSON.stringify(_committeesData)
-  //     );
-  //   });
-  // }
-
-  // function setupMembersListener() {
-  //   membersListener = getMembers({
-  //     groupID: "cmu-against-ice",
-  //   }).onSnapshot(function (querySnapshot) {
-  //     let _membersData = {};
-  //     querySnapshot.forEach(function (doc) {
-  //       _membersData[doc.id] = { ...doc.data(), id: doc.id };
-  //     });
-  //     setMembersData(_membersData);
-  //     window.localStorage.setItem("members", JSON.stringify(_membersData));
-  //   });
-  // }
-
-  //updateContributors();
-    // let _user = JSON.parse(window.localStorage.getItem("user"));
-    // let _projectsData = JSON.parse(window.localStorage.getItem("projects"));
-    // let _committeesData = JSON.parse(window.localStorage.getItem("committees"));
-    // let _membersData = JSON.parse(window.localStorage.getItem("members"));
-    // let _updatesData = JSON.parse(window.localStorage.getItem("updates"));
-    // if (_user) {
-    //   setUser(_user);
-    //   if (!projectsListener) setupProjectListener();
-    //   else if (_projectsData) setProjectsData(_projectsData);
-    //   if (!committeesListener) setupCommitteeListener();
-    //   else if (_committeesData) setCommitteesData(_committeesData);
-    //   if (!membersListener) setupMembersListener();
-    //   else if (_membersData) setMembersData(_membersData);
-    //   if (!updatesListener) setupUpdatesListener();
-    //   else if (_updatesData) setUpdatesData(_updatesData);
-    // }
+// getMemberData: (email) => {
+//   if ( !membersData ){ setupListenersAndData(); }
+//   if( membersData && email in membersData){
+//       let _memberData = {...membersData[email], updates:[], isCurrentUser: email===user.email};
+//       if(!_memberData.isSignedOn)return _memberData;
+      
+//       const _id = _memberData.userId;
+//       if (updatesData) {
+//         _memberData["updates"] = Object.values(updatesData).filter(
+//           (v) => v.authorId == _id
+//         );
+//         let allNots = [];
+//         Object.values(updatesData).forEach((update)=>{
+       
+//           const notifs = update.notifications?.filter((v)=>v.userId==user.id);
+//           if(notifs){
+//             allNots.push(...notifs);
+//           }
+//         });
+//         _memberData["notifications"]= allNots;
+//       }
+//       console.log(_memberData);
+//       return _memberData;
+//   }else{
+//     return null;
+//   }
+  
+// },

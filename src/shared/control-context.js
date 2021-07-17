@@ -3,11 +3,12 @@ import { createContext } from "react";
 
 // create a context with default values
 const ControlContext = createContext({
+  editMode:false,
   groupName:null,
   projectId:null,
   committeeId:null,
   sectionId:null,
-
+  //getGroupData: ()=>{},
   loginUser:   () => {},
   logoutUser:  () => {},
   user:        null,
