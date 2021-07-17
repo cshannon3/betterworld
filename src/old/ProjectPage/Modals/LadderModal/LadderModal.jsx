@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import styled from "styled-components"
 import Modal from 'styled-react-modal'
-import * as styles from '../../../../../styles/sharedStyles';
+import * as styles from '../../../../styles/sharedStyles';
 import StagesComponent from "./StagesComponent";
 import ProjectContext from '../../ProjectContext';
 import ControlContext from 'shared/control-context';
@@ -59,20 +59,7 @@ const LadderModal = ({ data, setLadderData, isOpen, onRequestClose }) =>{
                             <StagesComponent data={data["stages"].map((dd)=>{ return {...dd, "contributors": [...data["contributors"].filter((c)=>c.projects[ctx.data.id].roles.filter((r)=>r.stageId===dd.id).length)]} })} /> 
                         </div>
                         <div className="buttons" >
-                            <AddUpdateComponent
-                                type={"offer to help"}
-                                style={{color: "#0CC998"}}
-                                stages={stages}
-                                user={ctrctx.user}
-                                onSave={(newUpdate) => {
-                                    //const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
-                                    
-                                    const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
-                                    ctx.updateSection(newSectionData);
-                                    setLadderData(newSectionData);
-                                    //setSectionData(newSectionData)
-                                }}
-                            />
+                            
                             <AddUpdateComponent
                                 type={"request help"}
                                 style={{color: "#0595A5"}}
@@ -213,6 +200,21 @@ const TitleBar = styled(styles.GreyTitleBar)`
     padding-right:20px;
 `
 
+
+/* <AddUpdateComponent
+                                type={"offer to help"}
+                                style={{color: "#0CC998"}}
+                                stages={stages}
+                                user={ctrctx.user}
+                                onSave={(newUpdate) => {
+                                    //const newSectionData = {...sectionData, "updates":[...sectionData["updates"], newUpdate]}
+                                    
+                                    const newSectionData = {...data, "updates":[...data["updates"], newUpdate]}
+                                    ctx.updateSection(newSectionData);
+                                    setLadderData(newSectionData);
+                                    //setSectionData(newSectionData)
+                                }}
+                            /> */
     //const [sectionData, setSectionData] = useState(data);
    
    

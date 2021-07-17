@@ -6,19 +6,27 @@ export const cleanUpdateModel = (updateData) => {
     
     const blank =  {
         "id":uuidv4(),
-        "committeeId":"",
-        "sectionId":"",
-        "projectId":"",
+        "committeeName":"",
+        "committeeId":null,
+        "sectionName":"",
+        "sectionId":null,
+        "projectName":"",
+        "projectId":null,
         "stage":"",
-        "type": "default",
-        "status": "not started",
-        "author":"",
-        "authorId":"",
+        "type": "default", //  default / request help / offer to help
+        "isOnOverview":false,
+        "isPinned":false,
+        "status": "not started", // not started / done
+        "author":"", // name
+        "authorId":null, //
+        "userId":null,
         "date":Date.now(),
         "content":"",
-        "reactions":[ ],
+        "contentRaw":null,
+        "reactions":[],
         "replies":[],
-        "notifications":[]
+        "notifications":[],
+
     }
     let cleanModel = {...blank, ...d};
     if(cleanModel["replies"] != []){

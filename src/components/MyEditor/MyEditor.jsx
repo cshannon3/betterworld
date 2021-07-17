@@ -1,9 +1,6 @@
 import React from 'react';
 import {  useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { Editor, EditorState, RichUtils, convertToRaw, ContentState, convertFromRaw } from 'draft-js';
-import { GrBlockQuote } from "react-icons/gr";
-import { MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdCode, MdFormatListBulleted, MdFormatListNumbered } from 'react-icons/md';
 import {swapTags, getUsersFromTags} from './tags'
 import defaultStyle from './defaultStyle'
 import ControlContext from "shared/control-context";
@@ -13,21 +10,8 @@ import { MentionsInput, Mention } from "react-mentions";
 
 //https://stackblitz.com/edit/react-mentions?file=tags.js
 
-// const users = [
-//   {
-//       _id: '123',
-//       name: { first: 'John', last: 'Reynolds' }
-//     },
-//     {
-//       _id: '234',
-//       name: { first: 'Holly', last: 'Reynolds' }
-//     },
-//     {
-//       _id: '345',
-//       name: { first: 'Ryan', last: 'Williams' }
-//     }
-// ];
 
+//TODO replace 
 
 
 export function MyEditor2({content, onSave, onChange=(val)=>{}, onCancel=()=>{}}) {
@@ -35,7 +19,7 @@ export function MyEditor2({content, onSave, onChange=(val)=>{}, onCancel=()=>{}}
     const [_content, setContent] = useState(content??"");
     const ctrctx = useContext(ControlContext);
 
-
+    console.log(content);
     const handleCommentChange = (e) => {
       const newContent = e.target.value;
       setContent(e.target.value);
@@ -114,37 +98,51 @@ const CancelButton = styled(SaveButton)`
 
 
 
-export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel=()=>{}}) {
+// export function MyEditor({content, onSave, onChange=(val)=>{}, onCancel=()=>{}}) {
     
    
-  const [editorState, setEditorState] = React.useState(
-    () => content !== undefined ? EditorState.createWithContent(ContentState.createFromText(content)) : EditorState.createEmpty(),
-  );
-  useEffect(() => {
-      const raw = convertToRaw(editorState.getCurrentContent());
-      const blocks =raw.blocks;
-      const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
-      onChange(value);
+//   const [editorState, setEditorState] = React.useState(
+//     () => content !== undefined ? EditorState.createWithContent(ContentState.createFromText(content)) : EditorState.createEmpty(),
+//   );
+//   useEffect(() => {
+//       const raw = convertToRaw(editorState.getCurrentContent());
+//       const blocks =raw.blocks;
+//       const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
+//       onChange(value);
 
-  }, [editorState])
+//   }, [editorState])
 
-  return (
-  <div >
+//   return (
+//   <div >
 
-  <RootStyles>
-       <Editor 
-       editorState={editorState}
-        onChange={setEditorState} 
-      />
-  </RootStyles>
-   <SaveButton className={"button"} onClick={()=>{
-      const raw = convertToRaw(editorState.getCurrentContent());
-      const blocks =raw.blocks;
-      const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
+//   <RootStyles>
+//        <Editor 
+//        editorState={editorState}
+//         onChange={setEditorState} 
+//       />
+//   </RootStyles>
+//    <SaveButton className={"button"} onClick={()=>{
+//       const raw = convertToRaw(editorState.getCurrentContent());
+//       const blocks =raw.blocks;
+//       const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
       
-      onSave(value);
-   }}>save</SaveButton>
-   <CancelButton className={"button grey"} onClick={()=>onCancel()}>cancel</CancelButton>
-   </div>
-  );
-}
+//       onSave(value);
+//    }}>save</SaveButton>
+//    <CancelButton className={"button grey"} onClick={()=>onCancel()}>cancel</CancelButton>
+//    </div>
+//   );
+// }
+// const users = [
+//   {
+//       _id: '123',
+//       name: { first: 'John', last: 'Reynolds' }
+//     },
+//     {
+//       _id: '234',
+//       name: { first: 'Holly', last: 'Reynolds' }
+//     },
+//     {
+//       _id: '345',
+//       name: { first: 'Ryan', last: 'Williams' }
+//     }
+// ];

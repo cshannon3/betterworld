@@ -58,6 +58,18 @@ export const getMembers = ({ groupID = "cmu-against-ice" }) => {
 
 
 
+export const getGroupRef = () => { //{ groupID = "cmu-against-ice" }
+    return db.collection("groups").doc("cmu-against-ice"); 
+};
+
+export async function updateGroup(name, url) {
+    const groupID = "cmu-against-ice" ;
+    const groupData = await db.collection("groups").doc(groupID).get();
+    let _newRes = [...groupData.data()["resources"], {name, url}]
+    db.collection("groups").doc(groupID).update({
+        resources:_newRes
+    });
+}
 export const getUpdates = () => { 
     const groupID = "cmu-against-ice" ;
     return db.collection("groups").doc(groupID).collection('updates'); 
@@ -90,6 +102,37 @@ export async function deleteUpdate(updateId) {
 
 
 
+export function getCommitteeUpdates(committeeId=null) {
+    // Add team
+    if(committeeId!=null){
+        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "==", committeeId);
+    }
+    else{
+        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "!=", null);
+    }
+
+    
+}
+
+export function getProjectUpdates(projectId=null, sectionId=null) {
+    // Add team
+    let ref;
+    console.log(sectionId);
+    if(sectionId!=null){
+        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("sectionId", "==", sectionId);
+    }
+    else if (projectId!=null){
+        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("projectId", "==", projectId);
+    }else {
+        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("projectId", "!=", null);
+    }
+}
+export function getUserUpdates(userId=null) {
+
+    if(userId!=null){
+        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("authorId", "==", userId);
+    }
+}
 
 
 
@@ -144,8 +187,6 @@ export async function updateCommittee(committeeId, committeeData) {
     // Add team
     await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
 }
-
-
 
 
 

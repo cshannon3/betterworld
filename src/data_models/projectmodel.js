@@ -26,15 +26,52 @@ export const cleanProjectModel = (projectData) => {
 
 export const cleanSectionModel = (sectionData) => {
     let d = sectionData!== null && sectionData!== undefined ? sectionData : {};
-    
+    const  id = "id" in d ? d.id: uuidv4();
     const blank =  {
-        "id":uuidv4(),
-        "name":"",
-        "contributors":[],
-        "status":"Undefined",
-        "resources":[],
-        "stages":[],
-        "updates":[]
+        id:id,
+        name:"",
+        contributors:[],
+        status:"not started",
+        resources:[],
+        stages:[
+            {
+                name:"Research",
+                id:`${id}-research`,
+                resources:[],
+                sectionId:id,
+                status:"not started",
+                type:"Research"
+
+            },
+            {
+                name:"Writing",
+                id:`${id}-writing`,
+                resources:[],
+                sectionId:id,
+                status:"not started",
+                type:"Writing"
+
+            },
+            {
+                name:"Editing",
+                id:`${id}-editing`,
+                resources:[],
+                sectionId:id,
+                status:"not started",
+                type:"Editing"
+
+            },
+            {
+                name:"Design",
+                id:`${id}-design`,
+                resources:[],
+                sectionId:id,
+                status:"not started",
+                type:"Design"
+            },
+
+        ],
+        updates:[]
     }
     let cleanModel = {...blank, ...d};
     if(cleanModel["stages"] != []){
