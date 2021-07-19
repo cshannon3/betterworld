@@ -55,6 +55,13 @@ h2 {
     color: var(--black);
 }
 
+li {
+    font-family: 'Helvetica Neue';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: #000000; 
+}
 
 .Modal {
     position: absolute;

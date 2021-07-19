@@ -77,7 +77,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
         <div>
           {allowAddUpdate && (
             <ButtonOne onClick={() => setIsAddingUpdate(true)}>
-              {"AddUpdate"}
+              {"Add"}
             </ButtonOne>
           )}
         </div>
@@ -175,7 +175,7 @@ const UpdatesList = styled.div`
 `;
 const UpdatesMenu = styled.div`
   display: flex;
-  height: 75px;
+  height: 50px;
   justify-content: space-between;
   > div {
     display: flex;
@@ -185,8 +185,7 @@ const UpdatesMenu = styled.div`
     font-size: 21px;
     font-style: normal;
     font-weight: 600;
-    line-height: 33px;
-    letter-spacing: 0em;
+    text-align: baseline;
   }
   h3 {
     font-family: Baloo 2;
@@ -196,12 +195,12 @@ const UpdatesMenu = styled.div`
     display: flex;
     align-items: center;
   }
-  padding: 0px 0px 10px 20px;
+  padding: 0px 0px 10px 10px;
 `;
 const UpdatesContainer = styled.div`
   width: 100%;
   height: 100%;
-  box-sizing: content-box;
+ // box-sizing: content-box;
 `;
 const ButtonOne = styled.button`
   background: #0cc998;
@@ -211,7 +210,7 @@ const ButtonOne = styled.button`
   font-weight: bold;
   color: white;
   height: 35px;
-  width: 144px;
+  width: 100px;
   margin: 10px;
   cursor: pointer;
 `;

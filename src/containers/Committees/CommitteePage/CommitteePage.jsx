@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-
+import * as styles from 'styles/sharedStyles';
 import {
-  AtAGlanceModule,
   BudgetModule,
   RecruitingModule,
 } from "./Modules/modules";
@@ -10,7 +9,9 @@ import ControlContext from "shared/control-context";
 import { updateCommittee } from "shared/firebase";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
-
+import ModuleWrapper from "components/ModuleWrapper";
+import QuickLinksSection from "components/QuickLinks";
+import AtAGlanceModule from "components/AtAGlanceModule";
 
 export default function CommitteePage() {
   const ctrctx = useContext(ControlContext);
@@ -37,7 +38,7 @@ export default function CommitteePage() {
 
   const LeftComponent = ()=>{
     return (  
-      <div>
+      <LeftWrapper>
       <CommitteeTitleBox>
       <div>
         <CommitteesTitle>{committeeData.name}</CommitteesTitle>
@@ -55,18 +56,36 @@ export default function CommitteePage() {
           <CommitteesSubtitle>Interested in this Committee?</CommitteesSubtitle>
         </div>
       </div>
+      <QuickLinksSection
+          resources={[]}
+          clickLink={(_link) => { }}
+          addLink={(url, name)=>{ }}
+        />
     </CommitteeTitleBox>
-     
-      <CustomModule />
-    </div>)
+      <ModuleWrapper
+        name={committeeData.name}
+        Component={<div>Hey</div>}
+      />
+    </LeftWrapper>)
   }
 
 
   const RightComponent = ()=>{
     return (   
      <div>
-      <AtAGlanceModule committeeData={committeeData} />
+      {/* <AtAGlanceModule committeeData={committeeData} /> */}
       {/* <CalendarModule /> */}
+      <AtAGlanceModule
+      TopComponent={  <div>
+        <styles.EmphasizedRegularBodyText>Committee Responsibilities</styles.EmphasizedRegularBodyText>
+        <ul>
+          {committeeData["responsibilities"] &&
+            committeeData["responsibilities"].map((data) => (
+              <li>{data}</li>
+            ))}
+        </ul>
+      </div>}
+      />
       <UpdateDiv>
         <UpdatesSection/>
       </UpdateDiv>
@@ -87,6 +106,11 @@ const UpdateDiv = styled.div`
   padding: 5px;
 `;
 
+const LeftWrapper = styled.div`
+display: flex;
+  flex-direction:column;
+  height:100%;
+`;
 
 
 const CommitteesSubtitle = styled.h2`

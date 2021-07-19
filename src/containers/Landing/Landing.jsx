@@ -1,21 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDocument } from "react-firebase-hooks/firestore";
-
-import LeftPanel from "components/Panels/LeftPanel";
 import ControlContext from "shared/control-context";
-import Tooltip from "@material-ui/core/Tooltip";
-import { useHistory } from "react-router-dom";
-import { committeeIcons, quickLinks } from "data/dummydata";
 import {
   LargeBodyText,
   PageSubtitleText,
   PageTitleText,
-  ProjectCardText,
-  ProjectCardTextWhite,
-  SectionHeaderText,
-  SmallestBodyTextBlack,
-  SmallestBodyTextWhite,
 } from "styles/sharedStyles";
 
 import * as fb from "shared/firebase";
@@ -24,6 +14,7 @@ import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import QuickLinksSection from "components/QuickLinks";
 import AtAGlanceModule from "components/AtAGlanceModule";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
+import ModuleWrapper from "components/ModuleWrapper";
 
 export default function Landing() {
   const ctrctx = useContext(ControlContext);
@@ -37,7 +28,7 @@ export default function Landing() {
   const LeftComponent = () => {
     const groupData = loading ? null : value && value.data();
     return (
-      <div>
+      <LeftWrapper>
         <OverviewSection>
           <PageTitleText>CMU Against ICE</PageTitleText>
           <P10 />
@@ -54,7 +45,13 @@ export default function Landing() {
             fb.updateGroup(url,name);
           }}
         />
-      </div>
+        <ModuleWrapper
+        Component={<div>
+          Hello
+        </div>}
+        name={"New? Start Here!"}
+        />
+      </LeftWrapper>
     );
   };
   const RightComponent = () => {
@@ -111,6 +108,11 @@ const Row = styled.div`
   }
 `;
 
+const LeftWrapper = styled.div`
+display: flex;
+  flex-direction:column;
+  height:100%;
+`;
 const OverviewSection = styled.div``;
 // const QuickLinksSection = styled.div`
 //   width: 100%;
