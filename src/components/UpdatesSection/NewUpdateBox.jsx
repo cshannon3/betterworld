@@ -7,8 +7,19 @@ import ControlContext from "shared/control-context";
 import { swapTags, getUsersFromTags } from "components/MyEditor/tags";
 import defaultStyle from "components/MyEditor/defaultStyle";
 import { MentionsInput, Mention } from "react-mentions";
-//https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
 
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+//https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
+const styles = {
+  root: {
+     padding: '2px',
+    },
+};
 //TODO get in the current data of where they are --- project section etc
 const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
   const ctrctx = useContext(ControlContext);
@@ -73,6 +84,44 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
             />
           </MentionsInput>
         </RootStyles>
+        <OptionsBar>
+          <div>
+        <InputLabel id="demo-controlled-open-select-label">Type</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          // open={open}
+          // onClose={handleClose}
+          // onOpen={handleOpen}
+          value={type}
+          onChange={(event)=>setType(event.target.value)}
+        >
+          <MenuItem value={"default"}>Default</MenuItem>
+          <MenuItem value={"help request"}>Help Request</MenuItem>
+        </Select>
+    </div>
+    <div>
+    <InputLabel id="demo-controlled-open-select-label">Stage</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          // open={open}
+          // onClose={handleClose}
+          // onOpen={handleOpen}
+          value={stage}
+          onChange={(event)=>setStage(event.target.value)}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={"Research"}>Research</MenuItem>
+          <MenuItem value={"Writing"}>Writing</MenuItem>
+          <MenuItem value={"Editing"}>Editing</MenuItem>
+          <MenuItem value={"Design"}>Design</MenuItem>
+        </Select>
+    </div>
+    </OptionsBar>
+    <div>
         <SaveButton
           className={"button"}
           onClick={() => {
@@ -89,7 +138,7 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
         <CancelButton className={"button grey"} onClick={() => onCancel()}>
           cancel
         </CancelButton>
-
+    </div>
       </UpdateBoxCSS>
     </UpdateBoxWrapper>
   );
@@ -108,6 +157,17 @@ const RootStyles = styled.div`
     border-color: darkslategray;
   }
 `;
+
+const OptionsBar = styled.div`
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  div{
+    width:50%;
+  }
+`;
+
+
 const SaveButton = styled.button`
   background: #0cc998;
   border-radius: 5px;
