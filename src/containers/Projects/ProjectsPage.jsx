@@ -10,12 +10,8 @@ import { EmphasizedSmallBodyText, LargeBodyText, PageSubtitleText, PageTitleText
 import ProjectBox from "components/projectBox";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
-import QuickLinksSection from "components/QuickLinks";
-import AtAGlanceModule from "components/AtAGlanceModule";
-import { EditText, EditTextarea } from 'react-edit-text';
+import { EditTextarea } from 'react-edit-text';
 import 'react-edit-text/dist/index.css';
-
-
 
 export default function ProjectsPage() {
   const ctrctx = useContext(ControlContext);

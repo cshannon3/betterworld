@@ -78,13 +78,7 @@ export default function Landing() {
     );
   };
 
-  return link ? (
-    <ResponsiveSplitScreen
-      currentPage={"home"}
-      LeftComponent={LeftComponent}
-      RightComponent={RightComponent}
-    />
-  ) : (
+  return (
     <ResponsiveSplitScreen
       currentPage={"home"}
       LeftComponent={LeftComponent}
@@ -119,55 +113,6 @@ const OverviewSection = styled.div``;
 // `;
 const CommitteeSection = styled.div`
   width: 100%;
-`;
-const CommitteeBox = styled.div`
-  position: relative;
-  cursor: pointer;
-  height: 111px;
-  min-width: 244px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  background: #0cc998;
-  img {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    height: 111px;
-    min-width: 244px;
-  }
-  .contentBox {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 30px;
-    height: 100px;
-
-    .order {
-      color: white;
-      font-family: "Baloo 2";
-      font-weight: normal;
-      font-size: 26px;
-      line-height: 28px;
-    }
-
-    .line {
-      background-color: white;
-      width: 50px;
-      height: 3px;
-      margin-top: 5px;
-      border-radius: 11px;
-    }
-  }
-`;
-
-const LinkBox = styled.div`
-  height: 60px;
-  min-width: 60px;
-  img {
-    height: 54px;
-    width: 60px;
-    margin: 3px;
-  }
 `;
 
 /*
