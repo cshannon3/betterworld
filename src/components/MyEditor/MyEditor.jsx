@@ -54,7 +54,7 @@ export function MyEditor2({content, onSave, onChange=(val)=>{}, onCancel=()=>{}}
         // const blocks =raw.blocks;
         const displayText = swapTags(_content)
         // const value = blocks.map(block => (!block.text.trim() && '\n') || block.text).join('\n');
-       onSave(displayText);
+       onSave(displayText, _content);
      }}>save</SaveButton>
      {/* <div>{_content}</div> */}
      <CancelButton className={"button grey"} onClick={()=>onCancel()}>cancel</CancelButton>

@@ -8,6 +8,8 @@ import {
   PageTitleText,
 } from "styles/sharedStyles";
 
+import * as styles from "styles/sharedStyles";
+
 import * as fb from "shared/firebase";
 
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
@@ -49,7 +51,7 @@ export default function Landing() {
         Component={<div>
           Hello
         </div>}
-        name={"New? Start Here!"}
+           name={"New? Start Here!"}
         />
       </LeftWrapper>
     );
@@ -72,7 +74,20 @@ export default function Landing() {
       );
     return (
       <CommitteeSection>
-        <AtAGlanceModule />
+        <AtAGlanceModule 
+        TopComponent={<div>
+          <styles.EmphasizedRegularBodyText>Upcoming Meetings</styles.EmphasizedRegularBodyText>
+          <styles.RegularBodyText> Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a> / <a href="">Link</a>)</styles.RegularBodyText>
+          <styles.RegularBodyText>  Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting((<a href="">Notes</a> / <a href="">Link</a>)</styles.RegularBodyText> 
+        </div> 
+        }
+        BottomComponent={<div>
+          <styles.EmphasizedRegularBodyText>Recent Meetings</styles.EmphasizedRegularBodyText>
+          <styles.RegularBodyText> Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a>)</styles.RegularBodyText>
+          <styles.RegularBodyText>  Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting(<a href="">Notes</a>)</styles.RegularBodyText> 
+        </div> 
+        }
+        />
         <UpdatesSection/>
       </CommitteeSection>
     );
@@ -114,83 +129,3 @@ const OverviewSection = styled.div``;
 const CommitteeSection = styled.div`
   width: 100%;
 `;
-
-/*
-
-/<QuickLinksSection>
-        <P10/>
-          <PageSubtitleText>Quick Links</PageSubtitleText>
-          <Row>
-            {quickData.map((data) => (
-              <Tooltip title={data.tip}>
-                <a href={data.url} target="_blank">
-                  <LinkBox>
-                    <img src={data.icon} alt={data.title} />
-                  </LinkBox>
-                </a>
-              </Tooltip>
-            ))}
-          </Row>
-        </QuickLinksSection> 
- return (
-    <RowWrapper>
-      <LeftPanel />
-      <ContentContainer isMobile={isMobile}>
-       
-        <CommitteeSection>
-          <SectionHeaderText> Committees</SectionHeaderText>
-          <Row>
-            {committeeData.map((data) =>
-              <CommitteeBox onClick={()=>{
-                history.push(`/committees/${data.id}`);
-              }}>
-                <div className="contentBox">
-                  <div className="order">{`0${data["order"]}`}</div>
-                  <ProjectCardTextWhite className="name">{data["name"]}</ProjectCardTextWhite>
-                  <div className="line" />
-                </div>
-                <img src={committeeIcons[data["id"]]} alt={data["name"]} />
-              </CommitteeBox>
-            )}
-          </Row>
-        </CommitteeSection>
-        <ProjectsSection>
-          <SectionHeaderText> Projects/Actions</SectionHeaderText>
-          <Row>
-            {
-              projectsData.sort((a,b)=>a["end_date"]>b["end_date"]?-1:1).map((project)=>{
-               return( 
-               project["isArchived"]?
-               <ArchivedProjectBox onClick={()=>{
-                history.push(`/projects/${project.id}`);
-              }}>
-                    <ProjectCardText isArchived={project["isArchived"]}>{project.name}</ProjectCardText>
-                    <div className="line"/>
-                    <br/>
-                    <SmallestBodyTextWhite><span >Start date:</span>{formatDate(project["start_date"])}</SmallestBodyTextWhite>
-                    <SmallestBodyTextWhite><span >End Date: </span> {formatDate(project["end_date"])}</SmallestBodyTextWhite>
-                    <br/>
-                    <SmallestBodyTextWhite><span>Updates:</span> 22</SmallestBodyTextWhite>
-                    <SmallestBodyTextWhite><span>Contributors:</span>{project["contributors"]?.length}</SmallestBodyTextWhite>
-              </ArchivedProjectBox>:
-
-               <ProjectBox onClick={()=>{
-                  history.push(`/projects/${project.id}`);
-                }}>
-                      <ProjectCardText>{project.name}</ProjectCardText>
-                      <div className="line"/>
-                      <br/>
-                      <SmallestBodyTextBlack ><span >Start date:</span> {formatDate(project["start_date"])}</SmallestBodyTextBlack>
-                      <SmallestBodyTextBlack ><span >Est. Completion:</span>{formatDate(project["end_date"])}</SmallestBodyTextBlack>
-                      <br/>
-                      <SmallestBodyTextBlack ><span>Updates:</span> {getNumUpdates(project)}</SmallestBodyTextBlack>
-                </ProjectBox>
-                )
-              })
-            }
-          </Row>
-        </ProjectsSection>
-      </ContentContainer>
-    </RowWrapper>
-  )
-*/

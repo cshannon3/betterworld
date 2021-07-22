@@ -19,9 +19,11 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
   const [isAddingUpdate, setIsAddingUpdate] = useState(false);
   const [selectorOpen, setSelectorOpen] = useState(null);
   const urlParts = window.location.href.split("/");
+  const isHome = urlParts.length==4;
   const params = useParams();
   const positionRef = useRef();
   let updateListener;
+  
   //let committeeId=null, committeeName, projectId=null, projectName, sectionId=null, sectionName;
 
   const user = appCtx.user;
@@ -46,9 +48,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
         } else setupListener(fb.getCommitteeUpdates());
       } else if (urlParts.includes("projects")) {
         if ("projectId" in params) {
-          //projectId = params.projectId;
           if ("sectionId" in params) {
-            //sectionId = params.sectionId;
             setupListener(
               fb.getProjectUpdates(params.projectId, params.sectionId)
             );
@@ -62,6 +62,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
         setupListener(fb.getUserUpdates(user.id));
       } else if (urlParts.includes("past-projects")) {
       } else {
+        setupListener(fb.getMainUpdates());
         // Home
       }
     }
@@ -108,6 +109,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
               projectName: projectName,
               sectionName: sectionName,
               committeeName: committeeName,
+              isPinned:isHome || (newUpdateModel && newUpdateModel.type == "request help"),
               ...newUpdateModel,
             }); //appCtx.getCommitteeName(params.committeeId)
             fb.createUpdate(_newUpdate);
@@ -121,6 +123,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
       <UpdatesList>
         {updates &&
           updates
+          .filter((u)=>u.isPinned)
             .sort((a, b) => b.date - a.date)
             .map((updateData) => {
               return (
@@ -130,16 +133,10 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                   updateData={updateData}
                   isSelector={selectorOpen == updateData.id}
                   updateUpdate={(newUpdateData) => {
-                    // let newUpdates = updates;
-                    // let u = newUpdates.findIndex(
-                    //   (up) => up.id == newUpdateData.id
-                    // );
                     fb.updateUpdate(newUpdateData.id, newUpdateData);
-                    // newUpdates[u] = newUpdateData;
-                    // updateUpdates(newUpdates);
                   }}
                   setSelectorOpen={(updateData) => {
-                    //setSelectorOpen(updateData.id)
+                    setSelectorOpen(updateData.id)
                   }}
                   deleteUpdate={(updateData) => {
                     if (
@@ -147,12 +144,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                         "Are you sure? This action cannot be reversed"
                       )
                     ) {
-                      // let newUpdates = updates.filter(
-                      //   (u) => u.id != updateData.id
-                      // );
-                      //todo add delete function
                       fb.deleteUpdate(updateData.id);
-                      //updateUpdates(newUpdates);
                     } else {
                       return;
                     }
@@ -160,6 +152,39 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                 />
               );
             })}
+            <hr/>
+            {updates &&
+          updates
+            .filter((u)=>!u.isPinned).sort((a, b) => b.date - a.date)
+            .map((updateData) => {
+              return (
+                <UpdateBox
+                  key={updateData.id}
+                  id={updateData.id}
+                  updateData={updateData}
+                  isSelector={selectorOpen == updateData.id}
+                  updateUpdate={(newUpdateData) => {
+                    fb.updateUpdate(newUpdateData.id, newUpdateData);
+                  }}
+                  setSelectorOpen={(updateData) => {
+                    setSelectorOpen(updateData.id)
+                  }}
+                  deleteUpdate={(updateData) => {
+                    if (
+                      window.confirm(
+                        "Are you sure? This action cannot be reversed"
+                      )
+                    ) {
+                      fb.deleteUpdate(updateData.id);
+                    } else {
+                      return;
+                    }
+                  }}
+                />
+              );
+            })}
+
+
       </UpdatesList>
     </UpdatesContainer>
   );
@@ -172,6 +197,9 @@ const UpdatesList = styled.div`
   height: 100%;
   box-sizing: content-box;
   padding: 15px;
+  hr{
+    margin-bottom:10px;
+  }
 `;
 const UpdatesMenu = styled.div`
   display: flex;

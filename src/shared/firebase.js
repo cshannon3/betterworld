@@ -101,6 +101,9 @@ export async function deleteUpdate(updateId) {
 }
 
 
+export function getMainUpdates() {
+    return db.collection("groups").doc("cmu-against-ice").collection("updates").where("isPinned", "==", true);
+}
 
 export function getCommitteeUpdates(committeeId=null) {
     // Add team
@@ -110,8 +113,6 @@ export function getCommitteeUpdates(committeeId=null) {
     else{
         return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "!=", null);
     }
-
-    
 }
 
 export function getProjectUpdates(projectId=null, sectionId=null) {

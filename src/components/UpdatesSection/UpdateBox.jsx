@@ -3,7 +3,7 @@ import { useMemo, useState, useEffect, useContext } from "react";
 import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
 import { formatTimestamp } from "shared/utils";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineDelete, AiOutlinePushpin,  AiFillPushpin } from "react-icons/ai";
 import { MyEditor2 } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { BsReply } from "react-icons/bs";
@@ -14,6 +14,7 @@ import UpdateReply from "./UpdateReply";
 import _clone from 'lodash/clone'
 import _escapeRegExp from 'lodash/escapeRegExp'
 import _uniqBy from 'lodash/uniqBy'
+
 
 
 
@@ -47,12 +48,9 @@ const UpdateBox = ({
   const [isHovering, setIsHovering] = useState(false);
   const [editContent, setEditContent] = useState("");
 
-  let content = "";
-  //updateData["content"];
+  const [replyType, setReplyType] = useState("default");
 
-  // useEffect(() => {
-  //   // Update the document title using the browser API
-  // });
+  let content = "";
 
   function handleSelect(emoji) {
     const index = _.findIndex(updateData["reactions"], { emoji, by: userName });
@@ -103,6 +101,21 @@ const UpdateBox = ({
                   Done?
                 </ButtonOne>
               )}
+             {updateData["isPinned"] ? <AiFillPushpin
+                className="icon"
+                size={18}
+                onClick={() => {
+                  const newUpdateData = { ...updateData, isPinned: false };
+                  updateUpdate(newUpdateData);
+                }}
+              /> :<AiOutlinePushpin
+              className="icon"
+              size={18}
+              onClick={() => {
+                const newUpdateData = { ...updateData, isPinned: true };
+                updateUpdate(newUpdateData);
+              }}
+            />  }
               <AiOutlineEdit
                 className="icon"
                 size={18}
@@ -201,8 +214,8 @@ const UpdateBox = ({
       <div className={"content"}>
         <MyEditor2
           content={window.localStorage.getItem("editContent")}
-          onSave={(val) => {
-            const newUpdateData = { ...updateData, content: val };
+          onSave={(content, rawContent) => {
+            const newUpdateData = { ...updateData, content: content, contentRaw: rawContent };
             updateUpdate(newUpdateData);
             setIsEditing(false);
           }}
@@ -233,9 +246,6 @@ const UpdateBox = ({
       return (<p className={"content"} dangerouslySetInnerHTML={{__html:displayText}}></p>);
     }
     return (<p className={"content"}>{updateData["content"]}</p>);
-  
-   
-    
   }
   const HelpResponseRow = () => {
     if (!hasOfferedHelp) return null;
@@ -316,6 +326,7 @@ const UpdateBox = ({
               isEditing={activeReply && reply.id == activeReply.id}
               setIsEditing={(r) => {
                 setActiveReply(r);
+                setReplyType(activeReply.type);
                 setEditContent(r.content);
                 content = editContent;
                 setIsReplyEditing(true);
@@ -349,13 +360,14 @@ const UpdateBox = ({
             <select
               name="stages"
               id="stages"
-              value={activeReply.type}
+              value={replyType}//{activeReply.type}
               onChange={() => {
                 var x = document.getElementById("stages").value;
+                setReplyType(x);
                 //setSelectedStage(x);
               }}
             >
-              {["", "offer to help"].map((m) => (
+              {["default", "offer to help"].map((m) => (
                 <option value={m}>{m}</option>
               ))}
             </select>
@@ -375,8 +387,9 @@ const UpdateBox = ({
               let newReplies = updateData["replies"];
               let u = newReplies.findIndex((v) => v.id == activeReply.id);
 
-              newReplies[u] = { ...activeReply, content: val };
+              newReplies[u] = { ...activeReply, content: val, type:replyType };
               newUpdateData = { ...updateData, replies: newReplies };
+              
               //updateUpdate(newUpdateData);
             } else if (updateData.replies) {
               let newNotificaton = {
@@ -391,18 +404,19 @@ const UpdateBox = ({
                 notifications: notifs,
                 replies: [
                   ...updateData["replies"],
-                  { ...activeReply, content: val },
+                  { ...activeReply, content: val,type:replyType  },
                 ],
               };
             } else {
               newUpdateData = {
                 ...updateData,
-                replies: [{ ...activeReply, content: val }],
+                replies: [{ ...activeReply, content: val, type:replyType }],
               };
             }
             updateUpdate(newUpdateData);
             setActiveReply(null);
             setIsReplyEditing(false);
+            setReplyType("defualt");
           }}
           onCancel={() => {
             setActiveReply(null);
@@ -415,9 +429,15 @@ const UpdateBox = ({
 
   return (
     <div key={updateData["id"]}>
-      {(isOfferHelp || isRequestHelp) && (
+     
         <TopFlagRowStyle>
-          <TopFlag
+          <div className= {"tagrow"} >
+          {updateData["projectName"] &&<TopTag>{updateData["projectName"]}</TopTag>}
+          {updateData["sectionName"] &&<TopTag>{updateData["sectionName"]}</TopTag>}
+          {updateData["stage"] &&<TopTag>{updateData["stage"]}</TopTag>}
+
+          </div>
+          {(isOfferHelp || isRequestHelp) &&<TopFlag
             type={updateData["type"]}
             status={updateData["status"]}
             state={hasOfferedHelp}
@@ -427,17 +447,14 @@ const UpdateBox = ({
               : isRequestHelpDone
               ? "Request Done"
               : "Help Requested"}
-          </TopFlag>
+         </TopFlag>}
         </TopFlagRowStyle>
-      )}
       <UpdateBoxWrapper>
         <UpdateBoxCSS
           type={updateData["type"]}
           status={updateData["status"]}
           state={hasOfferedHelp}
           onMouseEnter={() => {
-            //console.log(editContent);
-            //setEditContent(content);
             setIsHovering(true);
           }}
           onMouseLeave={() => {
@@ -451,8 +468,6 @@ const UpdateBox = ({
           ) : (
            <ContentRow/>
           )}
-
-          {/* <PinnedHelpReplyRow /> */}
           <HelpResponseRow />
           <ReactionsRepliesRow />
         </UpdateBoxCSS>
@@ -618,7 +633,11 @@ const TopFlagRowStyle = styled.div`
   height: 18px;
   display: flex;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: space-between;
+  //flex-end;
+  .tagrow{
+    display:flex;
+  }
 `;
 
 const TopFlag = styled.div`
@@ -632,10 +651,6 @@ const TopFlag = styled.div`
   font-weight: bold;
   font-size: 11px;
   ${({ type, status, state }) =>
-    //     type === "offer to help"
-    //       ? `
-    //   background-color: #eaa828;
-    // `
     type === "request help" && status !== "done" && state
       ? `
       background-color: #eaa828;
@@ -651,31 +666,24 @@ const TopFlag = styled.div`
       : `background-color: grey;`}
 `;
 
-const HelpReq = styled.div`
-  height: 18px;
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
+
+const TopTag = styled.div`
+  max-width: 120px;
+  color: white;
+  border-radius: 5px 5px 0px 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11px;
+  background-color: grey;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  
 `;
 
-const OfferHelp = styled.div`
-  height: 18px;
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-  .flag {
-    width: 120px;
-    background-color: #eaa828;
-    color: white;
-    border-radius: 5px 5px 0px 0px;
-    padding-left: 10px;
-    padding-top: 3px;
-    font-family: Baloo 2;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 11px;
-  }
-`;
 
 const ButtonOne = styled.button`
   background: #0cc998;
@@ -825,3 +833,29 @@ export default UpdateBox;
 //     </div>
 //   );
 // };
+
+// const HelpReq = styled.div`
+//   height: 18px;
+//   display: flex;
+//   width: 100%;
+//   justify-content: flex-end;
+// `;
+
+// const OfferHelp = styled.div`
+//   height: 18px;
+//   display: flex;
+//   width: 100%;
+//   justify-content: flex-end;
+//   .flag {
+//     width: 120px;
+//     background-color: #eaa828;
+//     color: white;
+//     border-radius: 5px 5px 0px 0px;
+//     padding-left: 10px;
+//     padding-top: 3px;
+//     font-family: Baloo 2;
+//     font-style: normal;
+//     font-weight: bold;
+//     font-size: 11px;
+//   }
+// `;
