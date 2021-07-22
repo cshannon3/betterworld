@@ -41,7 +41,8 @@ export default function Landing() {
         <QuickLinksSection
           resources={groupData && groupData.resources}
           clickLink={(_link) => {
-            setLink(_link);
+            window.open(_link, '_blank');
+            //setLink(_link);
           }}
           addLink={(url, name)=>{
             fb.updateGroup(url,name);
@@ -51,40 +52,44 @@ export default function Landing() {
         Component={<div>
           Hello
         </div>}
-           name={"New? Start Here!"}
+           name={"Announcements / Polls"}
         />
       </LeftWrapper>
     );
   };
   const RightComponent = () => {
-    if (link)
-      return (
-        <div style={{ height: "100%" }}>
-          <button onClick={() => setLink(null)}>X</button>
-          <a href={link} target="_blank">
-            go to
-          </a>
-          <iframe
-            width="100%"
-            height="100%"
-            src={link}
-            allowFullScreen
-          ></iframe>
-        </div>
-      );
+    // if (link)
+    //   return (
+    //     <div style={{ height: "100%" }}>
+    //       <button onClick={() => setLink(null)}>X</button>
+    //       <a href={link} target="_blank">
+    //         go to
+    //       </a>
+    //       <iframe
+    //         width="100%"
+    //         height="100%"
+    //         src={link}
+    //         allowFullScreen
+    //       ></iframe>
+    //     </div>
+    //   );
     return (
       <CommitteeSection>
         <AtAGlanceModule 
         TopComponent={<div>
           <styles.EmphasizedRegularBodyText>Upcoming Meetings</styles.EmphasizedRegularBodyText>
-          <styles.RegularBodyText> Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a> / <a href="">Link</a>)</styles.RegularBodyText>
-          <styles.RegularBodyText>  Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting((<a href="">Notes</a> / <a href="">Link</a>)</styles.RegularBodyText> 
+          <H10/>
+          <styles.SmallestBodyTextBlack> - Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a> / <a href="">Link</a>)</styles.SmallestBodyTextBlack>
+          <styles.SmallestBodyTextBlack> - Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting((<a href="">Notes</a> / <a href="">Link</a>)</styles.SmallestBodyTextBlack> 
         </div> 
         }
         BottomComponent={<div>
+         
           <styles.EmphasizedRegularBodyText>Recent Meetings</styles.EmphasizedRegularBodyText>
-          <styles.RegularBodyText> Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a>)</styles.RegularBodyText>
-          <styles.RegularBodyText>  Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting(<a href="">Notes</a>)</styles.RegularBodyText> 
+          <H10/>
+         <styles.SmallestBodyTextBlack> - Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a>)</styles.SmallestBodyTextBlack>
+          <styles.SmallestBodyTextBlack> - Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting(<a href="">Notes</a>)</styles.SmallestBodyTextBlack> 
+         
         </div> 
         }
         />
@@ -106,6 +111,9 @@ const P10 = styled.div`
   padding-top: 20px;
 `;
 
+const H10 = styled.div`
+  height: 10px;
+`;
 const Row = styled.div`
   display: flex;
   gap: 20px;
