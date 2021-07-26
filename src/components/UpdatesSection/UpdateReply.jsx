@@ -205,22 +205,43 @@ const OfferHelp = styled.div`
   }
 `;
 
-const ButtonOne = styled.button`
-  background: #0cc998;
-  border-radius: 2px;
-  font-family: Baloo 2;
-  font-weight: bold;
-  color: white;
-  width: 100px;
-  height: 18px;
-  margin: 0px 5px 0px 0px;
-  padding: 0px;
-  cursor: pointer;
-  font-size: 12px;
-  outline: none;
-  border: none;
-`;
+// const ButtonOne = styled.button`
+//   background: #0cc998;
+//   border-radius: 2px;
+//   font-family: Baloo 2;
+//   font-weight: bold;
+//   color: white;
+//   width: 100px;
+//   height: 18px;
+//   margin: 0px 5px 0px 0px;
+//   padding: 0px;
+//   cursor: pointer;
+//   font-size: 12px;
+//   outline: none;
+//   border: none;
+// `;
 
+const ButtonOne = styled.button`
+  background: #E6FAF5;
+  border-radius: 60px;
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: normal;
+  color: #757575;
+  height: 35px;
+  width: 100px;
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+  border:1px solid #0CC998;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: 0.25s;
+  &:hover {
+    color:white;
+    box-shadow: inset 0 0 0 2em #0cc998;
+    transform: translateY(-0.25em);
+  }
+`;
 const FlexRow = styled.div`
   display: flex;
   justify-content: flex-end;

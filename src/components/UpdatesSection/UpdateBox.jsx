@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useMemo, useState, useEffect, useContext } from "react";
 import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
-import { formatTimestamp } from "shared/utils";
+import { formatTimestamp, formatTimeAgo } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete, AiOutlinePushpin,  AiFillPushpin } from "react-icons/ai";
 import { MyEditor2 } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
@@ -81,14 +81,9 @@ const UpdateBox = ({
       <div className={"topbar"}>
         <div className={"author"}>
           {updateData["author"]}
-          <span className={"stage"}> 
-          {updateData["stage"] ? `  •  ${updateData["stage"]}`:
-          updateData["sectionName"]? `  •  ${updateData["sectionName"]}`
-          :updateData["projectName"]? `  •  ${updateData["projectName"]}`
-          :''}</span>
-          
         </div>
-        {isHovering &&
+        {!isHovering ?  <div className={"date"}>{formatTimeAgo(updateData["date"])}</div>  
+        :
           (isCurrentUser ? (
             <div className={"icons"}>
               {isRequestHelp && !isRequestHelpDone && (
@@ -462,7 +457,7 @@ const UpdateBox = ({
           }}
         >
           <HeaderRow />
-          <div className={"date"}>{formatTimestamp(updateData["date"])}</div>
+         
           {isEditing ? (
             <ContentRowEdit />
           ) : (
@@ -678,22 +673,44 @@ const TopTag = styled.div`
   
 `;
 
-
 const ButtonOne = styled.button`
-  background: #0cc998;
-  border-radius: 2px;
-  font-family: Baloo 2;
-  font-weight: bold;
-  color: white;
-  width: 100px;
-  height: 18px;
+  background: #E6FAF5;
+  border-radius: 60px;
   margin: 0px 5px 0px 0px;
-  padding: 0px;
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: normal;
+  color: #757575;
+  height: 18px;
+  width: 100px;
   cursor: pointer;
-  font-size: 12px;
-  outline: none;
   border: none;
+  padding:0px;
+  font-size: 12px;
+  border:1px solid #0CC998;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: 0.25s;
+  &:hover {
+    color:white;
+    box-shadow: inset 0 0 0 2em #0cc998;
+    transform: translateY(-0.25em);
+  }
 `;
+// const ButtonOne = styled.button`
+//   background: #0cc998;
+//   border-radius: 2px;
+//   font-family: Baloo 2;
+//   font-weight: bold;
+//   color: white;
+//   width: 100px;
+//   height: 18px;
+//   margin: 0px 5px 0px 0px;
+//   padding: 0px;
+//   cursor: pointer;
+//   font-size: 12px;
+//   outline: none;
+//   border: none;
+// `;
 export default UpdateBox;
 
 // Offer help

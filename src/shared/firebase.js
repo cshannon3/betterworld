@@ -45,10 +45,39 @@ export async function createNewUser(result) {
         "photoUrl": result.user.photoURL,
         "email": result.user.email,
         "createdAt": firebase.firestore.FieldValue.serverTimestamp(),
-        "teams": [],
     };
     await setUserData(result.user.uid, data);
-    return data;
+    let ref = db.collection("groups").doc("cmu-against-ice" ).collection('members').doc(result.user.email); 
+    let snap = await ref.get();
+    if(snap.exists){
+        await ref.update({
+            userId:data["id"],
+            ...data
+        });
+        return {
+            userId:data["id"],
+            ...data,
+            ...snap.data()
+        }
+    }
+    else {
+        const memberData ={
+            ...data,
+            userId:data["id"],
+            id:result.user.email,
+            bio:"",
+            committees:{},
+            isSignedOn:true,
+            name:data["displayName"],
+            projects:{},
+            pronouns:"",
+            userType:"member"
+        };
+        await ref.set(memberData);
+        return memberData;
+
+    }
+  //  return data;
 }
 
 

@@ -167,7 +167,6 @@ function sleep(ms) {
            
               if (!userData) userData = await fb.createNewUser(result);
               else userData = { id: userId, ...userData };
-             
               setupListenersAndData();
               
               let i = 0;
