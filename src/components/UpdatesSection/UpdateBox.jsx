@@ -48,7 +48,7 @@ const UpdateBox = ({
   const [isHovering, setIsHovering] = useState(false);
   const [editContent, setEditContent] = useState("");
 
-  const [replyType, setReplyType] = useState("default");
+  const [replyType, setReplyType] = useState("update");
 
   let content = "";
 
@@ -367,7 +367,7 @@ const UpdateBox = ({
                 //setSelectedStage(x);
               }}
             >
-              {["default", "offer to help"].map((m) => (
+              {["reply", "offer to help"].map((m) => (
                 <option value={m}>{m}</option>
               ))}
             </select>
@@ -416,7 +416,7 @@ const UpdateBox = ({
             updateUpdate(newUpdateData);
             setActiveReply(null);
             setIsReplyEditing(false);
-            setReplyType("defualt");
+            setReplyType("update");
           }}
           onCancel={() => {
             setActiveReply(null);
@@ -575,12 +575,6 @@ const UpdateBoxCSS = styled.div`
   }
 
   ${({ type, status, state }) =>
-    //     type === "offer to help"
-    //       ? `
-    //   background-color: #fff7ec;
-    //   border-radius: 5px 0px 5px 5px ;
-    // `
-    //       :
     type === "request help" && status !== "done" && state
       ? `
       border-top:3px solid #EAA828;
@@ -678,7 +672,7 @@ const TopTag = styled.div`
   font-style: normal;
   font-weight: bold;
   font-size: 11px;
-  background-color: grey;
+  background-color: #0cc998;
   text-overflow: ellipsis;
   overflow: hidden;
   

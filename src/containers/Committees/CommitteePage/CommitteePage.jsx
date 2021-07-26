@@ -78,10 +78,11 @@ export default function CommitteePage() {
       <AtAGlanceModule
       TopComponent={  <div>
         <styles.EmphasizedRegularBodyText>Committee Responsibilities</styles.EmphasizedRegularBodyText>
+       <H10/>
         <ul>
           {committeeData["responsibilities"] &&
             committeeData["responsibilities"].map((data) => (
-              <li>{data}</li>
+              <styles.SmallestBodyTextBlack>- {data}</styles.SmallestBodyTextBlack>
             ))}
         </ul>
       </div>}
@@ -112,6 +113,9 @@ display: flex;
   height:100%;
 `;
 
+const H10 = styled.div`
+  height: 10px;
+`;
 
 const CommitteesSubtitle = styled.h2`
   font-family: "Baloo 2";

@@ -395,7 +395,8 @@ const TaskOverviewBox = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
   margin-top: 20px;
-  height:100%;
+  min-height:400px;
+  overflow: scroll;
   table {
     width: 100%;
   }
@@ -404,7 +405,6 @@ const TaskOverviewBox = styled.div`
     border-radius: 0.4rem;
   }
   tbody {
-    overflow: auto;
   }
   th,
   td {

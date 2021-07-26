@@ -1,17 +1,13 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import styled from "styled-components";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
-import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 import * as fb from "shared/firebase";
 import { useParams } from "react-router-dom";
 import ControlContext from "shared/control-context";
 import NewUpdateBox from "./NewUpdateBox";
 import { cleanUpdateModel } from "data_models/updatemodel";
 
-// import {
-/*
-Send in page info and this automatically gets resources
-*/
+// TODO verification
 
 const UpdatesSection = ({ allowAddUpdate = true }) => {
   const appCtx = useContext(ControlContext);
@@ -43,7 +39,6 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
     if (updates == null) {
       if (urlParts.includes("committees")) {
         if ("committeeId" in params) {
-          //committeeId = params.committeeId;
           setupListener(fb.getCommitteeUpdates(params.committeeId));
         } else setupListener(fb.getCommitteeUpdates());
       } else if (urlParts.includes("projects")) {
@@ -77,6 +72,11 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
         <div className={"updateTitle"}>Updates</div>
         <div>
           {allowAddUpdate && (
+            <ButtonTwo onClick={() => setIsAddingUpdate(true)}>
+              {"Request Help"}
+            </ButtonTwo>
+          )}
+          {allowAddUpdate && (
             <ButtonOne onClick={() => setIsAddingUpdate(true)}>
               {"Add"}
             </ButtonOne>
@@ -100,7 +100,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
               sectionName = r[1];
             }
             let _newUpdate = cleanUpdateModel({
-              author: appCtx.user.name,
+              author: appCtx.user.name??appCtx.user.displayName??"",
               authorId: appCtx.user.id,
               userId: appCtx.user.userId,
               projectId: _pid,
@@ -183,8 +183,6 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                 />
               );
             })}
-
-
       </UpdatesList>
     </UpdatesContainer>
   );
@@ -231,152 +229,44 @@ const UpdatesContainer = styled.div`
  // box-sizing: content-box;
 `;
 const ButtonOne = styled.button`
-  background: #0cc998;
-  border-radius: 72.2872px;
-  font-family: Baloo 2;
+  background: #E6FAF5;
+  border-radius: 60px;
+  font-family: 'Baloo 2';
   font-style: normal;
-  font-weight: bold;
-  color: white;
+  font-weight: normal;
+  color: #757575;
   height: 35px;
   width: 100px;
   margin: 10px;
   cursor: pointer;
+  border: none;
+  border:1px solid #0CC998;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: 0.25s;
+  &:hover {
+    color:white;
+    box-shadow: inset 0 0 0 2em #0cc998;
+    transform: translateY(-0.25em);
+  }
 `;
 
-// const UpdatesSection = ({
-//   updates = [],
-//   selectorOpen,
-//   user = null,
-//   stages = null,
-//   projectId=null,
-//   committeeId=null,
-//   sectionId=null,
-//   page="home",
-//   updateUpdates = (newUpdates) => {},
-//   setSelectorOpen = (updateId) => {},
-// }) => {
+const ButtonTwo = styled.button`
+  background: #FFF7EC;
+  border-radius: 60px;
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight:normal;
+  color: #757575;
+  height: 35px;
+  width: 100px;
+  margin: 10px 15px;
+  cursor: pointer;
+  border:1px solid #EAA828;
+  transition: 0.25s;
+  &:hover {
+    color:white;
+    box-shadow: inset 0 0 0 2em #EAA828;
+    transform: translateY(-0.15em);
+  }
+`;
 
-//   const urlParts = window.location.href.split("/");
-/* <button>Filter</button> */
-/* <AddUpdateComponent
-            type={"default"}
-            stages={[]}
-            user={user}
-            onSave={async (newUpdate) => {
-              //   console.log("On Save");
-              //   // add ids to new update
-              //   const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":committeeId, "sectionId":sectionId}
-              //   // TODO this gets added to db 
-              //   await fb.createUpdate(_newUpdate);
-              // if (updates) updateUpdates([...updates, _newUpdate]);
-              // else updateUpdates([newUpdate]);
-            }}
-          /> */
-
-//   return (
-//     <UpdatesContainer >
-//       <UpdatesMenu >
-//         <div className={"updateTitle"}>
-//           Updates
-//         </div>
-//         <div>
-//           {/* <button>Filter</button> */}
-//           <AddUpdateComponent
-//             type={"default"}
-//             stages={stages}
-//             user={user}
-//             onSave={async (newUpdate) => {
-//                 console.log("On Save");
-//                 // add ids to new update
-//                 const _newUpdate = {...newUpdate, "projectId":projectId, "committeeId":committeeId, "sectionId":sectionId}
-//                 // TODO this gets added to db
-//                 await fb.createUpdate(_newUpdate);
-//               if (updates) updateUpdates([...updates, _newUpdate]);
-//               else updateUpdates([newUpdate]);
-//             }}
-//           />
-//         </div>
-//       </UpdatesMenu>
-//       <UpdatesList>
-//         {updates &&
-//           updates
-//             .sort((a, b) => b.date - a.date)
-//             .map((updateData) => {
-//               return (
-//                 <UpdateBox
-//                   key={updateData.id}
-//                   id={updateData.id}
-//                   updateData={updateData}
-//                   isSelector={selectorOpen == updateData.id}
-//                   updateUpdate={(newUpdateData) => {
-//                     let newUpdates = updates;
-//                     let u = newUpdates.findIndex(
-//                       (up) => up.id == newUpdateData.id
-//                     );
-//                     fb.updateUpdate(newUpdateData.id, newUpdateData);
-//                     newUpdates[u] = newUpdateData;
-//                     updateUpdates(newUpdates);
-//                   }}
-//                   setSelectorOpen={(updateData) =>
-//                     setSelectorOpen(updateData.id)
-//                   }
-//                   deleteUpdate={(updateData) => {
-//                     if (
-//                       window.confirm(
-//                         "Are you sure? This action cannot be reversed"
-//                       )
-//                     ) {
-//                       let newUpdates = updates.filter(
-//                         (u) => u.id != updateData.id
-//                       );
-//                       //todo add delete function
-//                       fb.deleteUpdate(updateData.id);
-//                       updateUpdates(newUpdates);
-//                     } else {
-//                       return;
-//                     }
-//                   }}
-//                 />
-//               );
-//             })}
-//       </UpdatesList>
-//     </UpdatesContainer>
-//   );
-// };
-
-// export default UpdatesSection;
-
-// const UpdatesList = styled.div`
-//   overflow: scroll;
-//   height: calc(100% - 95px);
-//   padding: 15px;
-// `;
-// const UpdatesMenu = styled.div`
-//   display: flex;
-//   height: 75px;
-//   justify-content: space-between;
-//   > div {
-//     display: flex;
-//   }
-//   .updateTitle{
-//     font-family: 'Baloo 2';
-//     font-size: 21px;
-//     font-style: normal;
-//     font-weight: 600;
-//     line-height: 33px;
-//     letter-spacing: 0em;
-//   }
-//   h3 {
-//     font-family: Baloo 2;
-//     font-style: normal;
-//     font-weight: 800;
-//     font-size: 21px;
-//     display: flex;
-//     align-items: center;
-//   }
-//   padding: 0px 0px 10px 20px;
-// `;
-// const UpdatesContainer = styled.div`
-//   width: 100%;
-//   height: 100%;
-// `;

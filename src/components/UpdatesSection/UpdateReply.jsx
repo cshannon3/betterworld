@@ -14,7 +14,7 @@ const UpdateReply = ({
 }) => {
   const isCurrentUser = reply.author == userName;
   const [isHovering, setIsHovering] = useState(false);
-  const [type, setType]= useState("defualt");
+  const [type, setType]= useState("reply");
 
 
   const HeaderRow = () => {
