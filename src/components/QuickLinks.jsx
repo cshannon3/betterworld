@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Tooltip from "@material-ui/core/Tooltip";
 import { committeeIcons, quickLinks } from "data/dummydata";
-import { PageSubtitleText } from "styles/sharedStyles";
+import { PageSubtitleText, ToolTipText } from "styles/sharedStyles";
 import JitsiIcon from "assets/Landing/jitsi.png";
 import DriveIcon from "assets/Landing/google-drive.png";
 import DocIcon from "assets/Landing/google-docs.png";
@@ -48,7 +48,7 @@ const QuickLinksSection = ({
         </AddCard>
 
         {resources.map((data) => (
-          <Tooltip title={data.name}>
+          <Tooltip title={<ToolTipText>{data.name}</ToolTipText>}>
             {clickLink == null ? (
               <a href={data.url} target="_blank">
                 <LinkBox onClick={() => clickLink(data.url)}>
