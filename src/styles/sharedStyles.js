@@ -159,6 +159,13 @@ export const EmphasizedSmallBodyText = styled(RegularBodyText)`
   font-size: 14px;
 `;
 
+
+export const ToolTipText = styled(SmallestBodyTextWhite)`
+  padding:3px;
+`;
+
+
+
 export const TaskText = styled.div`
   font-family: 'Helvetica Neue';
   font-style: normal;

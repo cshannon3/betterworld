@@ -22,8 +22,6 @@ if (!firebase.apps.length) {
     firebase.app(); // if already initialized, use that one
 }
 
-
-
 const db = firebase.firestore();
 export const provider = new firebase.auth.GoogleAuthProvider();
 

@@ -70,8 +70,9 @@ export default function ProfilePage() {
     )
   }
   const RightComponent = ()=>{
-    return ( <div >
-              {/* <AtAGlanceModule/> */}
+    return ( 
+    
+    <div >
                <UpdatesSection/>
       </div>)
   }

@@ -99,6 +99,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
               projectName = r[0];
               sectionName = r[1];
             }
+            
             let _newUpdate = cleanUpdateModel({
               author: appCtx.user.name??appCtx.user.displayName??"",
               authorId: appCtx.user.id,
