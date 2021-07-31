@@ -14,7 +14,6 @@ import FigmaIcon from "assets/Landing/figma.png";
 import GeneralLinkIcon from "assets/Landing/link.png";
 
 import ReactModal from "react-modal";
-
 /*
 TODO add quick links to db and way to parse link
 */

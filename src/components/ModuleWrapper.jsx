@@ -6,7 +6,7 @@ import * as styles from 'styles/sharedStyles';
 
 export default function ModuleWrapper({Component, name}) {
    return ( <Wrapper>
-        <styles.GreyTitleBar>{name}</styles.GreyTitleBar>
+        <styles.GreenTitleBar>{name}</styles.GreenTitleBar>
       <Padding>
        {Component}
        </Padding>
