@@ -22,6 +22,8 @@ import { useHistory } from "react-router-dom";
 import { cleanProjectModel } from "data_models/projectmodel";
 import QuickLinksSection from "components/QuickLinks";
 
+import LinkOutIcon from "assets/linkout.png";
+
 const ActiveProjectPage = () => {
   const { projectId } = useParams();
   const [link, setLink] = useState(null);
@@ -71,10 +73,15 @@ const ActiveProjectPage = () => {
             <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
           </div>
           <div style={{ height: "100%" , width:"100%"}}>
-          <button onClick={() => setLink(null)}>X</button>
-          <a href={link} target="_blank">
-            go to
-          </a>
+          <OptionsBar>
+        
+       
+        <LinkBox href={link} target="_blank">
+         <img src={LinkOutIcon}/>
+        </LinkBox>
+        <button onClick={() => setLink(null)}>Close</button>
+  
+        </OptionsBar>
           <iframe
             width="100%"
             height="100%"
@@ -386,7 +393,19 @@ const LadderModule = ({ projectData, openLadderModal, contributors , clickLink})
     </TaskOverviewBox>
   );
 };
-
+const OptionsBar = styled.div`
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+`;
+const LinkBox = styled.a`
+  height: 25px;
+  padding:0px 10px;
+  img {
+    height: 25px;
+    width: 25px;
+  }
+`;
 const TitleBar = styled(styles.GreyTitleBar)`
   display: flex;
   justify-content: space-between;

@@ -124,15 +124,15 @@ const CancelBtn = styled.button`
   padding: 5px 10px;
   margin-right: 20px;
   width: 35%;
-  color: #BE83FF;
-  border: 1px solid #BE83FF;
+  color: #0CC998;
+  border: 1px solid #0CC998;
 `;
 
 const SubmitBtn = styled.input`
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px 10px;
-  background: #be83ff;
+  background: #0CC998;
   color: white;
   width: 60%;
   border: none;
@@ -165,7 +165,7 @@ const Icon = styled.img`
 `;
 
 const Title = styled.h1`
-  font-size: 28px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 30px;
@@ -180,7 +180,7 @@ const X = styled.p`
 
 const Input = styled.input`
   width: 100%;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 10px;
   border: 1px solid #5c677d;
   padding: 10px 10px;
@@ -237,7 +237,7 @@ const AddCard = styled.div`
 const AddText = styled.p`
   width: 100%;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   color: #0cc998;
   text-align: center;
 `;

@@ -17,6 +17,8 @@ import FBIcon from "assets/Landing/fb.png";
 import TwitterIcon from "assets/Landing/twitter.png";
 import FigmaIcon from "assets/Landing/figma.png";
 import GeneralLinkIcon from "assets/Landing/link.png";
+import LinkOutIcon from "assets/linkout.png";
+import CloseIcon from "assets/closeicon.png";
 
 
 import { fuzzyTextFilterFn } from "shared/utils";
@@ -53,6 +55,11 @@ const ProjectSectionPage = () => {
   const sectionId = urlParts[urlParts.length - 1];
   const [membersData , setMembersData] = useState(null);
   const [link, setLink] = useState(null);
+  const [fileModalOpen, setFileModalOpen] = useState(false);
+
+
+
+
   const [membersSnapshot, loadingMembers, error] = useCollection(
     fb.getMembers(),{ snapshotListenOptions: { includeMetadataChanges: true }, }
   );
@@ -65,8 +72,8 @@ const ProjectSectionPage = () => {
   if(!loadingMembers && !membersData){
     const _mems = membersSnapshot.docs.map(
       (doc) => ({
-        id: doc.id,
         ...doc.data(),
+        id: doc.id,
       }));
     setMembersData(_mems);
   }
@@ -108,10 +115,15 @@ const ProjectSectionPage = () => {
     return (
      <MainContainer >
         <div style={{ height: "100%" , width:"100%"}}>
-        <button onClick={() => setLink(null)}>X</button>
-        <a href={link} target="_blank">
-          go to
-        </a>
+        <OptionsBar>
+        
+       
+        <LinkBox href={link} target="_blank">
+         <img src={LinkOutIcon}/>
+        </LinkBox>
+        <button onClick={() => setLink(null)}>Close</button>
+  
+        </OptionsBar>
         <iframe
           width="100%"
           height="100%"
@@ -167,6 +179,7 @@ const ProjectSectionPage = () => {
           </div>
           <div className="tasks">
             <StagesComponent
+
               data={data["stages"].map((dd) => {
                 return { ...dd, contributors: getContributors(dd) };
               })}
@@ -175,6 +188,28 @@ const ProjectSectionPage = () => {
                 if(_link.includes("docs.google.com")) setLink(_link);
                 else window.open(_link, '_blank');
               }}
+              onAddMember={(rowData, member)=>{
+                let newMember = {...member};
+                console.log(rowData);
+                if(!(projectId in newMember.projects)){newMember.projects[projectId]={name:projectSnapshot.data()["name"], roles:[]}}
+                        newMember.projects[projectId].roles = [...newMember.projects[projectId].roles, {
+                          role:"contributor",
+                          stage: rowData["name"],
+                          stageId: rowData["id"],
+                          sectionId:sectionId,
+                          projectId:projectId,
+                          section:data["name"],
+                          project:projectSnapshot.data()["name"],
+                          type:rowData["type"],
+                        }];
+                          console.log(newMember);
+                fb.updateMember(member.id, {...newMember});
+              }}
+              onAddLink={(rowData)=>{
+                setFileModalOpen(true);
+                //fb.updateProject(member.id, {...newMember});
+              }}
+              setModalOpen={(val)=>setFileModalOpen(val)}
             />
           </div>
     
@@ -183,7 +218,7 @@ const ProjectSectionPage = () => {
   };
 
   const RightComponent = () => {
-    const stages = data["stages"].map((st) => st.name);
+    //const stages = data["stages"].map((st) => st.name);
 
     return (
       <UpdatesStyle>
@@ -204,8 +239,17 @@ const ProjectSectionPage = () => {
 
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-const StagesComponent = ({ data = [], membersData = [], clickLink }) => {
+const StagesComponent = ({ data = [], membersData = [], clickLink, onAddMember, onAddLink, setModalOpen }) => {
 //  const { register, handleSubmit, control } = useForm();
+const [name, setName] = useState("");
+const [webUrl, setWebUrl] = useState("");
+const handleSubmit = (event) => {
+  event.preventDefault();
+  onAddLink(name, webUrl);
+  //createLink(fileType, name, webUrl)
+  //setModalOpen(false);
+};
+
 
   const columns = useMemo(
     () => [
@@ -248,7 +292,9 @@ const StagesComponent = ({ data = [], membersData = [], clickLink }) => {
                     <div>
                       {m.name} 
                       </div>
-                      <button>Add</button>
+                      {cell.value.filter(v=>v.name==m.name).length>0? <button onClick={()=>{}}>Remove</button>:
+                      <button onClick={()=>{onAddMember(cell.row.original, m)
+                      }}>Add</button>}
                     
                   </AddMemberTile>
                 );
@@ -292,14 +338,42 @@ const StagesComponent = ({ data = [], membersData = [], clickLink }) => {
                            />
                     </Tooltip>);
                     })}
-                <Avatar alt="Remy Sharp">+</Avatar>
+                <Avatar alt="Remy Sharp" onClick={(e)=>{onAddLink(cell.row.original)}}>+</Avatar>
               </AvatarGroup>
              
                 }
                 position="left center"
           >
             <div>
-              <div>Document Data</div>
+            <form onSubmit={handleSubmit}>
+        <X onClick={() => setModalOpen(false)}>X</X>
+        <Title>Add a New File</Title>
+        <Label>
+          <SectionTitle>Name:</SectionTitle>
+          <Input
+            type="text"
+            name="Name"
+            placeholder="New File Name"
+            onChange={(event) => setName(event.target.value)}
+          />
+        </Label>
+
+        <div>
+          <SectionTitle>URL:</SectionTitle>
+          <Label>
+            <Input
+              type="text"
+              placeholder="Website URL"
+              name="URL"
+              onChange={(event) => setWebUrl(event.target.value)}
+            />
+          </Label>
+        </div>
+        <BtnRow>
+          <CancelBtn onClick={() => setModalOpen(false)}>Cancel</CancelBtn>
+          <SubmitBtn type="submit" value="Create" />
+        </BtnRow>
+      </form>
             </div>
           </Popup>
         );
@@ -383,7 +457,9 @@ const MainContainer = styled.div`
   padding-top: 15px;
   width:100%;
   height:100%;
-
+.Modal{
+  z-index:999999;
+}
   .header {
     //height: 20%;
     display: flex;
@@ -414,13 +490,24 @@ const MainContainer = styled.div`
   }
 `;
 
-const LinkBox = styled.div`
-  height: 40px;
-  min-width: 40px;
+const OptionsBar = styled.div`
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+`;
+const LinkBox = styled.a`
+  height: 25px;
+  padding:0px 10px;
   img {
-    height: 34px;
-    width: 40px;
-    margin: 3px;
+    height: 25px;
+    width: 25px;
+  }
+`;
+const CloseBox = styled.div`
+  height: 25px;
+  img {
+    height: 25px;
+    width: 25px;
   }
 `;
 const AddMemberPopUp = styled.div`
@@ -496,4 +583,116 @@ const StageStatus = styled.div`
     border: 6px solid transparent;
     border-color: #fff transparent transparent transparent;
   }
+`;
+
+
+
+function AddFileModal({ setModalOpen, addLink = (url, name) => {} }) {
+  //const { createLink } = useContext(ControlContext);
+  const [name, setName] = useState("");
+  const [webUrl, setWebUrl] = useState("");
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addLink(name, webUrl);
+    //createLink(fileType, name, webUrl)
+    setModalOpen(false);
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <X onClick={() => setModalOpen(false)}>X</X>
+        <Title>Add a New File</Title>
+        <Label>
+          <SectionTitle>Name:</SectionTitle>
+          <Input
+            type="text"
+            name="Name"
+            placeholder="New File Name"
+            onChange={(event) => setName(event.target.value)}
+          />
+        </Label>
+
+        <div>
+          <SectionTitle>URL:</SectionTitle>
+          <Label>
+            <Input
+              type="text"
+              placeholder="Website URL"
+              name="URL"
+              onChange={(event) => setWebUrl(event.target.value)}
+            />
+          </Label>
+        </div>
+        <BtnRow>
+          <CancelBtn onClick={() => setModalOpen(false)}>Cancel</CancelBtn>
+          <SubmitBtn type="submit" value="Create" />
+        </BtnRow>
+      </form>
+    </div>
+  );
+}
+
+const CancelBtn = styled.button`
+  border: 1px solid black;
+  background white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-right: 20px;
+  width: 35%;
+  color: #0CC998;
+  border: 1px solid #0CC998;
+`;
+
+const SubmitBtn = styled.input`
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background: #0CC998;
+  color: white;
+  width: 60%;
+  border: none;
+`;
+
+const BtnRow = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const Icon = styled.img`
+  width: 50px;
+`;
+
+const Title = styled.h1`
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const X = styled.p`
+  float: right;
+  font-weight: bold;
+  margin-left: 40px;
+  cursor: pointer;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #5c677d;
+  padding: 10px 10px;
+  margin-bottom: 15px;
+`;
+
+const SectionTitle = styled.p`
+  font-size: 14px;
+  line-height: 22px;
+  color: #9b9b9b;
+`;
+
+const Label = styled.label`
+  width: 100%;
 `;

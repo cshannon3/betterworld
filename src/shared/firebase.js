@@ -222,6 +222,12 @@ export async function updateCommittee(committeeId, committeeData) {
 
 
 
+export async function updateMember(memberId, memberData) {
+    // Add team
+    await db.collection("groups").doc("cmu-against-ice").collection("members").doc(memberId).update({...memberData});
+}
+
+
 
 
 
