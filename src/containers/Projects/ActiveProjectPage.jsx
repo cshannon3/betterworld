@@ -89,10 +89,12 @@ const ActiveProjectPage = () => {
       <LeftWrapper>
         <ProjectInfoContainer>
           <div>
-            <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
+            <styles.PageTitleText>{projectData["name"]}</styles.PageTitleText>
           </div>
+          <div>
           <PointPerson>{`Point Person: ${projectData["point_person"]["name"]}`}</PointPerson>
-          <DescriptionText>{projectData["description"]}</DescriptionText>
+          <styles.LargeBodyText>{projectData["description"]}</styles.LargeBodyText>
+          </div>
         </ProjectInfoContainer>
         <QuickLinksSection
           resources={projectData["resources"] ?? []}
@@ -114,6 +116,7 @@ const ActiveProjectPage = () => {
         <LadderModule
           projectData={projectData}
           contributors={contributorsSections}
+          
         />
       </LeftWrapper>
     );
@@ -158,7 +161,6 @@ const ProjectInfoContainer = styled.div`
   height: 100%;
   padding: 0px 50px 0px 0px;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
 `;
 
@@ -215,7 +217,7 @@ const DescriptionText = styled.p`
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-const LadderModule = ({ projectData, openLadderModal, contributors }) => {
+const LadderModule = ({ projectData, openLadderModal, contributors , clickLink}) => {
   const data = projectData["sections"];
   // let contributors = {};
   let statuses = {};

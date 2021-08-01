@@ -79,7 +79,8 @@ export async function createNewUser(result) {
 }
 
 
-export const getMembers = ({ groupID = "cmu-against-ice" }) => { 
+export const getMembers = () => { //{ groupID = "cmu-against-ice" }
+    const groupID = "cmu-against-ice" ;
     return db.collection("groups").doc(groupID).collection('members'); 
 };
 
@@ -184,7 +185,10 @@ export const getProjects = ({ groupID = "cmu-against-ice" }) => {
 };
 
 
-export const getProjectRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('projects').doc(id); };
+export const getProjectRef = (id) => { 
+    const groupID = "cmu-against-ice" ;
+    return db.collection("groups").doc(groupID).collection('projects').doc(id); 
+};
 
 export async function createProject(projectData, { groupID = "cmu-against-ice" }) {
     // Add team
@@ -199,7 +203,7 @@ export async function updateProject(projectId, projectData) {
     console.log(projectId);
     console.log( projectData);
     console.log("test");
-    await getProjectRef({ id: projectId, groupID: "cmu-against-ice" }).update(projectData).then((e)=>{
+    await getProjectRef(projectId).update(projectData).then((e)=>{
         console.log("Go");
     });
 }

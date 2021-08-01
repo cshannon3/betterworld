@@ -104,6 +104,7 @@ const ResponsiveSplitScreen = ({
       <RowWrapper>
         <LeftPanel />
         <StyledSplit
+          sizes={[65,35]}
           onDrag={(sizes) => {
            // console.log(sizes[1]);
              if(sizes[1]<40.0){console.log("hide")}
@@ -179,6 +180,7 @@ const RowWrapper = styled.div`
 const StyledSplit = styled(Split)`
   display: flex;
   height: 100vh;
+  width:100%;
   .gutter {
     background-color: #eee;
     background-repeat: no-repeat;
@@ -193,12 +195,13 @@ const StyledSplit = styled(Split)`
 const LeftStyle = styled.div`
   background-color: #ffffff;
   padding: 3vh 40px 10vh 40px;
+  margin:0px;
 `;
 
 const RightStyle = styled.div`
   background-color: #eee;
-  width: 50%;
   padding: 3vh 20px 10vh 20px;
+  margin:0px;
 `;
 
 const TopStyle = styled.div`

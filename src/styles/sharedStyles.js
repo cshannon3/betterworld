@@ -23,7 +23,7 @@ export const PageTitleText = styled.div`
   font-family: 'Baloo 2';
   font-style: normal;
   font-weight: bold;
-  font-size: 60px;
+  font-size: 40px;
   letter-spacing: -0.02em;
   color: #0CC998;
 `;
@@ -126,14 +126,15 @@ color: #000000;
 export const RegularBodyText = styled.p`
 font-family: Helvetica Neue;
 font-style: normal;
-font-weight: normal;
+font-weight: 400;
 font-size: 16px;
+
 color: #000000;
 `;
 
 export const LargeBodyText =  styled(RegularBodyText)`
-    font-weight: 200;
-    font-size: 22px;
+    font-weight: 300;
+    font-size: 20px;
 `;
 export const EmphasizedRegularBodyText = styled(RegularBodyText)`
   font-weight: bold;

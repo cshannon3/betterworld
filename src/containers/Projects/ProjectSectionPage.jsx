@@ -9,6 +9,16 @@ import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 import * as fb from "shared/firebase";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 
+import JitsiIcon from "assets/Landing/jitsi.png";
+import DriveIcon from "assets/Landing/google-drive.png";
+import DocIcon from "assets/Landing/google-docs.png";
+import InstaIcon from "assets/Landing/insta.png";
+import FBIcon from "assets/Landing/fb.png";
+import TwitterIcon from "assets/Landing/twitter.png";
+import FigmaIcon from "assets/Landing/figma.png";
+import GeneralLinkIcon from "assets/Landing/link.png";
+
+
 import { fuzzyTextFilterFn } from "shared/utils";
 //import { useHistory } from "react-router-dom";
 
@@ -21,56 +31,135 @@ import "reactjs-popup/dist/index.css";
 import { useForm } from "react-hook-form";
 import Tooltip from "@material-ui/core/Tooltip";
 
+import { useCollection , useDocument} from 'react-firebase-hooks/firestore';
+
+
+const getIconType = (url) => {
+  if (url.includes("meet.jit.si")) return JitsiIcon;
+  if (url.includes("drive.google.com")) return DriveIcon;
+  if (url.includes("docs.google.com")) return DocIcon;
+  if (url.includes("www.instagram.com")) return InstaIcon;
+  if (url.includes("www.facebook.com")) return FBIcon;
+  if (url.includes("www.twitter.com")) return TwitterIcon;
+  else return GeneralLinkIcon;
+};
+
+
+
 const ProjectSectionPage = () => {
   const ctrctx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
   const projectId = urlParts[urlParts.length - 2];
   const sectionId = urlParts[urlParts.length - 1];
-  const userMentionData = Object.entries(ctrctx.membersData).map(
-    ([k, myUser]) => ({
-      id: k,
-      ...myUser,
-    })
-  );
-  const [projectData, setProjectData] = useState(
-    ctrctx.getProjectData(projectId)
+  const [membersData , setMembersData] = useState(null);
+  const [link, setLink] = useState(null);
+  const [membersSnapshot, loadingMembers, error] = useCollection(
+    fb.getMembers(),{ snapshotListenOptions: { includeMetadataChanges: true }, }
   );
 
-  const data = projectData["sections"]?.filter((s) => s.id == sectionId)[0];
+  const [projectSnapshot, loadingProject, errorProject] = useDocument(
+    fb.getProjectRef(projectId),{snapshotListenOptions: { includeMetadataChanges: true },}
+  );
+
+
+  if(!loadingMembers && !membersData){
+    const _mems = membersSnapshot.docs.map(
+      (doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    setMembersData(_mems);
+  }
+
+  const data =  !loadingProject && projectSnapshot.data()["sections"]?.filter((s) => s.id == sectionId)[0];
   const LeftComponent = () => {
     const stages = data["stages"].map((st) => st.name);
     // TODO change this 
-    const getContributors = (stageData) => {
-      
-      let _contributors = [];
-      if (!("contributors" in data)) return [];
-      data["contributors"].forEach((s) => {
-        if (projectId in s.projects) {
-          let _roles = s.projects[projectId].roles;
+
+      let allContributors = [];
+      membersData.forEach((member) => {
+        if ("projects" in member && projectId in member.projects) {
+          let _roles = member.projects[projectId].roles;
           if (
             _roles &&
-            _roles.filter((r) => r.stageId === stageData.id).length
+            _roles.filter((r) => ( r.sectionId === sectionId)).length
           ) {
-            _contributors.push(s);
+            allContributors.push(member);
+          }
+        }
+      });
+    const getContributors = (stageData) => {
+      let _contributors = [];
+      if (!membersData) return [];
+      membersData.forEach((member) => {
+        if ("projects" in member && projectId in member.projects) {
+          let _roles = member.projects[projectId].roles;
+          if (
+            _roles &&
+            _roles.filter((r) => (r.stageId === stageData.id && r.sectionId === sectionId)).length
+          ) {
+            _contributors.push(member);
           }
         }
       });
       return _contributors;
     };
-
+    if (link)
     return (
+     <MainContainer >
+        <div style={{ height: "100%" , width:"100%"}}>
+        <button onClick={() => setLink(null)}>X</button>
+        <a href={link} target="_blank">
+          go to
+        </a>
+        <iframe
+          width="100%"
+          height="100%"
+          src={link}
+          allowFullScreen
+        ></iframe>
+        </div>
+      </MainContainer>
+    );
+    return loadingProject? <div>Loading</div>:(
       <MainContainer>
-        <div>
+   
           <div>
             <h2>{data["name"]}</h2>
             <div className="header">
-              <div className="description">
-                <styles.PageSubtitleText>Description</styles.PageSubtitleText>
+            <div>
+              <styles.PageSubtitleText>{`Point Person:`}</styles.PageSubtitleText>
+              <styles.RegularBodyText>{allContributors.length>0 && allContributors[0].name}</styles.RegularBodyText>
               </div>
-              <styles.RegularBodyText>---</styles.RegularBodyText>
+              <div>
+              <styles.PageSubtitleText>{`Members (${allContributors.length})`}</styles.PageSubtitleText>
+              <AvatarGroup max={7}>
+                {allContributors
+                  .slice(0, allContributors.length < 7 ? allContributors.length : 7)
+                  .map((c) => {
+                    return "photoUrl" in c ? (
+                      <Tooltip title={<styles.ToolTipText>{c.name}</styles.ToolTipText>}>
+                       <Avatar alt={c.name} src={c.photoUrl} />
+                    </Tooltip>
+                     
+                    ) : (
+                      <Tooltip title={<styles.ToolTipText>{c.name}</styles.ToolTipText>}>
+                      <Avatar alt={c.name}>{c.name[0]}</Avatar>
+                      </Tooltip>
+                    );
+                  })}
+                  <Tooltip title={<styles.ToolTipText>Add Member</styles.ToolTipText>}>
+                <Avatar alt="add new">+</Avatar>
+                </Tooltip>
+              </AvatarGroup>
+              </div>
+             
             </div>
             <div>
-              <styles.RegularBodyText style={{ padding: "20px 20px 20px 0px" }}>
+            <div className="description">
+                <styles.PageSubtitleText>Description</styles.PageSubtitleText>
+              </div>
+              <styles.RegularBodyText style={{ padding: "5px 20px 20px 0px" }}>
                 {" "}
                 {data["description"]}
               </styles.RegularBodyText>
@@ -81,10 +170,14 @@ const ProjectSectionPage = () => {
               data={data["stages"].map((dd) => {
                 return { ...dd, contributors: getContributors(dd) };
               })}
-              membersData={userMentionData}
+              membersData={membersData }
+              clickLink={(_link) => {
+                if(_link.includes("docs.google.com")) setLink(_link);
+                else window.open(_link, '_blank');
+              }}
             />
           </div>
-        </div>
+    
       </MainContainer>
     );
   };
@@ -111,8 +204,8 @@ const ProjectSectionPage = () => {
 
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-const StagesComponent = ({ data = [], membersData = [] }) => {
-  const { register, handleSubmit, control } = useForm();
+const StagesComponent = ({ data = [], membersData = [], clickLink }) => {
+//  const { register, handleSubmit, control } = useForm();
 
   const columns = useMemo(
     () => [
@@ -149,13 +242,15 @@ const StagesComponent = ({ data = [], membersData = [] }) => {
             position="left center"
           >
             <AddMemberPopUp>
-              {membersData.map((m) => {
+              {membersData?.map((m) => {
                 return (
-                  <div>
-                    <span>
-                      {m.name} <button>Add</button>
-                    </span>
-                  </div>
+                  <AddMemberTile>
+                    <div>
+                      {m.name} 
+                      </div>
+                      <button>Add</button>
+                    
+                  </AddMemberTile>
                 );
               })}
             </AddMemberPopUp>
@@ -180,22 +275,35 @@ const StagesComponent = ({ data = [], membersData = [] }) => {
 
       {
         Header: "Link",
-        accessor: "active_doc",
-        Cell: ({ cell }) => (
+        accessor: "resources",
+        Cell: ({ cell }) =>{
+          console.log(cell.value);
+        return (
           <Popup
             trigger={
+             
               <AvatarGroup max={3}>
-                <Avatar alt="Remy Sharp" src={docIcon} />
+                {cell.value && cell.value.slice(0, cell.value.length < 2 ? cell.value.length : 2)
+                  .map((c) => {
+                    return ( <Tooltip title={<styles.ToolTipText>{c.name}</styles.ToolTipText>}>
+                           <Avatar 
+                           onClick={(e)=> clickLink(c.url)}
+                           alt="Doc Name" src={getIconType(c.url)} 
+                           />
+                    </Tooltip>);
+                    })}
                 <Avatar alt="Remy Sharp">+</Avatar>
               </AvatarGroup>
-            }
-            position="left center"
+             
+                }
+                position="left center"
           >
             <div>
               <div>Document Data</div>
             </div>
           </Popup>
-        ),
+        );
+      }
       },
     ],
     []
@@ -272,24 +380,29 @@ export default ProjectSectionPage;
 const UpdatesStyle = styled.div``;
 
 const MainContainer = styled.div`
-  padding-top: 20px;
+  padding-top: 15px;
   width:100%;
+  height:100%;
+
   .header {
-    height: 20%;
+    //height: 20%;
     display: flex;
-    padding-top: 15px;
+    padding-top: 10px;
     justify-content: space-between;
     .date {
       color: green;
     }
   }
-
+  .description{
+    padding-top:20px;
+  }
   .descriptionText {
     font-size: 16px;
     padding: 10px 0px 60px 0px;
   }
 
   .tasks {
+    
   }
   .buttons {
     height: 100px;
@@ -315,7 +428,15 @@ const AddMemberPopUp = styled.div`
     overflow:scroll;
 `;
 
+const AddMemberTile = styled.div`
+    display:flex;
+    justify-content:space-between;
+    padding:5px;
+`;
+
 const TableSection = styled.section`
+  height:100%;
+  margin:auto;
   table {
     width: 100%;
   }
@@ -333,7 +454,7 @@ const TableSection = styled.section`
     font-family: "Baloo 2";
     font-style: normal;
     font-weight: bold;
-    font-size: 21px;
+    font-size: 18px;
     line-height: 33px;
   }
   td {
@@ -376,28 +497,3 @@ const StageStatus = styled.div`
     border-color: #fff transparent transparent transparent;
   }
 `;
-
-/* <div className="buttons">
-            <AddUpdateComponent
-              type={"request help"}
-              style={{ color: "#0595A5" }}
-              stages={stages}
-              user={ctrctx.user}
-              onSave={(newUpdate) => {
-                const _newUpdate = {
-                  ...newUpdate,
-                  projectId: projectId,
-                  committeeId: null,
-                  sectionId: sectionId,
-                };
-                // todo add new update to DB
-                fb.createUpdate(_newUpdate);
-                const newSectionData = {
-                  ...data,
-                  updates: [...data["updates"], _newUpdate],
-                };
-                // ctx.updateSection(newSectionData);
-                // setLadderData(newSectionData);
-              }}
-            />
-          </div> */

@@ -122,17 +122,5 @@ const OverviewSection = styled.div``;
 // `;
 const CommitteeSection = styled.div`
   width: 100%;
+  height:95%;
 `;
-
-
-   /* <AtAGlanceModule 
-        TopComponent={<div>
-          <styles.EmphasizedRegularBodyText>Upcoming Meetings</styles.EmphasizedRegularBodyText>
-          <H10/>
-          <styles.SmallestBodyTextBlack> - Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a> / <a href="">Link</a>)</styles.SmallestBodyTextBlack>
-          <styles.SmallestBodyTextBlack> - Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting((<a href="">Notes</a> / <a href="">Link</a>)</styles.SmallestBodyTextBlack> 
-        </div> 
-        }
-        BottomComponent={
-        }
-        /> */
