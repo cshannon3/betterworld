@@ -51,7 +51,7 @@ const UpdateBox = ({
   const [isHovering, setIsHovering] = useState(false);
   const [editContent, setEditContent] = useState("");
 
-  const [replyType, setReplyType] = useState("update");
+  const [replyType, setReplyType] = useState("reply");
 
   let content = "";
 
@@ -164,6 +164,7 @@ const UpdateBox = ({
                 );
                 setEditContent("");
                 content = "";
+                setReplyType("offer to help");
                 setIsReplyEditing(true);
               }}
             >
@@ -334,7 +335,8 @@ const UpdateBox = ({
               isEditing={activeReply && reply.id == activeReply.id}
               setIsEditing={(r) => {
                 setActiveReply(r);
-                setReplyType(activeReply.type);
+                console.log(r);
+                setReplyType(r.type);
                 setEditContent(r.content);
                 content = editContent;
                 setIsReplyEditing(true);
@@ -366,11 +368,11 @@ const UpdateBox = ({
         <FlexRow>
           <div class="dropdown">
             <select
-              name="stages"
-              id="stages"
-              value={replyType} //{activeReply.type}
-              onChange={() => {
-                var x = document.getElementById("stages").value;
+              name="stages-reply"
+              id="stages-reply"
+              value={replyType??"reply"} //{activeReply.type}
+              onChange={(event) => {
+                const x = event.target.value;
                 setReplyType(x);
                 //setSelectedStage(x);
               }}
@@ -387,6 +389,8 @@ const UpdateBox = ({
             content = val;
           }}
           onSave={(val) => {
+
+            console.log(replyType);
             let newUpdateData;
             if (
               updateData.replies &&
@@ -394,7 +398,6 @@ const UpdateBox = ({
             ) {
               let newReplies = updateData["replies"];
               let u = newReplies.findIndex((v) => v.id == activeReply.id);
-
               newReplies[u] = { ...activeReply, content: val, type: replyType };
               newUpdateData = { ...updateData, replies: newReplies };
 
@@ -403,7 +406,7 @@ const UpdateBox = ({
               let newNotificaton = {
                 userId: updateData.authorId,
                 isRead: false,
-                type: "reply",
+                type: replyType??"reply",
               };
               let notifs = [...updateData["notifications"], newNotificaton];
 
@@ -425,6 +428,8 @@ const UpdateBox = ({
             setActiveReply(null);
             setIsReplyEditing(false);
             setReplyType("update");
+            setIsShowingReplies(true);
+            console.log("HHHH");
           }}
           onCancel={() => {
             setActiveReply(null);

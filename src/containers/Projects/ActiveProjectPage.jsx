@@ -9,13 +9,6 @@ import * as fb from "shared/firebase";
 import styled from "styled-components";
 
 import ControlContext from "shared/control-context";
-import {
-  PageTitleText,
-  PageSubtitleText,
-  RegularBodyText,
-  EmphasizedSmallBodyText,
-} from "styles/sharedStyles";
-
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 
@@ -69,20 +62,43 @@ const ActiveProjectPage = () => {
   });
 
   const LeftComponent = () => {
+    if (link)
+      return (
+        
+       <LeftWrapper >
+          <ProjectInfoContainer>
+          <div>
+            <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
+          </div>
+          <div style={{ height: "100%" , width:"100%"}}>
+          <button onClick={() => setLink(null)}>X</button>
+          <a href={link} target="_blank">
+            go to
+          </a>
+          <iframe
+            width="100%"
+            height="100%"
+            src={link}
+            allowFullScreen
+          ></iframe>
+          </div>
+          </ProjectInfoContainer>
+        </LeftWrapper>
+      );
     return (
       <LeftWrapper>
         <ProjectInfoContainer>
           <div>
             <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
           </div>
-
           <PointPerson>{`Point Person: ${projectData["point_person"]["name"]}`}</PointPerson>
           <DescriptionText>{projectData["description"]}</DescriptionText>
         </ProjectInfoContainer>
         <QuickLinksSection
           resources={projectData["resources"] ?? []}
           clickLink={(_link) => {
-            setLink(_link);
+            if(_link.includes("docs.google.com")) setLink(_link);
+            else window.open(_link, '_blank');
           }}
           addLink={(url, name) => {
             fb.getProjectRef({ id: projectId, groupID: "cmu-against-ice" })
@@ -104,21 +120,7 @@ const ActiveProjectPage = () => {
   };
 
   const RightComponent = () => {
-    if (link)
-      return (
-        <div style={{ height: "100%" }}>
-          <button onClick={() => setLink(null)}>X</button>
-          <a href={link} target="_blank">
-            go to
-          </a>
-          <iframe
-            width="100%"
-            height="100%"
-            src={link}
-            allowFullScreen
-          ></iframe>
-        </div>
-      );
+    
     return (
       <RightStyle>
         {/* <AtAGlanceModule projectData={projectData} /> */}
@@ -141,13 +143,16 @@ const RightStyle = styled.div`
 `;
 const LeftStyle = styled.div`
   height: 100%;
+
 `;
 
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  width:100%;
 `;
+
 
 const ProjectInfoContainer = styled.div`
   height: 100%;
@@ -335,7 +340,6 @@ const LadderModule = ({ projectData, openLadderModal, contributors }) => {
         <div>
           <span>Sections Overview</span>
         </div>
-        <button>edit sections</button>
       </TitleBar>
 
       <table {...getTableProps()}>

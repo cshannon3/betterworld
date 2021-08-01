@@ -13,6 +13,10 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
   const appCtx = useContext(ControlContext);
   const [updates, setUpdates] = useState(null);
   const [isAddingUpdate, setIsAddingUpdate] = useState(false);
+  // Whether the update is a help request or a default update
+  const [newUpdateType, setNewUpdateType] = useState("default");
+  
+   
   const [selectorOpen, setSelectorOpen] = useState(null);
   const urlParts = window.location.href.split("/");
   const isHome = urlParts.length==4;
@@ -72,12 +76,12 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
         <div className={"updateTitle"}>Updates</div>
         <div>
           {allowAddUpdate && (
-            <ButtonTwo onClick={() => setIsAddingUpdate(true)}>
+            <ButtonTwo onClick={() => {setIsAddingUpdate(true); setNewUpdateType("request help")}}>
               {"Request Help"}
             </ButtonTwo>
           )}
           {allowAddUpdate && (
-            <ButtonOne onClick={() => setIsAddingUpdate(true)}>
+            <ButtonOne onClick={() => {setIsAddingUpdate(true);setNewUpdateType("default");}}>
               {"Add"}
             </ButtonOne>
           )}
@@ -86,6 +90,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
       {isAddingUpdate && (
         <NewUpdateBox
           key="testKey"
+          updateType={newUpdateType}
           onSave={(newUpdateModel) => {
             let projectName = null,
               sectionName = null,

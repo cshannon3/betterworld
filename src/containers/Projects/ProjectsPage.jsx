@@ -21,7 +21,9 @@ export default function ProjectsPage() {
 
   let history = useHistory();
   const LeftComponent = ()=>{
-    return ( <LeftStyle>
+    return (
+      
+      <LeftStyle>
        <OverviewSection>
       <PageTitleText>Projects</PageTitleText>
      
@@ -61,6 +63,7 @@ export default function ProjectsPage() {
      {
        projectsData.filter((v)=>v.isArchived).sort((a,b)=>a["end_date"]>b["end_date"]?-1:1).map((project)=>{
         return( 
+          
        <ProjectBox
        project={project}
        onClick={()=>history.push(`/past-projects/${project.id}`)}
@@ -76,7 +79,6 @@ export default function ProjectsPage() {
   const RightComponent = ()=>{
     return (  
       <RightStyle>
-          {/* <AtAGlanceModule/> */}
           <UpdatesSection
           allowAddUpdate={false}
           />
@@ -95,25 +97,24 @@ export default function ProjectsPage() {
 }
 
 const RightStyle= styled.div`
-  height:100%
+  height:100%;
 `
 const LeftStyle= styled.div`
-  height:100%
-
+  height:100%;
 `
-
 
 const Row = styled.div`
   display: flex;
   gap: 20px;
   overflow: scroll;
   margin-bottom:20px;
+  max-width:600px;
+ 
 `
-
  const OverviewSection = styled.div`
     margin-bottom:30px;
 `
 
 const ProjectsSection = styled.div`
-  //width:100%;
+  height:100%;
 `

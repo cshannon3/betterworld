@@ -273,6 +273,7 @@ const UpdatesStyle = styled.div``;
 
 const MainContainer = styled.div`
   padding-top: 20px;
+  width:100%;
   .header {
     height: 20%;
     display: flex;

@@ -7,30 +7,31 @@ import ControlContext from "shared/control-context";
 import { swapTags, getUsersFromTags } from "components/MyEditor/tags";
 import defaultStyle from "components/MyEditor/defaultStyle";
 import { MentionsInput, Mention } from "react-mentions";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
 
 //TODO get in the current data of where they are --- project section etc
-const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
+const NewUpdateBox = ({
+  onSave = () => {},
+  onCancel = () => {},
+  updateType,
+}) => {
   const ctrctx = useContext(ControlContext);
- // const userId = ctrctx.user && ctrctx.user.id;
+  // const userId = ctrctx.user && ctrctx.user.id;
   //const urlParts = window.location.href.split("/");
 
   const userName = ctrctx.user && ctrctx.user.displayName;
- // let content = "";
- // const [editContent, setEditContent] = useState("");
-  const [stage, setStage] = useState("");
-  const [type, setType] = useState("default");
+  // let content = "";
+  // const [editContent, setEditContent] = useState("");
+  const [stage, setStage] = useState("none");
+  const [type, setType] = useState(updateType);
   const [_content, setContent] = useState("");
 
   // const onChange = () => {
-    
-  //   };
- 
-  const handleCommentChange = (e) => {
 
+  //   };
+
+  const handleCommentChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);
     //onChange(newContent);
@@ -45,13 +46,10 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
   const HeaderRow = () => {
     return (
       <div className={"topbar"}>
-        <div className={"author"}>
-          {userName}
-        </div>
+        <div className={"author"}>{userName}</div>
       </div>
     );
   };
-
 
   return (
     <UpdateBoxWrapper>
@@ -74,59 +72,56 @@ const NewUpdateBox = ({onSave=()=>{}, onCancel=()=>{}}) => {
         </RootStyles>
         <OptionsBar>
           <div>
-        <InputLabel id="demo-controlled-open-select-label">Type</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          value={type}
-          onChange={(event)=>setType(event.target.value)}
-        >
-          <MenuItem value={"default"}>Default</MenuItem>
-          <MenuItem value={"request help"}>Help Request</MenuItem>
-        </Select>
-    </div>
-    <div>
-    <InputLabel id="demo-controlled-open-select-label">Stage</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-    
-          value={stage}
-          onChange={(event)=>{
-            console.log(event.target.value);
-            setStage(event.target.value);
-          }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={"Research"}>Research</MenuItem>
-          <MenuItem value={"Writing"}>Writing</MenuItem>
-          <MenuItem value={"Editing"}>Editing</MenuItem>
-          <MenuItem value={"Design"}>Design</MenuItem>
-        </Select>
-    </div>
-    </OptionsBar>
-    <div>
-        <SaveButton
-          className={"button"}
-          onClick={() => {
-            const displayText = swapTags(_content);
-            
-            onSave({
-              content:displayText, 
-              contentRaw:_content,
-              stage:stage,
-              type:type
-            });
-          }}
-        >
-          save
-        </SaveButton>
-        <CancelButton className={"button grey"} onClick={() => onCancel()}>
-          cancel
-        </CancelButton>
-    </div>
+            <label for="type">Type</label><br/>
+            <select
+              name="type"
+              id="type"
+              value={type}
+              onChange={(event) => setType(event.target.value)}
+            >
+              <option value={"default"}>Default</option>
+              <option value={"request help"}>Help Request</option>
+            </select>
+          </div>
+          <div>
+          <label for="stage">Stage</label><br/>
+            <select
+              name="stage"
+              id="stage1"
+              value={stage}
+              onChange={(event) => {
+                console.log(event.target.value);
+                setStage(event.target.value);
+              }}
+            >
+              <option value={"none"}> None</option>
+              <option value={"Research"}>Research</option>
+              <option value={"Writing"}>Writing</option>
+              <option value={"Editing"}>Editing</option>
+              <option value={"Design"}>Design</option>
+            </select>
+          </div>
+        </OptionsBar>
+        <div>
+          <SaveButton
+            className={"button"}
+            onClick={() => {
+              const displayText = swapTags(_content);
+
+              onSave({
+                content: displayText,
+                contentRaw: _content,
+                stage: stage,
+                type: type,
+              });
+            }}
+          >
+            save
+          </SaveButton>
+          <CancelButton className={"button grey"} onClick={() => onCancel()}>
+            cancel
+          </CancelButton>
+        </div>
       </UpdateBoxCSS>
     </UpdateBoxWrapper>
   );
@@ -147,14 +142,13 @@ const RootStyles = styled.div`
 `;
 
 const OptionsBar = styled.div`
-  display:flex;
-  justify-content:space-between;
-  width:100%;
-  div{
-    width:50%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  div {
+    width: 50%;
   }
 `;
-
 
 const SaveButton = styled.button`
   background: #0cc998;
