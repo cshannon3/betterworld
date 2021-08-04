@@ -1,11 +1,8 @@
 import { useMemo, useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import Modal from "styled-react-modal";
 import * as styles from "styles/sharedStyles";
 import ControlContext from "shared/control-context";
-import { cleanUpdateModel } from "data_models/updatemodel";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
-import AddUpdateComponent from "components/UpdatesSection/AddUpdateComponent";
 import * as fb from "shared/firebase";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 
@@ -15,22 +12,18 @@ import DocIcon from "assets/Landing/google-docs.png";
 import InstaIcon from "assets/Landing/insta.png";
 import FBIcon from "assets/Landing/fb.png";
 import TwitterIcon from "assets/Landing/twitter.png";
-import FigmaIcon from "assets/Landing/figma.png";
 import GeneralLinkIcon from "assets/Landing/link.png";
 import LinkOutIcon from "assets/linkout.png";
-import CloseIcon from "assets/closeicon.png";
 
 
 import { fuzzyTextFilterFn } from "shared/utils";
 //import { useHistory } from "react-router-dom";
 
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
-import docIcon from "assets/Landing/google-docs.png";
 import { AvatarGroup } from "@material-ui/lab";
 import { Avatar } from "@material-ui/core";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { useForm } from "react-hook-form";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import { useCollection , useDocument} from 'react-firebase-hooks/firestore';
@@ -116,8 +109,6 @@ const ProjectSectionPage = () => {
      <MainContainer >
         <div style={{ height: "100%" , width:"100%"}}>
         <OptionsBar>
-        
-       
         <LinkBox href={link} target="_blank">
          <img src={LinkOutIcon}/>
         </LinkBox>
@@ -218,8 +209,6 @@ const ProjectSectionPage = () => {
   };
 
   const RightComponent = () => {
-    //const stages = data["stages"].map((st) => st.name);
-
     return (
       <UpdatesStyle>
         <UpdatesSection></UpdatesSection>
