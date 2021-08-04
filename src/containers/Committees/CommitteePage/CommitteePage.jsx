@@ -62,21 +62,9 @@ export default function CommitteePage() {
           addLink={(url, name)=>{ }}
         />
     </CommitteeTitleBox>
-      <ModuleWrapper
-        name={committeeData.name}
-        Component={<div>Hey</div>}
-      />
-    </LeftWrapper>)
-  }
-
-
-  const RightComponent = ()=>{
-    return (   
-     <div>
-      {/* <AtAGlanceModule committeeData={committeeData} /> */}
-      {/* <CalendarModule /> */}
-      <AtAGlanceModule
-      TopComponent={  <div>
+    <ModuleWrapper
+      name={"Information"}
+      Component={  <div>
         <styles.EmphasizedRegularBodyText>Committee Responsibilities</styles.EmphasizedRegularBodyText>
        <H10/>
         <ul>
@@ -87,6 +75,18 @@ export default function CommitteePage() {
         </ul>
       </div>}
       />
+      {/* <ModuleWrapper
+        name={committeeData.name}
+        Component={<div>Hey</div>}
+      /> */}
+    </LeftWrapper>)
+  }
+
+
+  const RightComponent = ()=>{
+    return (   
+     <div>
+     
       <UpdateDiv>
         <UpdatesSection/>
       </UpdateDiv>

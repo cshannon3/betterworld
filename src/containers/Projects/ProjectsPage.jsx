@@ -21,11 +21,13 @@ export default function ProjectsPage() {
 
   let history = useHistory();
   const LeftComponent = ()=>{
-    return ( <LeftStyle>
+    return (
+      
+      <LeftStyle>
        <OverviewSection>
       <PageTitleText>Projects</PageTitleText>
      
-        {
+        {/* {
         ctrctx.editMode? <EditTextarea
         style={{"font-weight": "200;", "font-size": "16px;"}}
         defaultValue={`We are a student group that......
@@ -33,10 +35,9 @@ export default function ProjectsPage() {
              `}
         /> :
         <LargeBodyText>
-        We are a student group that......
-        ... nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.
+        
         </LargeBodyText>
-        }
+        } */}
        
       {/* <QuickLinksSection/> */}
    </OverviewSection>
@@ -61,6 +62,7 @@ export default function ProjectsPage() {
      {
        projectsData.filter((v)=>v.isArchived).sort((a,b)=>a["end_date"]>b["end_date"]?-1:1).map((project)=>{
         return( 
+          
        <ProjectBox
        project={project}
        onClick={()=>history.push(`/past-projects/${project.id}`)}
@@ -76,7 +78,6 @@ export default function ProjectsPage() {
   const RightComponent = ()=>{
     return (  
       <RightStyle>
-          {/* <AtAGlanceModule/> */}
           <UpdatesSection
           allowAddUpdate={false}
           />
@@ -95,25 +96,28 @@ export default function ProjectsPage() {
 }
 
 const RightStyle= styled.div`
-  height:100%
+  height:100%;
+  margin:auto;
 `
 const LeftStyle= styled.div`
-  height:100%
-
+  height:100%;
+  overflow: auto;
+  
 `
-
 
 const Row = styled.div`
   display: flex;
   gap: 20px;
   overflow: scroll;
   margin-bottom:20px;
+  padding:5px;
+  max-width:50vw;
 `
-
  const OverviewSection = styled.div`
     margin-bottom:30px;
+
 `
 
 const ProjectsSection = styled.div`
-  //width:100%;
+  height:100%;
 `

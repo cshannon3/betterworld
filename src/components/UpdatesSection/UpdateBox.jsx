@@ -3,7 +3,12 @@ import { useMemo, useState, useEffect, useContext } from "react";
 import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
 import { formatTimestamp, formatTimeAgo } from "shared/utils";
-import { AiOutlineEdit, AiOutlineDelete, AiOutlinePushpin,  AiFillPushpin } from "react-icons/ai";
+import {
+  AiOutlineEdit,
+  AiOutlineDelete,
+  AiOutlinePushpin,
+  AiFillPushpin,
+} from "react-icons/ai";
 import { MyEditor2 } from "../MyEditor/MyEditor";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { BsReply } from "react-icons/bs";
@@ -11,12 +16,10 @@ import { cleanReplyModel } from "data_models/updatemodel";
 import ControlContext from "shared/control-context";
 import UpdateReply from "./UpdateReply";
 //https://github.com/charkour/react-reactions/blob/main/src/components/slack/SlackCounter.tsx
-import _clone from 'lodash/clone'
-import _escapeRegExp from 'lodash/escapeRegExp'
-import _uniqBy from 'lodash/uniqBy'
-
-
-
+import _clone from "lodash/clone";
+import _escapeRegExp from "lodash/escapeRegExp";
+import _uniqBy from "lodash/uniqBy";
+import { Link } from "react-router-dom";
 
 const UpdateBox = ({
   updateData,
@@ -48,7 +51,7 @@ const UpdateBox = ({
   const [isHovering, setIsHovering] = useState(false);
   const [editContent, setEditContent] = useState("");
 
-  const [replyType, setReplyType] = useState("update");
+  const [replyType, setReplyType] = useState("reply");
 
   let content = "";
 
@@ -79,111 +82,94 @@ const UpdateBox = ({
   const HeaderRow = () => {
     return (
       <div className={"topbar"}>
-        <div className={"author"}>
-          {updateData["author"]}
-        </div>
-        {!isHovering ?  <div className={"date"}>{formatTimeAgo(updateData["date"])}</div>  
-        :
-          (isCurrentUser ? (
-            <div className={"icons"}>
-              {isRequestHelp && !isRequestHelpDone && (
-                <ButtonOne
-                  onClick={() => {
-                    const newUpdateData = { ...updateData, status: "done" };
-                    updateUpdate(newUpdateData);
-                  }}
-                >
-                  Done?
-                </ButtonOne>
-              )}
-             {updateData["isPinned"] ? <AiFillPushpin
+        <div className={"author"}>{updateData["author"]}</div>
+        {!isHovering ? (
+          <div className={"date"}>{formatTimeAgo(updateData["date"])}</div>
+        ) : isCurrentUser ? (
+          <div className={"icons"}>
+            {isRequestHelp && !isRequestHelpDone && (
+              <ButtonOne
+                onClick={() => {
+                  const newUpdateData = { ...updateData, status: "done" };
+                  updateUpdate(newUpdateData);
+                }}
+              >
+                Done?
+              </ButtonOne>
+            )}
+            {updateData["isPinned"] ? (
+              <AiFillPushpin
                 className="icon"
                 size={18}
                 onClick={() => {
                   const newUpdateData = { ...updateData, isPinned: false };
                   updateUpdate(newUpdateData);
                 }}
-              /> :<AiOutlinePushpin
+              />
+            ) : (
+              <AiOutlinePushpin
+                className="icon"
+                size={18}
+                onClick={() => {
+                  const newUpdateData = { ...updateData, isPinned: true };
+                  updateUpdate(newUpdateData);
+                }}
+              />
+            )}
+            <AiOutlineEdit
               className="icon"
               size={18}
               onClick={() => {
-                const newUpdateData = { ...updateData, isPinned: true };
-                updateUpdate(newUpdateData);
+                window.localStorage.setItem("editContent", updateData.content);
+                setIsEditing(true);
+                setEditContent(updateData.content);
+                content = updateData.content;
               }}
-            />  }
-              <AiOutlineEdit
-                className="icon"
-                size={18}
-                onClick={() => {
-                  window.localStorage.setItem(
-                    "editContent",
-                    updateData.content
-                  );
-                  setIsEditing(true);
-                  setEditContent(updateData.content);
-                  content = updateData.content;
-                }}
-              />
-              <AiOutlineDelete
-                className="icon"
-                size={18}
-                onClick={() => {
-                  deleteUpdate(updateData);
-                }}
-              />
-              <BsReply
-                className="icon"
-                size={18}
-                onClick={() => {
-                  setActiveReply(
-                    cleanReplyModel({
-                      author: userName,
-                      authorId: userId,
-                      date: Date.now(),
-                    })
-                  );
-                  setEditContent("");
-                  content = "";
-                  setIsReplyEditing(true);
-                }}
-              />
-            </div>
-          ) : isRequestHelp && !isRequestHelpDone ? ( //&& !hasOfferedHelp
-            <div className={"icons"}>
-              <ButtonOne
-                onClick={() => {
-                  setActiveReply(
-                    cleanReplyModel({
-                      author: userName,
-                      authorId: userId,
-                      date: Date.now(),
-                      type: "offer to help",
-                    })
-                  );
-                  setEditContent("");
-                  content = "";
-                  setIsReplyEditing(true);
-                }}
-              >
-                Offer Help
-              </ButtonOne>
-              <BsReply
-                size={18}
-                onClick={() => {
-                  setActiveReply(
-                    cleanReplyModel({
-                      author: userName,
-                      authorId: userId,
-                      date: Date.now(),
-                    })
-                  );
-                  setEditContent("");
-                  content = "";
-                  setIsReplyEditing(true);
-                }}
-              />
-            </div>
-          ) : (
+            />
+            <AiOutlineDelete
+              className="icon"
+              size={18}
+              onClick={() => {
+                deleteUpdate(updateData);
+              }}
+            />
+            <BsReply
+              className="icon"
+              size={18}
+              onClick={() => {
+                setActiveReply(
+                  cleanReplyModel({
+                    author: userName,
+                    authorId: userId,
+                    date: Date.now(),
+                  })
+                );
+                setEditContent("");
+                content = "";
+                setIsReplyEditing(true);
+              }}
+            />
+          </div>
+        ) : isRequestHelp && !isRequestHelpDone ? ( //&& !hasOfferedHelp
+          <div className={"icons"}>
+            <ButtonOne
+              onClick={() => {
+                setActiveReply(
+                  cleanReplyModel({
+                    author: userName,
+                    authorId: userId,
+                    date: Date.now(),
+                    type: "offer to help",
+                  })
+                );
+                setEditContent("");
+                content = "";
+                setReplyType("offer to help");
+                setIsReplyEditing(true);
+              }}
+            >
+              Offer Help
+            </ButtonOne>
             <BsReply
               size={18}
               onClick={() => {
@@ -199,7 +185,24 @@ const UpdateBox = ({
                 setIsReplyEditing(true);
               }}
             />
-          ))}
+          </div>
+        ) : (
+          <BsReply
+            size={18}
+            onClick={() => {
+              setActiveReply(
+                cleanReplyModel({
+                  author: userName,
+                  authorId: userId,
+                  date: Date.now(),
+                })
+              );
+              setEditContent("");
+              content = "";
+              setIsReplyEditing(true);
+            }}
+          />
+        )}
       </div>
     );
   };
@@ -210,7 +213,11 @@ const UpdateBox = ({
         <MyEditor2
           content={window.localStorage.getItem("editContent")}
           onSave={(content, rawContent) => {
-            const newUpdateData = { ...updateData, content: content, contentRaw: rawContent };
+            const newUpdateData = {
+              ...updateData,
+              content: content,
+              contentRaw: rawContent,
+            };
             updateUpdate(newUpdateData);
             setIsEditing(false);
           }}
@@ -226,22 +233,29 @@ const UpdateBox = ({
     );
   }
 
-  const ContentRow =() =>{
-    if("contentRaw" in updateData){
-      let displayText = _clone(updateData["contentRaw"])
+  const ContentRow = () => {
+    if ("contentRaw" in updateData) {
+      let displayText = _clone(updateData["contentRaw"]);
       //console.log(displayText);
-      const tags = updateData["contentRaw"].match(/@\{\{[^\}]+\}\}/gi) || []
-      tags.map(myTag => {
-        const tagData = myTag.slice(3, -2)
-        const tagDataArray = tagData.split('||')
+      const tags = updateData["contentRaw"].match(/@\{\{[^\}]+\}\}/gi) || [];
+      tags.map((myTag) => {
+        const tagData = myTag.slice(3, -2);
+        const tagDataArray = tagData.split("||");
         const tagDisplayValue = tagDataArray[2];
-        displayText = displayText.replace(new RegExp(_escapeRegExp(myTag), 'gi'), `<span  style="background-color:#e8f5fa;">@${tagDisplayValue}</span>`)
-       
+        displayText = displayText.replace(
+          new RegExp(_escapeRegExp(myTag), "gi"),
+          `<span  style="background-color:#e8f5fa;">@${tagDisplayValue}</span>`
+        );
       });
-      return (<p className={"content"} dangerouslySetInnerHTML={{__html:displayText}}></p>);
+      return (
+        <p
+          className={"content"}
+          dangerouslySetInnerHTML={{ __html: displayText }}
+        ></p>
+      );
     }
-    return (<p className={"content"}>{updateData["content"]}</p>);
-  }
+    return <p className={"content"}>{updateData["content"]}</p>;
+  };
   const HelpResponseRow = () => {
     if (!hasOfferedHelp) return null;
 
@@ -321,7 +335,8 @@ const UpdateBox = ({
               isEditing={activeReply && reply.id == activeReply.id}
               setIsEditing={(r) => {
                 setActiveReply(r);
-                setReplyType(activeReply.type);
+                console.log(r);
+                setReplyType(r.type);
                 setEditContent(r.content);
                 content = editContent;
                 setIsReplyEditing(true);
@@ -353,11 +368,11 @@ const UpdateBox = ({
         <FlexRow>
           <div class="dropdown">
             <select
-              name="stages"
-              id="stages"
-              value={replyType}//{activeReply.type}
-              onChange={() => {
-                var x = document.getElementById("stages").value;
+              name="stages-reply"
+              id="stages-reply"
+              value={replyType??"reply"} //{activeReply.type}
+              onChange={(event) => {
+                const x = event.target.value;
                 setReplyType(x);
                 //setSelectedStage(x);
               }}
@@ -374,6 +389,8 @@ const UpdateBox = ({
             content = val;
           }}
           onSave={(val) => {
+
+            console.log(replyType);
             let newUpdateData;
             if (
               updateData.replies &&
@@ -381,16 +398,15 @@ const UpdateBox = ({
             ) {
               let newReplies = updateData["replies"];
               let u = newReplies.findIndex((v) => v.id == activeReply.id);
-
-              newReplies[u] = { ...activeReply, content: val, type:replyType };
+              newReplies[u] = { ...activeReply, content: val, type: replyType };
               newUpdateData = { ...updateData, replies: newReplies };
-              
+
               //updateUpdate(newUpdateData);
             } else if (updateData.replies) {
               let newNotificaton = {
                 userId: updateData.authorId,
                 isRead: false,
-                type: "reply",
+                type: replyType??"reply",
               };
               let notifs = [...updateData["notifications"], newNotificaton];
 
@@ -399,19 +415,21 @@ const UpdateBox = ({
                 notifications: notifs,
                 replies: [
                   ...updateData["replies"],
-                  { ...activeReply, content: val,type:replyType  },
+                  { ...activeReply, content: val, type: replyType },
                 ],
               };
             } else {
               newUpdateData = {
                 ...updateData,
-                replies: [{ ...activeReply, content: val, type:replyType }],
+                replies: [{ ...activeReply, content: val, type: replyType }],
               };
             }
             updateUpdate(newUpdateData);
             setActiveReply(null);
             setIsReplyEditing(false);
             setReplyType("update");
+            setIsShowingReplies(true);
+            console.log("HHHH");
           }}
           onCancel={() => {
             setActiveReply(null);
@@ -424,15 +442,18 @@ const UpdateBox = ({
 
   return (
     <div key={updateData["id"]}>
-     
-        <TopFlagRowStyle>
-          <div className= {"tagrow"} >
-          {updateData["projectName"] &&<TopTag>{updateData["projectName"]}</TopTag>}
-          {updateData["sectionName"] &&<TopTag>{updateData["sectionName"]}</TopTag>}
-          {updateData["stage"] &&<TopTag>{updateData["stage"]}</TopTag>}
-
-          </div>
-          {(isOfferHelp || isRequestHelp) &&<TopFlag
+      <TopFlagRowStyle>
+        <div className={"tagrow"}>
+          {updateData["projectName"] && (
+            <TopTag><StyledLink to={`/projects/${updateData.projectId}`} style={{ textDecoration: 'none' }}>{updateData["projectName"]}</StyledLink></TopTag>
+          )}
+          {updateData["sectionName"] && (
+            <TopTag><StyledLink to={`/projects/${updateData.projectId}/${updateData.sectionId}`} style={{ textDecoration: 'none' }}>{updateData["sectionName"]}</StyledLink></TopTag>
+          )}
+          {updateData["stage"] && <TopTag>{updateData["stage"]}</TopTag>}
+        </div>
+        {(isOfferHelp || isRequestHelp) && (
+          <TopFlag
             type={updateData["type"]}
             status={updateData["status"]}
             state={hasOfferedHelp}
@@ -442,8 +463,9 @@ const UpdateBox = ({
               : isRequestHelpDone
               ? "Request Done"
               : "Help Requested"}
-         </TopFlag>}
-        </TopFlagRowStyle>
+          </TopFlag>
+        )}
+      </TopFlagRowStyle>
       <UpdateBoxWrapper>
         <UpdateBoxCSS
           type={updateData["type"]}
@@ -457,12 +479,8 @@ const UpdateBox = ({
           }}
         >
           <HeaderRow />
-         
-          {isEditing ? (
-            <ContentRowEdit />
-          ) : (
-           <ContentRow/>
-          )}
+
+          {isEditing ? <ContentRowEdit /> : <ContentRow />}
           <HelpResponseRow />
           <ReactionsRepliesRow />
         </UpdateBoxCSS>
@@ -480,6 +498,20 @@ const UpdateBox = ({
     </div>
   );
 };
+
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
+    color: white;
+  font-family: Baloo 2;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11px;
+`;
 
 const FlexRow = styled.div`
   display: flex;
@@ -553,8 +585,8 @@ const UpdateBoxCSS = styled.div`
     font-size: 14px;
     font-family: Inter;
   }
-  .mention{
-    background-color:blue;
+  .mention {
+    background-color: blue;
   }
   .num_replies {
     font-size: 12px;
@@ -624,8 +656,8 @@ const TopFlagRowStyle = styled.div`
   width: 100%;
   justify-content: space-between;
   //flex-end;
-  .tagrow{
-    display:flex;
+  .tagrow {
+    display: flex;
   }
 `;
 
@@ -655,7 +687,6 @@ const TopFlag = styled.div`
       : `background-color: grey;`}
 `;
 
-
 const TopTag = styled.div`
   max-width: 120px;
   color: white;
@@ -670,14 +701,13 @@ const TopTag = styled.div`
   background-color: #0cc998;
   text-overflow: ellipsis;
   overflow: hidden;
-  
 `;
 
 const ButtonOne = styled.button`
-  background: #E6FAF5;
+  background: #e6faf5;
   border-radius: 60px;
   margin: 0px 5px 0px 0px;
-  font-family: 'Baloo 2';
+  font-family: "Baloo 2";
   font-style: normal;
   font-weight: normal;
   color: #757575;
@@ -685,13 +715,13 @@ const ButtonOne = styled.button`
   width: 100px;
   cursor: pointer;
   border: none;
-  padding:0px;
+  padding: 0px;
   font-size: 12px;
-  border:1px solid #0CC998;
+  border: 1px solid #0cc998;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   transition: 0.25s;
   &:hover {
-    color:white;
+    color: white;
     box-shadow: inset 0 0 0 2em #0cc998;
     transform: translateY(-0.25em);
   }

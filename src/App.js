@@ -211,7 +211,13 @@ function sleep(ms) {
                   console.log(error);
                 });
             },
-           
+           getMembersData: ()=>{
+              if (membersData) return membersData;
+              setupListenersAndData();
+              if (membersData) return membersData;
+              return false;
+           },
+
             getMemberData: () => {
               if ( !membersData ){ setupListenersAndData(); }
               if( membersData && user && user.email in membersData){

@@ -48,42 +48,17 @@ export default function Landing() {
             fb.updateGroup(url,name);
           }}
         />
+       
         <ModuleWrapper
-        Component={<div>
-          Hello
-        </div>}
-           name={"Announcements / Polls"}
-        />
-      </LeftWrapper>
-    );
-  };
-  const RightComponent = () => {
-    // if (link)
-    //   return (
-    //     <div style={{ height: "100%" }}>
-    //       <button onClick={() => setLink(null)}>X</button>
-    //       <a href={link} target="_blank">
-    //         go to
-    //       </a>
-    //       <iframe
-    //         width="100%"
-    //         height="100%"
-    //         src={link}
-    //         allowFullScreen
-    //       ></iframe>
-    //     </div>
-    //   );
-    return (
-      <CommitteeSection>
-        <AtAGlanceModule 
-        TopComponent={<div>
+        Component={
+        <div>
+        <div>
           <styles.EmphasizedRegularBodyText>Upcoming Meetings</styles.EmphasizedRegularBodyText>
           <H10/>
           <styles.SmallestBodyTextBlack> - Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a> / <a href="">Link</a>)</styles.SmallestBodyTextBlack>
           <styles.SmallestBodyTextBlack> - Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting((<a href="">Notes</a> / <a href="">Link</a>)</styles.SmallestBodyTextBlack> 
         </div> 
-        }
-        BottomComponent={<div>
+        <div>
          
           <styles.EmphasizedRegularBodyText>Recent Meetings</styles.EmphasizedRegularBodyText>
           <H10/>
@@ -91,9 +66,20 @@ export default function Landing() {
           <styles.SmallestBodyTextBlack> - Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting(<a href="">Notes</a>)</styles.SmallestBodyTextBlack> 
          
         </div> 
-        }
+        </div>
+        
+      }
+           name={"Announcements"}
         />
-        <UpdatesSection/>
+      </LeftWrapper>
+    );
+  };
+  const RightComponent = () => {
+    return (
+      <CommitteeSection>
+        <UpdatesSection
+          allowAddUpdate={false}
+        />
       </CommitteeSection>
     );
   };
@@ -136,4 +122,5 @@ const OverviewSection = styled.div``;
 // `;
 const CommitteeSection = styled.div`
   width: 100%;
+  height:95%;
 `;

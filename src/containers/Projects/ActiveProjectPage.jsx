@@ -9,13 +9,6 @@ import * as fb from "shared/firebase";
 import styled from "styled-components";
 
 import ControlContext from "shared/control-context";
-import {
-  PageTitleText,
-  PageSubtitleText,
-  RegularBodyText,
-  EmphasizedSmallBodyText,
-} from "styles/sharedStyles";
-
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 
@@ -28,6 +21,8 @@ import { fuzzyTextFilterFn } from "shared/utils";
 import { useHistory } from "react-router-dom";
 import { cleanProjectModel } from "data_models/projectmodel";
 import QuickLinksSection from "components/QuickLinks";
+
+import LinkOutIcon from "assets/linkout.png";
 
 const ActiveProjectPage = () => {
   const { projectId } = useParams();
@@ -69,20 +64,50 @@ const ActiveProjectPage = () => {
   });
 
   const LeftComponent = () => {
+    if (link)
+      return (
+        
+       <LeftWrapper >
+          <ProjectInfoContainer>
+          <div>
+            <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
+          </div>
+          <div style={{ height: "100%" , width:"100%"}}>
+          <OptionsBar>
+        
+       
+        <LinkBox href={link} target="_blank">
+         <img src={LinkOutIcon}/>
+        </LinkBox>
+        <button onClick={() => setLink(null)}>Close</button>
+  
+        </OptionsBar>
+          <iframe
+            width="100%"
+            height="100%"
+            src={link}
+            allowFullScreen
+          ></iframe>
+          </div>
+          </ProjectInfoContainer>
+        </LeftWrapper>
+      );
     return (
       <LeftWrapper>
         <ProjectInfoContainer>
           <div>
-            <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
+            <styles.PageTitleText>{projectData["name"]}</styles.PageTitleText>
           </div>
-
+          <div>
           <PointPerson>{`Point Person: ${projectData["point_person"]["name"]}`}</PointPerson>
-          <DescriptionText>{projectData["description"]}</DescriptionText>
+          <styles.LargeBodyText>{projectData["description"]}</styles.LargeBodyText>
+          </div>
         </ProjectInfoContainer>
         <QuickLinksSection
           resources={projectData["resources"] ?? []}
           clickLink={(_link) => {
-            setLink(_link);
+            if(_link.includes("docs.google.com")) setLink(_link);
+            else window.open(_link, '_blank');
           }}
           addLink={(url, name) => {
             fb.getProjectRef({ id: projectId, groupID: "cmu-against-ice" })
@@ -98,27 +123,14 @@ const ActiveProjectPage = () => {
         <LadderModule
           projectData={projectData}
           contributors={contributorsSections}
+          
         />
       </LeftWrapper>
     );
   };
 
   const RightComponent = () => {
-    if (link)
-      return (
-        <div style={{ height: "100%" }}>
-          <button onClick={() => setLink(null)}>X</button>
-          <a href={link} target="_blank">
-            go to
-          </a>
-          <iframe
-            width="100%"
-            height="100%"
-            src={link}
-            allowFullScreen
-          ></iframe>
-        </div>
-      );
+    
     return (
       <RightStyle>
         {/* <AtAGlanceModule projectData={projectData} /> */}
@@ -141,19 +153,21 @@ const RightStyle = styled.div`
 `;
 const LeftStyle = styled.div`
   height: 100%;
+
 `;
 
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  width:100%;
 `;
+
 
 const ProjectInfoContainer = styled.div`
   height: 100%;
   padding: 0px 50px 0px 0px;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
 `;
 
@@ -210,7 +224,7 @@ const DescriptionText = styled.p`
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-const LadderModule = ({ projectData, openLadderModal, contributors }) => {
+const LadderModule = ({ projectData, openLadderModal, contributors , clickLink}) => {
   const data = projectData["sections"];
   // let contributors = {};
   let statuses = {};
@@ -335,7 +349,6 @@ const LadderModule = ({ projectData, openLadderModal, contributors }) => {
         <div>
           <span>Sections Overview</span>
         </div>
-        <button>edit sections</button>
       </TitleBar>
 
       <table {...getTableProps()}>
@@ -380,7 +393,19 @@ const LadderModule = ({ projectData, openLadderModal, contributors }) => {
     </TaskOverviewBox>
   );
 };
-
+const OptionsBar = styled.div`
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+`;
+const LinkBox = styled.a`
+  height: 25px;
+  padding:0px 10px;
+  img {
+    height: 25px;
+    width: 25px;
+  }
+`;
 const TitleBar = styled(styles.GreyTitleBar)`
   display: flex;
   justify-content: space-between;

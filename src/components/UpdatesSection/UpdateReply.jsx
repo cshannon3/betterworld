@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import _ from "lodash";
-import { formatTimestamp } from "shared/utils";
+import { formatTimestamp, formatTimeAgo } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useState } from "react";
 
@@ -14,16 +14,16 @@ const UpdateReply = ({
 }) => {
   const isCurrentUser = reply.author == userName;
   const [isHovering, setIsHovering] = useState(false);
-  const [type, setType]= useState("reply");
-
+  const [type, setType] = useState("reply");
 
   const HeaderRow = () => {
     return (
       <div className={"topbar"}>
         <div className={"author"}>{reply["author"]}</div>
-        
-        
-        {isHovering && isCurrentUser ? (
+
+        {!isHovering ? (
+          <div className={"date"}>{formatTimeAgo(reply["date"])}</div>
+        ) : isCurrentUser ? (
           <div className={"icons"}>
             <AiOutlineEdit
               size={18}
@@ -39,25 +39,27 @@ const UpdateReply = ({
                 deleteReply(reply);
               }}
             />
-           { reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
-            onClick={() => {
-              updateReplyStatus(reply.id, "done");
-            }}
-          >
-            Done?
-          </ButtonOne>}
+            {reply["type"] === "offer to help" && reply["status"] !== "done" && (
+              <ButtonOne
+                onClick={() => {
+                  updateReplyStatus(reply.id, "done");
+                }}
+              >
+                Done?
+              </ButtonOne>
+            )}
           </div>
-        ) :
-         reply["type"] ==="offer to help" && reply["status"]!=="done" ?
-         <OfferHelp status={reply["status"]} type={reply["type"]}>
-          <div className="flag">Help Offered</div>
-        </OfferHelp>
-        : reply["type"] ==="offer to help" && reply["status"]==="done"?
-        <OfferHelp status={reply["status"]} type={reply["type"]}>
-        <div className="flag">Done</div>
-      </OfferHelp>
-    :<div/>
-      }
+        ) : reply["type"] === "offer to help" && reply["status"] !== "done" ? (
+          <OfferHelp status={reply["status"]} type={reply["type"]}>
+            <div className="flag">Help Offered</div>
+          </OfferHelp>
+        ) : reply["type"] === "offer to help" && reply["status"] === "done" ? (
+          <OfferHelp status={reply["status"]} type={reply["type"]}>
+            <div className="flag">Done</div>
+          </OfferHelp>
+        ) : (
+          <div />
+        )}
       </div>
     );
   };
@@ -66,9 +68,7 @@ const UpdateReply = ({
   };
 
   return isEditing ? null : (
-    <div style={{paddingTop:'10px'}}>
-      
-
+    <div style={{ paddingTop: "10px" }}>
       <ReplyBoxCSS
         key={reply["id"]}
         status={reply["status"]}
@@ -80,39 +80,23 @@ const UpdateReply = ({
           setIsHovering(false);
         }}
       >
-        
-
         <HeaderRow />
-        <div className={"date"}>{formatTimestamp(reply["date"])}</div>
+
         <ContentRow />
-      
-      
       </ReplyBoxCSS>
     </div>
   );
 };
 
-  /* <FlexRow>
-         {reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
-            onClick={() => {
-              updateReplyStatus(reply.id, "done");
-            }}
-          >
-            Done?
-          </ButtonOne>
-          }
-        </FlexRow>
-        {reply["type"] === "offer to help" && (
-        <OfferHelp status={reply["status"]} type={reply["type"]}>
-          <div className="flag">Help Offered</div>
-        </OfferHelp> */
 const ReplyBoxCSS = styled.div`
   background-color: #ffffff;
   border: 1px solid #eeeeee;
   box-sizing: border-box;
   margin: 1px;
   margin-left: -10px;
+  padding-top: 5px;
   padding-left: 10px;
+  padding-right: 10px;
   padding-bottom: 15px;
   width: calc(100% + 20px);
   .topbar {
@@ -168,31 +152,29 @@ const ReplyBoxCSS = styled.div`
     justify-content: space-between;
     align-items: baseline;
   }
-  border-left:1px solid #0CC998;
- 
+  border-left: 1px solid #0cc998;
+  ${({ type, status }) =>
+    type === "offer to help" && status !== "done"
+      ? `
+background-color: #fff7ec;
+border-radius: 5px 0px 5px 5px;
+`
+      : type === "offer to help" && status === "done"
+      ? `
+  background-color: #E6FAF5;
+border-radius: 5px 0px 5px 5px ;
+`
+      : `border-left:1px solid #0CC998;`}
 `;
 
-
-// ${({ type, status }) =>
-// type === "offer to help" && status !== "done"
-//   ? `
-// background-color: white;//#fff7ec;
-// border-radius: 5px 0px 5px 5px ;
-// `
-//   : type === "offer to help" && status === "done"
-//   ? `
-//   background-color: #E6FAF5;
-// border-radius: 5px 0px 5px 5px ;
-// `
-//   : `border-left:1px solid #0CC998;`}
 const OfferHelp = styled.div`
   height: 18px;
   .flag {
     width: 100px;
     color: white;
-    border-radius: 5px; 
+    border-radius: 5px;
     font-family: Baloo 2;
-    text-align:center;
+    text-align: center;
     font-style: normal;
     font-weight: bold;
     font-size: 11px;
@@ -222,9 +204,9 @@ const OfferHelp = styled.div`
 // `;
 
 const ButtonOne = styled.button`
-  background: #E6FAF5;
+  background: #e6faf5;
   border-radius: 60px;
-  font-family: 'Baloo 2';
+  font-family: "Baloo 2";
   font-style: normal;
   font-weight: normal;
   color: #757575;
@@ -233,11 +215,11 @@ const ButtonOne = styled.button`
   margin: 10px;
   cursor: pointer;
   border: none;
-  border:1px solid #0CC998;
+  border: 1px solid #0cc998;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   transition: 0.25s;
   &:hover {
-    color:white;
+    color: white;
     box-shadow: inset 0 0 0 2em #0cc998;
     transform: translateY(-0.25em);
   }
@@ -260,3 +242,18 @@ export default UpdateReply;
 //   setEditContent("");
 //   content = "";
 //   setIsReplyEditing(true);
+
+/* <FlexRow>
+         {reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
+            onClick={() => {
+              updateReplyStatus(reply.id, "done");
+            }}
+          >
+            Done?
+          </ButtonOne>
+          }
+        </FlexRow>
+        {reply["type"] === "offer to help" && (
+        <OfferHelp status={reply["status"]} type={reply["type"]}>
+          <div className="flag">Help Offered</div>
+        </OfferHelp> */

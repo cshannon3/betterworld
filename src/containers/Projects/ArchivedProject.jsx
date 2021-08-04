@@ -157,8 +157,9 @@ const Flex = styled.div`
 `
       : `height:47%;
       .GalleryStyle{
-        width: 50%;
+        width: 60%;
         height: 50vh;
+        margin:auto;
       }
       `}
 `;
