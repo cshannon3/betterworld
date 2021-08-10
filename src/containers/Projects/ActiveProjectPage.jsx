@@ -1,11 +1,7 @@
 import React, { useMemo, useContext, useState, useEffect, useRef } from "react";
 import "react-slideshow-image/dist/styles.css";
-import { NavLink, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import * as fb from "shared/firebase";
-// import {
-//   LadderModule,
-//   AtAGlanceModule,
-// } from "../../old/ProjectPage/Modules/modules";
 import styled from "styled-components";
 
 import ControlContext from "shared/control-context";
@@ -15,13 +11,10 @@ import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { AvatarGroup } from "@material-ui/lab";
 import { Avatar } from "@material-ui/core";
-//import styles from './search.module.css';
 import * as styles from "styles/sharedStyles";
 import { fuzzyTextFilterFn } from "shared/utils";
 import { useHistory } from "react-router-dom";
-import { cleanProjectModel } from "data_models/projectmodel";
 import QuickLinksSection from "components/QuickLinks";
-
 import LinkOutIcon from "assets/linkout.png";
 
 const ActiveProjectPage = () => {
@@ -33,7 +26,7 @@ const ActiveProjectPage = () => {
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
-  const user = appCtx.user;
+  //const user = appCtx.user;
 
   let helpRequests = [];
   let totalUpdates = [];
@@ -66,7 +59,7 @@ const ActiveProjectPage = () => {
   const LeftComponent = () => {
     if (link)
       return (
-        
+
        <LeftWrapper >
           <ProjectInfoContainer>
           <div>
@@ -74,13 +67,13 @@ const ActiveProjectPage = () => {
           </div>
           <div style={{ height: "100%" , width:"100%"}}>
           <OptionsBar>
-        
-       
+
+
         <LinkBox href={link} target="_blank">
          <img src={LinkOutIcon}/>
         </LinkBox>
         <button onClick={() => setLink(null)}>Close</button>
-  
+
         </OptionsBar>
           <iframe
             width="100%"
@@ -104,7 +97,11 @@ const ActiveProjectPage = () => {
           </div>
         </ProjectInfoContainer>
         <QuickLinksSection
-          resources={projectData["resources"] ?? []}
+          title={"Quick Links"}
+          spacing={-10}
+          position = "bottom left"
+          maxLength={11}
+          items={projectData["resources"] ?? []}
           clickLink={(_link) => {
             if(_link.includes("docs.google.com")) setLink(_link);
             else window.open(_link, '_blank');
@@ -122,39 +119,21 @@ const ActiveProjectPage = () => {
         />
         <LadderModule
           projectData={projectData}
-          contributors={contributorsSections}
-          
-        />
+          contributors={contributorsSections} />
       </LeftWrapper>
     );
   };
 
-  const RightComponent = () => {
-    
-    return (
-      <RightStyle>
-        {/* <AtAGlanceModule projectData={projectData} /> */}
-        <UpdatesSection />
-      </RightStyle>
-    );
-  };
   return (
     <ResponsiveSplitScreen
       LeftComponent={LeftComponent}
-      RightComponent={RightComponent}
+      RightComponent={UpdatesSection}
     />
   );
 };
 
 export default ActiveProjectPage;
 
-const RightStyle = styled.div`
-  height: 100%;
-`;
-const LeftStyle = styled.div`
-  height: 100%;
-
-`;
 
 const LeftWrapper = styled.div`
   display: flex;
@@ -197,29 +176,6 @@ const PointPerson = styled(ProjectsSubtitle)`
   padding-top: 15px;
 `;
 
-const DescriptionText = styled.p`
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-`;
-
-// const Flex = styled.div`
-//   display: flex;
-//   width: 100%;
-
-//   ${({ isMobile }) =>
-//     isMobile
-//       ? `
-// flex-direction: column;
-
-// `
-//       : `.GalleryStyle{
-//       width: 50%;
-//       height: 50vh;
-//     }
-//     `}
-// `;
 
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
@@ -255,7 +211,6 @@ const LadderModule = ({ projectData, openLadderModal, contributors , clickLink})
             value={cell.value}
             onClick={
               () => history.push(`/${cell.row.original["id"]}`)
-              // openLadderModal(cell.row.original)
             }
           >
             {cell.value}

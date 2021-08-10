@@ -96,20 +96,7 @@ const ArchivedProjectPage = () => {
     RightComponent={RightComponent}
 />
 
-    // <Con>
-    //   <div>
-    //   <Breadcrumbs>
-    //       <NavLink to='/'><BreadcrumbText>CMU AGAINST ICE</BreadcrumbText></NavLink>
-    //       <Arrow> &gt; </Arrow>
-    //       <NavLink to='/projects'><BreadcrumbText>Projects</BreadcrumbText></NavLink>
-    //       <Arrow> &gt; </Arrow>
-    //       <NavLink to={`/projects/${projectData.name}`}><BreadcrumbText>{projectData.name}</BreadcrumbText></NavLink>
-    //   </Breadcrumbs>
-    //     <PageTitleText>{projectData.name} (Archived)</PageTitleText>
-    //   </div>
-      
-     
-    // </Con>
+  
   );
 };
 
@@ -173,40 +160,15 @@ const AtAG = styled.div`
 const ResourceBox = styled.div`
   padding-left: 20px;
 `;
-const GalleryStyle = styled.div`
-  width: 50%;
-  height: 50vh;
-`;
 
 const ArtifactLink = styled(RegularBodyText)`
   align-items: center;
 `;
-
-const Contibutors = styled.p`
-  font-family: "Helvetica";
-  font-style: normal;
-  font-weight: bold;
-  font-size: 11.3495px;
-  line-height: 15px;
-`;
-
-const ContributorBox = styled.div`
-  height: 60px;
-  background: grey;
-  margin-bottom: 20px;
-`;
-
 const OverviewTextStyle = styled.div`
   width: 100%;
   padding: 20px;
 `;
 
-const Con = styled.div`
-  width: 90%;
-  padding: 5vh 50px 3vh 40px;
-  display: flex;
-  flex-direction: column;
-`;
 const EachSlide = styled.div`
   height: 250px;
   width: 200px;
@@ -226,15 +188,3 @@ const EachSlide = styled.div`
     text-align: center;
   }
 `;
-
-
-const Row = styled.div`
-  display: flex;
-  width: 100%;
-`;
-const ContentContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  padding: 5vh 50px 3vh 40px;
-`;
-

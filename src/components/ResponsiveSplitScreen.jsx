@@ -66,29 +66,10 @@ const Breadcrumb = ({ currentPage }) => {
           </NavLink>
         );
       })}
-
-      {/* <NavLink to="/">
-        <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-      </NavLink> */}
     </Breadcrumbs>
   );
 
-  // if (currentPage == "home")
 
-  // //TODO nested breadcrumbs
-  // return (
-  //   <Breadcrumbs>
-  //     <NavLink to="/">
-  //       <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-  //     </NavLink>
-  //     <Arrow> &gt; </Arrow>
-  //     <NavLink to={`/${currentPage}`}>
-  //       <BreadcrumbText>
-  //         {currentPage && currentPage.toUpperCase()}
-  //       </BreadcrumbText>
-  //     </NavLink>
-  //   </Breadcrumbs>
-  // );
 };
 
 const ResponsiveSplitScreen = ({
@@ -157,15 +138,6 @@ export const ResponsiveFullScreen = ({ currentPage, MainComponent }) => {
   );
 };
 
-/* <RowWrapper> <LeftPanel />
-        <LeftStyle>
-          <Breadcrumb />
-          <LeftComponent />
-        </LeftStyle>
-        <RightStyle>
-          <RightComponent />
-        </RightStyle> 
-      </RowWrapper>*/
 const RowWrapper = styled.div`
   display: flex;
   height: 100vh;
@@ -186,7 +158,6 @@ const StyledSplit = styled(Split)`
     background-repeat: no-repeat;
     background-position: 50%;
   }
-
   .gutter.gutter-horizontal {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
     cursor: col-resize;

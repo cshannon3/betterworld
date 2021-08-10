@@ -117,7 +117,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
               committeeName: committeeName,
               isPinned:isHome || (newUpdateModel && newUpdateModel.type == "request help"),
               ...newUpdateModel,
-            }); //appCtx.getCommitteeName(params.committeeId)
+            }); 
             fb.createUpdate(_newUpdate);
             console.log(_newUpdate);
           }}

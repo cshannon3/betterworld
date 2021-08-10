@@ -22,7 +22,6 @@ This is the implementation of the Betterworld study done in 2020-2021 at Carnegi
 
 ## Next Steps
 - insert next steps
-
 _________________________________
 
 # Getting Started with Create React App

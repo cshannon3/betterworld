@@ -17,19 +17,13 @@ const NewUpdateBox = ({
   updateType,
 }) => {
   const ctrctx = useContext(ControlContext);
-  // const userId = ctrctx.user && ctrctx.user.id;
-  //const urlParts = window.location.href.split("/");
 
   const userName = ctrctx.user && ctrctx.user.displayName;
-  // let content = "";
-  // const [editContent, setEditContent] = useState("");
   const [stage, setStage] = useState("none");
   const [type, setType] = useState(updateType);
   const [_content, setContent] = useState("");
 
-  // const onChange = () => {
 
-  //   };
 
   const handleCommentChange = (e) => {
     const newContent = e.target.value;

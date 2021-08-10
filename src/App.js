@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-
 import * as fb from "shared/firebase";
-
-//import dummydata from 'shared/dummydata';
 import firebase from "firebase/app";
 import ControlContext from "shared/control-context";
 
@@ -23,7 +19,6 @@ CommitteesPage,
 ProfilePage,
 NotFoundPage,
 } from "containers/pages"
-import ReflexDemo from "components/ResponsiveSplitScreen";
 
 
 let userListener;
@@ -75,7 +70,6 @@ const App = () => {
           case "committees": setCommitteesData(_collectionData); break;
           case "projects": setProjectsData(_collectionData);break;
         } 
-        
       });
   }
  

@@ -26,9 +26,6 @@ import {
 export default CommitteeBox;
 
 
-
-
-
 const CommitteeBoxStyle = styled.div`
 position: relative;
 cursor: pointer;

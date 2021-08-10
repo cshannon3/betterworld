@@ -18,13 +18,13 @@ export default function Splash () {
         Sign In with Google
       </Button>
 </div>
-<div>
+{/* <div>
       Activism Now
       <Button id="LoginPage-login" onClick={() => appCtx.loginUser()}>
         <Img src={GoogleLogo} />
         Sign In with Google
       </Button>
-      </div>
+      </div> */}
      </FlexRow>
     </LoginContainer>
   )
