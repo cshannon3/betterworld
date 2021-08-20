@@ -280,44 +280,6 @@ const StagesComponent = ({
             membersData = {membersData}
             onAddMember = {(m)=>onAddMember(cell.row.original, m)}
           />
-          // <Popup
-          //   trigger={
-          //     <AvatarGroup max={3}>
-          //       {cell.value
-          //         .slice(0, cell.value.length < 2 ? cell.value.length : 2)
-          //         .map((c) => {
-          //           return "photoUrl" in c ? (
-          //             <Avatar alt="Remy Sharp" src={c.photoUrl} />
-          //           ) : (
-          //             <Avatar alt="Remy Sharp">{c.name[0]}</Avatar>
-          //           );
-          //         })}
-          //       <Avatar alt="Remy Sharp">+</Avatar>
-          //     </AvatarGroup>
-          //   }
-          //   position="left center"
-          // >
-          //   <AddMemberPopUp>
-          //     {membersData?.map((m) => {
-          //       return (
-          //         <AddMemberTile>
-          //           <div>{m.name}</div>
-          //           {cell.value.filter((v) => v.name == m.name).length > 0 ? (
-          //             <button onClick={() => {}}>Remove</button>
-          //           ) : (
-          //             <button
-          //               onClick={() => {
-          //                 onAddMember(cell.row.original, m);
-          //               }}
-          //             >
-          //               Add
-          //             </button>
-          //           )}
-          //         </AddMemberTile>
-          //       );
-          //     })}
-          //   </AddMemberPopUp>
-          // </Popup>
         ),
       },
       {

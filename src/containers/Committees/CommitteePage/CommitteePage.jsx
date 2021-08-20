@@ -139,35 +139,3 @@ const CommitteeTitleBox = styled.div`
 `;
 
 
-
- // const CustomModule = () => {
-  //   if (committeeId == "art-edu") {
-  //     return <RecruitingModule committeeData={committeeData} />;
-  //   }
-  //   if (committeeId == "actions") {
-  //     return <RecruitingModule committeeData={committeeData} />;
-  //   }
-  //   if (committeeId == "money") {
-  //     return <BudgetModule committeeData={committeeData} />;
-  //   }
-  //   if (committeeId == "recruiting") {
-  //     return <RecruitingModule committeeData={committeeData} />;
-  //   }
-  // };
-// function CommitteeInfoModule({ committeeData, user, onSave }) {
-//   return (
-    
-//   );
-// }
-// <CommitteeInfoModule
-// committeeData={committeeData}
-// user={ctrctx.user}
-// onSave={(newUpdate) => {
-//   let newCommitteeData = {
-//     ...committeeData,
-//     updates: [...committeeData.updates, newUpdate],
-//   };
-//   updateCommittee(committeeId, newCommitteeData);
-//   setCommitteeData(newCommitteeData);
-// }}
-// />

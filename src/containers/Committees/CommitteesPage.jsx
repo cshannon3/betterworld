@@ -6,7 +6,6 @@ import { LargeBodyText, PageTitleText } from "styles/sharedStyles";
 import CommitteeBox from "components/committeeBox";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
-
 import QuickLinksSection from "components/QuickLinks";
 
 export default function CommitteesPage() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {  useEffect, useState, useContext } from "react";
+import {  useState, useContext } from "react";
 import styled from "styled-components";
 import {swapTags, getUsersFromTags} from './tags'
 import defaultStyle from './defaultStyle'
@@ -7,7 +7,6 @@ import ControlContext from "shared/control-context";
 import { MentionsInput, Mention } from "react-mentions";
 //https://blog.logrocket.com/building-rich-text-editors-in-react-using-draft-js-and-react-draft-wysiwyg/
 //https://draftjs.org/docs/api-reference-data-conversion
-
 //https://stackblitz.com/edit/react-mentions?file=tags.js
 
 

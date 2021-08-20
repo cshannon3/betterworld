@@ -12,19 +12,12 @@ export default function Splash () {
       <Subtitle>Virtual Collaboration Made Easy</Subtitle>
       <FlexRow>
 <div>
-    CMU Against ICE
       <Button id="LoginPage-login-button" onClick={() => appCtx.loginUser()}>
         <Img src={GoogleLogo} />
         Sign In with Google
       </Button>
 </div>
-{/* <div>
-      Activism Now
-      <Button id="LoginPage-login" onClick={() => appCtx.loginUser()}>
-        <Img src={GoogleLogo} />
-        Sign In with Google
-      </Button>
-      </div> */}
+
      </FlexRow>
     </LoginContainer>
   )

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext} from "react";
 import styled from "styled-components";
 import LeftPanel from "components/Panels/LeftPanel";
 import { useMediaQuery } from "react-responsive";
@@ -11,7 +11,7 @@ import ControlContext from "shared/control-context";
 import Split from "react-split";
 
 //TODO figure out best way to do breadcrumbs
-const Breadcrumb = ({ currentPage }) => {
+const Breadcrumb = () => {
   const urlParts = window.location.href.split("/");
   const params = useParams();
   const appCtx = useContext(ControlContext);
@@ -68,17 +68,13 @@ const Breadcrumb = ({ currentPage }) => {
       })}
     </Breadcrumbs>
   );
-
-
 };
 
 const ResponsiveSplitScreen = ({
-  currentPage,
   LeftComponent,
   RightComponent,
 }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
- // const [sizes, setSizes] = useState([50, 50]);
 
   if (!isMobile)
     return (
@@ -87,7 +83,6 @@ const ResponsiveSplitScreen = ({
         <StyledSplit
           sizes={[65,35]}
           onDrag={(sizes) => {
-           // console.log(sizes[1]);
              if(sizes[1]<40.0){console.log("hide")}
           }}
         >

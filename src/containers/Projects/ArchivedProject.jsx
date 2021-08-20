@@ -1,9 +1,9 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useRef } from "react";
 import styled from "styled-components";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { useMediaQuery } from "react-responsive";
-import { Link, NavLink , useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 
 import ControlContext from "shared/control-context";
@@ -14,10 +14,9 @@ import {
   EmphasizedSmallBodyText,
 } from "styles/sharedStyles";
 
-
 const ArchivedProjectPage = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
-  const  { projectId } = useParams();
+  const { projectId } = useParams();
 
   const appCtx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
@@ -26,77 +25,75 @@ const ArchivedProjectPage = () => {
     appCtx.getProjectData(projectId)
   );
 
-  let contributorsText = projectData["contributors"] && projectData["contributors"]
-    .map((data) => data.name)
-    .join(", ");
+  let contributorsText =
+    projectData["contributors"] &&
+    projectData["contributors"].map((data) => data.name).join(", ");
 
-    const LeftComponent = ()=>{
-        return ( <div>
-            <PageTitleText>{projectData && projectData["name"]}</PageTitleText>
+  const LeftComponent = () => {
+    return (
+      <div>
+        <PageTitleText>{projectData && projectData["name"]}</PageTitleText>
         <Flex isMobile={isMobile}>
-            <div className={"GalleryStyle"}>
-              <Slideshow
-                images={
-                  projectData["display_images"] ??
-                  projectData["artifact_images"] ??
-                  []
-                }
-              />
-            </div>
-            
-          </Flex>
-          <Flex isMobile={isMobile}>
-            <OverviewTextStyle>
-              <PageSubtitleText>Description</PageSubtitleText>
-              <RegularBodyText>
-                {projectData["description"] ?? "No description"}
-              </RegularBodyText>
-            </OverviewTextStyle>
-            <OverviewTextStyle>
-              <PageSubtitleText>Outcome</PageSubtitleText>
-              <RegularBodyText>
-                {projectData["outcome"] ?? "No Outcome"}
-              </RegularBodyText>
-            </OverviewTextStyle>
-          </Flex>
-          </div>)
-      }
-      const RightComponent = ()=>{
-        return (   <div>
-          <AtAG>
-              <PageSubtitleText>Timespan</PageSubtitleText>
-              <EmphasizedSmallBodyText>March 2020</EmphasizedSmallBodyText>
-              <PageSubtitleText>Contributors</PageSubtitleText>
-    
-              {projectData["contributors"] && (
-                <UserText>{contributorsText}</UserText>
-              )}
-              <PageSubtitleText>Artifacts</PageSubtitleText>
-              <ResourceBox>
-                {projectData["resources"] &&
-                  projectData["resources"].map((data) => (
-                    <ArtifactLink>
-                      <a href={data.url} target="_blank">
-                        {data.name}
-                      </a>
-                    </ArtifactLink>
-                  ))}
-              </ResourceBox>
-            </AtAG>
-        </div>
-           )
-    }
-    
+          <div className={"GalleryStyle"}>
+            <Slideshow
+              images={
+                projectData["display_images"] ??
+                projectData["artifact_images"] ??
+                []
+              }
+            />
+          </div>
+        </Flex>
+        <Flex isMobile={isMobile}>
+          <OverviewTextStyle>
+            <PageSubtitleText>Description</PageSubtitleText>
+            <RegularBodyText>
+              {projectData["description"] ?? "No description"}
+            </RegularBodyText>
+          </OverviewTextStyle>
+          <OverviewTextStyle>
+            <PageSubtitleText>Outcome</PageSubtitleText>
+            <RegularBodyText>
+              {projectData["outcome"] ?? "No Outcome"}
+            </RegularBodyText>
+          </OverviewTextStyle>
+        </Flex>
+      </div>
+    );
+  };
+  const RightComponent = () => {
+    return (
+      <div>
+        <AtAG>
+          <PageSubtitleText>Timespan</PageSubtitleText>
+          <EmphasizedSmallBodyText>March 2020</EmphasizedSmallBodyText>
+          <PageSubtitleText>Contributors</PageSubtitleText>
 
+          {projectData["contributors"] && (
+            <UserText>{contributorsText}</UserText>
+          )}
+          <PageSubtitleText>Artifacts</PageSubtitleText>
+          <ResourceBox>
+            {projectData["resources"] &&
+              projectData["resources"].map((data) => (
+                <ArtifactLink>
+                  <a href={data.url} target="_blank">
+                    {data.name}
+                  </a>
+                </ArtifactLink>
+              ))}
+          </ResourceBox>
+        </AtAG>
+      </div>
+    );
+  };
 
   return (
     <ResponsiveSplitScreen
-    currentPage={'projects'}
-    LeftComponent={LeftComponent}
-    RightComponent={RightComponent}
-/>
-
-  
+      currentPage={"projects"}
+      LeftComponent={LeftComponent}
+      RightComponent={RightComponent}
+    />
   );
 };
 
@@ -108,7 +105,6 @@ const Slideshow = ({ images }) => {
       easing="ease"
       style={{ width: "100%", paddingTop: "50px" }}
     >
-      {/* <SlideImg src={"https://images.unsplash.com/photo-1623141629222-287c9e385a40?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"}/> */}
       {images.map((i) => {
         return (
           <EachSlide
@@ -125,9 +121,8 @@ const Slideshow = ({ images }) => {
   );
 };
 
-
 export default ArchivedProjectPage;
-  
+
 const UserText = styled.div`
   padding-bottom: 20px;
   font-size: 16px;

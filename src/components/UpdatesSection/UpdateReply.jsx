@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import _ from "lodash";
-import { formatTimestamp, formatTimeAgo } from "shared/utils";
+import {  formatTimeAgo } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useState } from "react";
 

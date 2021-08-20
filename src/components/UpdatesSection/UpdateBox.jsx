@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { useMemo, useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { SlackSelector, SlackCounter } from "@charkour/react-reactions";
 import _ from "lodash";
-import { formatTimestamp, formatTimeAgo } from "shared/utils";
+import {  formatTimeAgo } from "shared/utils";
 import {
   AiOutlineEdit,
   AiOutlineDelete,

@@ -1,16 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {  useState } from "react";
 import styled from "styled-components";
-import * as styles from "styles/sharedStyles";
-import * as fb from "shared/firebase";
 import Tooltip from "@material-ui/core/Tooltip";
-import { PageSubtitleText, ToolTipText } from "styles/sharedStyles";
+import * as styles from 'styles/sharedStyles';
 import { getIconType } from "shared/utils";
+import AddLinkPopup from "components/AddLinkPopup";
+
 import { AvatarGroup } from "@material-ui/lab";
 import { Avatar } from "@material-ui/core";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { useCollection, useDocument } from "react-firebase-hooks/firestore";
-import AddLinkPopup from "components/AddLinkPopup";
 
 
 const QuickLinksSection = ({
@@ -33,7 +31,7 @@ const QuickLinksSection = ({
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <QuickPadding>
-      {title&& <PageSubtitleText>{title}</PageSubtitleText>}
+      {title&& <styles.PageSubtitleText>{title}</styles.PageSubtitleText>}
       <Popup
         trigger={
           <AvatarGroup max={maxLength} spacing={spacing} variant={variant}>
@@ -115,27 +113,6 @@ const Row = styled.div`
   }
 `;
 
-// const LinkBox = styled.div`
-//   height: 50px;
-//   min-width: 50px;
-//   img {
-//     height: 44px;
-//     width: 50px;
-//     margin: 3px;
-//   }
-// `;
-
-// const AddCard = styled.div`
-//   width: 50px;
-//   height: 50px;
-//   border: 2px solid #0cc998;
-//   border-radius: 15px;
-//   display: flex;
-//   align-items: center;
-//   flex-wrap: wrap;
-//   justify-content: center;
-//   cursor: pointer;
-// `;
 
 const AddMemberPopUp = styled.div`
   height: 250px;
@@ -147,66 +124,3 @@ const AddMemberTile = styled.div`
   justify-content: space-between;
   padding: 5px;
 `;
-
-/*
-<Row>
-        <AddCard onClick={() => setFileModalOpen(true)}>
-          <AddText style={{ fontSize: "40px" }}>+</AddText>
-        </AddCard>
-        {items.map((data) => (
-          <Tooltip title={<ToolTipText>{data.name}</ToolTipText>}>
-            {clickLink == null ? (
-              <a href={data.url} target="_blank">
-                <LinkBox onClick={() => clickLink(data.url)}>
-                  <img src={getIconType(data.url)} alt={data.name} />
-                </LinkBox>
-              </a>
-            ) : (
-              <LinkBox onClick={() => clickLink(data.url)}>
-                <img src={getIconType(data.url)} alt={data.name} />
-              </LinkBox>
-            )}
-          </Tooltip>
-        ))}
-      </Row>
-  */
-
-// const QuickLinksSection = ({
-//   items = [],
-//   clickLink = null,
-//   addLink = (url, name) => {},
-// }) => {
-//   if (!items) {
-//     items = [];
-//   }
-//   const [fileModalOpen, setFileModalOpen] = useState(false);
-
-//   return (
-//     <QuickPadding>
-//       <PageSubtitleText>Quick Links</PageSubtitleText>
-//       <Row>
-//         <AddCard onClick={() => setFileModalOpen(true)}>
-//           <AddText style={{ fontSize: "40px" }}>+</AddText>
-//         </AddCard>
-//         {items.map((data) => (
-//           <Tooltip title={<ToolTipText>{data.name}</ToolTipText>}>
-//             {clickLink == null ? (
-//               <a href={data.url} target="_blank">
-//                 <LinkBox onClick={() => clickLink(data.url)}>
-//                   <img src={getIconType(data.url)} alt={data.name} />
-//                 </LinkBox>
-//               </a>
-//             ) : (
-//               <LinkBox onClick={() => clickLink(data.url)}>
-//                 <img src={getIconType(data.url)} alt={data.name} />
-//               </LinkBox>
-//             )}
-//           </Tooltip>
-//         ))}
-//       </Row>
-//       <ReactModal isOpen={fileModalOpen} className="Modal">
-//         <AddFileModal setModalOpen={setFileModalOpen} addLink={addLink} />
-//       </ReactModal>
-//     </QuickPadding>
-//   );
-// };

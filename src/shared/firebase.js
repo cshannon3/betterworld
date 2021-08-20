@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
+import {DEFAULT_GROUP_ID} from "secret.js";
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -14,11 +15,12 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 }
 
-
+const defaultGroupID = DEFAULT_GROUP_ID;
+console.log(defaultGroupID);
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 } else {
-    firebase.app(); // if already initialized, use that one
+    firebase.app(); 
 }
 
 const db = firebase.firestore();
@@ -31,9 +33,6 @@ export const getCollectionRef = ({groupID, collection}) => {
 
 
 export function getUserRef(userId) { return db.collection("users").doc(userId); }
-// export const getProjects = () => { return db.collection('projects');};
-
-// export const getProjectRef = id => { return db.collection('projects').doc(id);};
 
 export async function createNewUser(result) {
     let data = {
@@ -44,7 +43,7 @@ export async function createNewUser(result) {
         "createdAt": firebase.firestore.FieldValue.serverTimestamp(),
     };
     await setUserData(result.user.uid, data);
-    let ref = db.collection("groups").doc("cmu-against-ice" ).collection('members').doc(result.user.email); 
+    let ref = db.collection("groups").doc(defaultGroupID ).collection('members').doc(result.user.email); 
     let snap = await ref.get();
     if(snap.exists){
         await ref.update({
@@ -77,19 +76,19 @@ export async function createNewUser(result) {
 }
 
 
-export const getMembers = () => { //{ groupID = "cmu-against-ice" }
-    const groupID = "cmu-against-ice" ;
+export const getMembers = () => { //{ groupID = defaultGroupID }
+    const groupID = defaultGroupID ;
     return db.collection("groups").doc(groupID).collection('members'); 
 };
 
 
 
-export const getGroupRef = () => { //{ groupID = "cmu-against-ice" }
-    return db.collection("groups").doc("cmu-against-ice"); 
+export const getGroupRef = () => { //{ groupID = defaultGroupID }
+    return db.collection("groups").doc(defaultGroupID); 
 };
 
 export async function updateGroup(name, url) {
-    const groupID = "cmu-against-ice" ;
+    const groupID = defaultGroupID ;
     const groupData = await db.collection("groups").doc(groupID).get();
     let _newRes = [...groupData.data()["resources"], {name, url}]
     db.collection("groups").doc(groupID).update({
@@ -97,15 +96,15 @@ export async function updateGroup(name, url) {
     });
 }
 export const getUpdates = () => { 
-    const groupID = "cmu-against-ice" ;
+    const groupID = defaultGroupID ;
     return db.collection("groups").doc(groupID).collection('updates'); 
 };
 
 
-export const getUpdateRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('updates').doc(id); };
+export const getUpdateRef = ({ id, groupID = defaultGroupID }) => { return db.collection("groups").doc(groupID).collection('updates').doc(id); };
 
 export async function createUpdate(updateData) {
-    const groupID = "cmu-against-ice" ;
+    const groupID = defaultGroupID ;
    console.log("createUpdate");
     console.log(updateData);
     let res = await db.collection("groups").doc(groupID).collection("updates").add(updateData);
@@ -114,13 +113,13 @@ export async function createUpdate(updateData) {
 }
 
 export async function updateUpdate(updateId, updateData) {
-    const groupID = "cmu-against-ice" ;
+    const groupID = defaultGroupID ;
     await db.collection("groups").doc(groupID).collection("updates").doc(updateId).update(updateData).then((e)=>{
         console.log("Go");
     });
 }
 export async function deleteUpdate(updateId) {
-    const groupID = "cmu-against-ice" ;
+    const groupID = defaultGroupID ;
     await db.collection("groups").doc(groupID).collection("updates").doc(updateId).delete().then((e)=>{
         console.log("deleted");
     });
@@ -128,16 +127,16 @@ export async function deleteUpdate(updateId) {
 
 
 export function getMainUpdates() {
-    return db.collection("groups").doc("cmu-against-ice").collection("updates").where("isPinned", "==", true);
+    return db.collection("groups").doc(defaultGroupID).collection("updates").where("isPinned", "==", true);
 }
 
 export function getCommitteeUpdates(committeeId=null) {
     // Add team
     if(committeeId!=null){
-        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "==", committeeId);
+        return db.collection("groups").doc(defaultGroupID).collection("updates").where("committeeId", "==", committeeId);
     }
     else{
-        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("committeeId", "!=", null);
+        return db.collection("groups").doc(defaultGroupID).collection("updates").where("committeeId", "!=", null);
     }
 }
 
@@ -146,18 +145,18 @@ export function getProjectUpdates(projectId=null, sectionId=null) {
     let ref;
     console.log(sectionId);
     if(sectionId!=null){
-        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("sectionId", "==", sectionId);
+        return db.collection("groups").doc(defaultGroupID).collection("updates").where("sectionId", "==", sectionId);
     }
     else if (projectId!=null){
-        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("projectId", "==", projectId);
+        return db.collection("groups").doc(defaultGroupID).collection("updates").where("projectId", "==", projectId);
     }else {
-        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("projectId", "!=", null);
+        return db.collection("groups").doc(defaultGroupID).collection("updates").where("projectId", "!=", null);
     }
 }
 export function getUserUpdates(userId=null) {
 
     if(userId!=null){
-        return db.collection("groups").doc("cmu-against-ice").collection("updates").where("authorId", "==", userId);
+        return db.collection("groups").doc(defaultGroupID).collection("updates").where("authorId", "==", userId);
     }
 }
 
@@ -178,17 +177,17 @@ export async function updateUserData(userId, data) { await getUserRef(userId).up
 
 
 
-export const getProjects = ({ groupID = "cmu-against-ice" }) => { 
+export const getProjects = ({ groupID = defaultGroupID }) => { 
     return db.collection("groups").doc(groupID).collection('projects'); 
 };
 
 
 export const getProjectRef = (id) => { 
-    const groupID = "cmu-against-ice" ;
+    const groupID = defaultGroupID ;
     return db.collection("groups").doc(groupID).collection('projects').doc(id); 
 };
 
-export async function createProject(projectData, { groupID = "cmu-against-ice" }) {
+export async function createProject(projectData, { groupID = defaultGroupID }) {
     // Add team
     
     let res = await db.collection("groups").doc(groupID).collection("projects").add(projectData);
@@ -207,21 +206,21 @@ export async function updateProject(projectId, projectData) {
 }
 
 
-export const getCommitteeRef = ({ id, groupID = "cmu-against-ice" }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
+export const getCommitteeRef = ({ id, groupID = defaultGroupID }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
 
-export const getCommittees = ({ groupID = "cmu-against-ice" }) => { 
+export const getCommittees = ({ groupID = defaultGroupID }) => { 
     return db.collection("groups").doc(groupID).collection('committees'); 
 };
 
 export async function updateCommittee(committeeId, committeeData) {
     // Add team
-    await getCommitteeRef({ id: committeeId, groupID: "cmu-against-ice" }).update(committeeData);
+    await getCommitteeRef({ id: committeeId, groupID: defaultGroupID }).update(committeeData);
 }
 
 
 
 export async function updateMember(memberId, memberData) {
     // Add team
-    await db.collection("groups").doc("cmu-against-ice").collection("members").doc(memberId).update({...memberData});
+    await db.collection("groups").doc(defaultGroupID).collection("members").doc(memberId).update({...memberData});
 }
 

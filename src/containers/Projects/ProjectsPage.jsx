@@ -112,11 +112,3 @@ const ProjectsSection = styled.div`
   height: 100%;
 `;
 
-        // {
-  //  <EditTextarea
-  //       style={editStye}
-  //       defaultValue={`We are a student group that......
-  //       ... nudge towards holding CMU accountable and working toward real change. We believe that creating this will valuable since it will connect us more to the CMU community and spread the word.
-  //            `}
-  //       /> 
-  //     } 

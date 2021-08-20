@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext} from "react";
 import styled from "styled-components";
 import { useDocument } from "react-firebase-hooks/firestore";
 import ControlContext from "shared/control-context";
@@ -7,11 +7,8 @@ import {
   PageSubtitleText,
   PageTitleText,
 } from "styles/sharedStyles";
-
 import * as styles from "styles/sharedStyles";
-
 import * as fb from "shared/firebase";
-
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import QuickLinksSection from "components/QuickLinks";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
@@ -22,7 +19,7 @@ export default function Landing() {
   const [value, loading, error] = useDocument(fb.getGroupRef(), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
-  const [link, setLink] = useState(null);
+  //const [link, setLink] = useState(null);
   let projectsData = ctrctx.getProjectsData();
   projectsData = projectsData ? Object.values(projectsData) : [];
 
@@ -31,7 +28,7 @@ export default function Landing() {
     return (
       <LeftWrapper>
         <div>
-          <PageTitleText style={{paddingBottom: '20px'}}>CMU Against ICE</PageTitleText>
+          <PageTitleText style={{paddingBottom: '20px'}}>{groupData &&groupData.name}</PageTitleText>
           <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
           {loading && <span>Document: Loading...</span>}
           {groupData && <LargeBodyText>{groupData.description}</LargeBodyText>}

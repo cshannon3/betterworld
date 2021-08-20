@@ -1,18 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import {
-  EmphasizedSmallBodyText,
-  LargeBodyText,
-  PageSubtitleText,
-  PageTitleText,
-  ProjectCardText,
-  ProjectCardTextWhite,
-  SectionHeaderText,
-  SmallestBodyTextBlack,
-  SmallestBodyTextWhite,
-} from "styles/sharedStyles";
+import * as styles from 'styles/sharedStyles';
 
-//history.push(`/projects/${project.id}`);
+
 const ProjectBox = ({ project, onClick = () => {} }) => {
   const formatDate = (d) => {
     return d.substring(0, d.length - 13);
@@ -25,43 +15,43 @@ const ProjectBox = ({ project, onClick = () => {} }) => {
 
   return project["isArchived"] ? (
     <ArchivedProjectBox onClick={onClick}>
-      <ProjectCardText isArchived={project["isArchived"]}>
+      <styles.ProjectCardText isArchived={project["isArchived"]}>
         {project.name}
-      </ProjectCardText>
+      </styles.ProjectCardText>
       <div className="line" />
       <br />
-      <SmallestBodyTextWhite>
+      <styles.SmallestBodyTextWhite>
         <span>Start date:</span>
         {formatDate(project["start_date"])}
-      </SmallestBodyTextWhite>
-      <SmallestBodyTextWhite>
+      </styles.SmallestBodyTextWhite>
+      <styles.SmallestBodyTextWhite>
         <span>End Date: </span> {formatDate(project["end_date"])}
-      </SmallestBodyTextWhite>
+      </styles.SmallestBodyTextWhite>
       <br />
-      <SmallestBodyTextWhite>
+      <styles.SmallestBodyTextWhite>
         <span>Updates:</span> 22
-      </SmallestBodyTextWhite>
-      <SmallestBodyTextWhite>
+      </styles.SmallestBodyTextWhite>
+      <styles.SmallestBodyTextWhite>
         <span>Contributors:</span>
         {project["contributors"]?.length}
-      </SmallestBodyTextWhite>
+      </styles.SmallestBodyTextWhite>
     </ArchivedProjectBox>
   ) : (
     <ProjectBoxStyle onClick={onClick}>
-      <ProjectCardText>{project.name}</ProjectCardText>
+      <styles.ProjectCardText>{project.name}</styles.ProjectCardText>
       <div className="line" />
       <br />
-      <SmallestBodyTextBlack>
+      <styles.SmallestBodyTextBlack>
         <span>Start date:</span> {formatDate(project["start_date"])}
-      </SmallestBodyTextBlack>
-      <SmallestBodyTextBlack>
+      </styles.SmallestBodyTextBlack>
+      <styles.SmallestBodyTextBlack>
         <span>Est. Completion:</span>
         {formatDate(project["end_date"])}
-      </SmallestBodyTextBlack>
+      </styles.SmallestBodyTextBlack>
       <br />
-      <SmallestBodyTextBlack>
+      <styles.SmallestBodyTextBlack>
         <span>Updates:</span> {getNumUpdates(project)}
-      </SmallestBodyTextBlack>
+      </styles.SmallestBodyTextBlack>
     </ProjectBoxStyle>
   );
 };
