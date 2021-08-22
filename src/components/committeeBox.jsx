@@ -2,10 +2,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { committeeIcons } from "data/dummydata";
-import {
-    ProjectCardTextWhite, 
-  } from "styles/sharedStyles";
+import * as styles from 'styles/sharedStyles';
 
+
+  
  const CommitteeBox = ({id, order, name, onClick=()=>{}}) =>{
 
    return( <CommitteeBoxStyle
@@ -13,9 +13,9 @@ import {
         >
         <div className="contentBox">
             <div className="order">{`0${order}`}</div>
-            <ProjectCardTextWhite className="name">
+            <styles.ProjectCardTextWhite className="name">
             {name}
-            </ProjectCardTextWhite>
+            </styles.ProjectCardTextWhite>
             <div className="line" />
         </div>
         <img src={committeeIcons[id]} alt={name} />
@@ -24,9 +24,6 @@ import {
 }
 
 export default CommitteeBox;
-
-
-
 
 
 const CommitteeBoxStyle = styled.div`

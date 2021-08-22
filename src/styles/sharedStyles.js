@@ -85,7 +85,6 @@ line-height: 22px;
 letter-spacing: 0.05em;
 text-transform: uppercase;
 color: #000000;
-
 `;
 
 export const LadderTitleText = styled.div`
@@ -128,7 +127,6 @@ font-family: Helvetica Neue;
 font-style: normal;
 font-weight: 400;
 font-size: 16px;
-
 color: #000000;
 `;
 

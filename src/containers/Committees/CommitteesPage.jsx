@@ -6,9 +6,7 @@ import { LargeBodyText, PageTitleText } from "styles/sharedStyles";
 import CommitteeBox from "components/committeeBox";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
-
 import QuickLinksSection from "components/QuickLinks";
-import AtAGlanceModule from "components/AtAGlanceModule";
 
 export default function CommitteesPage() {
   const ctrctx = useContext(ControlContext);
@@ -42,12 +40,7 @@ export default function CommitteesPage() {
     );
   };
   const RightComponent = () => {
-    return (
-      <div>
-        {/* <AtAGlanceModule/> */}
-        <UpdatesSection />
-      </div>
-    );
+    return ( <div> <UpdatesSection /> </div>);
   };
   return (
     <ResponsiveSplitScreen

@@ -17,19 +17,13 @@ const NewUpdateBox = ({
   updateType,
 }) => {
   const ctrctx = useContext(ControlContext);
-  // const userId = ctrctx.user && ctrctx.user.id;
-  //const urlParts = window.location.href.split("/");
 
   const userName = ctrctx.user && ctrctx.user.displayName;
-  // let content = "";
-  // const [editContent, setEditContent] = useState("");
   const [stage, setStage] = useState("none");
   const [type, setType] = useState(updateType);
   const [_content, setContent] = useState("");
 
-  // const onChange = () => {
 
-  //   };
 
   const handleCommentChange = (e) => {
     const newContent = e.target.value;
@@ -252,30 +246,7 @@ const UpdateBoxCSS = styled.div`
       `}
 `;
 
-const TopFlagRowStyle = styled.div`
-  height: 18px;
-  display: flex;
-  width: 100%;
-  background: #f9f9f9;
-  justify-content: flex-end;
-`;
 
-const TopFlag = styled.div`
-  width: 120px;
-  color: white;
-  border-radius: 5px 5px 0px 0px;
-  padding-left: 10px;
-  padding-top: 3px;
-  font-family: Baloo 2;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 11px;
-  ${({ type, status, state }) =>
-    type === "request help"
-      ? `
-  background-color: #CB0101;
-`
-      : `background-color: grey;`}
-`;
+
 
 export default NewUpdateBox;

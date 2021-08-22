@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-
 import * as fb from "shared/firebase";
-
-//import dummydata from 'shared/dummydata';
 import firebase from "firebase/app";
 import ControlContext from "shared/control-context";
-
+import {DEFAULT_GROUP_ID} from "secret.js";
 //Screens
 import AddItemPage from "containers/Add_Item_Page/AddItemPage";
 import { ModalProvider } from "styled-react-modal";
@@ -23,8 +19,8 @@ CommitteesPage,
 ProfilePage,
 NotFoundPage,
 } from "containers/pages"
-import ReflexDemo from "components/ResponsiveSplitScreen";
 
+const defaultGroupID = DEFAULT_GROUP_ID;
 
 let userListener;
 
@@ -34,6 +30,7 @@ let listeners = {
   "members":null,
   "updates":null
 }
+
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -63,7 +60,7 @@ const App = () => {
 
   function setupListener(type) {
 
-      listeners[type] = fb.getCollectionRef({groupID:"cmu-against-ice", collection:type}).onSnapshot(function (querySnapshot) {
+      listeners[type] = fb.getCollectionRef({groupID:defaultGroupID, collection:type}).onSnapshot(function (querySnapshot) {
         let _collectionData = {};
         querySnapshot.forEach(function (doc) {
           _collectionData[doc.id] = { ...doc.data(), id: doc.id };
@@ -75,7 +72,6 @@ const App = () => {
           case "committees": setCommitteesData(_collectionData); break;
           case "projects": setProjectsData(_collectionData);break;
         } 
-        
       });
   }
  

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import _ from "lodash";
-import { formatTimestamp, formatTimeAgo } from "shared/utils";
+import {  formatTimeAgo } from "shared/utils";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useState } from "react";
 
@@ -187,22 +187,6 @@ const OfferHelp = styled.div`
   }
 `;
 
-// const ButtonOne = styled.button`
-//   background: #0cc998;
-//   border-radius: 2px;
-//   font-family: Baloo 2;
-//   font-weight: bold;
-//   color: white;
-//   width: 100px;
-//   height: 18px;
-//   margin: 0px 5px 0px 0px;
-//   padding: 0px;
-//   cursor: pointer;
-//   font-size: 12px;
-//   outline: none;
-//   border: none;
-// `;
-
 const ButtonOne = styled.button`
   background: #e6faf5;
   border-radius: 60px;
@@ -224,36 +208,5 @@ const ButtonOne = styled.button`
     transform: translateY(-0.25em);
   }
 `;
-const FlexRow = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
 
 export default UpdateReply;
-
-//   setActiveReply(
-//     cleanReplyModel({
-//       author: userName,
-//       authorId: userId,
-//       date: Date.now(),
-//       type: "offer to help"
-//     })
-//   );
-//   setEditContent("");
-//   content = "";
-//   setIsReplyEditing(true);
-
-/* <FlexRow>
-         {reply["type"] ==="offer to help" && reply["status"]!=="done" &&<ButtonOne
-            onClick={() => {
-              updateReplyStatus(reply.id, "done");
-            }}
-          >
-            Done?
-          </ButtonOne>
-          }
-        </FlexRow>
-        {reply["type"] === "offer to help" && (
-        <OfferHelp status={reply["status"]} type={reply["type"]}>
-          <div className="flag">Help Offered</div>
-        </OfferHelp> */

@@ -1,17 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import * as styles from 'styles/sharedStyles';
-import {
-  BudgetModule,
-  RecruitingModule,
-} from "./Modules/modules";
 import ControlContext from "shared/control-context";
-import { updateCommittee } from "shared/firebase";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import ModuleWrapper from "components/ModuleWrapper";
 import QuickLinksSection from "components/QuickLinks";
-import AtAGlanceModule from "components/AtAGlanceModule";
 
 export default function CommitteePage() {
   const ctrctx = useContext(ControlContext);
@@ -21,28 +15,12 @@ export default function CommitteePage() {
     ctrctx.getCommitteeData(committeeId)
   );
 
-  const CustomModule = () => {
-    if (committeeId == "art-edu") {
-      return <RecruitingModule committeeData={committeeData} />;
-    }
-    if (committeeId == "actions") {
-      return <RecruitingModule committeeData={committeeData} />;
-    }
-    if (committeeId == "money") {
-      return <BudgetModule committeeData={committeeData} />;
-    }
-    if (committeeId == "recruiting") {
-      return <RecruitingModule committeeData={committeeData} />;
-    }
-  };
-
   const LeftComponent = ()=>{
     return (  
       <LeftWrapper>
       <CommitteeTitleBox>
       <div>
         <CommitteesTitle>{committeeData.name}</CommitteesTitle>
-
         <DescriptionText>{committeeData.description}</DescriptionText>
       </div>
 
@@ -75,10 +53,6 @@ export default function CommitteePage() {
         </ul>
       </div>}
       />
-      {/* <ModuleWrapper
-        name={committeeData.name}
-        Component={<div>Hey</div>}
-      /> */}
     </LeftWrapper>)
   }
 
@@ -165,20 +139,3 @@ const CommitteeTitleBox = styled.div`
 `;
 
 
-// function CommitteeInfoModule({ committeeData, user, onSave }) {
-//   return (
-    
-//   );
-// }
-// <CommitteeInfoModule
-// committeeData={committeeData}
-// user={ctrctx.user}
-// onSave={(newUpdate) => {
-//   let newCommitteeData = {
-//     ...committeeData,
-//     updates: [...committeeData.updates, newUpdate],
-//   };
-//   updateCommittee(committeeId, newCommitteeData);
-//   setCommitteeData(newCommitteeData);
-// }}
-// />

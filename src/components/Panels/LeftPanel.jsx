@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import ControlContext from "../../shared/control-context";
-import { NavLink } from "react-router-dom";
 import FolderIcon from "../../assets/Panel/folder1.png";
 import NetworkIcon from "../../assets/Panel/network1.png";
 import EarthIcon from "../../assets/Panel/planet-earth1.png";
 import UserIcon from "../../assets/Panel/user1.png";
 import { useHistory } from "react-router-dom";
-//import { Drawer } from "@material-ui/core";
 
 // TODO highlight the active tab
 //https://material-ui.com/components/drawers/
@@ -23,7 +21,6 @@ export default function LeftPanel({activeTab}) {
     <Panel>
       <section>
         <PhotoUrl src={user && user.photoUrl} alt="Profile" />
-        {/* <Name>{user && user.displayName.split(' ')[0]}</Name> */}
         {user && user.isAdmin && <MemberType>Admin</MemberType>}
         {user && user.notifications && (
           <Notifs>{`${user.notifications.length} new notifications`}</Notifs>

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext} from "react";
 import styled from "styled-components";
 import LeftPanel from "components/Panels/LeftPanel";
 import { useMediaQuery } from "react-responsive";
@@ -11,7 +11,7 @@ import ControlContext from "shared/control-context";
 import Split from "react-split";
 
 //TODO figure out best way to do breadcrumbs
-const Breadcrumb = ({ currentPage }) => {
+const Breadcrumb = () => {
   const urlParts = window.location.href.split("/");
   const params = useParams();
   const appCtx = useContext(ControlContext);
@@ -66,38 +66,15 @@ const Breadcrumb = ({ currentPage }) => {
           </NavLink>
         );
       })}
-
-      {/* <NavLink to="/">
-        <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-      </NavLink> */}
     </Breadcrumbs>
   );
-
-  // if (currentPage == "home")
-
-  // //TODO nested breadcrumbs
-  // return (
-  //   <Breadcrumbs>
-  //     <NavLink to="/">
-  //       <BreadcrumbText>CMU AGAINST ICE</BreadcrumbText>
-  //     </NavLink>
-  //     <Arrow> &gt; </Arrow>
-  //     <NavLink to={`/${currentPage}`}>
-  //       <BreadcrumbText>
-  //         {currentPage && currentPage.toUpperCase()}
-  //       </BreadcrumbText>
-  //     </NavLink>
-  //   </Breadcrumbs>
-  // );
 };
 
 const ResponsiveSplitScreen = ({
-  currentPage,
   LeftComponent,
   RightComponent,
 }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
- // const [sizes, setSizes] = useState([50, 50]);
 
   if (!isMobile)
     return (
@@ -106,7 +83,6 @@ const ResponsiveSplitScreen = ({
         <StyledSplit
           sizes={[65,35]}
           onDrag={(sizes) => {
-           // console.log(sizes[1]);
              if(sizes[1]<40.0){console.log("hide")}
           }}
         >
@@ -157,15 +133,6 @@ export const ResponsiveFullScreen = ({ currentPage, MainComponent }) => {
   );
 };
 
-/* <RowWrapper> <LeftPanel />
-        <LeftStyle>
-          <Breadcrumb />
-          <LeftComponent />
-        </LeftStyle>
-        <RightStyle>
-          <RightComponent />
-        </RightStyle> 
-      </RowWrapper>*/
 const RowWrapper = styled.div`
   display: flex;
   height: 100vh;
@@ -186,7 +153,6 @@ const StyledSplit = styled(Split)`
     background-repeat: no-repeat;
     background-position: 50%;
   }
-
   .gutter.gutter-horizontal {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
     cursor: col-resize;
