@@ -11,6 +11,28 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 
 
+import P1 from "assets/70.jpg";
+import P2 from "assets/22.jpg";
+import P3 from "assets/44.jpg";
+import P4 from "assets/32.jpg";
+
+
+
+let nameSwitch = {
+  "Daniel Le Compte": "Dillon",
+  "Connor Shannon":"Jess",
+  "Peter":"Paul",
+  "Kevin":"Sarah"
+}
+
+let imageSwitch = {
+  "Daniel Le Compte": P1,
+  "Connor Shannon":P2,
+  "Peter":P3,
+  "Kevin":P4
+}
+
+
 const QuickLinksSection = ({
   items = [],
   clickLink = ()=>{},
@@ -29,6 +51,7 @@ const QuickLinksSection = ({
   }
 
   const [modalOpen, setModalOpen] = useState(false);
+ 
   return (
     <QuickPadding>
       {title&& <styles.PageSubtitleText>{title}</styles.PageSubtitleText>}
@@ -40,9 +63,10 @@ const QuickLinksSection = ({
               items
                 .slice(0, items.length < maxLength ? items.length : maxLength)
                 .map((c) => {
+                  const name = c.name ?c.name.split(" ")[0]: "";
                   return (
                     <Tooltip
-                      title={<styles.ToolTipText>{c.name}</styles.ToolTipText>}
+                      title={<styles.ToolTipText>{name}</styles.ToolTipText>}
                     >
                       <Avatar
                         onClick={(e) => clickLink(c.url)}
@@ -50,8 +74,7 @@ const QuickLinksSection = ({
                         src={
                           type == "link"
                             ? getIconType(c.url)
-                            : "photoUrl" in c
-                            ? c.photoUrl
+                           // : "photoUrl" in c ? c.photoUrl //TODO add back in
                             : c.name[0]
                         }
                       />
@@ -73,9 +96,10 @@ const QuickLinksSection = ({
         ) : (
           <AddMemberPopUp>
             {membersData?.map((m) => {
+              const _name = m.name.split(" ")[0];
               return (
                 <AddMemberTile>
-                  <div>{m.name}</div>
+                  <div>{_name}</div>
                   {items.filter((v) => v.name == m.name).length > 0 ? (
                     <button onClick={() => {}}>Remove</button>
                   ) : (

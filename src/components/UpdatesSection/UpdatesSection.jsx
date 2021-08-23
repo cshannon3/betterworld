@@ -9,6 +9,7 @@ import { cleanUpdateModel } from "data_models/updatemodel";
 
 // TODO verification
 
+
 const UpdatesSection = ({ allowAddUpdate = true }) => {
   const appCtx = useContext(ControlContext);
   const [updates, setUpdates] = useState(null);

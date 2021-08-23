@@ -124,21 +124,12 @@ const ProjectSectionPage = () => {
                     allContributors.length < 7 ? allContributors.length : 7
                   )
                   .map((c) => {
-                    return "photoUrl" in c ? (
-                      <Tooltip
+                    return ( <Tooltip
                         title={
                           <styles.ToolTipText>{c.name}</styles.ToolTipText>
                         }
                       >
-                        <Avatar alt={c.name} src={c.photoUrl} />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip
-                        title={
-                          <styles.ToolTipText>{c.name}</styles.ToolTipText>
-                        }
-                      >
-                        <Avatar alt={c.name}>{c.name[0]}</Avatar>
+                        <Avatar alt={c.name}>{c.name[0]/*"photoUrl" in c ? c.photoUrl: c.name[0]*/}</Avatar>
                       </Tooltip>
                     );
                   })}

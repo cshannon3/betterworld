@@ -21,6 +21,7 @@ import _escapeRegExp from "lodash/escapeRegExp";
 import _uniqBy from "lodash/uniqBy";
 import { Link } from "react-router-dom";
 
+
 const UpdateBox = ({
   updateData,
   isSelector,
@@ -55,6 +56,17 @@ const UpdateBox = ({
 
   let content = "";
 
+let nameSwitch = {
+  "Daniel Le Compte": "Dillon",
+  "Connor Shannon":"Jess",
+  "connor shannon":"Angie",
+  "Peter":"Paul",
+  "Kevin":"Sarah"
+}
+
+
+
+
   function handleSelect(emoji) {
     const index = _.findIndex(updateData["reactions"], { emoji, by: userName });
     // console.log(index);
@@ -82,7 +94,7 @@ const UpdateBox = ({
   const HeaderRow = () => {
     return (
       <div className={"topbar"}>
-        <div className={"author"}>{updateData["author"]}</div>
+        <div className={"author"}>{updateData["author"] in nameSwitch ? nameSwitch[updateData["author"]]: "User 1"}</div>
         {!isHovering ? (
           <div className={"date"}>{formatTimeAgo(updateData["date"])}</div>
         ) : isCurrentUser ? (

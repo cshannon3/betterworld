@@ -145,7 +145,7 @@ function sleep(ms) {
           value={{
             
             user, // ID of current user
-            groupName:"CMU Against ICE",
+            groupName:"Activist Org",
             //getGroupData: async () => await fb.getGroupData(),
             projectsData: projectsData,
             committeesData: committeesData,
