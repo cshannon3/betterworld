@@ -28,10 +28,12 @@ export default function Landing() {
     return (
       <LeftWrapper>
         <div>
-          <PageTitleText style={{paddingBottom: '20px'}}>{groupData &&groupData.name}</PageTitleText>
+          <PageTitleText style={{paddingBottom: '20px'}}>{"Activist Org"/*groupData &&groupData.name*/}</PageTitleText>
           <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
           {loading && <span>Document: Loading...</span>}
-          {groupData && <LargeBodyText>{groupData.description}</LargeBodyText>}
+          {groupData && <LargeBodyText>{`We are a college activist group focused on mobilizing students and calling for change in our university and our city.`
+          /*groupData.description*/
+          }</LargeBodyText>}
         </div>
         <QuickLinksSection
           title={"Quick Links"}

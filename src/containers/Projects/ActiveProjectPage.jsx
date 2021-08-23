@@ -1,6 +1,6 @@
 import React, { useMemo, useContext, useState, useEffect, useRef } from "react";
 import "react-slideshow-image/dist/styles.css";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as fb from "shared/firebase";
 import styled from "styled-components";
 
@@ -16,6 +16,9 @@ import { fuzzyTextFilterFn } from "shared/utils";
 import { useHistory } from "react-router-dom";
 import QuickLinksSection from "components/QuickLinks";
 import LinkOutIcon from "assets/linkout.png";
+import Tooltip from "@material-ui/core/Tooltip";
+
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 const ActiveProjectPage = () => {
   const { projectId } = useParams();
@@ -27,6 +30,7 @@ const ActiveProjectPage = () => {
     appCtx.getProjectData(projectId)
   );
   //const user = appCtx.user;
+  //const [membersData, setMembersData] = useState(null);
 
   let helpRequests = [];
   let totalUpdates = [];
@@ -59,29 +63,25 @@ const ActiveProjectPage = () => {
   const LeftComponent = () => {
     if (link)
       return (
-
-       <LeftWrapper >
+        <LeftWrapper>
           <ProjectInfoContainer>
-          <div>
-            <ProjectsTitle>{projectData["name"]}</ProjectsTitle>
-          </div>
-          <div style={{ height: "100%" , width:"100%"}}>
-          <OptionsBar>
-
-
-        <LinkBox href={link} target="_blank">
-         <img src={LinkOutIcon}/>
-        </LinkBox>
-        <button onClick={() => setLink(null)}>Close</button>
-
-        </OptionsBar>
-          <iframe
-            width="100%"
-            height="100%"
-            src={link}
-            allowFullScreen
-          ></iframe>
-          </div>
+            <div>
+              <styles.PageTitleText>{projectData["name"]}</styles.PageTitleText>
+            </div>
+            <div style={{ height: "100%", width: "100%" }}>
+              <OptionsBar>
+                <LinkBox href={link} target="_blank">
+                  <img src={LinkOutIcon} />
+                </LinkBox>
+                <button onClick={() => setLink(null)}>Close</button>
+              </OptionsBar>
+              <iframe
+                width="100%"
+                height="100%"
+                src={link}
+                allowFullScreen
+              ></iframe>
+            </div>
           </ProjectInfoContainer>
         </LeftWrapper>
       );
@@ -91,20 +91,60 @@ const ActiveProjectPage = () => {
           <div>
             <styles.PageTitleText>{projectData["name"]}</styles.PageTitleText>
           </div>
+          <InfoRow2>
+            <div>
+            <styles.PageSubtitleText>{`Point Person:`}</styles.PageSubtitleText>
+            <styles.LargeBodyText>{projectData["point_person"]["name"]}</styles.LargeBodyText>
+          </div>
+            <div>
+              <styles.PageSubtitleText>{`Members (${projectData["contributors"]?.length})`}</styles.PageSubtitleText>
+              <AvatarGroup max={7}>
+                {projectData["contributors"]
+                  ?.slice(
+                    0,
+                    projectData["contributors"]?.length < 7
+                      ? projectData["contributors"]?.length
+                      : 7
+                  )
+                  .map((c) => {
+                    return (
+                      <Tooltip
+                        title={
+                          <styles.ToolTipText>{c.name}</styles.ToolTipText>
+                        }
+                      >
+                        <Avatar alt={c.name}>
+                          {
+                            c
+                              .name[0] /*"photoUrl" in c ? c.photoUrl: c.name[0]*/
+                          }
+                        </Avatar>
+                      </Tooltip>
+                    );
+                  })}
+                <Tooltip
+                  title={<styles.ToolTipText>Add Member</styles.ToolTipText>}
+                >
+                  <Avatar alt="add new">+</Avatar>
+                </Tooltip>
+              </AvatarGroup>
+            </div>
+          </InfoRow2>
           <div>
-          <PointPerson>{`Point Person: ${projectData["point_person"]["name"]}`}</PointPerson>
-          <styles.LargeBodyText>{projectData["description"]}</styles.LargeBodyText>
+            <styles.LargeBodyText>
+              {projectData["description"]}
+            </styles.LargeBodyText>
           </div>
         </ProjectInfoContainer>
         <QuickLinksSection
           title={"Quick Links"}
           spacing={-10}
-          position = "bottom left"
+          position="bottom left"
           maxLength={11}
           items={projectData["resources"] ?? []}
           clickLink={(_link) => {
-            if(_link.includes("docs.google.com")) setLink(_link);
-            else window.open(_link, '_blank');
+            if (_link.includes("docs.google.com")) setLink(_link);
+            else window.open(_link, "_blank");
           }}
           addLink={(url, name) => {
             fb.getProjectRef({ id: projectId, groupID: "cmu-against-ice" })
@@ -119,7 +159,8 @@ const ActiveProjectPage = () => {
         />
         <LadderModule
           projectData={projectData}
-          contributors={contributorsSections} />
+          contributors={contributorsSections}
+        />
       </LeftWrapper>
     );
   };
@@ -134,14 +175,18 @@ const ActiveProjectPage = () => {
 
 export default ActiveProjectPage;
 
+const InfoRow2 = styled.div`
+  display: flex;
+  justify-content:space-between;
+  padding-bottom:40px;
+`;
 
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width:100%;
+  width: 100%;
 `;
-
 
 const ProjectInfoContainer = styled.div`
   height: 100%;
@@ -176,11 +221,15 @@ const PointPerson = styled(ProjectsSubtitle)`
   padding-top: 15px;
 `;
 
-
 // Let the table remove the filter if the string is empty.
 fuzzyTextFilterFn.autoRemove = (value) => !value;
 
-const LadderModule = ({ projectData, openLadderModal, contributors , clickLink}) => {
+const LadderModule = ({
+  projectData,
+  openLadderModal,
+  contributors,
+  clickLink,
+}) => {
   const data = projectData["sections"];
   // let contributors = {};
   let statuses = {};
@@ -209,9 +258,7 @@ const LadderModule = ({ projectData, openLadderModal, contributors , clickLink})
         Cell: ({ cell }) => (
           <styles.RegularBodyText
             value={cell.value}
-            onClick={
-              () => history.push(`/${cell.row.original["id"]}`)
-            }
+            onClick={() => history.push(`/${cell.row.original["id"]}`)}
           >
             {cell.value}
           </styles.RegularBodyText>
@@ -226,11 +273,9 @@ const LadderModule = ({ projectData, openLadderModal, contributors , clickLink})
           <div>
             <AvatarGroup max={3}>
               {contributors[cell.value].map((c) => {
-                return "photoUrl" in c ? (
-                  <Avatar alt="Remy Sharp" src={c.photoUrl} />
-                ) : (
-                  <Avatar alt="Remy Sharp">{c.name[0]}</Avatar>
-                );
+                // TODO add back in
+                //return"photoUrl" in c ? ( <Avatar alt="Remy Sharp" src={c.photoUrl} />) :
+                return <Avatar alt="Remy Sharp">{c.name[0]}</Avatar>;
               })}
             </AvatarGroup>
           </div>
@@ -349,13 +394,13 @@ const LadderModule = ({ projectData, openLadderModal, contributors , clickLink})
   );
 };
 const OptionsBar = styled.div`
-  width:100%;
-  display:flex;
-  justify-content:flex-end;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 `;
 const LinkBox = styled.a`
   height: 25px;
-  padding:0px 10px;
+  padding: 0px 10px;
   img {
     height: 25px;
     width: 25px;
@@ -375,7 +420,7 @@ const TaskOverviewBox = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
   margin-top: 20px;
-  min-height:400px;
+  min-height: 400px;
   overflow: scroll;
   table {
     width: 100%;
@@ -412,3 +457,26 @@ const TableRow = styled.tr`
     background-color: #cffcf0;
   }
 `;
+
+// const [membersSnapshot, loadingMembers, error] = useCollection(
+//   fb.getMembers(),
+//   { snapshotListenOptions: { includeMetadataChanges: true } }
+// );
+
+// if (!loadingMembers && !membersData) {
+//   const _mems = membersSnapshot.docs.map((doc) => ({
+//     ...doc.data(),
+//     id: doc.id,
+//   }));
+//   setMembersData(_mems);
+// }
+
+// let allContributors = [];
+// membersData.forEach((member) => {
+//   if ("projects" in member && projectId in member.projects) {
+//     let _roles = member.projects[projectId].roles;
+//     if (_roles ) {
+//       allContributors.push(member);
+//     }
+//   }
+// });
