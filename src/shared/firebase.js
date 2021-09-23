@@ -83,9 +83,19 @@ export const getMembers = () => { //{ groupID = defaultGroupID }
 
 
 
+export const getGroups = (userData) => { //{ groupID = defaultGroupID }
+    console.log(userData.groups);
+    return db.collection("groups");//.where('id', 'in',  userData.groups)
+};
+
+
+
 export const getGroupRef = () => { //{ groupID = defaultGroupID }
     return db.collection("groups").doc(defaultGroupID); 
 };
+
+
+
 
 export async function updateGroup(name, url) {
     const groupID = defaultGroupID ;
@@ -177,7 +187,7 @@ export async function updateUserData(userId, data) { await getUserRef(userId).up
 
 
 
-export const getProjects = ({ groupID = defaultGroupID }) => { 
+export const getProjects = (groupID) => { 
     return db.collection("groups").doc(groupID).collection('projects'); 
 };
 
@@ -206,9 +216,9 @@ export async function updateProject(projectId, projectData) {
 }
 
 
-export const getCommitteeRef = ({ id, groupID = defaultGroupID }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
+export const getCommitteeRef = ( id, groupID ) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
 
-export const getCommittees = ({ groupID = defaultGroupID }) => { 
+export const getCommittees = (groupID) => { 
     return db.collection("groups").doc(groupID).collection('committees'); 
 };
 

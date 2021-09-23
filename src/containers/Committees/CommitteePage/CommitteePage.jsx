@@ -6,17 +6,32 @@ import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import ModuleWrapper from "components/ModuleWrapper";
 import QuickLinksSection from "components/QuickLinks";
+import { useHistory, useParams } from "react-router-dom";
+import * as fb from "shared/firebase";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+
 
 export default function CommitteePage() {
-  const ctrctx = useContext(ControlContext);
-  const urlParts = window.location.href.split("/");
-  const committeeId = urlParts[urlParts.length - 1];
-  const [committeeData, setCommitteeData] = useState(
-    ctrctx.getCommitteeData(committeeId)
+ // const ctrctx = useContext(ControlContext);
+  //const urlParts = window.location.href.split("/");
+  //const committeeId = urlParts[urlParts.length - 1];
+  // const [committeeData, setCommitteeData] = useState(
+  //   ctrctx.getCommitteeData(committeeId)
+  // );
+  const params = useParams();
+  const [committeeData, setCommitteeData] = useState(null);
+  const [committeeSnapshot, loadingCommittee, errorCommittee] = useDocument(
+    fb.getCommitteeRef (params.committeeId, params.groupId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
   );
+  if (!loadingCommittee && !committeeData ) {
+    setCommitteeData({...committeeSnapshot.data(), id:committeeSnapshot.id});
+  }
 
   const LeftComponent = ()=>{
+    console.log(committeeData)
     return (  
+      !committeeData? <LeftWrapper></LeftWrapper>:
       <LeftWrapper>
       <CommitteeTitleBox>
       <div>
@@ -27,7 +42,7 @@ export default function CommitteePage() {
       <div className="bottomBar">
         <div>
           <CommitteesSubtitle>
-            Point Person: {committeeData.pointPerson.displayName}
+            Point Person: { committeeData.pointPerson.displayName??"Null"}
           </CommitteesSubtitle>
         </div>
         <div>

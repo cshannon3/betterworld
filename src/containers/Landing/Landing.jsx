@@ -1,6 +1,6 @@
-import React, { useContext} from "react";
+import React, { useContext, useState} from "react";
 import styled from "styled-components";
-import { useDocument } from "react-firebase-hooks/firestore";
+import { useDocument, useCollection } from "react-firebase-hooks/firestore";
 import ControlContext from "shared/control-context";
 import {
   LargeBodyText,
@@ -13,15 +13,29 @@ import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import QuickLinksSection from "components/QuickLinks";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import ModuleWrapper from "components/ModuleWrapper";
+import { useHistory, useParams } from "react-router-dom";
 
 export default function Landing() {
-  const ctrctx = useContext(ControlContext);
+  const params = useParams();
+  //const ctrctx = useContext(ControlContext);
   const [value, loading, error] = useDocument(fb.getGroupRef(), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
-  //const [link, setLink] = useState(null);
-  let projectsData = ctrctx.getProjectsData();
-  projectsData = projectsData ? Object.values(projectsData) : [];
+
+  const [projectsData, setProjectsData] = useState(null);
+  const [projectsSnapshot, loadingProject, errorProject] = useCollection(
+    fb.getProjects(params.groupId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
+  if (!loadingProject && !projectsData) {
+    const _data = projectsSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setProjectsData(_data);
+  }
+
 
   const LeftComponent = () => {
     const groupData = loading ? null : value && value.data();
@@ -32,7 +46,6 @@ export default function Landing() {
           <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
           {loading && <span>Document: Loading...</span>}
           {groupData && <LargeBodyText>{`We are a college activist group focused on mobilizing students and calling for change in our university and our city.`
-          /*groupData.description*/
           }</LargeBodyText>}
         </div>
         <QuickLinksSection

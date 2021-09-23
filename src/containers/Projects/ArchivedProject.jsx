@@ -16,11 +16,11 @@ import {
 
 const ArchivedProjectPage = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
-  const { projectId } = useParams();
+  const { groupId, projectId } = useParams();
 
   const appCtx = useContext(ControlContext);
   const urlParts = window.location.href.split("/");
-  console.log(urlParts);
+  //console.log(urlParts);
   const [projectData, setProjectData] = useState(
     appCtx.getProjectData(projectId)
   );
@@ -93,6 +93,7 @@ const ArchivedProjectPage = () => {
       currentPage={"projects"}
       LeftComponent={LeftComponent}
       RightComponent={RightComponent}
+      projectName={projectData && projectData["name"]}
     />
   );
 };

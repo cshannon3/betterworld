@@ -11,8 +11,10 @@ import { useMediaQuery } from "react-responsive";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import ProjectBox from "components/projectBox";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import CommitteeBox from "components/committeeBox";
+
+//TODO Stuff
 
 
 //https://brianmin.tech/react-edit-text/
@@ -70,7 +72,7 @@ export default function ProfilePage() {
               return (
                 <CommitteeBox
                   committee={committee}
-                  onClick={() => history.push(`/committees/${committee.id}`)}
+                  onClick={() => history.push(`//committees/${committee.id}`)}
                 />
               );
             })}

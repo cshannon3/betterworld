@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import ControlContext from "../../shared/control-context";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {
   PageTitleText,
   SectionHeaderText,
@@ -13,12 +13,27 @@ import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import { EditTextarea } from "react-edit-text";
 import "react-edit-text/dist/index.css";
+import * as fb from "shared/firebase";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 export default function ProjectsPage() {
-  const ctrctx = useContext(ControlContext);
+ // const ctrctx = useContext(ControlContext);
+  const params = useParams();
 
-  let projectsData = ctrctx.getProjectsData();
-  projectsData = projectsData ? Object.values(projectsData) : [];
+  const [projectsData, setProjectsData] = useState(null);
+  const [projectsSnapshot, loadingProject, errorProject] = useCollection(
+    fb.getProjects(params.groupId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
+  if (!loadingProject && !projectsData) {
+    const _data = projectsSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setProjectsData(_data);
+  }
+
 
   let history = useHistory();
   const LeftComponent = () => {
@@ -32,28 +47,28 @@ export default function ProjectsPage() {
         <ProjectsSection>
           <SectionHeaderText> Active Projects </SectionHeaderText>
           <Row>
-            {projectsData
+            {projectsData&&projectsData
               .filter((v) => !v.isArchived)
               .sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
               .map((project) => {
                 return (
                   <ProjectBox
                     project={project}
-                    onClick={() => history.push(`/projects/${project.id}`)}
+                    onClick={() => history.push(`/${params.groupId}/projects/${project.id}`)}
                   />
                 );
               })}
           </Row>
           <SectionHeaderText> Archived Projects </SectionHeaderText>
           <Row>
-            {projectsData
+            {projectsData&&projectsData
               .filter((v) => v.isArchived)
               .sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
               .map((project) => {
                 return (
                   <ProjectBox
                     project={project}
-                    onClick={() => history.push(`/past-projects/${project.id}`)}
+                    onClick={() => history.push(`/${params.groupId}/past-projects/${project.id}`)}
                   />
                 );
               })}

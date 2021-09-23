@@ -57,7 +57,7 @@ const CancelBtn = styled.button`
   border: 1px solid #0CC998;
 `;
 
-const SubmitBtn = styled.input`
+const SubmitBtn = styled.button`
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px 10px;

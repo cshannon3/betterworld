@@ -7,9 +7,6 @@ import ControlContext from "shared/control-context";
 import NewUpdateBox from "./NewUpdateBox";
 import { cleanUpdateModel } from "data_models/updatemodel";
 
-// TODO verification
-
-
 const UpdatesSection = ({ allowAddUpdate = true }) => {
   const appCtx = useContext(ControlContext);
   const [updates, setUpdates] = useState(null);
@@ -20,7 +17,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
    
   const [selectorOpen, setSelectorOpen] = useState(null);
   const urlParts = window.location.href.split("/");
-  const isHome = urlParts.length==4;
+  const isHome = urlParts.length==6 || urlParts.length==4;
   const params = useParams();
   const positionRef = useRef();
   let updateListener;

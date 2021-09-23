@@ -1,20 +1,32 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import ControlContext from "../../shared/control-context";
-import { useHistory } from "react-router-dom";
+import { useHistory , useParams } from "react-router-dom";
 import { LargeBodyText, PageTitleText } from "styles/sharedStyles";
 import CommitteeBox from "components/committeeBox";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import QuickLinksSection from "components/QuickLinks";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import * as fb from "shared/firebase";
+
 
 export default function CommitteesPage() {
-  const ctrctx = useContext(ControlContext);
-  const committeeData = Object.values(ctrctx.getCommitteesData());
-
+ // const ctrctx = useContext(ControlContext);
+  //const committeeData = Object.values(ctrctx.getCommitteesData());
+  const params = useParams();
+  const [committeesData, setCommitteesData] = useState(null);
+  const [committeesSnapshot, loadingCommittees, errorCommittees] = useDocument(
+    fb.getCommittees(params.groupId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+  if (!loadingCommittees && !committeesData ) {
+    setCommitteesData(committeesSnapshot.docs.map((v)=>{return{...v.data(), id:v.id}}))
+  }
   let history = useHistory();
   const LeftComponent = () => {
     return (
+     !committeesData? <div>  </div> :
       <OverviewSection>
         <div>
           <PageTitleText> Committees</PageTitleText>
@@ -26,12 +38,12 @@ export default function CommitteesPage() {
 
         <CommitteeSection>
           <Row>
-            {committeeData.map((data) => (
+            {committeesData.map((data) => (
               <CommitteeBox
                 id={data.id}
                 name={data.name}
                 order={data.order}
-                onClick={() => history.push(`/committees/${data.id}`)}
+                onClick={() => history.push(`/${params.groupId}/committees/${data.id}`)}
               />
             ))}
           </Row>

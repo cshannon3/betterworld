@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import * as fb from "shared/firebase";
 import styled from "styled-components";
 
-import ControlContext from "shared/control-context";
+//import ControlContext from "shared/control-context";
 import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 
@@ -21,32 +21,56 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 const ActiveProjectPage = () => {
-  const { projectId } = useParams();
+  const { groupId, projectId } = useParams();
   const [link, setLink] = useState(null);
-  const appCtx = useContext(ControlContext);
-  const urlParts = window.location.href.split("/");
-  console.log(urlParts);
-  const [projectData, setProjectData] = useState(
-    appCtx.getProjectData(projectId)
+
+  const [projectData, setProjectData] = useState(null);
+  const [projectSnapshot, loadingProject, errorProject] = useDocument(
+    fb.getProjectRef(projectId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
   );
-  //const user = appCtx.user;
-  //const [membersData, setMembersData] = useState(null);
+  const [updatesSnapshot, loadingUpdates, errorUpdates] = useCollection(
+    fb.getProjectUpdates(projectId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+  const [membersSnapshot, loadingMembers, errorMembers] = useCollection(
+    fb.getMembers(groupId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
 
   let helpRequests = [];
   let totalUpdates = [];
 
-  projectData["sections"]?.forEach((section) => {
-    if (section["updates"])
-      section["updates"].forEach((update) => {
-        totalUpdates.push({ ...update, section_name: section.name });
-        if (update && update["type"] == "request help") {
-          helpRequests.push({ ...update, section_name: section.name });
-        }
-      });
-  });
+  if (!loadingProject &&  !loadingUpdates &&!loadingMembers&& !projectData ) {
+  
+    let _projectData = {...projectSnapshot.data(),  id:projectSnapshot.id, contributors:[], updates:[]};
+    _projectData["contributors"] = membersSnapshot.docs.filter((v) => (("projects" in v.data()) && (projectId in v.data().projects))).map((v)=>{return {...v.data(), id:v.id}});
+    _projectData["updates"] = updatesSnapshot.docs.map((d)=>{return {...d.data(), id:d.id}});
+   
+    _projectData["sections"]?.forEach((section) => {
+      section["updates"] =  _projectData["updates"]
+      .filter((v) => v.sectionId == section.id);
+    });
+    
+    setProjectData(_projectData);
+    totalUpdates = _projectData["updates"];
+    helpRequests = _projectData["updates"].filter((d)=>d.type == "request help");
+  }
+
+
+  // projectData && projectData["sections"]?.forEach((section) => {
+  //   if (section["updates"])
+  //     section["updates"].forEach((update) => {
+  //       totalUpdates.push({ ...update, section_name: section.name });
+  //       if (update && update["type"] == "request help") {
+  //         helpRequests.push({ ...update, section_name: section.name });
+  //       }
+  //     });
+  // });
   let contributorsSections = {};
 
-  projectData["sections"]?.forEach((section) => {
+  projectData &&projectData["sections"]?.forEach((section) => {
     let names = [];
     projectData["contributors"]?.forEach((contr) => {
       if (
@@ -66,7 +90,7 @@ const ActiveProjectPage = () => {
         <LeftWrapper>
           <ProjectInfoContainer>
             <div>
-              <styles.PageTitleText>{projectData["name"]}</styles.PageTitleText>
+              <styles.PageTitleText>{projectData&&projectData["name"]}</styles.PageTitleText>
             </div>
             <div style={{ height: "100%", width: "100%" }}>
               <OptionsBar>
@@ -85,8 +109,11 @@ const ActiveProjectPage = () => {
           </ProjectInfoContainer>
         </LeftWrapper>
       );
+      
     return (
+      !projectData?<LeftWrapper></LeftWrapper>:
       <LeftWrapper>
+
         <ProjectInfoContainer>
           <div>
             <styles.PageTitleText>{projectData["name"]}</styles.PageTitleText>
@@ -160,6 +187,7 @@ const ActiveProjectPage = () => {
         <LadderModule
           projectData={projectData}
           contributors={contributorsSections}
+          groupId={groupId}
         />
       </LeftWrapper>
     );
@@ -169,6 +197,7 @@ const ActiveProjectPage = () => {
     <ResponsiveSplitScreen
       LeftComponent={LeftComponent}
       RightComponent={UpdatesSection}
+      projectName={projectData && projectData["name"]}
     />
   );
 };
@@ -229,6 +258,7 @@ const LadderModule = ({
   openLadderModal,
   contributors,
   clickLink,
+  groupId
 }) => {
   const data = projectData["sections"];
   // let contributors = {};
@@ -258,7 +288,7 @@ const LadderModule = ({
         Cell: ({ cell }) => (
           <styles.RegularBodyText
             value={cell.value}
-            onClick={() => history.push(`/${cell.row.original["id"]}`)}
+            onClick={() => history.push(`/${groupId}/${cell.row.original["id"]}`)}
           >
             {cell.value}
           </styles.RegularBodyText>
@@ -378,7 +408,7 @@ const LadderModule = ({
                 {...row.getRowProps()}
                 onClick={() =>
                   history.push(
-                    `/projects/${projectData["id"]}/${row.original["id"]}`
+                    `/${groupId}/projects/${projectData["id"]}/${row.original["id"]}`
                   )
                 }
               >
@@ -480,3 +510,11 @@ const TableRow = styled.tr`
 //     }
 //   }
 // });
+  //const appCtx = useContext(ControlContext);
+  //const urlParts = window.location.href.split("/");
+  //console.log(urlParts);
+  // const [projectData, setProjectData] = useState(
+  //   appCtx.getProjectData(projectId)
+  // );
+  //const user = appCtx.user;
+  //const [membersData, setMembersData] = useState(null);

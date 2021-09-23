@@ -48,7 +48,7 @@ const ProjectSectionPage = () => {
     }));
     setMembersData(_mems);
   }
-
+//TODO fix this so it's set by setstate
   const data =
     !loadingProject &&
     projectSnapshot.data()["sections"]?.filter((s) => s.id == sectionId)[0];
@@ -233,6 +233,8 @@ const ProjectSectionPage = () => {
       currentPage={"projects"}
       LeftComponent={LeftComponent}
       RightComponent={UpdatesSection}
+      projectName={ !loadingProject && projectSnapshot.data()["name"]}
+      sectionName = {data && data["name"]}
     />
   );
 };
