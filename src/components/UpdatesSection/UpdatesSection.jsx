@@ -41,25 +41,21 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
     if (updates == null) {
       if (urlParts.includes("committees")) {
         if ("committeeId" in params) {
-          setupListener(fb.getCommitteeUpdates(params.committeeId));
-        } else setupListener(fb.getCommitteeUpdates());
+          setupListener(fb.getCommitteeUpdates({groupId:params.groupId, committeeId:params.committeeId}));
+        } else setupListener(fb.getCommitteeUpdates({groupId:params.groupId}));
       } else if (urlParts.includes("projects")) {
-        if ("projectId" in params) {
-          if ("sectionId" in params) {
-            setupListener(
-              fb.getProjectUpdates(params.projectId, params.sectionId)
-            );
-          } else {
-            setupListener(fb.getProjectUpdates(params.projectId));
-          }
-        } else {
-          setupListener(fb.getProjectUpdates());
-        }
+        setupListener(
+          fb.getProjectUpdates(
+            {groupId:params.groupId, 
+              projectId: ("projectId" in params) ? params.projectId : null, 
+              sectionId:("sectionId" in params) ?params.sectionId : null
+          })
+        );
       } else if (urlParts.includes("profile")) {
-        setupListener(fb.getUserUpdates(user.id));
+        setupListener(fb.getUserUpdates({groupId:params.groupId, userId:user.id}));
       } else if (urlParts.includes("past-projects")) {
       } else {
-        setupListener(fb.getMainUpdates());
+        setupListener(fb.getMainUpdates({groupId:params.groupId}));
         // Home
       }
     }
@@ -116,8 +112,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
               isPinned:isHome || (newUpdateModel && newUpdateModel.type == "request help"),
               ...newUpdateModel,
             }); 
-            fb.createUpdate(_newUpdate);
-            console.log(_newUpdate);
+            fb.createUpdate({groupId:params.groupId, updateData:_newUpdate});
           }}
           onCancel={() => {
             setIsAddingUpdate(false);
@@ -148,7 +143,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                         "Are you sure? This action cannot be reversed"
                       )
                     ) {
-                      fb.deleteUpdate(updateData.id);
+                      fb.deleteUpdate({groupId: params.groupId, updateId:updateData.id});
                     } else {
                       return;
                     }
@@ -168,7 +163,11 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                   updateData={updateData}
                   isSelector={selectorOpen == updateData.id}
                   updateUpdate={(newUpdateData) => {
-                    fb.updateUpdate(newUpdateData.id, newUpdateData);
+                    fb.updateUpdate({
+                      groupId: params.groupId, 
+                      updateId:newUpdateData.id, 
+                      updateData:newUpdateData
+                    });
                   }}
                   setSelectorOpen={(updateData) => {
                     setSelectorOpen(updateData.id)
@@ -179,7 +178,10 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                         "Are you sure? This action cannot be reversed"
                       )
                     ) {
-                      fb.deleteUpdate(updateData.id);
+                      fb.deleteUpdate({
+                        groupId:params.groupId,
+                        updateId: updateData.id
+                      });
                     } else {
                       return;
                     }

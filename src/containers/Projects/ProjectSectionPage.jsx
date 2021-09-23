@@ -19,11 +19,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import AddLinkPopup from "components/AddLinkPopup";
 import QuickLinksSection from "components/QuickLinks";
-
+import { useParams } from "react-router-dom";
 
 
 const ProjectSectionPage = () => {
-  const ctrctx = useContext(ControlContext);
+  //const ctrctx = useContext(ControlContext);
+  const params = useParams();
   const urlParts = window.location.href.split("/");
   const projectId = urlParts[urlParts.length - 2];
   const sectionId = urlParts[urlParts.length - 1];
@@ -32,12 +33,12 @@ const ProjectSectionPage = () => {
   const [fileModalOpen, setFileModalOpen] = useState(false);
 
   const [membersSnapshot, loadingMembers, error] = useCollection(
-    fb.getMembers(),
+    fb.getMembers({groupId:params.groupId}),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
 
   const [projectSnapshot, loadingProject, errorProject] = useDocument(
-    fb.getProjectRef(projectId),
+    fb.getProjectRef({id:projectId, groupId:params.groupId}),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
 
@@ -184,11 +185,14 @@ const ProjectSectionPage = () => {
                 },
               ];
               console.log(newMember);
-              fb.updateMember(member.id, { ...newMember });
+              fb.updateMember({
+                groupId:params.groupId,
+                memberId: member.id,
+                memberData: { ...newMember }}
+                );
             }}
             onAddLink={(rowData, name, url) => {
               const _name = name;
-              console.log(_name);
               let projectSections = projectSnapshot.data().sections;
               let sectionIndex = projectSections.findIndex((s)=> s.id==data.id);
               let newSectionData = data; //?.filter((s) => s.id !== sectionId)

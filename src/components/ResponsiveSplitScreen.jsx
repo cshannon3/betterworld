@@ -31,10 +31,6 @@ const Breadcrumb = ({projectName, committeeName, sectionName}) => {
     breadcrumbData.push([`/${params.groupId}/projects`, "Projects"]);
     if ("projectId" in params) {
       if ("sectionId" in params) {
-        // const [projectName, sectionName] = appCtx.getProjectName(
-        //   params.projectId,
-        //   params.sectionId
-        // );
         breadcrumbData.push(["arrow"]);
         breadcrumbData.push([`/${params.groupId}/projects/${params.projectId}`, projectName]);
         breadcrumbData.push(["arrow"]);

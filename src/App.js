@@ -21,7 +21,7 @@ NotFoundPage,
 } from "containers/pages"
 import UserHome from "containers/UserHome/UserHome";
 
-const defaultGroupID = DEFAULT_GROUP_ID;
+//const defaultGroupID = DEFAULT_GROUP_ID;
 
 let userListener;
 
@@ -32,7 +32,6 @@ const App = () => {
     if(!user){
       let _user = JSON.parse(window.localStorage.getItem("user"));
       setUser(_user);
-
     }
   }
 

@@ -18,7 +18,7 @@ import { useHistory, useParams } from "react-router-dom";
 export default function Landing() {
   const params = useParams();
   //const ctrctx = useContext(ControlContext);
-  const [value, loading, error] = useDocument(fb.getGroupRef(), {
+  const [value, loading, error] = useDocument(fb.getGroupRef({groupId:params.groupId}), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
@@ -42,10 +42,10 @@ export default function Landing() {
     return (
       <LeftWrapper>
         <div>
-          <PageTitleText style={{paddingBottom: '20px'}}>{"Activist Org"/*groupData &&groupData.name*/}</PageTitleText>
+          <PageTitleText style={{paddingBottom: '20px'}}>{groupData &&groupData.name}</PageTitleText>
           <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
           {loading && <span>Document: Loading...</span>}
-          {groupData && <LargeBodyText>{`We are a college activist group focused on mobilizing students and calling for change in our university and our city.`
+          {groupData && <LargeBodyText>{ groupData.description
           }</LargeBodyText>}
         </div>
         <QuickLinksSection
@@ -58,7 +58,7 @@ export default function Landing() {
             window.open(_link, '_blank');
           }}
           onAddLink={(url, name)=>{
-            fb.updateGroup(url,name);
+            fb.updateGroup({groupId:params.groupId, name, url});
           }}
         />
 
@@ -104,3 +104,5 @@ const CommitteeSection = styled.div`
   width: 100%;
   height:95%;
 `;
+
+//`We are a college activist group focused on mobilizing students and calling for change in our university and our city.`

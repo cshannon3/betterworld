@@ -14,9 +14,6 @@ import ProjectBox from "components/projectBox";
 import { useHistory, useParams } from "react-router-dom";
 import CommitteeBox from "components/committeeBox";
 
-//TODO Stuff
-
-
 //https://brianmin.tech/react-edit-text/
 export default function ProfilePage() {
   const ctrctx = useContext(ControlContext);
@@ -26,20 +23,22 @@ export default function ProfilePage() {
   const [projectsData, setProjectsData] = useState([]);
   const [committeeData, setCommitteeData] = useState([]);
 
-  useEffect(() => {
-    const data = ctrctx.getMemberData(); //"conreshan@gmail.com"
-    let _p = ctrctx.getProjectsData();
-    let _projectsData =
-      _p && data ? Object.values(_p).filter((v) => v.id in data.projects) : [];
-    setProfileData(data);
-    const committeeData =
-      data && data.committees
-        ? Object.values(ctrctx.getCommitteesData()).filter(
-            (v) => v.id in data.committees
-          )
-        : [];
-    setProjectsData(_projectsData);
-  }, []);
+  // TODO add back in
+  
+  // useEffect(() => {
+  //   const data = ctrctx.getMemberData(); //"conreshan@gmail.com"
+  //   let _p = ctrctx.getProjectsData();
+  //   let _projectsData =
+  //     _p && data ? Object.values(_p).filter((v) => v.id in data.projects) : [];
+  //   setProfileData(data);
+  //   const committeeData = data && data.committees
+  //       ? Object.values(ctrctx.getCommitteesData()).filter(
+  //           (v) => v.id in data.committees
+  //         )
+  //       : [];
+  //   setProjectsData(_projectsData);
+  // }, []);
+
 
   const LeftComponent = () => {
     return (
@@ -47,13 +46,13 @@ export default function ProfilePage() {
         <PageSubtitleText>BETTERWORLD</PageSubtitleText>
         <PageTitleText>My Work</PageTitleText>
         <LargeBodyText style={{ paddingBottom: "20px" }}>
-          {profileData &&
+          {profileData && profileData &&
             profileData["notifications"] &&
             `Hi ${ctrctx.user.displayName}! You’ve got ${profileData["notifications"].length} new notification...`}
         </LargeBodyText>
         <SectionHeaderText>My Projects</SectionHeaderText>
         <Row>
-          {projectsData
+          {projectsData && projectsData
             ?.sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
             .map((project) => {
               return (
@@ -66,13 +65,13 @@ export default function ProfilePage() {
         </Row>
         <SectionHeaderText>My Committees</SectionHeaderText>
         <Row>
-          {committeeData
+          {committeeData &&  committeeData
             ?.sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
             .map((committee) => {
               return (
                 <CommitteeBox
                   committee={committee}
-                  onClick={() => history.push(`//committees/${committee.id}`)}
+                  onClick={() => history.push(`/committees/${committee.id}`)}
                 />
               );
             })}

@@ -12,26 +12,23 @@ import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 
 export default function CommitteePage() {
- // const ctrctx = useContext(ControlContext);
-  //const urlParts = window.location.href.split("/");
-  //const committeeId = urlParts[urlParts.length - 1];
-  // const [committeeData, setCommitteeData] = useState(
-  //   ctrctx.getCommitteeData(committeeId)
-  // );
+
   const params = useParams();
   const [committeeData, setCommitteeData] = useState(null);
   const [committeeSnapshot, loadingCommittee, errorCommittee] = useDocument(
-    fb.getCommitteeRef (params.committeeId, params.groupId),
+    fb.getCommitteeRef({id:params.committeeId, groupId:params.groupId}),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
+
   if (!loadingCommittee && !committeeData ) {
     setCommitteeData({...committeeSnapshot.data(), id:committeeSnapshot.id});
   }
 
   const LeftComponent = ()=>{
     console.log(committeeData)
+    const ptperson = (committeeData  && "pointPerson" in committeeData && committeeData.pointPerson && "displayName" in committeeData.pointPerson)? committeeData.pointPerson.displayName : "None"
     return (  
-      !committeeData? <LeftWrapper></LeftWrapper>:
+      committeeData &&
       <LeftWrapper>
       <CommitteeTitleBox>
       <div>
@@ -42,7 +39,7 @@ export default function CommitteePage() {
       <div className="bottomBar">
         <div>
           <CommitteesSubtitle>
-            Point Person: { committeeData.pointPerson.displayName??"Null"}
+            Point Person: {ptperson }
           </CommitteesSubtitle>
         </div>
         <div>

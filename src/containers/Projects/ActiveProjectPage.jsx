@@ -26,15 +26,15 @@ const ActiveProjectPage = () => {
 
   const [projectData, setProjectData] = useState(null);
   const [projectSnapshot, loadingProject, errorProject] = useDocument(
-    fb.getProjectRef(projectId),
+    fb.getProjectRef({id:projectId, groupId}),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
   const [updatesSnapshot, loadingUpdates, errorUpdates] = useCollection(
-    fb.getProjectUpdates(projectId),
+    fb.getProjectUpdates({groupId, projectId}),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
   const [membersSnapshot, loadingMembers, errorMembers] = useCollection(
-    fb.getMembers(groupId),
+    fb.getMembers({groupId}),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
 
@@ -58,18 +58,7 @@ const ActiveProjectPage = () => {
     helpRequests = _projectData["updates"].filter((d)=>d.type == "request help");
   }
 
-
-  // projectData && projectData["sections"]?.forEach((section) => {
-  //   if (section["updates"])
-  //     section["updates"].forEach((update) => {
-  //       totalUpdates.push({ ...update, section_name: section.name });
-  //       if (update && update["type"] == "request help") {
-  //         helpRequests.push({ ...update, section_name: section.name });
-  //       }
-  //     });
-  // });
   let contributorsSections = {};
-
   projectData &&projectData["sections"]?.forEach((section) => {
     let names = [];
     projectData["contributors"]?.forEach((contr) => {
@@ -174,7 +163,7 @@ const ActiveProjectPage = () => {
             else window.open(_link, "_blank");
           }}
           addLink={(url, name) => {
-            fb.getProjectRef({ id: projectId, groupID: "cmu-against-ice" })
+            fb.getProjectRef({ id: projectId, groupId: groupId })
               .get()
               .then((snapData) => {
                 const d = snapData.data();
@@ -487,34 +476,3 @@ const TableRow = styled.tr`
     background-color: #cffcf0;
   }
 `;
-
-// const [membersSnapshot, loadingMembers, error] = useCollection(
-//   fb.getMembers(),
-//   { snapshotListenOptions: { includeMetadataChanges: true } }
-// );
-
-// if (!loadingMembers && !membersData) {
-//   const _mems = membersSnapshot.docs.map((doc) => ({
-//     ...doc.data(),
-//     id: doc.id,
-//   }));
-//   setMembersData(_mems);
-// }
-
-// let allContributors = [];
-// membersData.forEach((member) => {
-//   if ("projects" in member && projectId in member.projects) {
-//     let _roles = member.projects[projectId].roles;
-//     if (_roles ) {
-//       allContributors.push(member);
-//     }
-//   }
-// });
-  //const appCtx = useContext(ControlContext);
-  //const urlParts = window.location.href.split("/");
-  //console.log(urlParts);
-  // const [projectData, setProjectData] = useState(
-  //   appCtx.getProjectData(projectId)
-  // );
-  //const user = appCtx.user;
-  //const [membersData, setMembersData] = useState(null);

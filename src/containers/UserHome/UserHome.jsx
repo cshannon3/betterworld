@@ -1,4 +1,4 @@
-import React, { useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { useDocument, useCollection } from "react-firebase-hooks/firestore";
 import {
@@ -14,20 +14,20 @@ import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import ModuleWrapper from "components/ModuleWrapper";
 import { useHistory, useParams } from "react-router-dom";
 
-
-
 export default function UserHome() {
   const params = useParams();
+  let history = useHistory();
   //const ctrctx = useContext(ControlContext);
-  
+
   let _user = JSON.parse(window.localStorage.getItem("user"));
   console.log(_user);
   const [groupsData, setGroupsData] = useState(null);
-  const [groupsSnapshot, loadingGroups, errorGroups]= useDocument(fb.getGroups(_user), {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
-
-
+  const [groupsSnapshot, loadingGroups, errorGroups] = useDocument(
+    fb.getGroups(_user),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
   if (!loadingGroups && !groupsData) {
     const _data = groupsSnapshot.docs.map((doc) => ({
       ...doc.data(),
@@ -36,27 +36,40 @@ export default function UserHome() {
     console.log(_data);
     setGroupsData(_data);
   }
-
-
-
   const LeftComponent = () => {
-   return (<div>{groupsData&& groupsData.map((d)=>(<div>{d.name}</div>))}</div>)
+    return (
+      <div>
+        {groupsData &&
+          groupsData.map((d) => (
+            <div
+              onClick={() => {
+                history.push(`/${d.id}`);
+              }}
+            >
+              {d.name}
+            </div>
+          ))}
+      </div>
+    );
   };
 
   return (
-    <ResponsiveSplitScreen
-      currentPage={"home"}
-      LeftComponent={LeftComponent}
-      RightComponent={ LeftComponent}
-    />
+    <LeftComponent/>
+   
   );
 }
 const LeftWrapper = styled.div`
-display: flex;
-  flex-direction:column;
-  height:100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 const CommitteeSection = styled.div`
   width: 100%;
-  height:95%;
+  height: 95%;
 `;
+
+ // <ResponsiveSplitScreen
+    //   currentPage={"home"}
+    //   LeftComponent={LeftComponent}
+    //   RightComponent={LeftComponent}
+    // />
