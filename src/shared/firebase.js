@@ -16,7 +16,7 @@ const firebaseConfig = {
 }
 
 const defaultGroupID = DEFAULT_GROUP_ID;
-console.log(defaultGroupID);
+
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 } else {
@@ -27,8 +27,8 @@ const db = firebase.firestore();
 export const provider = new firebase.auth.GoogleAuthProvider();
 
 
-export const getCollectionRef = ({groupID, collection}) => { 
-    return db.collection("groups").doc(groupID).collection(collection); 
+export const getCollectionRef = ({groupId, collection}) => { 
+    return db.collection("groups").doc(groupId).collection(collection); 
 };
 
 
@@ -42,6 +42,7 @@ export async function createNewUser(result) {
         "email": result.user.email,
         "createdAt": firebase.firestore.FieldValue.serverTimestamp(),
     };
+    // TODO fix this to only set it when they join a group
     await setUserData(result.user.uid, data);
     let ref = db.collection("groups").doc(defaultGroupID ).collection('members').doc(result.user.email); 
     let snap = await ref.get();
@@ -76,49 +77,57 @@ export async function createNewUser(result) {
 }
 
 
-export const getMembers = () => { //{ groupID = defaultGroupID }
-    const groupID = defaultGroupID ;
-    return db.collection("groups").doc(groupID).collection('members'); 
+// TODO update instances
+export const getMembers = ({groupId}) => { //{ groupID = defaultGroupID }
+   // const groupID = defaultGroupID ;
+    return db.collection("groups").doc(groupId).collection('members'); 
+};
+
+
+// TODO figure out query
+export const getGroups = (userData) => { //{ groupID = defaultGroupID }
+    return db.collection("groups");//.where('id', 'in',  userData.groups)
 };
 
 
 
-export const getGroupRef = () => { //{ groupID = defaultGroupID }
-    return db.collection("groups").doc(defaultGroupID); 
+export const getGroupRef = ({groupId}) => { //{ groupID = defaultGroupID }
+    return db.collection("groups").doc(groupId); 
 };
 
-export async function updateGroup(name, url) {
-    const groupID = defaultGroupID ;
-    const groupData = await db.collection("groups").doc(groupID).get();
+
+
+
+export async function updateGroup({groupId, name, url}) {
+    //const groupID = defaultGroupID ;
+    const groupData = await db.collection("groups").doc(groupId).get();
     let _newRes = [...groupData.data()["resources"], {name, url}]
-    db.collection("groups").doc(groupID).update({
+    db.collection("groups").doc(groupId).update({
         resources:_newRes
     });
 }
-export const getUpdates = () => { 
-    const groupID = defaultGroupID ;
-    return db.collection("groups").doc(groupID).collection('updates'); 
+export const getUpdates = ({groupId}) => { 
+    //const groupID = defaultGroupID ;
+    return db.collection("groups").doc(groupId).collection('updates'); 
 };
 
 
-export const getUpdateRef = ({ id, groupID = defaultGroupID }) => { return db.collection("groups").doc(groupID).collection('updates').doc(id); };
+export const getUpdateRef = ({ id, groupId}) => { return db.collection("groups").doc(groupId).collection('updates').doc(id); };
 
-export async function createUpdate(updateData) {
-    const groupID = defaultGroupID ;
+export async function createUpdate({groupId, updateData}) {
    console.log("createUpdate");
     console.log(updateData);
-    let res = await db.collection("groups").doc(groupID).collection("updates").add(updateData);
+    let res = await db.collection("groups").doc(groupId).collection("updates").add(updateData);
     // let userData = await getUserData(user.id);
     return { ...res, "id": res.id };
 }
 
-export async function updateUpdate(updateId, updateData) {
-    const groupID = defaultGroupID ;
-    await db.collection("groups").doc(groupID).collection("updates").doc(updateId).update(updateData).then((e)=>{
+export async function updateUpdate({groupId, updateId, updateData}) {
+    await db.collection("groups").doc(groupId).collection("updates").doc(updateId).update(updateData).then((e)=>{
         console.log("Go");
     });
 }
-export async function deleteUpdate(updateId) {
+export async function deleteUpdate({groupId, updateId}) {
     const groupID = defaultGroupID ;
     await db.collection("groups").doc(groupID).collection("updates").doc(updateId).delete().then((e)=>{
         console.log("deleted");
@@ -126,37 +135,36 @@ export async function deleteUpdate(updateId) {
 }
 
 
-export function getMainUpdates() {
-    return db.collection("groups").doc(defaultGroupID).collection("updates").where("isPinned", "==", true);
+export function getMainUpdates({groupId}) {
+    return db.collection("groups").doc(groupId).collection("updates").where("isPinned", "==", true);
 }
 
-export function getCommitteeUpdates(committeeId=null) {
+export function getCommitteeUpdates({groupId, committeeId=null}) {
     // Add team
     if(committeeId!=null){
-        return db.collection("groups").doc(defaultGroupID).collection("updates").where("committeeId", "==", committeeId);
+        return db.collection("groups").doc(groupId).collection("updates").where("committeeId", "==", committeeId);
     }
     else{
-        return db.collection("groups").doc(defaultGroupID).collection("updates").where("committeeId", "!=", null);
+        return db.collection("groups").doc(groupId).collection("updates").where("committeeId", "!=", null);
     }
 }
 
-export function getProjectUpdates(projectId=null, sectionId=null) {
+export function getProjectUpdates({groupId, projectId=null, sectionId=null}) {
     // Add team
     let ref;
-    console.log(sectionId);
     if(sectionId!=null){
-        return db.collection("groups").doc(defaultGroupID).collection("updates").where("sectionId", "==", sectionId);
+        return db.collection("groups").doc(groupId).collection("updates").where("sectionId", "==", sectionId);
     }
     else if (projectId!=null){
-        return db.collection("groups").doc(defaultGroupID).collection("updates").where("projectId", "==", projectId);
+        return db.collection("groups").doc(groupId).collection("updates").where("projectId", "==", projectId);
     }else {
-        return db.collection("groups").doc(defaultGroupID).collection("updates").where("projectId", "!=", null);
+        return db.collection("groups").doc(groupId).collection("updates").where("projectId", "!=", null);
     }
 }
-export function getUserUpdates(userId=null) {
+export function getUserUpdates({groupId, userId=null}) {
 
     if(userId!=null){
-        return db.collection("groups").doc(defaultGroupID).collection("updates").where("authorId", "==", userId);
+        return db.collection("groups").doc(groupId).collection("updates").where("authorId", "==", userId);
     }
 }
 
@@ -177,14 +185,14 @@ export async function updateUserData(userId, data) { await getUserRef(userId).up
 
 
 
-export const getProjects = ({ groupID = defaultGroupID }) => { 
+export const getProjects = (groupID) => { 
     return db.collection("groups").doc(groupID).collection('projects'); 
 };
 
 
-export const getProjectRef = (id) => { 
-    const groupID = defaultGroupID ;
-    return db.collection("groups").doc(groupID).collection('projects').doc(id); 
+export const getProjectRef = ({id, groupId}) => { 
+    //const groupID = defaultGroupID ;
+    return db.collection("groups").doc(groupId).collection('projects').doc(id); 
 };
 
 export async function createProject(projectData, { groupID = defaultGroupID }) {
@@ -195,32 +203,31 @@ export async function createProject(projectData, { groupID = defaultGroupID }) {
     return { ...res, "id": res.id };
 }
 
-export async function updateProject(projectId, projectData) {
+export async function updateProject({groupId, projectId, projectData}) {
     // Add team
     console.log(projectId);
     console.log( projectData);
     console.log("test");
-    await getProjectRef(projectId).update(projectData).then((e)=>{
+    await getProjectRef({id:projectId, groupId}).update(projectData).then((e)=>{
         console.log("Go");
     });
 }
 
 
-export const getCommitteeRef = ({ id, groupID = defaultGroupID }) => { return db.collection("groups").doc(groupID).collection('committees').doc(id); };
+export const getCommitteeRef = ({ id, groupId }) => { return db.collection("groups").doc(groupId).collection('committees').doc(id); };
 
-export const getCommittees = ({ groupID = defaultGroupID }) => { 
-    return db.collection("groups").doc(groupID).collection('committees'); 
+export const getCommittees = (groupId) => { 
+    return db.collection("groups").doc(groupId).collection('committees'); 
 };
 
-export async function updateCommittee(committeeId, committeeData) {
+export async function updateCommittee({groupId, committeeId, committeeData}) {
     // Add team
-    await getCommitteeRef({ id: committeeId, groupID: defaultGroupID }).update(committeeData);
+    await getCommitteeRef({ id: committeeId, groupId}).update(committeeData);
 }
 
 
 
-export async function updateMember(memberId, memberData) {
-    // Add team
-    await db.collection("groups").doc(defaultGroupID).collection("members").doc(memberId).update({...memberData});
+export async function updateMember({groupId, memberId, memberData}) {
+    await db.collection("groups").doc(groupId).collection("members").doc(memberId).update({...memberData});
 }
 

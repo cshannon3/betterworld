@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
 import * as fb from "shared/firebase";
 import { useParams } from "react-router-dom";
 import ControlContext from "shared/control-context";
 import NewUpdateBox from "./NewUpdateBox";
 import { cleanUpdateModel } from "data_models/updatemodel";
-
-// TODO verification
-
 
 const UpdatesSection = ({ allowAddUpdate = true }) => {
   const appCtx = useContext(ControlContext);
@@ -20,7 +17,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
    
   const [selectorOpen, setSelectorOpen] = useState(null);
   const urlParts = window.location.href.split("/");
-  const isHome = urlParts.length==4;
+  const isHome = urlParts.length==6 || urlParts.length==4;
   const params = useParams();
   const positionRef = useRef();
   let updateListener;
@@ -44,25 +41,21 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
     if (updates == null) {
       if (urlParts.includes("committees")) {
         if ("committeeId" in params) {
-          setupListener(fb.getCommitteeUpdates(params.committeeId));
-        } else setupListener(fb.getCommitteeUpdates());
+          setupListener(fb.getCommitteeUpdates({groupId:params.groupId, committeeId:params.committeeId}));
+        } else setupListener(fb.getCommitteeUpdates({groupId:params.groupId}));
       } else if (urlParts.includes("projects")) {
-        if ("projectId" in params) {
-          if ("sectionId" in params) {
-            setupListener(
-              fb.getProjectUpdates(params.projectId, params.sectionId)
-            );
-          } else {
-            setupListener(fb.getProjectUpdates(params.projectId));
-          }
-        } else {
-          setupListener(fb.getProjectUpdates());
-        }
+        setupListener(
+          fb.getProjectUpdates(
+            {groupId:params.groupId, 
+              projectId: ("projectId" in params) ? params.projectId : null, 
+              sectionId:("sectionId" in params) ?params.sectionId : null
+          })
+        );
       } else if (urlParts.includes("profile")) {
-        setupListener(fb.getUserUpdates(user.id));
+        setupListener(fb.getUserUpdates({groupId:params.groupId, userId:user.id}));
       } else if (urlParts.includes("past-projects")) {
       } else {
-        setupListener(fb.getMainUpdates());
+        setupListener(fb.getMainUpdates({groupId:params.groupId}));
         // Home
       }
     }
@@ -72,6 +65,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
   }, []);
 
   return (
+    
     <UpdatesContainer ref={positionRef}>
       <UpdatesMenu>
         <div className={"updateTitle"}>Updates</div>
@@ -119,17 +113,16 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
               isPinned:isHome || (newUpdateModel && newUpdateModel.type == "request help"),
               ...newUpdateModel,
             }); 
-            fb.createUpdate(_newUpdate);
-            console.log(_newUpdate);
+            fb.createUpdate({groupId:params.groupId, updateData:_newUpdate});
           }}
           onCancel={() => {
             setIsAddingUpdate(false);
           }}
         />
       )}
-      <UpdatesList>
-        {updates &&
-          updates
+      {updates &&<UpdatesList>
+    
+          {updates
           .filter((u)=>u.isPinned)
             .sort((a, b) => b.date - a.date)
             .map((updateData) => {
@@ -151,7 +144,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                         "Are you sure? This action cannot be reversed"
                       )
                     ) {
-                      fb.deleteUpdate(updateData.id);
+                      fb.deleteUpdate({groupId: params.groupId, updateId:updateData.id});
                     } else {
                       return;
                     }
@@ -171,7 +164,11 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                   updateData={updateData}
                   isSelector={selectorOpen == updateData.id}
                   updateUpdate={(newUpdateData) => {
-                    fb.updateUpdate(newUpdateData.id, newUpdateData);
+                    fb.updateUpdate({
+                      groupId: params.groupId, 
+                      updateId:newUpdateData.id, 
+                      updateData:newUpdateData
+                    });
                   }}
                   setSelectorOpen={(updateData) => {
                     setSelectorOpen(updateData.id)
@@ -182,7 +179,10 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                         "Are you sure? This action cannot be reversed"
                       )
                     ) {
-                      fb.deleteUpdate(updateData.id);
+                      fb.deleteUpdate({
+                        groupId:params.groupId,
+                        updateId: updateData.id
+                      });
                     } else {
                       return;
                     }
@@ -190,13 +190,25 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                 />
               );
             })}
-      </UpdatesList>
+      </UpdatesList>}
     </UpdatesContainer>
   );
 };
 
 export default UpdatesSection;
 
+// TODO have updates slide in
+const fadeIn = keyframes`
+  0% {
+    transform: translateY(50%);
+    opacity:0;
+   
+  }
+  100% {
+    transform: translateX(0);
+    opacity:1;
+  }
+`;
 const UpdatesList = styled.div`
   overflow: scroll;
   height: 100%;
@@ -205,6 +217,8 @@ const UpdatesList = styled.div`
   hr{
     margin-bottom:10px;
   }
+  animation: ${fadeIn} 1s ease;
+  animation-iteration-count: 1;
 `;
 const UpdatesMenu = styled.div`
   display: flex;

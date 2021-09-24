@@ -37,7 +37,8 @@ const AddLinkPopup = ({
         const _url= document.getElementById("urlName").value;
         const _name= document.getElementById("fileName").value;
         onAddLink( _name, _url);
-      }}/>
+        
+      }}>Submit</SubmitBtn>
     </BtnRow>
 </div> );
 }
@@ -57,7 +58,7 @@ const CancelBtn = styled.button`
   border: 1px solid #0CC998;
 `;
 
-const SubmitBtn = styled.input`
+const SubmitBtn = styled.button`
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px 10px;

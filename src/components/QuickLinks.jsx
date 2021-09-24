@@ -51,7 +51,10 @@ const QuickLinksSection = ({
   }
 
   const [modalOpen, setModalOpen] = useState(false);
- 
+  const [open, setOpen] = useState(false);
+  const closeModal = () => setOpen(false);
+
+  
   return (
     <QuickPadding>
       {title&& <styles.PageSubtitleText>{title}</styles.PageSubtitleText>}
@@ -91,7 +94,7 @@ const QuickLinksSection = ({
         {type == "link" ? (
           <AddLinkPopup
             onAddLink={(name, url) => onAddLink(name, url)}
-            setModalOpen={setModalOpen}
+            setModalOpen={(newVal)=>setModalOpen(newVal)}
           />
         ) : (
           <AddMemberPopUp>
@@ -124,6 +127,7 @@ export default QuickLinksSection;
 
 const QuickPadding = styled.div`
   padding: 20px 0px;
+  min-height:100px;
 `;
 
 const Row = styled.div`

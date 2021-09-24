@@ -11,47 +11,43 @@ import ControlContext from "shared/control-context";
 import Split from "react-split";
 
 //TODO figure out best way to do breadcrumbs
-const Breadcrumb = () => {
+const Breadcrumb = ({projectName, committeeName, sectionName}) => {
   const urlParts = window.location.href.split("/");
   const params = useParams();
   const appCtx = useContext(ControlContext);
   const groupName = appCtx.groupName;
-  let breadcrumbData = [["/", groupName]];
+  let breadcrumbData = [[`/${params.groupId}/`, groupName]];
 
   if (urlParts.includes("committees")) {
     breadcrumbData.push(["arrow"]);
-    breadcrumbData.push(["/committees", "Committees"]);
+    breadcrumbData.push([`/${params.groupId}/committees`, "Committees"]);
     if ("committeeId" in params) {
-      const committeeName = appCtx.getCommitteeName(params.committeeId);
+      //const committeeName = appCtx.getCommitteeName(params.committeeId);
       breadcrumbData.push(["arrow"]);
-      breadcrumbData.push([`/committees/${params.committeeId}`, committeeName]);
+      breadcrumbData.push([`/${params.groupId}/committees/${params.committeeId}`, committeeName]);
     }
   } else if (urlParts.includes("projects")) {
     breadcrumbData.push(["arrow"]);
-    breadcrumbData.push(["/projects", "Projects"]);
+    breadcrumbData.push([`/${params.groupId}/projects`, "Projects"]);
     if ("projectId" in params) {
       if ("sectionId" in params) {
-        const [projectName, sectionName] = appCtx.getProjectName(
-          params.projectId,
-          params.sectionId
-        );
         breadcrumbData.push(["arrow"]);
-        breadcrumbData.push([`/projects/${params.projectId}`, projectName]);
+        breadcrumbData.push([`/${params.groupId}/projects/${params.projectId}`, projectName]);
         breadcrumbData.push(["arrow"]);
         breadcrumbData.push([
-          `/projects/${params.projectId}/${params.sectionId}`,
+          `/${params.groupId}/projects/${params.projectId}/${params.sectionId}`,
           sectionName,
         ]);
       } else {
-        const [projectName] = appCtx.getProjectName(params.projectId);
+        //const [projectName] = appCtx.getProjectName(params.projectId);
         console.log(projectName);
         breadcrumbData.push(["arrow"]);
-        breadcrumbData.push([`/projects/${params.projectId}`, projectName]);
+        breadcrumbData.push([`/${params.groupId}/projects/${params.projectId}`, projectName]);
       }
     }
   } else if (urlParts.includes("profile")) {
     breadcrumbData.push(["arrow"]);
-    breadcrumbData.push([`/profile`, "Profile"]);
+    breadcrumbData.push([`/${params.groupId}/profile`, "Profile"]);
   } else if (urlParts.includes("past-projects")) {
   }
 
@@ -73,6 +69,9 @@ const Breadcrumb = () => {
 const ResponsiveSplitScreen = ({
   LeftComponent,
   RightComponent,
+  projectName,
+  committeeName,
+  sectionName,
 }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
 
@@ -87,7 +86,11 @@ const ResponsiveSplitScreen = ({
           }}
         >
           <LeftStyle>
-            <Breadcrumb />
+            <Breadcrumb 
+            projectName={projectName}
+            committeeName={committeeName}
+            sectionName={sectionName}
+            />
             <LeftComponent />
           </LeftStyle>
 
@@ -111,7 +114,11 @@ const ResponsiveSplitScreen = ({
         </Drawer>
         <div>
           <TopStyle>
-            <Breadcrumb />
+            <Breadcrumb 
+              projectName={projectName}
+              committeeName={committeeName}
+              sectionName={sectionName}
+            />
             <LeftComponent />
           </TopStyle>
           <BottomStyle>

@@ -13,24 +13,69 @@ import {
   RegularBodyText,
   EmphasizedSmallBodyText,
 } from "styles/sharedStyles";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import * as fb from "shared/firebase";
+
 
 const ArchivedProjectPage = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
-  const { projectId } = useParams();
+  const { groupId, projectId } = useParams();
 
-  const appCtx = useContext(ControlContext);
-  const urlParts = window.location.href.split("/");
-  console.log(urlParts);
-  const [projectData, setProjectData] = useState(
-    appCtx.getProjectData(projectId)
+  const [projectData, setProjectData] = useState(null);
+  const [projectSnapshot, loadingProject, errorProject] = useDocument(
+    fb.getProjectRef({id:projectId, groupId}),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
   );
 
-  let contributorsText =
+  const [updatesSnapshot, loadingUpdates, errorUpdates] = useCollection(
+    fb.getProjectUpdates({groupId, projectId}),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+  const [membersSnapshot, loadingMembers, errorMembers] = useCollection(
+    fb.getMembers({groupId}),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
+
+  let helpRequests = [];
+  let totalUpdates = [];
+
+  if (!loadingProject &&  !loadingUpdates &&!loadingMembers&& !projectData ) {
+    let _projectData = {...projectSnapshot.data(),  id:projectSnapshot.id, contributors:[], updates:[]};
+    _projectData["contributors"] = membersSnapshot.docs.filter((v) => (("projects" in v.data()) && (projectId in v.data().projects))).map((v)=>{return {...v.data(), id:v.id}});
+    _projectData["updates"] = updatesSnapshot.docs.map((d)=>{return {...d.data(), id:d.id}});
+   
+    _projectData["sections"]?.forEach((section) => {
+      section["updates"] =  _projectData["updates"]
+      .filter((v) => v.sectionId == section.id);
+    });
+    
+    setProjectData(_projectData);
+    totalUpdates = _projectData["updates"];
+    helpRequests = _projectData["updates"].filter((d)=>d.type == "request help");
+  }
+
+  let contributorsSections = {};
+  projectData &&projectData["sections"]?.forEach((section) => {
+    let names = [];
+    projectData["contributors"]?.forEach((contr) => {
+      if (
+        contr.projects[projectData.id].roles.filter(
+          (role) => role.sectionId == section.id
+        ).length
+      ) {
+        names.push(contr);
+      }
+    });
+    contributorsSections[section["id"]] = [...names];
+  });
+
+  let contributorsText = projectData && "contributors" in projectData &&
     projectData["contributors"] &&
     projectData["contributors"].map((data) => data.name).join(", ");
 
   const LeftComponent = () => {
-    return (
+    return  projectData && (
       <div>
         <PageTitleText>{projectData && projectData["name"]}</PageTitleText>
         <Flex isMobile={isMobile}>
@@ -62,7 +107,7 @@ const ArchivedProjectPage = () => {
     );
   };
   const RightComponent = () => {
-    return (
+    return projectData && (
       <div>
         <AtAG>
           <PageSubtitleText>Timespan</PageSubtitleText>
@@ -93,6 +138,7 @@ const ArchivedProjectPage = () => {
       currentPage={"projects"}
       LeftComponent={LeftComponent}
       RightComponent={RightComponent}
+      projectName={projectData && projectData["name"]}
     />
   );
 };

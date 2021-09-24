@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import ControlContext from "../../shared/control-context";
 import Tooltip from "@material-ui/core/Tooltip";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {
   PageTitleText,
   SectionHeaderText,
@@ -13,12 +13,27 @@ import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
 import UpdatesSection from "components/UpdatesSection/UpdatesSection";
 import { EditTextarea } from "react-edit-text";
 import "react-edit-text/dist/index.css";
+import * as fb from "shared/firebase";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 export default function ProjectsPage() {
-  const ctrctx = useContext(ControlContext);
+ // const ctrctx = useContext(ControlContext);
+  const params = useParams();
 
-  let projectsData = ctrctx.getProjectsData();
-  projectsData = projectsData ? Object.values(projectsData) : [];
+  const [projectsData, setProjectsData] = useState(null);
+  const [projectsSnapshot, loadingProject, errorProject] = useCollection(
+    fb.getProjects(params.groupId),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
+  if (!loadingProject && !projectsData) {
+    const _data = projectsSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setProjectsData(_data);
+  }
+
 
   let history = useHistory();
   const LeftComponent = () => {
@@ -31,33 +46,39 @@ export default function ProjectsPage() {
         </OverviewSection>
         <ProjectsSection>
           <SectionHeaderText> Active Projects </SectionHeaderText>
-          <Row>
-            {projectsData
+          {!projectsData ? (<Row></Row>):
+          (<AnimatedRow>
+            {projectsData&&projectsData
               .filter((v) => !v.isArchived)
               .sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
               .map((project) => {
                 return (
                   <ProjectBox
                     project={project}
-                    onClick={() => history.push(`/projects/${project.id}`)}
+                    onClick={() => history.push(`/${params.groupId}/projects/${project.id}`)}
                   />
                 );
               })}
-          </Row>
+          </AnimatedRow>)
+         }
           <SectionHeaderText> Archived Projects </SectionHeaderText>
-          <Row>
-            {projectsData
+          {!projectsData ? (<Row></Row>):
+          (<AnimatedRow>
+            {
+            projectsData
               .filter((v) => v.isArchived)
               .sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
               .map((project) => {
                 return (
                   <ProjectBox
                     project={project}
-                    onClick={() => history.push(`/past-projects/${project.id}`)}
+                    onClick={() => history.push(`/${params.groupId}/past-projects/${project.id}`)}
                   />
                 );
-              })}
-          </Row>
+              })
+              
+              }
+          </AnimatedRow>)}
         </ProjectsSection>
       </LeftStyle>
     );
@@ -80,13 +101,7 @@ export default function ProjectsPage() {
 }
 
 
-const editStye = {
-  fontFamily: "Helvetica Neue",
-  fontStyle: "normal",
-  fontWeight: "400",
-  fontSize: "16px",
-  color: "#000000"
-}
+
 const RightStyle = styled.div`
   height: 100%;
   margin: auto;
@@ -103,6 +118,25 @@ const Row = styled.div`
   margin-bottom: 20px;
   padding: 5px;
   max-width: 50vw;
+  height: 200px;
+`;
+
+
+const fadeIn = keyframes`
+  0% {
+    transform: translateX(50%);
+    opacity:0;
+   
+  }
+  100% {
+    transform: translateX(0);
+    opacity:1;
+  }
+`;
+
+const AnimatedRow = styled(Row)`
+  animation: ${fadeIn} 1s ease;
+  animation-iteration-count: 1;
 `;
 const OverviewSection = styled.div`
   margin-bottom: 30px;

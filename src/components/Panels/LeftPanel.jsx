@@ -5,8 +5,7 @@ import FolderIcon from "../../assets/Panel/folder1.png";
 import NetworkIcon from "../../assets/Panel/network1.png";
 import EarthIcon from "../../assets/Panel/planet-earth1.png";
 import UserIcon from "../../assets/Panel/user1.png";
-import { useHistory } from "react-router-dom";
-
+import { useHistory, useParams } from "react-router-dom";
 // TODO highlight the active tab
 //https://material-ui.com/components/drawers/
 //import { useMediaQuery } from "react-responsive";
@@ -15,8 +14,10 @@ export default function LeftPanel({activeTab}) {
   const { user, logoutUser } = useContext(ControlContext);
   let history = useHistory();
   //const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
+  const params = useParams();
+  const groupId = params["groupId"];
+  console.log(groupId);
 
- 
   return (
     <Panel>
       <section>
@@ -31,7 +32,7 @@ export default function LeftPanel({activeTab}) {
         className="active"
         id="overviewSideLink"
         onClick={() => {
-          history.push("/");
+          history.push(`/${groupId}`);
         }}
       >
         <PhotoIcon src={EarthIcon} alt="Overview" />
@@ -40,7 +41,7 @@ export default function LeftPanel({activeTab}) {
       <div
         id="projectSideLink"
         onClick={() => {
-          history.push("/projects");
+          history.push(`/${groupId}/projects`);
         }}
       >
         <PhotoIcon src={FolderIcon} alt="Projects" />
@@ -49,7 +50,7 @@ export default function LeftPanel({activeTab}) {
       <div
         id="committeeSideLink"
         onClick={() => {
-          history.push("/committees");
+          history.push(`/${groupId}/committees`);
         }}
       >
         <PhotoIcon src={NetworkIcon} alt="Committees" />
@@ -58,7 +59,7 @@ export default function LeftPanel({activeTab}) {
       <div
         id="myInfoSideLink"
         onClick={() => {
-          history.push("/profile");
+          history.push(`/${groupId}/profile`);
         }}
       >
         <PhotoIcon src={UserIcon} alt="Projects" />
