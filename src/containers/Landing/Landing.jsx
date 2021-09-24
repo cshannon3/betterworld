@@ -1,5 +1,5 @@
 import React, { useContext, useState} from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import { useDocument, useCollection } from "react-firebase-hooks/firestore";
 import ControlContext from "shared/control-context";
 import {
@@ -39,10 +39,12 @@ export default function Landing() {
 
   const LeftComponent = () => {
     const groupData = loading ? null : value && value.data();
-    return (
+    return loading?   <LoadingContainer>
+    </LoadingContainer>:(
+    
       <LeftWrapper>
-        <div>
-          <PageTitleText style={{paddingBottom: '20px'}}>{groupData &&groupData.name}</PageTitleText>
+        <div className={"top-text-box"}>
+          <PageTitleText style={{paddingBottom: '20px', minHeight: '80px'}}>{groupData &&groupData.name}</PageTitleText>
           <PageSubtitleText>Mission Statement/Who We Are</PageSubtitleText>
           {loading && <span>Document: Loading...</span>}
           {groupData && <LargeBodyText>{ groupData.description
@@ -74,10 +76,8 @@ export default function Landing() {
           <styles.EmphasizedRegularBodyText style={{padding: '10px 0px'}}>Recent Meetings</styles.EmphasizedRegularBodyText>
          <styles.SmallestBodyTextBlack> - Sunday, July 25th at 8pm: General Meeting(<a href="">Notes</a>)</styles.SmallestBodyTextBlack>
           <styles.SmallestBodyTextBlack> - Tuesday, July 27th at 7pm: Dis-O Open 2021 Meeting(<a href="">Notes</a>)</styles.SmallestBodyTextBlack>
-
         </div>
         </div>
-
       }
            name={"Announcements"}
         />
@@ -95,14 +95,29 @@ export default function Landing() {
     />
   );
 }
+
+const fadeIn = keyframes`
+   0% {opacity:0;}
+  100% {opacity:1;}
+
+`;
 const LeftWrapper = styled.div`
-display: flex;
+  display: flex;
   flex-direction:column;
   height:100%;
-`;
-const CommitteeSection = styled.div`
-  width: 100%;
-  height:95%;
+  animation: ${fadeIn} 1s ease;
+  animation-iteration-count: 1;
+  .top-text-box{
+    min-height:200px;
+  }
 `;
 
+
+const LoadingContainer = styled.div`
+  height:100%;
+  width:100%;
+`;
 //`We are a college activist group focused on mobilizing students and calling for change in our university and our city.`
+
+
+       

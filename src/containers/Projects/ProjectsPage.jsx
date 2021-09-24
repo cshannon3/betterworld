@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import ControlContext from "../../shared/control-context";
 import Tooltip from "@material-ui/core/Tooltip";
 import { useHistory, useParams } from "react-router-dom";
@@ -46,7 +46,8 @@ export default function ProjectsPage() {
         </OverviewSection>
         <ProjectsSection>
           <SectionHeaderText> Active Projects </SectionHeaderText>
-          <Row>
+          {!projectsData ? (<Row></Row>):
+          (<AnimatedRow>
             {projectsData&&projectsData
               .filter((v) => !v.isArchived)
               .sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
@@ -58,10 +59,13 @@ export default function ProjectsPage() {
                   />
                 );
               })}
-          </Row>
+          </AnimatedRow>)
+         }
           <SectionHeaderText> Archived Projects </SectionHeaderText>
-          <Row>
-            {projectsData&&projectsData
+          {!projectsData ? (<Row></Row>):
+          (<AnimatedRow>
+            {
+            projectsData
               .filter((v) => v.isArchived)
               .sort((a, b) => (a["end_date"] > b["end_date"] ? -1 : 1))
               .map((project) => {
@@ -71,8 +75,10 @@ export default function ProjectsPage() {
                     onClick={() => history.push(`/${params.groupId}/past-projects/${project.id}`)}
                   />
                 );
-              })}
-          </Row>
+              })
+              
+              }
+          </AnimatedRow>)}
         </ProjectsSection>
       </LeftStyle>
     );
@@ -95,13 +101,7 @@ export default function ProjectsPage() {
 }
 
 
-const editStye = {
-  fontFamily: "Helvetica Neue",
-  fontStyle: "normal",
-  fontWeight: "400",
-  fontSize: "16px",
-  color: "#000000"
-}
+
 const RightStyle = styled.div`
   height: 100%;
   margin: auto;
@@ -118,6 +118,25 @@ const Row = styled.div`
   margin-bottom: 20px;
   padding: 5px;
   max-width: 50vw;
+  height: 200px;
+`;
+
+
+const fadeIn = keyframes`
+  0% {
+    transform: translateX(50%);
+    opacity:0;
+   
+  }
+  100% {
+    transform: translateX(0);
+    opacity:1;
+  }
+`;
+
+const AnimatedRow = styled(Row)`
+  animation: ${fadeIn} 1s ease;
+  animation-iteration-count: 1;
 `;
 const OverviewSection = styled.div`
   margin-bottom: 30px;

@@ -124,6 +124,7 @@ export default QuickLinksSection;
 
 const QuickPadding = styled.div`
   padding: 20px 0px;
+  min-height:100px;
 `;
 
 const Row = styled.div`

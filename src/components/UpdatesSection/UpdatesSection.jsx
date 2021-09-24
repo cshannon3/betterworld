@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import UpdateBox from "components/UpdatesSection/UpdateBox";
 import * as fb from "shared/firebase";
 import { useParams } from "react-router-dom";
@@ -65,6 +65,7 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
   }, []);
 
   return (
+    
     <UpdatesContainer ref={positionRef}>
       <UpdatesMenu>
         <div className={"updateTitle"}>Updates</div>
@@ -119,9 +120,9 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
           }}
         />
       )}
-      <UpdatesList>
-        {updates &&
-          updates
+      {updates &&<UpdatesList>
+    
+          {updates
           .filter((u)=>u.isPinned)
             .sort((a, b) => b.date - a.date)
             .map((updateData) => {
@@ -189,13 +190,25 @@ const UpdatesSection = ({ allowAddUpdate = true }) => {
                 />
               );
             })}
-      </UpdatesList>
+      </UpdatesList>}
     </UpdatesContainer>
   );
 };
 
 export default UpdatesSection;
 
+// TODO have updates slide in
+const fadeIn = keyframes`
+  0% {
+    transform: translateY(50%);
+    opacity:0;
+   
+  }
+  100% {
+    transform: translateX(0);
+    opacity:1;
+  }
+`;
 const UpdatesList = styled.div`
   overflow: scroll;
   height: 100%;
@@ -204,6 +217,8 @@ const UpdatesList = styled.div`
   hr{
     margin-bottom:10px;
   }
+  animation: ${fadeIn} 1s ease;
+  animation-iteration-count: 1;
 `;
 const UpdatesMenu = styled.div`
   display: flex;
