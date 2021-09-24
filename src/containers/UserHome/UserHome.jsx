@@ -8,16 +8,14 @@ import {
 } from "styles/sharedStyles";
 import * as styles from "styles/sharedStyles";
 import * as fb from "shared/firebase";
-import ResponsiveSplitScreen from "components/ResponsiveSplitScreen";
-import QuickLinksSection from "components/QuickLinks";
-import UpdatesSection from "components/UpdatesSection/UpdatesSection";
-import ModuleWrapper from "components/ModuleWrapper";
 import { useHistory, useParams } from "react-router-dom";
+import ControlContext from "shared/control-context";
 
+// TODO create user home page
 export default function UserHome() {
   const params = useParams();
   let history = useHistory();
-  //const ctrctx = useContext(ControlContext);
+  const ctrctx = useContext(ControlContext);
 
   let _user = JSON.parse(window.localStorage.getItem("user"));
   console.log(_user);
@@ -43,6 +41,7 @@ export default function UserHome() {
           groupsData.map((d) => (
             <div
               onClick={() => {
+                ctrctx.groupName = d.name;
                 history.push(`/${d.id}`);
               }}
             >
@@ -55,7 +54,6 @@ export default function UserHome() {
 
   return (
     <LeftComponent/>
-   
   );
 }
 const LeftWrapper = styled.div`

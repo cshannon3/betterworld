@@ -60,7 +60,6 @@ const App = () => {
       <React.Fragment>
         <ControlContext.Provider
           value={{
-            
             user, // ID of current user
             groupName:"Activist Org",
             loginUser: async () => {
@@ -74,8 +73,6 @@ const App = () => {
               window.localStorage.setItem("user", JSON.stringify(userData));
               console.log(userData);
               setUser(userData);
-             
-
             },
             logoutUser: () => {
               firebase

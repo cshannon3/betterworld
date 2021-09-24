@@ -71,7 +71,7 @@ const ResponsiveSplitScreen = ({
   RightComponent,
   projectName,
   committeeName,
-  sectionName
+  sectionName,
 }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 800px)" });
 

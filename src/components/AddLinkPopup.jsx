@@ -37,7 +37,8 @@ const AddLinkPopup = ({
         const _url= document.getElementById("urlName").value;
         const _name= document.getElementById("fileName").value;
         onAddLink( _name, _url);
-      }}/>
+        
+      }}>Submit</SubmitBtn>
     </BtnRow>
 </div> );
 }
